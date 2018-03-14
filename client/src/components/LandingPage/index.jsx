@@ -7,7 +7,7 @@ class LandingPage extends Component {
   render() {
     return (
       <div className="landing-page-container">
-        <h1>Shogi Grandmaster</h1>
+        <h1>Shogi </h1>
         <input
           type="submit"
           value="Login"
@@ -16,7 +16,7 @@ class LandingPage extends Component {
         <input
           type="submit"
           value="Signup"
-          onClick={() => this.props.history.push("/signup")}
+          onClick={() => this.props.history.push("/Signup")}
         />
       </div>
     );
