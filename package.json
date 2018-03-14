@@ -1,0 +1,28 @@
+{
+  "name": "shogi-grandmasters",
+  "version": "1.0.0",
+  "description": "Battle to become grandmaster of the shogi-ban.",
+  "main": "index.js",
+  "scripts": {
+    "start:rest-server": "cd rest-server && yarn start",
+    "start:socket-server": "cd socket-server && yarn start",
+    "start:client-server": "cd client/server && yarn start",
+    "build": "cd client && yarn build",
+    "start":
+      "npm-run-all -p start:rest-server start:socket-server start:client-server",
+    "setup:rest-server": "cd rest-server && yarn",
+    "setup:socket-server": "cd socket-server && yarn",
+    "setup:client-server": "cd client/server && yarn",
+    "setup:client": "cd client && yarn",
+    "db:setup:rest-server":
+      "cd rest-server && babel-node src/config/database/setup.js",
+    "buildEnv": "node bin/buildEnv.js"
+  },
+  "repository": "https://github.com/Shogi-Grandmasters/shogi-grandmasters.git",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "yarn": "^1.5.1"
+  }
+}
