@@ -48,6 +48,10 @@ class GameTile {
       this.canPromote = true;
     }
   }
+
+  promote() {
+    this.isPromoted = true;
+  }
 }
 
 GameTile.prototype._rookMoves = () => {
