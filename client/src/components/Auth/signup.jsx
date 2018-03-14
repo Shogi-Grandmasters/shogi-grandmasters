@@ -4,23 +4,8 @@ import axios from 'axios'
 import './Auth.css';
 
 class Signup extends Component {
-  constructor() {
-    super();
-    
-  }
 
-  submitAuthData = (e) => {
-    e.preventDefault();
-    const { email, password, username } = this.state;
-    const body = {
-      email,
-      password,
-      username
-    }
-    console.log(body)
-  }
-
-  // submitAuthData = async (e) => {
+  // submitAuthData = (e) => {
   //   e.preventDefault();
   //   const { email, password, username } = this.state;
   //   const body = {
@@ -28,13 +13,24 @@ class Signup extends Component {
   //     password,
   //     username
   //   }
-  //   try {
-  //     const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
-  //     data ? this.props.history.push('/login') : this.props.history.push('/auth');
-  //   } catch (err) {
-  //     throw new Error(err);
-  //   }
+  //   console.log(body)
   // }
+
+  submitAuthData = async (e) => {
+    e.preventDefault();
+    const { email, password, username } = this.state;
+    const body = {
+      email,
+      password,
+      username
+    }
+    try {
+      const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
+      data ? this.props.history.push('/login') : this.props.history.push('/auth');
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 
   handleInputChange = (event) => {
     const { value, name } = event.target;
