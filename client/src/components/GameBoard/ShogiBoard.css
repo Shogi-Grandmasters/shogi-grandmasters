@@ -21,5 +21,17 @@
 }
 
 .selected {
-  border: solid 1px #ff0000;
+  background-color: #f7ee75;
+  border: solid 1px #8a853d;
+}
+
+.hinted {
+  cursor: pointer;
+  background-color: #bafff9;
+  border: solid 1px #3a5553;
+}
+
+.hinted:hover {
+  cursor: pointer;
+  background-color: #d0faf6;
 }
