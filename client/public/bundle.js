@@ -34659,6 +34659,11 @@ var ShogiBoard = function (_Component) {
       }
     }
   }, {
+    key: 'playerColorFromId',
+    value: function playerColorFromId(id) {
+      return id.charCodeAt(0) > 90 ? 'white' : 'black';
+    }
+  }, {
     key: 'reverseBoard',
     value: function reverseBoard() {
       var boardCopy = copyMatrix(this.state.board);
@@ -34670,8 +34675,29 @@ var ShogiBoard = function (_Component) {
       });
     }
   }, {
-    key: 'clickSpace',
-    value: function clickSpace(coords) {}
+    key: 'getPiece',
+    value: function getPiece(_ref4) {
+      var _ref5 = _slicedToArray(_ref4, 2),
+          x = _ref5[0],
+          y = _ref5[1];
+
+      // PLACEHOLDER
+      var tempPiece = this.state.board[x][y];
+      if (tempPiece.trim()) {
+        var relativeMoves = [[-1, -1], [-1, 0], [-1, 1]];
+        var possibleMoves = relativeMoves.map(function (_ref6) {
+          var _ref7 = _slicedToArray(_ref6, 2),
+              moveX = _ref7[0],
+              moveY = _ref7[1];
+
+          return [x + moveX, y + moveY];
+        });
+        return {
+          color: this.playerColorFromId(tempPiece),
+          possibleMoves: possibleMoves
+        };
+      }
+    }
   }, {
     key: 'movePiece',
     value: function movePiece(coords) {
@@ -34732,23 +34758,12 @@ var ShogiBoard = function (_Component) {
     key: 'toggleHints',
     value: function toggleHints() {
       if (this.state.selected) {
-        var _state$selected2 = _slicedToArray(this.state.selected, 2),
-            x = _state$selected2[0],
-            y = _state$selected2[1];
-
-        var possibleMoves = [[-1, -1], [-1, 0], [-1, 1]];
-        var updateHints = possibleMoves.map(function (_ref4) {
-          var _ref5 = _slicedToArray(_ref4, 2),
-              moveX = _ref5[0],
-              moveY = _ref5[1];
-
-          return [x + moveX, y + moveY];
-        });
+        var selectedPiece = this.getPiece(this.state.selected);
         // prune impossible moves
-        updateHints = updateHints.reduce(function (moves, _ref6) {
-          var _ref7 = _slicedToArray(_ref6, 2),
-              x = _ref7[0],
-              y = _ref7[1];
+        var updateHints = selectedPiece.possibleMoves.reduce(function (moves, _ref8) {
+          var _ref9 = _slicedToArray(_ref8, 2),
+              x = _ref9[0],
+              y = _ref9[1];
 
           var inBounds = x >= 0 && x <= 8 && y >= 0 && y <= 8;
           if (inBounds) moves.push([x, y]);
@@ -34768,10 +34783,10 @@ var ShogiBoard = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var _ref8 = this.state.selected || [-1, -1],
-          _ref9 = _slicedToArray(_ref8, 2),
-          selectedX = _ref9[0],
-          selectedY = _ref9[1];
+      var _ref10 = this.state.selected || [-1, -1],
+          _ref11 = _slicedToArray(_ref10, 2),
+          selectedX = _ref11[0],
+          selectedY = _ref11[1];
 
       var hints = this.state.hints;
       var playerColor = this.state.player.color;
@@ -34791,7 +34806,7 @@ var ShogiBoard = function (_Component) {
                   key: ri + 'x' + ci,
                   selected: ri === selectedX && ci === selectedY,
                   hints: hints,
-                  owned: cell.trim() && cell.charCodeAt(0) > 90 ? playerColor === 'white' : playerColor === 'black',
+                  owned: cell.trim() && _this3.state.player.color === _this3.playerColorFromId(cell),
                   coords: [ri, ci],
                   piece: cell.trim() ? cell : null,
                   activate: _this3.togglePiece,

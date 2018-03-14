@@ -83,6 +83,10 @@ class ShogiBoard extends Component {
     }
   }
 
+  playerColorFromId(id) {
+    return id.charCodeAt(0) > 90 ? 'white' : 'black';
+  }
+
   reverseBoard() {
     let boardCopy = copyMatrix(this.state.board);
     boardCopy = boardCopy.reverse().map(row => row.reverse());
@@ -91,8 +95,17 @@ class ShogiBoard extends Component {
     })
   }
 
-  clickSpace(coords) {
-
+  getPiece([x, y]) {
+    // PLACEHOLDER
+    let tempPiece = this.state.board[x][y];
+    if (tempPiece.trim()) {
+      let relativeMoves = [[-1, -1], [-1, 0], [-1, 1]];
+      let possibleMoves = relativeMoves.map(([moveX, moveY]) => [x + moveX, y + moveY]);
+      return {
+        color: this.playerColorFromId(tempPiece),
+        possibleMoves,
+      }
+    }
   }
 
   movePiece(coords) {
@@ -136,11 +149,9 @@ class ShogiBoard extends Component {
 
   toggleHints() {
     if (this.state.selected) {
-      let [x, y] = this.state.selected;
-      let possibleMoves = [ [-1, -1], [-1, 0], [-1, 1] ];
-      let updateHints = possibleMoves.map(([moveX, moveY]) => [x + moveX, y + moveY]);
+      let selectedPiece = this.getPiece(this.state.selected);
       // prune impossible moves
-      updateHints = updateHints.reduce((moves, [x, y]) => {
+      let updateHints = selectedPiece.possibleMoves.reduce((moves, [x, y]) => {
         let inBounds = x >= 0 && x <= 8 && y >= 0 && y <= 8;
         if (inBounds) moves.push([x, y]);
         return moves;
@@ -171,7 +182,7 @@ class ShogiBoard extends Component {
                     key={`${ri}x${ci}`}
                     selected={ri === selectedX && ci === selectedY }
                     hints={hints}
-                    owned={cell.trim() && cell.charCodeAt(0) > 90 ? playerColor === 'white' : playerColor === 'black'}
+                    owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                     coords={[ri, ci]}
                     piece={cell.trim() ? cell : null}
                     activate={this.togglePiece}
