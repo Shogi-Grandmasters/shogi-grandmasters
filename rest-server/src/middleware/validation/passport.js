@@ -2,7 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import jwt from "passport-jwt";
 
-import { loginQuery } from "../../helpers/authHelpers";
+import { loginQuery } from "../../components/auth/authHelpers";
 import { comparePasswords } from "../auth/bcrypt";
 const LocalStrategy = local.Strategy;
 const JwtStrategy = jwt.Strategy;
