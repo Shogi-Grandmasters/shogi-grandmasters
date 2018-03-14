@@ -16,7 +16,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route path="/board" component={ShogiBoard} />
-          <Route path="/" component={LandingPage} />
+          <Route exact path="/" component={LandingPage} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
         </Switch>

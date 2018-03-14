@@ -1,14 +1,23 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+import './Auth.css';
+
 class Signup extends Component {
   constructor() {
     super();
-    this.state = {
-      email: '',
-      password: '',
-      username: ''
+    
+  }
+
+  submitAuthData = (e) => {
+    e.preventDefault();
+    const { email, password, username } = this.state;
+    const body = {
+      email,
+      password,
+      username
     }
+    console.log(body)
   }
 
   // submitAuthData = async (e) => {
@@ -56,7 +65,7 @@ class Signup extends Component {
             />
           <input
             type='submit'
-            onClick={(e) => console.log('hello')}
+            onClick={(e) => this.submitAuthData(e)}
             />
         </form>
       </div>
