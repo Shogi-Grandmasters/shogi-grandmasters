@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import GameTile from '../../../lib/GameTile';
 
 import './ShogiBoard.css';
 

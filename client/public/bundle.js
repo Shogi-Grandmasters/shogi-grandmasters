@@ -34547,6 +34547,10 @@ var _react = __webpack_require__(10);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _GameTile = __webpack_require__(448);
+
+var _GameTile2 = _interopRequireDefault(_GameTile);
+
 __webpack_require__(443);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -35418,6 +35422,148 @@ module.exports = function (css) {
 	return fixedCss;
 };
 
+
+/***/ }),
+/* 448 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _constants = __webpack_require__(449);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GameTile = function () {
+  function GameTile(name, color, loc) {
+    var promotedName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+    _classCallCheck(this, GameTile);
+
+    this.name = name;
+    this.promotedName = promotedName;
+    this.color = color;
+    this.isPromoted = false;
+    this.canPromote = false;
+    this.loc = loc;
+
+    if (name === "Rook" || name === "Bishop") {
+      this.moves = [];
+      this.promotedMoves = _constants.moveSets[name];
+    } else {
+      this.moves = _constants.moveSets[name];
+      if (name !== "King" && name !== "Gold") {
+        this.promotedMoves = _constants.moveSets.Gold;
+      }
+    }
+  }
+
+  _createClass(GameTile, [{
+    key: "findMoves",
+    value: function findMoves() {
+      var _this = this;
+
+      var moveSet = this.isPromoted ? this.promotedMoves : this.moves;
+
+      if (this.name === "Rook") {
+        moveSet = moveSet.concat(this._rookMoves());
+      } else if (this.name === "Bishop") {
+        moveSet = moveSet.concat(this._bishopMoves());
+      }
+
+      if (this.color = 'black') {
+        moveSet = moveSet.map(function (loc) {
+          return [-loc[0], -loc[1]];
+        });
+      }
+
+      return moveSet.reduce(function (set, move) {
+        var position = [_this.loc[0] + move[0], _this.loc[1] + move[1]];
+        if (position[0] < _constants.boardSize && position[0] >= 0 && position[1] < _constants.boardSize && position[1] >= 0 && !(position[0] === _this.loc[0] && position[1] === _this.loc[1])) {
+          return set.concat([position]);
+        }
+        return set;
+      }, []);
+    }
+  }, {
+    key: "setLocation",
+    value: function setLocation(loc) {
+      this.loc = loc;
+      if (loc[0] < 3 && !this.canPromote) {
+        this.canPromote = true;
+      }
+    }
+  }, {
+    key: "promote",
+    value: function promote() {
+      this.isPromoted = true;
+    }
+  }]);
+
+  return GameTile;
+}();
+
+GameTile.prototype._rookMoves = function () {
+  var result = [];
+  for (var i = 0; i < _constants.boardSize; i++) {
+    result = result.concat([[i, 0], [-i, 0], [0, i], [0, -i]]);
+  }
+  return result;
+};
+
+GameTile.prototype._bishopMoves = function () {
+  var result = [];
+  for (var i = 0, j = 0; i < _constants.boardSize && j < _constants.boardSize; _ref = [i + 1, j + 1], i = _ref[0], j = _ref[1], _ref) {
+    var _ref;
+
+    result = result.concat([[i, j], [-i, -j], [-i, j], [i, -j]]);
+  }
+  return result;
+};
+
+exports.default = GameTile;
+
+/***/ }),
+/* 449 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var constants = {
+  boardIds: {
+    k: 'King',
+    g: 'Gold',
+    s: 'Silver',
+    h: 'Knight',
+    p: 'Pawn',
+    r: 'Rook',
+    b: 'Bishop',
+    l: 'Lance'
+  },
+  moveSets: {
+    King: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]],
+    Gold: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 0], [0, -1]],
+    Silver: [[-1, -1], [-1, 0], [-1, 1], [1, 1], [1, -1]],
+    Knight: [[-2, -1], [-2, 1]],
+    Pawn: [[-1, 0]],
+    Rook: [[-1, -1], [-1, 1], [1, 1], [1, -1]],
+    Bishop: [[-1, 0], [0, 1], [1, 0], [0, -1]],
+    Lance: [[-1, 0]]
+  },
+  boardSize: 9
+};
+
+exports.default = constants;
 
 /***/ })
 /******/ ]);
