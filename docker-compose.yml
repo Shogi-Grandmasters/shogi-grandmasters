@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  psql:
+    image: library/postgres:alpine
+    container_name: shogi_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: grandmaster
