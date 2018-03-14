@@ -1,6 +1,6 @@
-import db from "../config/database";
-import { success, error } from "../lib/log";
-
+import { db } from "../../config/database/";
+import { success, error } from "../../lib/log";
+import { signUpHelper, loginHelper } from './authSQL';
 export const signUpQuery = async body => {
   try {
     const queryString = signUpHelper(body);
@@ -9,7 +9,7 @@ export const signUpQuery = async body => {
     return data;
   } catch (err) {
     error("signUpQuery - error= ", err);
-    res.status(404).send(err);
+    throw new Error(err);
   }
 };
 
@@ -21,6 +21,6 @@ export const loginQuery = async body => {
     return data;
   } catch (err) {
     error("loginQuery - error= ", err);
-    res.status(404).send(err);
+    throw new Error(err);
   }
 };

@@ -1,8 +1,8 @@
-import db from "../config/database";
-import { signUpQuery, loginQuery } from "../helpers/authHelpers";
-import { success, error } from "../lib/log";
-import { generateToken } from "../middleware/auth/jwt";
-import { hashPassword } from "../middleware/auth/bcrypt";
+import db from "../../config/database";
+import { signUpQuery, loginQuery } from "./authHelpers";
+import { success, error } from "../../lib/log";
+import { generateToken } from "../../middleware/auth/jwt";
+import { hashPassword } from "../../middleware/auth/bcrypt";
 
 export const signUpController = async (req, res) => {
   try {
