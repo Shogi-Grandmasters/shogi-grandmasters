@@ -2,14 +2,14 @@ import passport from "passport";
 import local from "passport-local";
 import jwt from "passport-jwt";
 
-import { loginQuery } from "../../helpers/authHelpers";
+import { loginQuery } from "../../components/auth/authHelpers";
 import { comparePasswords } from "../auth/bcrypt";
 const LocalStrategy = local.Strategy;
 const JwtStrategy = jwt.Strategy;
 const ExtractJwt = jwt.ExtractJwt;
 
 const localOptions = {
-  usernameField: "email"
+  usernameField: "username"
 };
 
 const jwtOptions = {
@@ -18,17 +18,17 @@ const jwtOptions = {
 };
 
 passport.use(
-  new LocalStrategy(localOptions, async (email, password, done) => {
+  new LocalStrategy(localOptions, async (username, password, done) => {
     try {
-      const { rows } = await loginQuery({ email });
-      if (!rows.length) {
-        return done(null, false, { message: "Incorrect email." });
+      const user = await loginQuery({ username });
+      if (!user.length) {
+        return done(null, false, { message: "Incorrect username." });
       }
-      const passwordsMatch = await comparePasswords(password, rows[0].password);
+      const passwordsMatch = await comparePasswords(password, user[0].password);
       if (!passwordsMatch) {
         return done(null, false, { message: "Incorrect password " });
       }
-      return done(null, rows);
+      return done(null, user);
     } catch (e) {
       return done(e);
     }

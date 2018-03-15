@@ -7,7 +7,7 @@ class LandingPage extends Component {
   render() {
     return (
       <div className="landing-page-container">
-        <h1>Shogi Grandmaster</h1>
+        <h1>Shogi Grandmasters</h1>
         <input
           type="submit"
           value="Login"

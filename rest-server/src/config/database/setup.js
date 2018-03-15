@@ -1,4 +1,4 @@
-import { Users } from "./models/usersModel.js";
+import Users from "./models/usersModel.js";
 
 const setup = async () => {
   await Users.drop();

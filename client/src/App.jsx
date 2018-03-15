@@ -5,6 +5,9 @@ import LandingPage from "./components/LandingPage/index.jsx";
 import Signup from "./components/Auth/Signup.jsx";
 import Login from "./components/Auth/Login.jsx";
 import ShogiBoard from "./components/GameBoard/ShogiBoard.jsx";
+import Home from "./components/Home/index.jsx";
+import Protected from './components/Global/Protected.jsx';
+
 
 class App extends Component {
   constructor() {
@@ -16,7 +19,12 @@ class App extends Component {
       <div>
         <Switch>
           <Route path="/board" component={ShogiBoard} />
-          <Route path="/" component={LandingPage} />
+          <Route exact path="/" component={LandingPage} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route path="/home" component={(props) => (
+            <Protected component={Home} {...props} />
+          )}/>
         </Switch>
       </div>
     );
