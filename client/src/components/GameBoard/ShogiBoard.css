@@ -50,16 +50,16 @@
 }
 
 .active:hover {
-  background-color: #ffcc00;
+  background-color: rgba(247, 238, 117, 0.4);
 }
 
 .selected {
-  background-color: #f7ee75;
+  background-color: rgba(247, 238, 117, 0.3);;
 }
 
 .hinted {
   cursor: pointer;
-  background-color: #bafff9;
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .hinted:hover {
