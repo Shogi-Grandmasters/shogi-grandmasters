@@ -2,50 +2,14 @@ import React from 'react';
 import { Component } from 'react';
 import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
+import ShogiPiece from './ShogiPiece.jsx';
+import PlayerPanel from './PlayerPanel.jsx';
 
 import './ShogiBoard.css';
 
 const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
-
-const getTokenImage = (tile, player) => {
-  const prefix = tile.color === player.color ? 'N-' : 'S-';
-  const suffix = tile.isPromoted ? '-P' : '';
-  return './tokens/' + prefix + tile.name + suffix + '.svg';
-}
-
-const ShogiPiece = ({ coords, tile, player, isActive, activate }) => {
-  let tileStyle = {
-    backgroundImage: `url(${getTokenImage(tile, player)})`,
-  };
-  return (
-    <div
-      className="shogi__token"
-      style={tileStyle}
-      onClick={() => player.color === tile.color && activate(coords)}
-    >
-      {tile.name}
-    </div>
-  )
-}
-
-const PlayerPanel = ({ player, turn, selected }) => (
-  <div className="match__player">
-    <h2>{player.user.name}</h2>
-    <h4>{turn ? 'ACTIVE' : ''}</h4>
-    <ul>
-      {player.hand.map((piece, pi) =>
-        <ShogiPiece
-          key={pi}
-          coords={`${player.color}:${pi}`}
-          tile={{ name: boardIds[piece], color: player.color, isPromoted: false }}
-          player={player}
-        />
-      )}
-    </ul>
-  </div>
-);
 
 const GridSpace = ({ coords, hints = [], selected = false, owned = false, piece = null, player, activate, movePiece }) => {
   let classNames = ['space'];
