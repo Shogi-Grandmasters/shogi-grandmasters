@@ -51,7 +51,7 @@ const clientDisconnect = ({ io, client, room }) => {
 const clientFetchMessages = async ({ io, client, room, clientCache }, payload) => {
   success("client load message request heard");
   try {
-    await clientCache.get("messages", (err, result) => {
+    await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
       result && serverGameChat({ io, client, room }, result);
     });
   } catch (err) {
@@ -62,8 +62,8 @@ const clientFetchMessages = async ({ io, client, room, clientCache }, payload) =
 const clientGameChat = async ({ io, client, room, clientCache }, payload) => {
   success("client game chat heard");
   try {
-    await clientCache.setex("messages", 60, JSON.stringify(payload.messages));
-    await clientCache.get("messages", (err, result) => {
+    await clientCache.setex(`${room.get("id")}/messages`, 60, JSON.stringify(payload.messages));
+    await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
       result && serverGameChat({ io, client, room }, result);
     });
   } catch (err) {
