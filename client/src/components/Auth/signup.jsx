@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
 
 import './Auth.css';
 
@@ -28,31 +28,34 @@ class Signup extends Component {
 
   render() {
     return (
-      <div>
-        <form>
-          <input
-            name='email'
-            type='text'
-            placeholder={'enter email'}
-            onChange={this.handleInputChange}
-            />
-          <input 
-            name='username'
-            type='text'
-            placeholder={'enter your username'}
-            onChange={this.handleInputChange}
-            />
-          <input 
-            name='password'
-            type='text'
-            placeholder={'enter your password'}
-            onChange={this.handleInputChange}
-            />
-          <input
-            type='submit'
-            onClick={(e) => this.submitAuthData(e)}
-            />
-        </form>
+      <div className='auth-container'>
+        <input
+          name='email'
+          type='text'
+          className='auth-form'
+          placeholder={'enter email'}
+          onChange={this.handleInputChange}
+          />
+        <input 
+          name='username'
+          type='text'
+          className='auth-form'
+          placeholder={'enter your username'}
+          onChange={this.handleInputChange}
+          />
+        <input 
+          name='password'
+          type='password'
+          className='auth-form'
+          id='password'
+          placeholder={'enter your password'}
+          onChange={this.handleInputChange}
+          />
+        <input
+          type='submit'
+          className='auth-button'
+          onClick={(e) => this.submitAuthData(e)}
+          />
       </div>
     )
   }

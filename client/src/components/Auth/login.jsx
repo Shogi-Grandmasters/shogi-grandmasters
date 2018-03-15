@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
+
+import './Auth.css';
 
 class Login extends Component {
   constructor() {
@@ -29,25 +31,27 @@ class Login extends Component {
 
   render() {
     return(
-      <div>
-        <form>
-          <input
-            name='username'
-            type='text'
-            placeholder={'enter username'}
-            onChange={this.handleInputChange}
-            />
-          <input 
-            name='password'
-            type='text'
-            placeholder={'enter your password'}
-            onChange={this.handleInputChange}
-            />
-          <input
-            type='submit'
-            onClick={(e) => this.submitAuthData(e)}
-            />
-        </form>
+      <div className='auth-container'>
+        <input
+          name='username'
+          type='text'
+          placeholder={'enter username'}
+          className='auth-form'
+          onChange={this.handleInputChange}
+          /><br />   
+        <input 
+          name='password'
+          type='password'
+          placeholder={'enter your password'}
+          className='auth-form'
+          id='password'
+          onChange={this.handleInputChange}
+          /><br />
+        <input
+          type='submit'
+          className='auth-button'
+          onClick={(e) => this.submitAuthData(e)}
+          />
       </div>
     )
   }
