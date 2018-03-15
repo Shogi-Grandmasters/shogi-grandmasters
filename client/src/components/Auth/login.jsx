@@ -3,14 +3,19 @@ import axios from 'axios'
 
 class Login extends Component {
 
-  submitAuthData = (e) => {
+  submitAuthData = async (e) => {
     e.preventDefault();
-    const { email, password, username } = this.state;
-    const body = {
-      email,
-      password
+    const { username, password } = this.state;
+    const body = { username, password }
+    try {
+      const data = await axios.post(`http://localhost:3396/api/auth/login`, body);
+      localStorage.setItem('username', data.data.username)
+      localStorage.setItem('id', data.data.id)
+      localStorage.setItem('token', data.data.token.accessToken)
+      data ? this.props.history.push('/') : this.props.history.push('/login');
+    } catch (err) {
+      throw new Error(err);
     }
-    console.log(body)
   }
 
   handleInputChange = (event) => {
@@ -23,9 +28,9 @@ class Login extends Component {
       <div>
         <form>
           <input
-            name='email'
+            name='username'
             type='text'
-            placeholder={'enter email'}
+            placeholder={'enter username'}
             onChange={this.handleInputChange}
             />
           <input 
