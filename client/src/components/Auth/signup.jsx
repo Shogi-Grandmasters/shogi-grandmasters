@@ -4,15 +4,15 @@ import axios from 'axios'
 import './Auth.css';
 
 class Signup extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
 
   submitAuthData = async (e) => {
     e.preventDefault();
     const { email, password, username } = this.state;
-    const body = {
-      email,
-      password,
-      username
-    }
+    const body = { email, password, username };
     try {
       const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
       data ? this.props.history.push('/login') : this.props.history.push('/auth');
