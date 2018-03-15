@@ -17,7 +17,7 @@ export const signUpQuery = async body => {
 export const loginQuery = async body => {
   try {
     const queryString = loginHelper(body);
-    const data = await db.queryAsync(queryString);
+    const data = await db.query(queryString);
     success("loginQuery - successfully retrieved data ", data);
     return data;
   } catch (err) {
