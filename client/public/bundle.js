@@ -34584,6 +34584,7 @@ var ShogiPiece = function ShogiPiece(_ref) {
   var imageUrl = './tokens/' + prefix + tile.name + suffix + '.svg';
   var tileStyle = {
     textIndent: '-999px',
+    overflow: 'hidden',
     width: '60px',
     height: '70px',
     margin: '0 auto',

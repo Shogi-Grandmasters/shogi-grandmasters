@@ -15,6 +15,7 @@ const ShogiPiece = ({ tile, player }) => {
   let imageUrl =  './tokens/' + prefix + tile.name + suffix + '.svg';
   let tileStyle = {
     textIndent: '-999px',
+    overflow: 'hidden',
     width: '60px',
     height: '70px',
     margin: '0 auto',
