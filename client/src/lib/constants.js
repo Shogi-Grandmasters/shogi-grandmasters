@@ -1,14 +1,4 @@
 const constants = {
-  boardIds: {
-    k: 'King',
-    g: 'Gold',
-    s: 'Silver',
-    h: 'Knight',
-    p: 'Pawn',
-    r: 'Rook',
-    b: 'Bishop',
-    l: 'Lance',
-  },
   moveSets: {
     King: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]],
     Gold: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 0], [0, -1]],
@@ -18,6 +8,16 @@ const constants = {
     Rook: [[-1, -1], [-1, 1], [1, 1], [1, -1]],
     Bishop: [[-1, 0], [0, 1], [1, 0], [0, -1]],
     Lance: [[-1, 0]],
+  },
+  boardIds: {
+    k: 'King',
+    g: 'Gold',
+    s: 'Silver',
+    h: 'Knight',
+    p: 'Pawn',
+    r: 'Rook',
+    b: 'Bishop',
+    l: 'Lance',
   },
   boardSize: 9,
 };

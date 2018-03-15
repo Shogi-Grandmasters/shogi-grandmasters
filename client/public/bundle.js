@@ -34539,6 +34539,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -34547,17 +34549,19 @@ var _react = __webpack_require__(10);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _constants = __webpack_require__(449);
+var _constants = __webpack_require__(450);
 
 var _constants2 = _interopRequireDefault(_constants);
 
-var _GameTile = __webpack_require__(448);
+var _GameTile = __webpack_require__(451);
 
 var _GameTile2 = _interopRequireDefault(_GameTile);
 
 __webpack_require__(443);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -34571,18 +34575,70 @@ var copyMatrix = function copyMatrix(matrix) {
   });
 };
 
-var GridSpace = function GridSpace(_ref) {
-  var coords = _ref.coords,
-      _ref$hints = _ref.hints,
-      hints = _ref$hints === undefined ? [] : _ref$hints,
-      _ref$selected = _ref.selected,
-      selected = _ref$selected === undefined ? false : _ref$selected,
-      _ref$owned = _ref.owned,
-      owned = _ref$owned === undefined ? false : _ref$owned,
-      _ref$piece = _ref.piece,
-      piece = _ref$piece === undefined ? null : _ref$piece,
-      activate = _ref.activate,
-      movePiece = _ref.movePiece;
+var ShogiPiece = function ShogiPiece(_ref) {
+  var tile = _ref.tile,
+      player = _ref.player;
+
+  var prefix = tile.color === player.color ? 'N-' : 'S-';
+  var suffix = tile.isPromoted ? '-P' : '';
+  var imageUrl = './tokens/' + prefix + tile.name + suffix + '.svg';
+  var tileStyle = {
+    textIndent: '-999px',
+    width: '60px',
+    height: '70px',
+    margin: '0 auto',
+    background: 'url(' + imageUrl + ')',
+    backgroundSize: 'contain'
+  };
+  return _react2.default.createElement(
+    'div',
+    { style: tileStyle },
+    tile.name
+  );
+};
+
+var PlayerPanel = function PlayerPanel(_ref2) {
+  var player = _ref2.player,
+      turn = _ref2.turn;
+  return _react2.default.createElement(
+    'div',
+    { className: 'match__player' },
+    _react2.default.createElement(
+      'h2',
+      null,
+      player.user.name
+    ),
+    _react2.default.createElement(
+      'h4',
+      null,
+      turn ? 'ACTIVE' : ''
+    ),
+    _react2.default.createElement(
+      'ul',
+      null,
+      player.hand.map(function (piece) {
+        return _react2.default.createElement(ShogiPiece, {
+          tile: { name: _constants2.default.boardIds[piece], color: player.color, isPromoted: false },
+          player: player
+        });
+      })
+    )
+  );
+};
+
+var GridSpace = function GridSpace(_ref3) {
+  var coords = _ref3.coords,
+      _ref3$hints = _ref3.hints,
+      hints = _ref3$hints === undefined ? [] : _ref3$hints,
+      _ref3$selected = _ref3.selected,
+      selected = _ref3$selected === undefined ? false : _ref3$selected,
+      _ref3$owned = _ref3.owned,
+      owned = _ref3$owned === undefined ? false : _ref3$owned,
+      _ref3$piece = _ref3.piece,
+      piece = _ref3$piece === undefined ? null : _ref3$piece,
+      player = _ref3.player,
+      activate = _ref3.activate,
+      movePiece = _ref3.movePiece;
 
   var classNames = ['space'];
 
@@ -34597,10 +34653,10 @@ var GridSpace = function GridSpace(_ref) {
 
   var isHint = false;
   if (hints.length) {
-    isHint = hints.some(function (_ref2) {
-      var _ref3 = _slicedToArray(_ref2, 2),
-          hintX = _ref3[0],
-          hintY = _ref3[1];
+    isHint = hints.some(function (_ref4) {
+      var _ref5 = _slicedToArray(_ref4, 2),
+          hintX = _ref5[0],
+          hintY = _ref5[1];
 
       return x === hintX && y === hintY;
     });
@@ -34620,7 +34676,7 @@ var GridSpace = function GridSpace(_ref) {
         }
       }
     },
-    piece.name || ' '
+    piece ? _react2.default.createElement(ShogiPiece, { tile: piece, player: player }) : ' '
   );
 };
 
@@ -34669,6 +34725,7 @@ var ShogiBoard = function (_Component) {
   }, {
     key: 'playerColorFromId',
     value: function playerColorFromId(id) {
+      if (id.length > 1) id = id[1];
       return id.charCodeAt(0) > 90 ? 'white' : 'black';
     }
   }, {
@@ -34684,27 +34741,41 @@ var ShogiBoard = function (_Component) {
     }
   }, {
     key: 'getPiece',
-    value: function getPiece(_ref4) {
-      var _ref5 = _slicedToArray(_ref4, 2),
-          x = _ref5[0],
-          y = _ref5[1];
+    value: function getPiece(_ref6) {
+      var _ref7 = _slicedToArray(_ref6, 2),
+          x = _ref7[0],
+          y = _ref7[1];
 
       // PLACEHOLDER
       var tempPiece = this.state.board[x][y];
       if (tempPiece.trim()) {
-        var relativeMoves = [[-1, -1], [-1, 0], [-1, 1]];
-        var possibleMoves = relativeMoves.map(function (_ref6) {
-          var _ref7 = _slicedToArray(_ref6, 2),
-              moveX = _ref7[0],
-              moveY = _ref7[1];
-
-          return [x + moveX, y + moveY];
-        });
-        return {
-          color: this.playerColorFromId(tempPiece),
-          possibleMoves: possibleMoves
-        };
+        // let relativeMoves = [[-1, -1], [-1, 0], [-1, 1]];
+        // let possibleMoves = relativeMoves.map(([moveX, moveY]) => [x + moveX, y + moveY]);
+        // return {
+        //   color: this.playerColorFromId(tempPiece),
+        //   possibleMoves,
+        // }
+        return new _GameTile2.default(_constants2.default.boardIds[tempPiece], this.playerColorFromId(tempPiece), [x, y], 'King Rat');
       }
+      return null;
+    }
+  }, {
+    key: 'capture',
+    value: function capture(_ref8) {
+      var _ref9 = _slicedToArray(_ref8, 2),
+          x = _ref9[0],
+          y = _ref9[1];
+
+      console.log(JSON.stringify(this.state.board));
+      // may need to change depending on socket events
+      var pieceToCapture = this.state.board[x][y];
+      var updatePlayer = _extends({}, this.state.player);
+
+      pieceToCapture = this.state.player.color === 'white' ? pieceToCapture.toLowerCase() : pieceToCapture.toUpperCase();
+      updatePlayer.hand = [].concat(_toConsumableArray(updatePlayer.hand), [pieceToCapture]);
+      this.setState({
+        player: updatePlayer
+      });
     }
   }, {
     key: 'movePiece',
@@ -34714,10 +34785,11 @@ var ShogiBoard = function (_Component) {
       // matches available moves based on moveset
       // cannot have other pieces blocking, unless piece movement == hop
       // initiates capture if destination is occupied by other team
+      // since the move will only happen to a hint tile,
+      // any tile found at the destination coords can be considered an opponent piece
 
       // get piece from selected in state
       if (this.state.selected) {
-        // change this to a get / set
         var _state$selected = _slicedToArray(this.state.selected, 2),
             fromX = _state$selected[0],
             fromY = _state$selected[1];
@@ -34726,6 +34798,9 @@ var ShogiBoard = function (_Component) {
             toX = _coords2[0],
             toY = _coords2[1];
 
+        if (this.getPiece(coords)) {
+          this.capture(coords);
+        }
         var pieceToMove = this.state.board[fromX][fromY];
         var updateBoard = this.state.board.slice().map(function (row) {
           return row.slice();
@@ -34768,10 +34843,10 @@ var ShogiBoard = function (_Component) {
       if (this.state.selected) {
         var selectedPiece = this.getPiece(this.state.selected);
         // prune impossible moves
-        var updateHints = selectedPiece.possibleMoves.reduce(function (moves, _ref8) {
-          var _ref9 = _slicedToArray(_ref8, 2),
-              x = _ref9[0],
-              y = _ref9[1];
+        var updateHints = selectedPiece.findMoves().reduce(function (moves, _ref10) {
+          var _ref11 = _slicedToArray(_ref10, 2),
+              x = _ref11[0],
+              y = _ref11[1];
 
           var inBounds = x >= 0 && x <= 8 && y >= 0 && y <= 8;
           if (inBounds) moves.push([x, y]);
@@ -34791,39 +34866,46 @@ var ShogiBoard = function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var _ref10 = this.state.selected || [-1, -1],
-          _ref11 = _slicedToArray(_ref10, 2),
-          selectedX = _ref11[0],
-          selectedY = _ref11[1];
+      var _ref12 = this.state.selected || [-1, -1],
+          _ref13 = _slicedToArray(_ref12, 2),
+          selectedX = _ref13[0],
+          selectedY = _ref13[1];
 
       var hints = this.state.hints;
       var playerColor = this.state.player.color;
 
       return _react2.default.createElement(
-        'table',
-        null,
+        'div',
+        { className: 'match' },
+        _react2.default.createElement(PlayerPanel, { id: 'opponent', player: this.state.opponent, turn: !this.state.isTurn }),
         _react2.default.createElement(
-          'tbody',
-          null,
-          this.state.board.map(function (row, ri) {
-            return _react2.default.createElement(
-              'tr',
-              { key: ri },
-              row.map(function (cell, ci) {
-                return _react2.default.createElement(GridSpace, {
-                  key: ri + 'x' + ci,
-                  selected: ri === selectedX && ci === selectedY,
-                  hints: hints,
-                  owned: cell.trim() && _this3.state.player.color === _this3.playerColorFromId(cell),
-                  coords: [ri, ci],
-                  piece: cell.trim() ? new _GameTile2.default(_constants2.default.boardIds[cell.toLowerCase()], _this3.playerColorFromId(cell), [ri, ci], 'Sir Bae') : null,
-                  activate: _this3.togglePiece,
-                  movePiece: _this3.movePiece
-                });
-              })
-            );
-          })
-        )
+          'table',
+          { className: 'match__board' },
+          _react2.default.createElement(
+            'tbody',
+            null,
+            this.state.board.map(function (row, ri) {
+              return _react2.default.createElement(
+                'tr',
+                { key: ri },
+                row.map(function (cell, ci) {
+                  return _react2.default.createElement(GridSpace, {
+                    key: ri + 'x' + ci,
+                    selected: ri === selectedX && ci === selectedY,
+                    hints: hints,
+                    owned: cell.trim() && _this3.state.player.color === _this3.playerColorFromId(cell),
+                    coords: [ri, ci],
+                    piece: cell.trim() ? { name: _constants2.default.boardIds[cell.toLowerCase()], color: _this3.playerColorFromId(cell) } : null,
+                    player: _this3.state.player,
+                    activate: _this3.togglePiece,
+                    movePiece: _this3.movePiece
+                  });
+                })
+              );
+            })
+          )
+        ),
+        _react2.default.createElement(PlayerPanel, { id: 'player', player: this.state.player, turn: this.state.isTurn })
       );
     }
   }]);
@@ -34873,7 +34955,7 @@ exports = module.exports = __webpack_require__(445)(false);
 
 
 // module
-exports.push([module.i, ".space {\n  width: 80px;\n  height: 80px;\n  border: solid 1px #999; }\n\n.promote-black {\n  background-color: #ececec; }\n\n.promote-white {\n  background-color: #cecece; }\n\n.active {\n  cursor: pointer; }\n\n.active:hover {\n  background-color: #ffcc00; }\n\n.selected {\n  background-color: #f7ee75;\n  border: solid 1px #8a853d; }\n\n.hinted {\n  cursor: pointer;\n  background-color: #bafff9;\n  border: solid 1px #3a5553; }\n\n.hinted:hover {\n  cursor: pointer;\n  background-color: #d0faf6; }\n", ""]);
+exports.push([module.i, ".match {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n  -ms-flex-direction: row;\n  flex-direction: row; }\n\n.match__player {\n  -webkit-box-flex: 3;\n  -ms-flex: 3 200px;\n  flex: 3 200px;\n  margin: 16px;\n  border: solid 1px #ececec;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -ms-flex-direction: column;\n  flex-direction: column;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  -webkit-box-pack: start;\n  -ms-flex-pack: start;\n  justify-content: flex-start; }\n\n.match__board {\n  overflow: hidden;\n  -webkit-box-flex: 6;\n  -ms-flex: 6 800px;\n  flex: 6 800px; }\n\n.space {\n  width: 80px;\n  height: 80px;\n  border: solid 1px #999; }\n\n.promote-black {\n  background-color: #ececec; }\n\n.promote-white {\n  background-color: #cecece; }\n\n.active {\n  cursor: pointer; }\n\n.active:hover {\n  background-color: #ffcc00; }\n\n.selected {\n  background-color: #f7ee75;\n  border: solid 1px #8a853d; }\n\n.hinted {\n  cursor: pointer;\n  background-color: #bafff9;\n  border: solid 1px #3a5553; }\n\n.hinted:hover {\n  cursor: pointer;\n  background-color: #d0faf6; }\n\n.player__panel {\n  width: 300px;\n  height: 200px;\n  margin: 8px; }\n", ""]);
 
 // exports
 
@@ -35428,7 +35510,45 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 448 */
+/* 448 */,
+/* 449 */,
+/* 450 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var constants = {
+  moveSets: {
+    King: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]],
+    Gold: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 0], [0, -1]],
+    Silver: [[-1, -1], [-1, 0], [-1, 1], [1, 1], [1, -1]],
+    Knight: [[-2, -1], [-2, 1]],
+    Pawn: [[-1, 0]],
+    Rook: [[-1, -1], [-1, 1], [1, 1], [1, -1]],
+    Bishop: [[-1, 0], [0, 1], [1, 0], [0, -1]],
+    Lance: [[-1, 0]]
+  },
+  boardIds: {
+    k: 'King',
+    g: 'Gold',
+    s: 'Silver',
+    h: 'Knight',
+    p: 'Pawn',
+    r: 'Rook',
+    b: 'Bishop',
+    l: 'Lance'
+  },
+  boardSize: 9
+};
+
+exports.default = constants;
+
+/***/ }),
+/* 451 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35440,9 +35560,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _constants = __webpack_require__(449);
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// import {moveSets, boardSize} from './constants.js';
+
+var boardSize = 9;
+var moveSets = {
+  King: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]],
+  Gold: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 0], [0, -1]],
+  Silver: [[-1, -1], [-1, 0], [-1, 1], [1, 1], [1, -1]],
+  Knight: [[-2, -1], [-2, 1]],
+  Pawn: [[-1, 0]],
+  Rook: [[-1, -1], [-1, 1], [1, 1], [1, -1]],
+  Bishop: [[-1, 0], [0, 1], [1, 0], [0, -1]],
+  Lance: [[-1, 0]]
+};
 
 var GameTile = function () {
   function GameTile(name, color, loc) {
@@ -35459,11 +35591,11 @@ var GameTile = function () {
 
     if (name === "Rook" || name === "Bishop") {
       this.moves = [];
-      this.promotedMoves = _constants.moveSets[name];
+      this.promotedMoves = moveSets[name];
     } else {
-      this.moves = _constants.moveSets[name];
+      this.moves = moveSets[name];
       if (name !== "King" && name !== "Gold") {
-        this.promotedMoves = _constants.moveSets.Gold;
+        this.promotedMoves = moveSets.Gold;
       }
     }
   }
@@ -35481,7 +35613,7 @@ var GameTile = function () {
         moveSet = moveSet.concat(this._bishopMoves());
       }
 
-      if (this.color = 'black') {
+      if (this.color === 'black') {
         moveSet = moveSet.map(function (loc) {
           return [-loc[0], -loc[1]];
         });
@@ -35489,7 +35621,7 @@ var GameTile = function () {
 
       return moveSet.reduce(function (set, move) {
         var position = [_this.loc[0] + move[0], _this.loc[1] + move[1]];
-        if (position[0] < _constants.boardSize && position[0] >= 0 && position[1] < _constants.boardSize && position[1] >= 0 && !(position[0] === _this.loc[0] && position[1] === _this.loc[1])) {
+        if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 && !(position[0] === _this.loc[0] && position[1] === _this.loc[1])) {
           return set.concat([position]);
         }
         return set;
@@ -35515,7 +35647,7 @@ var GameTile = function () {
 
 GameTile.prototype._rookMoves = function () {
   var result = [];
-  for (var i = 0; i < _constants.boardSize; i++) {
+  for (var i = 0; i < boardSize; i++) {
     result = result.concat([[i, 0], [-i, 0], [0, i], [0, -i]]);
   }
   return result;
@@ -35523,7 +35655,7 @@ GameTile.prototype._rookMoves = function () {
 
 GameTile.prototype._bishopMoves = function () {
   var result = [];
-  for (var i = 0, j = 0; i < _constants.boardSize && j < _constants.boardSize; _ref = [i + 1, j + 1], i = _ref[0], j = _ref[1], _ref) {
+  for (var i = 0, j = 0; i < boardSize && j < boardSize; _ref = [i + 1, j + 1], i = _ref[0], j = _ref[1], _ref) {
     var _ref;
 
     result = result.concat([[i, j], [-i, -j], [-i, j], [i, -j]]);
@@ -35532,42 +35664,6 @@ GameTile.prototype._bishopMoves = function () {
 };
 
 exports.default = GameTile;
-
-/***/ }),
-/* 449 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var constants = {
-  boardIds: {
-    k: 'King',
-    g: 'Gold',
-    s: 'Silver',
-    h: 'Knight',
-    p: 'Pawn',
-    r: 'Rook',
-    b: 'Bishop',
-    l: 'Lance'
-  },
-  moveSets: {
-    King: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]],
-    Gold: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 0], [0, -1]],
-    Silver: [[-1, -1], [-1, 0], [-1, 1], [1, 1], [1, -1]],
-    Knight: [[-2, -1], [-2, 1]],
-    Pawn: [[-1, 0]],
-    Rook: [[-1, -1], [-1, 1], [1, 1], [1, -1]],
-    Bishop: [[-1, 0], [0, 1], [1, 0], [0, -1]],
-    Lance: [[-1, 0]]
-  },
-  boardSize: 9
-};
-
-exports.default = constants;
 
 /***/ })
 /******/ ]);
