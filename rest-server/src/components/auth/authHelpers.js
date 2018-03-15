@@ -18,7 +18,7 @@ export const loginQuery = async body => {
   try {
     const queryString = loginHelper(body);
     const data = await db.query(queryString);
-    success("loginQuery - successfully retrieved data ", data);
+    success("loginQuery - successfully retrieved data ", JSON.stringify(data));
     return data;
   } catch (err) {
     error("loginQuery - error= ", err);

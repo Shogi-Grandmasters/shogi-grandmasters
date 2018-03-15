@@ -27,11 +27,11 @@ export const signUpController = async (req, res) => {
 
 export const loginController = async (req, res) => {
   try {
-    const { rows } = await loginQuery(req.body);
+    const rows = await loginQuery(req.body);
     delete rows[0].password;
-    const { id, email } = rows[0];
+    const { id, username } = rows[0];
     success("loginController - successfully retrieved data ", rows[0]);
-    const token = await generateToken(id, email);
+    const token = await generateToken(id, username);
     rows[0].token = token;
     return res
       .status(200)
