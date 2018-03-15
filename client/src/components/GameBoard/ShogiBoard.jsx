@@ -30,13 +30,15 @@ const ShogiPiece = ({ coords, tile, player, isActive, activate }) => {
   )
 }
 
-const PlayerPanel = ({ player, turn }) => (
+const PlayerPanel = ({ player, turn, selected }) => (
   <div className="match__player">
     <h2>{player.user.name}</h2>
     <h4>{turn ? 'ACTIVE' : ''}</h4>
     <ul>
-      {player.hand.map(piece =>
+      {player.hand.map((piece, pi) =>
         <ShogiPiece
+          key={pi}
+          coords={`${player.color}:${pi}`}
           tile={{ name: boardIds[piece], color: player.color, isPromoted: false }}
           player={player}
         />

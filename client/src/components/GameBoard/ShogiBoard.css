@@ -1,14 +1,14 @@
 .match {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .match__player {
-  flex: 3 200px;
-  margin: 16px;
+  flex: 2 80px;
+  margin: 0;
   border: solid 1px #ececec;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 }
@@ -16,7 +16,8 @@
 .match__board {
   background-repeat: repeat;
   overflow: hidden;
-  flex: 6 800px;
+  flex: 6 720px;
+  max-width: 720px;
   border-collapse: collapse;
 }
 
