@@ -21,11 +21,21 @@
     }
 
     findMoves(board) {
-      let moveSet = this.isPromoted ? this.promotedMoves : this.moves;
+      let moveSet = this.isPromoted ? this.promotedMoves : this.moves || [];
 
       if (this.color === "black") {
         moveSet = moveSet.map(loc => [-loc[0], -loc[1]]);
       }
+
+      moveSet = moveSet.reduce((set, move) => {
+        let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
+        if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 &&
+          !((board[position[0]][position[1]].charCodeAt(0) > 90 && this.color === "white") ||
+          (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black"))) {
+          return set.concat([move]);
+        }
+        return set;
+      }, []);
 
       if (this.name === "Rook") {
         moveSet = moveSet.concat(this._rookMoves(board));
@@ -35,19 +45,7 @@
         moveSet = this._lanceMoves(board);
       }
 
-      return moveSet.reduce((set, move) => {
-        let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
-        if (
-          position[0] < boardSize &&
-          position[0] >= 0 &&
-          position[1] < boardSize &&
-          position[1] >= 0 &&
-          !(position[0] === this.loc[0] && position[1] === this.loc[1])
-        ) {
-          return set.concat([position]);
-        }
-        return set;
-      }, []);
+      return moveSet.map((move) => [this.loc[0] + move[0], this.loc[1] + move[1]]);
     }
 
     setLocation(loc) {
@@ -72,98 +70,110 @@
     let result = [];
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] - i, this.loc[1]];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] < 0 ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([-i, 0]);
-          break;
-        }
+      if (position[0] < 0) {
+        break;
       } else {
-        result.push([-i, 0]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([-i, 0]);
+            break;
+          }
+        } else {
+          result.push([-i, 0]);
+        }
       }
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] + i, this.loc[1]];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] === boardSize ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([i, 0]);
-          break;
-        }
+      if (position[0] === boardSize) {
+        break;
       } else {
-        result.push([i, 0]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([i, 0]);
+            break;
+          }
+        } else {
+          result.push([i, 0]);
+        }
       }
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0], this.loc[1] - i];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[1] < 0 ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([0, -i]);
-          break;
-        }
+      if (position[1] < 0) {
+        break;
       } else {
-        result.push([0, -i]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([0, -i]);
+            break;
+          }
+        } else {
+          result.push([0, -i]);
+        }
       }
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0], this.loc[1] + i];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[1] + i === boardSize ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([0, i]);
-          break;
-        }
+      if (position[1] === boardSize) {
+        break;
       } else {
-        result.push([0, i]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([0, i]);
+            break;
+          }
+        } else {
+          result.push([0, i]);
+        }
       }
     }
     return result;
@@ -173,102 +183,111 @@
     let result = [];
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] - i, this.loc[1] - i];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] < 0 ||
-          position[1] < 0 ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([-i, -i]);
-          break;
-        }
+      if ( position[0] < 0 || position[1] < 0) {
+        break;
       } else {
-        result.push([-i, -i]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([-i, -i]);
+            break;
+          }
+        } else {
+          result.push([-i, -i]);
+        }
       }
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] + i, this.loc[1] + i];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] === boardSize ||
-          position[1] === boardSize ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([i, i]);
-          break;
-        }
+      console.log(position);
+      if (position[0] === boardSize || position[1] === boardSize) {
+        break;
       } else {
-        result.push([i, i]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([i, i]);
+            break;
+          }
+        } else {
+          result.push([i, i]);
+        }
       }
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] - i, this.loc[1] + i];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] < 0 ||
-          position[1] === boardSize ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([-i, i]);
-          break;
-        }
+      if (position[0] < 0 || position[1] === boardSize) {
+        break;
       } else {
-        result.push([-i, i]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([-i, i]);
+            break;
+          }
+        } else {
+          result.push([-i, i]);
+        }
       }
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] + i, this.loc[1] - i];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] < 0 ||
-          position[1] < 0 ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([i, -i]);
-          break;
-        }
+      if (position[0] === boardSize || position[1] < 0) {
+        break;
       } else {
-        result.push([i, -i]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black")
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push([i, -i]);
+            break;
+          }
+        } else {
+          result.push([i, -i]);
+        }
       }
     }
     return result;
@@ -276,28 +295,33 @@
 
   GameTile.prototype._lanceMoves = function(board) {
     let result = [];
+    let white = this.color === 'white';
     for (let i = 1; i < boardSize; i++) {
-      let position = [this.loc[0] - i, this.loc[1]];
-      if (board[position[0]][position[1]] !== " ") {
-        if (
-          position[0] < 0 ||
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
-          break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white")
-        ) {
-          result.push([-i, 0]);
-          break;
-        }
+      let position = white ? [this.loc[0] - i, this.loc[1]] : [this.loc[0] + i, this.loc[1]];
+      if (position[0] < 0 || position[0] === boardSize) {
+        break;
       } else {
-        result.push([-i, 0]);
+        if (board[position[0]][position[1]] !== " ") {
+          if (
+            position[0] < 0 ||
+            ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "white") ||
+              (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+                this.color === "black"))
+          ) {
+            break;
+          } else if (
+            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
+              this.color === "black") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
+              this.color === "white")
+          ) {
+            result.push(white ? [-i, 0] : [i, 0]);
+            break;
+          }
+        } else {
+          result.push(white ? [-i, 0] : [i, 0]);
+        }
       }
     }
     return result;
