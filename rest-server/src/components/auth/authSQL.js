@@ -1,5 +1,4 @@
 export const signUpHelper = ({ email, username, password }) => {
-  console.log(email, username, password)
   return `
     INSERT INTO users (email, username, password)
     VALUES ('${email}', '${username}', '${password}')
