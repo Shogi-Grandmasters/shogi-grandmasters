@@ -44,7 +44,7 @@ class GameTile {
             return set.concat([position]);
           }
         return set;
-      }) :
+      }, []) :
       moveSet.reduce((set, move) => {
       let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
       if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 && !(position[0] === this.loc[0] && position[1] === this.loc[1])) {
