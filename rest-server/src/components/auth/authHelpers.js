@@ -1,10 +1,11 @@
 import { db } from "../../config/database/";
 import { success, error } from "../../lib/log";
 import { signUpHelper, loginHelper } from './authSQL';
+
 export const signUpQuery = async body => {
   try {
     const queryString = signUpHelper(body);
-    const data = await db.queryAsync(queryString);
+    const data = await db.query(queryString);
     success("signUpQuery - successfully retrieved data ", JSON.stringify(data));
     return data;
   } catch (err) {
