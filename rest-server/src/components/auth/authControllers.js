@@ -7,7 +7,7 @@ import { hashPassword } from "../../middleware/auth/bcrypt";
 export const signUpController = async (req, res) => {
   try {
     req.body.password = await hashPassword(req.body.password);
-    const { rows } = await signUpQuery(req.body);
+    const rows = await signUpQuery(req.body);
     const { id, email } = rows[0];
     success(
       "signUpController - successfully retrieved data ",
