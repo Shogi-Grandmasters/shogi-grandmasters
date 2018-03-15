@@ -34547,6 +34547,10 @@ var _react = __webpack_require__(10);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _constants = __webpack_require__(449);
+
+var _constants2 = _interopRequireDefault(_constants);
+
 var _GameTile = __webpack_require__(448);
 
 var _GameTile2 = _interopRequireDefault(_GameTile);
@@ -34616,7 +34620,7 @@ var GridSpace = function GridSpace(_ref) {
         }
       }
     },
-    piece || ' '
+    piece.name || ' '
   );
 };
 
@@ -34629,7 +34633,7 @@ var ShogiBoard = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ShogiBoard.__proto__ || Object.getPrototypeOf(ShogiBoard)).call(this, props));
 
     _this.state = {
-      board: props.board || [['L', 'K', 'S', 'G', 'K', 'G', 'S', 'K', 'L'], [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '], ['l', 'k', 's', 'g', 'k', 'g', 's', 'k', 'l']],
+      board: props.board || [['P', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'P'], [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '], ['p', 'h', 's', 'g', 'k', 'g', 's', 'h', 'p']],
       player: {
         user: {
           name: 'Player One'
@@ -34812,7 +34816,7 @@ var ShogiBoard = function (_Component) {
                   hints: hints,
                   owned: cell.trim() && _this3.state.player.color === _this3.playerColorFromId(cell),
                   coords: [ri, ci],
-                  piece: cell.trim() ? cell : null,
+                  piece: cell.trim() ? new _GameTile2.default(_constants2.default.boardIds[cell.toLowerCase()], _this3.playerColorFromId(cell), [ri, ci], 'Sir Bae') : null,
                   activate: _this3.togglePiece,
                   movePiece: _this3.movePiece
                 });

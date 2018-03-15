@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import constants from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
 
 import './ShogiBoard.css';
@@ -34,7 +35,7 @@ const GridSpace = ({ coords, hints = [], selected = false, owned = false, piece 
         }
       }}
     >
-      {piece || ' '}
+      {piece.name || ' '}
     </td>
   );
 }
@@ -44,7 +45,7 @@ class ShogiBoard extends Component {
     super(props);
     this.state = {
       board: props.board || [
-        ['L', 'K', 'S', 'G', 'K', 'G', 'S', 'K', 'L'],
+        ['P', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'P'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -52,7 +53,7 @@ class ShogiBoard extends Component {
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
-        ['l', 'k', 's', 'g', 'k', 'g', 's', 'k', 'l']
+        ['p', 'h', 's', 'g', 'k', 'g', 's', 'h', 'p']
       ],
       player: {
         user: {
@@ -185,7 +186,7 @@ class ShogiBoard extends Component {
                     hints={hints}
                     owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                     coords={[ri, ci]}
-                    piece={cell.trim() ? cell : null}
+                    piece={cell.trim() ? new GameTile(constants.boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci], 'Sir Bae') : null}
                     activate={this.togglePiece}
                     movePiece={this.movePiece}
                   />
