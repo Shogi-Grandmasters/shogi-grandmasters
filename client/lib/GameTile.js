@@ -21,9 +21,9 @@ class GameTile {
     this.isPromoted = false;
     this.canPromote = false;
     this.loc = loc
+    this.moves = [];
 
-    if (name === "Rook" || name === "Bishop") {
-      this.moves = [];
+    if (name === "Rook" || name === "Bishop" ) {
       this.promotedMoves = moveSets[name];
     } else {
       this.moves = moveSets[name];
@@ -34,19 +34,31 @@ class GameTile {
   }
 
   findMoves() {
-    let moveSet = this.isPromoted ? this.promotedMoves : this.moves;
+    let moveSet = this.isPromoted ? this.promotedMoves.slice() : this.moves.slice();
 
     if (this.name === "Rook") {
       moveSet = moveSet.concat(this._rookMoves());
     } else if (this.name === "Bishop") {
       moveSet = moveSet.concat(this._bishopMoves());
+    } else if (this.name === "Lance" && !this.isPromoted) {
+      moveSet = this._lanceMoves();
     }
 
     if (this.color === 'black') {
       moveSet = moveSet.map((loc) => [-loc[0], -loc[1]]);
     }
 
-    return moveSet.reduce((set, move) => {
+    return (this.name === 'Lance' && !this.isPromoted) ?
+      moveSet.reduce((set, move) => {
+        let position = [this.loc + move[0], this.loc[1]];
+        if (position[0] < boardSize && position[0] >= 0 &&
+          ((position[0] < this.loc[0] && this.color === 'white') ||
+          (postion[0] > this.loc[0] && this.color === 'black'))) {
+            return set.concat([position]);
+          }
+        return set;
+      }) :
+      moveSet.reduce((set, move) => {
       let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
       if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 && !(position[0] === this.loc[0] && position[1] === this.loc[1])) {
         return set.concat([position]);
@@ -57,7 +69,11 @@ class GameTile {
 
   setLocation(loc) {
     this.loc = loc;
-    if (loc[0] < 3 && !this.canPromote) {
+    if (this.name === 'King' || this.name === 'Gold') {
+      return;
+    }
+    if ((loc[0] < 3 && this.color === 'white') ||
+      (loc[0] > boardSize - 4 && this.color === 'black')) {
       this.canPromote = true;
     }
   }
@@ -82,5 +98,13 @@ GameTile.prototype._bishopMoves = () => {
   }
   return result;
 };
+
+GameTile.prototype._lanceMoves = () => {
+  let result = [];
+  for (let i = 1; i < boardSize; i++) {
+    result.push([-i, 0]);
+  }
+  return result;
+}
 
 export default GameTile;
