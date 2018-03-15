@@ -1,6 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
-import constants from '../../../lib/constants';
+import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
 
 import './ShogiBoard.css';
@@ -9,21 +9,24 @@ const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
 
-const ShogiPiece = ({ tile, player }) => {
+const getTokenImage = (tile, player) => {
   const prefix = tile.color === player.color ? 'N-' : 'S-';
   const suffix = tile.isPromoted ? '-P' : '';
-  let imageUrl =  './tokens/' + prefix + tile.name + suffix + '.svg';
+  return './tokens/' + prefix + tile.name + suffix + '.svg';
+}
+
+const ShogiPiece = ({ coords, tile, player, isActive, activate }) => {
   let tileStyle = {
-    textIndent: '-999px',
-    overflow: 'hidden',
-    width: '60px',
-    height: '70px',
-    margin: '0 auto',
-    background: `url(${imageUrl})`,
-    backgroundSize: 'contain',
+    backgroundImage: `url(${getTokenImage(tile, player)})`,
   };
   return (
-    <div style={tileStyle}>{tile.name}</div>
+    <div
+      className="shogi__token"
+      style={tileStyle}
+      onClick={() => player.color === tile.color && activate(coords)}
+    >
+      {tile.name}
+    </div>
   )
 }
 
@@ -34,7 +37,7 @@ const PlayerPanel = ({ player, turn }) => (
     <ul>
       {player.hand.map(piece =>
         <ShogiPiece
-          tile={{ name: constants.boardIds[piece], color: player.color, isPromoted: false }}
+          tile={{ name: boardIds[piece], color: player.color, isPromoted: false }}
           player={player}
         />
       )}
@@ -60,15 +63,16 @@ const GridSpace = ({ coords, hints = [], selected = false, owned = false, piece 
     <td
       id={`${x}-${y}`}
       className={classNames.join(' ')}
-      onClick={() => {
-        if (isHint) {
-          movePiece([x, y]);
-        } else if (piece && owned) {
-          piece && owned && activate(coords);
-        }
-      }}
+      onClick={() => isHint && movePiece([x, y])}
     >
-      {piece ? <ShogiPiece tile={piece} player={player} /> : ' ' }
+      {piece ?
+        <ShogiPiece
+          coords={coords}
+          tile={piece}
+          player={player}
+          isActive={selected}
+          activate={activate}
+        /> : ' ' }
     </td>
   );
 }
@@ -133,21 +137,14 @@ class ShogiBoard extends Component {
 
   getPiece([x, y]) {
     // PLACEHOLDER
-    let tempPiece = this.state.board[x][y];
-    if (tempPiece.trim()) {
-      // let relativeMoves = [[-1, -1], [-1, 0], [-1, 1]];
-      // let possibleMoves = relativeMoves.map(([moveX, moveY]) => [x + moveX, y + moveY]);
-      // return {
-      //   color: this.playerColorFromId(tempPiece),
-      //   possibleMoves,
-      // }
-      return new GameTile(constants.boardIds[tempPiece], this.playerColorFromId(tempPiece), [x, y], 'King Rat');
+    let pieceAtCoords = this.state.board[x][y];
+    if (pieceAtCoords.trim()) {
+      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y], 'King Rat');
     }
     return null;
   }
 
   capture([x, y]) {
-    console.log(JSON.stringify(this.state.board))
     // may need to change depending on socket events
     let pieceToCapture = this.state.board[x][y];
     let updatePlayer = {...this.state.player};
@@ -160,15 +157,6 @@ class ShogiBoard extends Component {
   }
 
   movePiece(coords) {
-    // requires a selected piece
-
-    // matches available moves based on moveset
-    // cannot have other pieces blocking, unless piece movement == hop
-    // initiates capture if destination is occupied by other team
-      // since the move will only happen to a hint tile,
-      // any tile found at the destination coords can be considered an opponent piece
-
-    // get piece from selected in state
     if (this.state.selected) {
       let [fromX, fromY] = this.state.selected;
       let [toX, toY] = coords;
@@ -179,9 +167,6 @@ class ShogiBoard extends Component {
       let updateBoard = this.state.board.slice().map(row => row.slice());
       updateBoard[fromX][fromY] = ' ';
       updateBoard[toX][toY] = pieceToMove;
-      // update board
-      // deselect
-      // transition turn
       this.setState({
         board: updateBoard,
         hints: [],
@@ -203,6 +188,7 @@ class ShogiBoard extends Component {
   }
 
   toggleHints() {
+    // TODO:  variant for player hand click
     if (this.state.selected) {
       let selectedPiece = this.getPiece(this.state.selected);
       // prune impossible moves
@@ -241,7 +227,7 @@ class ShogiBoard extends Component {
                       hints={hints}
                       owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                       coords={[ri, ci]}
-                      piece={cell.trim() ? { name: constants.boardIds[cell.toLowerCase()], color: this.playerColorFromId(cell)} : null}
+                      piece={cell.trim() ? new GameTile(boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci], 'Temp') : null}
                       player={this.state.player}
                       activate={this.togglePiece}
                       movePiece={this.movePiece}

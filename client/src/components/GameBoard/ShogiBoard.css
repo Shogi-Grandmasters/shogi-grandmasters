@@ -18,6 +18,16 @@
   flex: 6 800px;
 }
 
+.shogi__token {
+  text-indent: -999px;
+  overflow: hidden;
+  width: 60px;
+  height: 70px;
+  margin: 0 auto;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .space {
   width: 80px;
   height: 80px;

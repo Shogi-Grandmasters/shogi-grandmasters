@@ -31,4 +31,8 @@ export const moveSets = {
 export const boardSize = 9;
 
 
-export default constants;
+export default {
+  moveSets,
+  boardIds,
+  boardSize
+};
