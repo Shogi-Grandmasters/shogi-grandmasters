@@ -34689,7 +34689,7 @@ var ShogiBoard = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ShogiBoard.__proto__ || Object.getPrototypeOf(ShogiBoard)).call(this, props));
 
     _this.state = {
-      board: props.board || [['P', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'P'], [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '], ['p', 'h', 's', 'g', 'k', 'g', 's', 'h', 'p']],
+      board: props.board || [['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'], [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '], ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'], [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '], ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']],
       player: {
         user: {
           name: 'Player One'

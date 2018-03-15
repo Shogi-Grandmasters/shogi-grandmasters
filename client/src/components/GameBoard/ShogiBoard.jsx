@@ -77,7 +77,7 @@ class ShogiBoard extends Component {
     super(props);
     this.state = {
       board: props.board || [
-        ['P', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'P'],
+        ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -85,7 +85,7 @@ class ShogiBoard extends Component {
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
-        ['p', 'h', 's', 'g', 'k', 'g', 's', 'h', 'p']
+        ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
       ],
       player: {
         user: {
