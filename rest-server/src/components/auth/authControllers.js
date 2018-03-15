@@ -28,9 +28,11 @@ export const signUpController = async (req, res) => {
 export const loginController = async (req, res) => {
   try {
     const rows = await loginQuery(req.body);
-    delete rows[0].password;
+    console.log('our rows from loginController', rows)
+    // delete rows[0].password;
     const { id, username } = rows[0];
-    success("loginController - successfully retrieved data ", rows[0]);
+    console.log('our username and id', id, username)
+    success("loginController - successfully retrieved data ", JSON.stringify(rows[0]));
     const token = await generateToken(id, username);
     rows[0].token = token;
     return res

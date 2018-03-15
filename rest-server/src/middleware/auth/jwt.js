@@ -2,14 +2,14 @@ import { sign, verify } from "jsonwebtoken";
 
 import { success, error } from "../../lib/log";
 
-export const generateToken = (id, email) => {
+export const generateToken = (id, username) => {
   const token = {};
 
   token.accessToken = sign(
     {
-      exp: Math.floor(Date.now() / 1000) + 60 * 60,
-      email,
-      id
+      exp: Math.floor(Date.now() / 1000) + (60 * 60),
+      username,
+      id,
     },
     process.env.TOKEN_SECRET
   );
