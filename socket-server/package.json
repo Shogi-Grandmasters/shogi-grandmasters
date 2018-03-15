@@ -12,13 +12,14 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.17.0",
+    "chalk": "^2.3.0",
     "delay": "^2.0.0",
     "dotenv": "^4.0.0",
     "lodash": "^4.17.4",
     "random-id": "^0.0.2",
+    "redis": "^2.8.0",
     "socket.io": "^2.0.3",
-    "socket.io-client": "^2.0.3",
-    "chalk": "^2.3.0"
+    "socket.io-client": "^2.0.3"
   },
   "devDependencies": {
     "babel-jest": "^21.2.0",
