@@ -5,7 +5,6 @@ import helmet from "helmet";
 
 import router from "../../routes/index";
 
-const db = require('../database/index');
 const middleWare = [
   helmet(),
   parser.json(),
