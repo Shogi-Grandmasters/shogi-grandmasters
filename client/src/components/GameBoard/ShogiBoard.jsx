@@ -103,7 +103,6 @@ class ShogiBoard extends Component {
   }
 
   getPiece([x, y]) {
-    // PLACEHOLDER
     let pieceAtCoords = this.state.board[x][y];
     if (pieceAtCoords.trim()) {
       return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y], 'King Rat');
@@ -112,7 +111,6 @@ class ShogiBoard extends Component {
   }
 
   capture([x, y]) {
-    // may need to change depending on socket events
     let pieceToCapture = this.state.board[x][y];
     let updatePlayer = {...this.state.player};
 
@@ -144,10 +142,15 @@ class ShogiBoard extends Component {
   }
 
   togglePiece(coords) {
-    let [incomingX, incomingY] = coords;
-    let current = this.state.selected;
-    let updateSelected = current ? incomingX === current[0] && incomingY === current[1] ? null : coords : coords;
-
+    // clicks on hand sends {color}:{piece}
+    let updateSelected;
+    if (typeof coords === 'string') {
+      //
+    } else {
+      let [incomingX, incomingY] = coords;
+      let current = this.state.selected;
+      updateSelected = current ? incomingX === current[0] && incomingY === current[1] ? null : coords : coords;
+    }
     // set or unset move hints
     this.setState({
       selected: updateSelected,
@@ -184,7 +187,7 @@ class ShogiBoard extends Component {
     }
     return(
       <div className="match">
-        <PlayerPanel id={'opponent'} player={this.state.opponent} turn={!this.state.isTurn} />
+        <PlayerPanel id={'opponent'} local={false} player={this.state.opponent} turn={!this.state.isTurn} />
         <table className="match__board" style={boardStyle}>
           <tbody>
             {this.state.board.map((row, ri) => {
@@ -208,7 +211,7 @@ class ShogiBoard extends Component {
             })}
           </tbody>
         </table>
-        <PlayerPanel id={'player'} player={this.state.player} turn={this.state.isTurn} />
+        <PlayerPanel id={'player'} local={true} player={this.state.player} turn={this.state.isTurn} />
       </div>
     )
   }

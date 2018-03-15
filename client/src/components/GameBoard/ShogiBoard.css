@@ -73,23 +73,19 @@
   margin: 8px;
 }
 
-.player__hand {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+.player__profile {
+  width: 200px;
 }
-.player__hand > * {
-  flex: 1 auto;
+
+.player__hand {
+  width: 520px;
 }
 .player__hand-tile {
   cursor: pointer;
   width: 80px;
   height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: inline-block;
+  margin: 2px;
 }
 .player__hand-count {
   text-align: center;

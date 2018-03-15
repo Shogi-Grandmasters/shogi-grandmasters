@@ -3,15 +3,17 @@ import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 
-const PlayerHand = ({ player, selected, activate }) => {
+const PlayerHand = ({ player, local, selected, activate }) => {
   let hand = player.hand.reduce((counts, piece) => {
     counts[piece] = counts[piece] + 1 || 1;
     return counts;
   }, {})
+  let tileStyles = ['player__hand-tile'];
+  if (local) tileStyles.push('active');
   return (
     <div className="player__hand">
       {Object.entries(hand).map(([piece, count]) =>
-        <div className="player__hand-tile">
+        <div className={tileStyles.join(' ')}>
           <ShogiPiece
             key={piece}
             coords={`${player.color}:${piece}`}
@@ -19,19 +21,22 @@ const PlayerHand = ({ player, selected, activate }) => {
             player={player}
             activate={activate}
           />
-          <span className="player__hand-count">{count}</span>
+          <div className="player__hand-count">{count}</div>
         </div>
       )}
     </div>
   )
 }
 
-const PlayerPanel = ({ player, turn, selected, activate }) => (
+const PlayerPanel = ({ player, local, turn, selected, activate }) => (
   <div className="match__player">
-    <h2>{player.user.name}</h2>
-    <h4>{turn ? 'ACTIVE' : ''}</h4>
+    <div className="player__profile">
+      <h2>{player.user.name}</h2>
+    </div>
     <PlayerHand
       player={player}
+      local={local}
+      selected={selected}
       activate={activate}
     />
   </div>
