@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
-import constants from '../../lib/constants';
-import GameTile from '../../lib/GameTile';
+import constants from '../../../lib/constants';
+import GameTile from '../../../lib/GameTile';
 
 import './ShogiBoard.css';
 
