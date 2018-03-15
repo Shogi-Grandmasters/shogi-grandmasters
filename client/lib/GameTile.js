@@ -1,17 +1,4 @@
-// import {moveSets, boardSize} from './constants.js';
-
-const boardSize = 9;
-const moveSets = {
-  King: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]],
-  Gold: [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 0], [0, -1]],
-  Silver: [[-1, -1], [-1, 0], [-1, 1], [1, 1], [1, -1]],
-  Knight: [[-2, -1], [-2, 1]],
-  Pawn: [[-1, 0]],
-  Rook: [[-1, -1], [-1, 1], [1, 1], [1, -1]],
-  Bishop: [[-1, 0], [0, 1], [1, 0], [0, -1]],
-  Lance: [[-1, 0]],
-};
-
+import {moveSets, boardSize} from './constants.js';
 
 class GameTile {
   constructor(name, color, loc, promotedName = null) {
