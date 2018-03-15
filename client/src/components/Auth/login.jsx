@@ -2,7 +2,11 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 class Login extends Component {
-
+  constructor() {
+    super();
+    this.state = {};
+  }
+  
   submitAuthData = async (e) => {
     e.preventDefault();
     const { username, password } = this.state;
@@ -12,7 +16,7 @@ class Login extends Component {
       localStorage.setItem('username', data.data.username)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('token', data.data.token.accessToken)
-      data ? this.props.history.push('/') : this.props.history.push('/login');
+      data ? this.props.history.push('/home') : this.props.history.push('/login');
     } catch (err) {
       throw new Error(err);
     }
