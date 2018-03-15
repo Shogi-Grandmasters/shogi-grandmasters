@@ -7,8 +7,8 @@ class GameTile {
     this.color = color;
     this.isPromoted = false;
     this.canPromote = false;
-    this.loc = loc
-    this.moves = [];
+    this.loc = loc;
+    this.moves = Array(1);
 
     if (name === "Rook" || name === "Bishop" ) {
       this.promotedMoves = moveSets[name];
@@ -21,7 +21,7 @@ class GameTile {
   }
 
   findMoves() {
-    let moveSet = this.isPromoted ? this.promotedMoves.slice() : this.moves.slice();
+    let moveSet = this.isPromoted ? this.promotedMoves : this.moves;
 
     if (this.name === "Rook") {
       moveSet = moveSet.concat(this._rookMoves());
@@ -37,7 +37,7 @@ class GameTile {
 
     return (this.name === 'Lance' && !this.isPromoted) ?
       moveSet.reduce((set, move) => {
-        let position = [this.loc + move[0], this.loc[1]];
+        let position = [this.loc[0] + move[0], this.loc[1]];
         if (position[0] < boardSize && position[0] >= 0 &&
           ((position[0] < this.loc[0] && this.color === 'white') ||
           (postion[0] > this.loc[0] && this.color === 'black'))) {
