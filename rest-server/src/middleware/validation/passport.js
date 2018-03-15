@@ -20,7 +20,7 @@ const jwtOptions = {
 passport.use(
   new LocalStrategy(localOptions, async (username, password, done) => {
     try {
-      const { rows } = await loginQuery({ username });
+      const rows = await loginQuery({ username });
       if (!rows.length) {
         return done(null, false, { message: "Incorrect username." });
       }

@@ -10,6 +10,6 @@ export const loginHelper = ({ username }) => {
   return `
     SELECT id, email, username, password
     FROM users
-    WHERE email='${username}'
+    WHERE username='${username}'
   `;
 };
