@@ -5,17 +5,6 @@ import './Auth.css';
 
 class Signup extends Component {
 
-  // submitAuthData = (e) => {
-  //   e.preventDefault();
-  //   const { email, password, username } = this.state;
-  //   const body = {
-  //     email,
-  //     password,
-  //     username
-  //   }
-  //   console.log(body)
-  // }
-
   submitAuthData = async (e) => {
     e.preventDefault();
     const { email, password, username } = this.state;
