@@ -49,7 +49,8 @@ const GridSpace = ({ coords, hints = [], selected = false, owned = false, piece 
   let classNames = ['space'];
   let [x, y] = coords;
   let promotes = x < 3 ? 'white' : x > 5 ? 'black' : null;
-  if (promotes) classNames.push(`promote-${promotes}`);
+  if ((y + 1) % 3 === 0 && y < 8) classNames.push('right-border');
+  if ((x + 1) % 3 === 0 && x < 8) classNames.push('lower-border');
   if (piece && owned) classNames.push('active');
   if (selected) classNames.push('selected'); // and remove active
 
@@ -212,10 +213,13 @@ class ShogiBoard extends Component {
     const hints = this.state.hints;
     const playerColor = this.state.player.color;
 
+    const boardStyle = {
+      backgroundImage: `url(${'./textures/wood.jpg'})`
+    }
     return(
       <div className="match">
         <PlayerPanel id={'opponent'} player={this.state.opponent} turn={!this.state.isTurn} />
-        <table className="match__board">
+        <table className="match__board" style={boardStyle}>
           <tbody>
             {this.state.board.map((row, ri) => {
               return (
