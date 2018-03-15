@@ -9,7 +9,6 @@ class Login extends Component {
     const body = { username, password }
     try {
       const data = await axios.post(`http://localhost:3396/api/auth/login`, body);
-      console.log('our data in Login', data)
       localStorage.setItem('username', data.data.username)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('token', data.data.token.accessToken)
