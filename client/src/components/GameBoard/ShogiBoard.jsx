@@ -159,7 +159,7 @@ class ShogiBoard extends Component {
     if (this.state.selected) {
       let selectedPiece = this.getPiece(this.state.selected);
       // prune impossible moves
-      let updateHints = selectedPiece.findMoves().reduce((moves, [x, y]) => {
+      let updateHints = selectedPiece.findMoves(this.state.board).reduce((moves, [x, y]) => {
         let inBounds = x >= 0 && x <= 8 && y >= 0 && y <= 8;
         if (inBounds) moves.push([x, y]);
         return moves;
