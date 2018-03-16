@@ -84,6 +84,7 @@ class ShogiBoard extends Component {
     this.toggleHints = this.toggleHints.bind(this);
     this.localPlayer = this.localPlayer.bind(this);
     this.movePiece = this.movePiece.bind(this);
+    this.removeFromHand = this.removeFromHand.bind(this);
     this.reverseBoard = this.reverseBoard.bind(this);
   }
 
@@ -130,6 +131,17 @@ class ShogiBoard extends Component {
     })
   }
 
+  removeFromHand(piece) {
+    let updatePlayer = {...this.state.player};
+    let updateHand = [...updatePlayer.hand];
+    let removePoint = updateHand.indexOf(piece);
+    updateHand.splice(removePoint, 1);
+    updatePlayer.hand = updateHand;
+    this.setState({
+      player: updatePlayer,
+    })
+  }
+
   movePiece([x, y]) {
     if (this.state.selected) {
       let updateBoard = copyMatrix(this.state.board);
@@ -149,6 +161,7 @@ class ShogiBoard extends Component {
         // with drops, spot will always be empty
         updateBoard[x][y] = pieceToPlace;
         // decrement piece count in player hand based on target
+        this.removeFromHand(pieceToPlace);
       }
       this.setState({
         board: updateBoard,
@@ -204,7 +217,6 @@ class ShogiBoard extends Component {
         let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
         // run the canDrop() function for hints and set state
         let validLocations = helpers.validDropLocations(gameTile, this.state.board);
-        console.log(validLocations);
         this.setState({
           hints: validLocations,
         })
