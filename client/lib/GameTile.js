@@ -23,15 +23,27 @@
     findMoves(board, _test = false) {
       let moveSet = this.isPromoted ? this.promotedMoves : this.moves;
 
-      moveSet = moveSet.reduce((set, move) => {
-        let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
-        if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 &&
-          !((board[position[0]][position[1]].charCodeAt(0) > 90 && this.color === "white") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black" && board[position[0]][position[1]] !== ' '))) {
-          return set.concat([move]);
-        }
-        return set;
-      }, []);
+      if (_test) {
+        console.log('are we here')
+        moveSet = moveSet.reduce((set, move) => {
+          let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
+          if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0) {
+            return set.concat([move]);
+          }
+          return set;
+        }, []);
+        console.log(moveSet);
+      } else {
+        moveSet = moveSet.reduce((set, move) => {
+          let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
+          if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 &&
+            !((board[position[0]][position[1]].charCodeAt(0) > 90 && this.color === "white") ||
+            (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black" && board[position[0]][position[1]] !== ' '))) {
+            return set.concat([move]);
+          }
+          return set;
+        }, []);
+      }
 
       if (this.name === "Rook") {
         moveSet = moveSet.concat(this._rookMoves(board, _test));

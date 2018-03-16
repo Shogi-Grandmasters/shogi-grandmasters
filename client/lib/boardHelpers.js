@@ -55,11 +55,7 @@ export const getCombinedMoveSet = (board, color) => {
         p = new GameTile(boardIds[board[r][c].charAt(0).toLowerCase()], color, [r, c], board[r][c].charAt(1) === "+" ? true : false);
       }
       if (p) {
-        if (p.name === 'King') {
-          teamMoves = teamMoves.concat(p.findMoves(board, true));
-        } else {
-          teamMoves = teamMoves.concat(p.findMoves(board));
-        }
+        teamMoves = teamMoves.concat(p.findMoves(board, true));
       }
     }
   }));
