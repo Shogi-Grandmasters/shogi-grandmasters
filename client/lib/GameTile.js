@@ -8,11 +8,11 @@
       this.isPromoted = isPromoted;
       this.canPromote = false;
       this.loc = loc;
-      this.moves = Array(1);
+      this.moves = [];
 
       if (name === "Rook" || name === "Bishop") {
         this.promotedMoves = moveSets[name];
-      } else {
+      } else if (this.name !== 'Lance') {
         this.moves = moveSets[name];
         if (name !== "King" && name !== "Gold") {
           this.promotedMoves = moveSets.Gold;
@@ -20,29 +20,25 @@
       }
     }
 
-    findMoves(board) {
-      let moveSet = this.isPromoted ? this.promotedMoves : this.moves || [];
-
-      // if (this.color === "black") {
-      //   moveSet = moveSet.map(loc => [-loc[0], -loc[1]]);
-      // }
+    findMoves(board, _test = false) {
+      let moveSet = this.isPromoted ? this.promotedMoves : this.moves;
 
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
         if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 &&
           !((board[position[0]][position[1]].charCodeAt(0) > 90 && this.color === "white") ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black"))) {
+          (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black" && board[position[0]][position[1]] !== ' '))) {
           return set.concat([move]);
         }
         return set;
       }, []);
 
       if (this.name === "Rook") {
-        moveSet = moveSet.concat(this._rookMoves(board));
+        moveSet = moveSet.concat(this._rookMoves(board, _test));
       } else if (this.name === "Bishop") {
-        moveSet = moveSet.concat(this._bishopMoves(board));
+        moveSet = moveSet.concat(this._bishopMoves(board, _test));
       } else if (this.name === "Lance" && !this.isPromoted) {
-        moveSet = this._lanceMoves(board);
+        moveSet = this._lanceMoves(board, _test);
       }
 
       moveSet = moveSet.map(move => [
@@ -50,8 +46,8 @@
         this.loc[1] + move[1]
       ]);
 
-      if (this.name = 'King') {
-        moveSet = this._kingMoves(board, moveSet)
+      if (this.name === 'King' && !_test) {
+        moveSet = this._kingMoves(board, moveSet);
       }
 
       return moveSet;
@@ -75,7 +71,7 @@
     }
   }
 
-  GameTile.prototype._rookMoves = function(board) {
+  GameTile.prototype._rookMoves = function(board, _test) {
     let result = [];
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] - i, this.loc[1]];
@@ -92,9 +88,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([-i, 0]);
             break;
@@ -119,9 +115,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([i, 0]);
             break;
@@ -146,9 +142,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([0, -i]);
             break;
@@ -173,9 +169,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([0, i]);
             break;
@@ -188,7 +184,7 @@
     return result;
   };
 
-  GameTile.prototype._bishopMoves = function(board) {
+  GameTile.prototype._bishopMoves = function(board, _test) {
     let result = [];
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] - i, this.loc[1] - i];
@@ -205,9 +201,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([-i, -i]);
             break;
@@ -232,9 +228,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([i, i]);
             break;
@@ -259,9 +255,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([-i, i]);
             break;
@@ -286,9 +282,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([i, -i]);
             break;
@@ -301,7 +297,7 @@
     return result;
   };
 
-  GameTile.prototype._lanceMoves = function(board) {
+  GameTile.prototype._lanceMoves = function(board, _test) {
     let result = [];
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] - i, this.loc[1]];
@@ -319,9 +315,9 @@
             break;
           } else if (
             (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "black" && board[position[0]][position[1]] !== 'k') ||
+              this.color === "black" && !(_test && board[position[0]][position[1]] === 'k')) ||
             (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "white" && board[position[0]][position[1]] !== 'K')
+              this.color === "white" && !(_test && board[position[0]][position[1]] === 'K'))
           ) {
             result.push([-i, 0]);
             break;
@@ -335,11 +331,12 @@
   };
 
   GameTile.prototype._kingMoves = function(board, moveSet) {
-    let oppTeam = getCombinedMoveSet(reverseBoard(board));
+    let oppTeam = getCombinedMoveSet(reverseBoard(board), oppositeColor[this.color]);
     let kingsOpts = moveSet.map((move) => [oppositeBoardSide[move[0]], oppositeBoardSide[move[1]]]);
     return kingsOpts
       .reduce((set, move) => {
-        if (!oppTeam.includes(move)) {
+        let open = oppTeam.every((tuple) => !(tuple[0] === move[0] && tuple[1] === move[1]));
+        if (open) {
           return set.concat([move]);
         }
         return set;

@@ -38,11 +38,9 @@ const copyMatrix = (matrix) => {
 }
 
 export const reverseBoard = (board) => {
-    let boardCopy = copyMatrix(this.state.board);
+    let boardCopy = copyMatrix(board);
     boardCopy = boardCopy.reverse().map(row => row.reverse());
-    this.setState({
-      board: boardCopy,
-    })
+    return boardCopy;
   }
 
 // the board as the team's owner sees it and that player's color
@@ -50,27 +48,22 @@ export const getCombinedMoveSet = (board, color) => {
   let teamMoves = [];
   board.forEach((row, r) => row.forEach((col, c) => {
     if (board[r][c] !== ' ') {
+      let p;
       if (color === 'white' && board[r][c].charCodeAt(0) > 90) {
-        teamMoves = teamMoves.concat(
-          new GameTile(
-            boardIds[board[r][c][0]],
-            'white',
-            [r, c],
-            (board[r][c][1] === '+') ? true : false)
-          .findMoves()
-        );
+        p = new GameTile(boardIds[board[r][c].charAt(0).toLowerCase()], color, [r, c], board[r][c].charAt(1) === "+" ? true : false);
+      } else if (color === 'black' && board[r][c].charCodeAt(0) < 91) {
+        p = new GameTile(boardIds[board[r][c].charAt(0).toLowerCase()], color, [r, c], board[r][c].charAt(1) === "+" ? true : false);
       }
-    } else if (color === 'black' && board[r][c].charCodeAt(0) < 91) {
-      teamMoves = teamMoves.concat(
-        new GameTile(
-          boardIds[board[r][c][0]],
-          'black',
-          [r, c],
-          board[r][c][1] === "+" ? true : false)
-        .findMoves()
-      );
+      if (p) {
+        if (p.name === 'King') {
+          teamMoves = teamMoves.concat(p.findMoves(board, true));
+        } else {
+          teamMoves = teamMoves.concat(p.findMoves(board));
+        }
+      }
     }
   }));
+  return teamMoves;
 }
 
 export default {
