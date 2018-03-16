@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Logo from '../Logo';
+import { Link } from 'react-router-dom';
 
+import './Nav.css'
 class Nav extends Component {
   constructor() {
     super();
@@ -11,19 +13,20 @@ class Nav extends Component {
 
   logout = () => {
     window.localStorage.clear();
-    this.props.history.push('/login');
   }
 
   render() {
     return (
-      <div class="topnav">
-        <a class="active" href="#home">Home</a>
-        <a href="#news">News</a>
-        <a href="#contact">Contact</a>
-        <a href="#about">About</a>
-      </div>
+      <ul className="topnav">
+        <li className="logo"><Logo /></li>
+        <li><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
+        <li><a href="#contact">History</a></li>
+        <li><Link to="/acct">Account</Link></li>
+      </ul>
     )
   }
 }
 
 export default Nav;
+
+// <li><a onClick={()=>this.account()}>Account</a></li>

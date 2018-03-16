@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Logo from '../Global/Logo/index.js';
-import Nav from '../Global/Nav.jsx';
+import Nav from '../Global/Nav/Nav.jsx';
 
 class Account extends Component {
   constructor() {
@@ -11,7 +11,6 @@ class Account extends Component {
   render() {
     return(
       <div>
-        <Logo />
         <Nav />
       </div>
     )
