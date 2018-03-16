@@ -1,12 +1,12 @@
-import { db } from "../../config/database/";
+import db from "../../config/database/";
 import { success, error } from "../../lib/log";
 import { signUpHelper, loginHelper } from './authSQL';
 
 export const signUpQuery = async body => {
   try {
     const queryString = signUpHelper(body);
-    const data = await db.query(queryString);
-    success("signUpQuery - successfully retrieved data ", JSON.stringify(data[0]));
+    const data = await db.queryAsync(queryString);
+    success("signUpQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
     return data;
   } catch (err) {
     error("signUpQuery - error= ", err);
@@ -17,9 +17,9 @@ export const signUpQuery = async body => {
 export const loginQuery = async body => {
   try {
     const queryString = loginHelper(body);
-    const data = await db.query(queryString);
-    success("loginQuery - successfully retrieved data ", JSON.stringify(data[0]));
-    return data[0];
+    const data = await db.queryAsync(queryString);
+    success("loginQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
+    return data;
   } catch (err) {
     error("loginQuery - error= ", err);
     throw new Error(err);

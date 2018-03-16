@@ -1,7 +1,6 @@
 import http from "http";
 import SocketIo from "socket.io";
 import { each } from "lodash";
-import Redis from "redis";
 
 import Rooms from "./rooms";
 import clientEvents from "./clientEvents";
@@ -18,13 +17,8 @@ io.on("connection", client => {
   const room = rooms.findOrCreate(roomId || "default");
   client.join(room.get("id"));
 
-  const clientCache = Redis.createClient();
-  clientCache.on("error", err => {
-    error("Something went wrong ", err);
-  });
-
   each(clientEvents, (handler, event) => {
-    client.on(event, handler.bind(null, { io, client, room, clientCache }));
+    client.on(event, handler.bind(null, { io, client, room }));
   });
 });
 

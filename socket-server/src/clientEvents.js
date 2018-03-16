@@ -48,24 +48,21 @@ const clientDisconnect = ({ io, client, room }) => {
 //   }
 // };
 
-const clientFetchMessages = async ({ io, client, room, clientCache }, payload) => {
-  success("client load message request heard");
-  try {
-    await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
-      result && serverGameChat({ io, client, room }, result);
-    });
-  } catch (err) {
-    error("error fetching messages from database. e = ", err);
-  }
-};
+// const clientFetchMessages = async ({ io, client, room }, payload) => {
+//   success("client load message request heard");
+//   try {
+//     await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
+//       result && serverGameChat({ io, client, room }, result);
+//     });
+//   } catch (err) {
+//     error("error fetching messages from database. e = ", err);
+//   }
+// };
 
-const clientGameChat = async ({ io, client, room, clientCache }, payload) => {
+const clientGameChat = async ({ io, client, room }, payload) => {
   success("client game chat heard");
   try {
-    await clientCache.setex(`${room.get("id")}/messages`, 60, JSON.stringify(payload.messages));
-    await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
-      result && serverGameChat({ io, client, room }, result);
-    });
+    serverGameChat({ io, client, room }, payload.messages);
   } catch (err) {
     error("client game chat error: ", err);
   }
@@ -77,7 +74,7 @@ const clientGameReady = async ({ io, client, room }) => {
 };
 
 const clientListGames = async ({ io, client, room }) => {
-  success("inside of addopenDuels");
+  success("list open games");
   serverUpdateGames({ io, client, room });
 };
 
@@ -86,7 +83,7 @@ const clientEmitters = {
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,
-  "client.fetchMessages": clientFetchMessages,
+  // "client.fetchMessages": clientFetchMessages,
   "client.gameReady": clientGameReady,
   "client.gameChat": clientGameChat,
   "client.listOpenGames": clientListGames

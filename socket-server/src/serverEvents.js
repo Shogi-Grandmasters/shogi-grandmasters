@@ -46,7 +46,7 @@ export const serverGameChat = ({ io, room }, messages) => {
 };
 
 export const serverUpdateGames = ({ io, room }) => {
-  io.in(room.get("id")).emit("updateOpenGames", {
-    message: "do a pull request on all open dules!!!"
+  io.in(room.get("id")).emit("updateOpenMatches", {
+    message: "fetchall open matches!!!"
   });
 };
