@@ -1,10 +1,13 @@
 import React from 'react';
 import { Component } from 'react';
+
 import { boardIds } from '../../../lib/constants';
 import helpers from '../../../lib/boardHelpers';
+
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
+import ModalPrompt from '../Global/ModalPrompt.jsx';
 
 import './ShogiBoard.css';
 
@@ -76,14 +79,20 @@ class ShogiBoard extends Component {
         color: 'black',
         hand: [],
       },
+      pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
+      showModal: false,
+      modalContent: null,
       selected: null,
       hints: [],
       isTurn: true,
     }
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.movePiece = this.movePiece.bind(this);
     this.checkPromotion = this.checkPromotion.bind(this);
+    this.promptForPromote = this.promptForPromote.bind(this);
+    this.promotePiece = this.promotePiece.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
     this.reverseBoard = this.reverseBoard.bind(this);
   }
@@ -92,6 +101,14 @@ class ShogiBoard extends Component {
     if (this.state.player.color === 'black') {
       this.reverseBoard();
     }
+  }
+
+  toggleModal(content = null) {
+    this.setState(prevState => ({
+      pendingDecision: !prevState.pendingDecision,
+      showModal: !prevState.showModal,
+      modalContent: content,
+    }))
   }
 
   playerColorFromId(id) {
@@ -138,6 +155,36 @@ class ShogiBoard extends Component {
     })
   }
 
+  promotePiece([x, y], fromPrompt = false) {
+    let updateBoard = copyMatrix(this.state.board);
+    let pieceId = updateBoard[x][y];
+    pieceId = pieceId.trim() && pieceId.length === 1 ? pieceId + '+' : pieceId;
+    updateBoard[x][y] = pieceId;
+    if (fromPrompt) {
+      this.toggleModal();
+    }
+    this.setState({
+      board: updateBoard,
+    });
+  }
+
+  promptForPromote(coords) {
+    let choices = [
+      {
+        cta: 'Yes',
+        action: this.promotePiece,
+        args: [coords, true],
+      },
+      {
+        cta: 'No',
+        action: this.toggleModal,
+        args: [null],
+      }
+    ];
+    let content = <ModalPrompt message="Promote?" choices={choices} />;
+    this.toggleModal(content);
+  }
+
   checkPromotion(coords, pieceId) {
     let [x, y] = coords;
     if (x < 3 && pieceId.length === 1) {
@@ -148,6 +195,7 @@ class ShogiBoard extends Component {
 
       if (!willPromote) {
         // prompt user for choice
+        this.promptForPromote(coords);
       }
       pieceId = willPromote ? pieceId + '+' : pieceId;
     }
@@ -248,6 +296,9 @@ class ShogiBoard extends Component {
     const boardStyle = {
       backgroundImage: `url(${'./textures/wood.jpg'})`
     }
+
+    const modal = this.state.showModal ? this.state.modalContent : null;
+
     return(
       <div className="match">
         <PlayerPanel
@@ -289,6 +340,7 @@ class ShogiBoard extends Component {
           turn={this.state.isTurn}
           activate={this.togglePiece}
         />
+        { modal }
       </div>
     )
   }
