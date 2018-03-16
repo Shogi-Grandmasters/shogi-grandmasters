@@ -4,7 +4,8 @@ body {
 
 .match {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .match__player {
@@ -15,6 +16,17 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+}
+
+.match__timer, .match__hands {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  justify-content: center;
+}
+.match__hands > * {
+  flex: 1 auto;
 }
 
 .match__board {
@@ -42,14 +54,6 @@ body {
   margin: 0px;
 }
 
-.promote-black {
-  background-color: #ececec;
-}
-
-.promote-white {
-  background-color: #cecece;
-}
-
 .active {
   cursor: pointer;
 }
@@ -71,19 +75,20 @@ body {
   cursor: pointer;
 }
 
-.player__panel {
-  width: 300px;
-  height: 200px;
-  margin: 8px;
-}
-
-.player__profile {
-  width: 200px;
-}
-
 .player__hand {
-  width: 520px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
 }
+.north{
+  align-content: flex-end;
+  align-items: flex-end;
+}
+.south{
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
 .player__hand-tile {
   cursor: pointer;
   width: 80px;

@@ -7,6 +7,7 @@ import helpers from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
+import PlayerHand from './PlayerHand.jsx';
 import ModalPrompt from '../Global/ModalPrompt.jsx';
 
 import './ShogiBoard.css';
@@ -61,20 +62,20 @@ class ShogiBoard extends Component {
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+        ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
         ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
       ],
       player: {
         user: {
-          name: 'Player One',
+          name: 'Ocheyo',
         },
         color: 'white',
         hand: [],
       },
       opponent: {
         user: {
-          name: 'Player Two'
+          name: 'rgonewildplus'
         },
         color: 'black',
         hand: [],
@@ -301,14 +302,14 @@ class ShogiBoard extends Component {
 
     return(
       <div className="match">
-        <PlayerPanel
-          id={'opponent'}
-          local={false}
-          selected={this.state.selected}
-          player={this.state.opponent}
-          turn={!this.state.isTurn}
-          activate={this.togglePiece}
-        />
+        <div className="match__timer">
+          <PlayerPanel
+            player={this.state.opponent}
+          />
+          <PlayerPanel
+            player={this.state.player}
+          />
+        </div>
         <table className="match__board" style={boardStyle}>
           <tbody>
             {this.state.board.map((row, ri) => {
@@ -332,14 +333,24 @@ class ShogiBoard extends Component {
             })}
           </tbody>
         </table>
-        <PlayerPanel
-          id={'player'}
-          local={true}
-          selected={this.state.selected}
-          player={this.state.player}
-          turn={this.state.isTurn}
-          activate={this.togglePiece}
-        />
+        <div className="match__hands">
+          <PlayerHand
+            id={'opponent'}
+            local={false}
+            selected={this.state.selected}
+            player={this.state.opponent}
+            turn={!this.state.isTurn}
+            activate={this.togglePiece}
+          />
+          <PlayerHand
+            id={'player'}
+            local={true}
+            selected={this.state.selected}
+            player={this.state.player}
+            turn={this.state.isTurn}
+            activate={this.togglePiece}
+          />
+        </div>
         { modal }
       </div>
     )
