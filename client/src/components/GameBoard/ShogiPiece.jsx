@@ -6,7 +6,7 @@ const getTokenImage = (tile, player) => {
   return './tokens/' + prefix + tile.name + suffix + '.svg';
 }
 
-const ShogiPiece = ({ coords, tile, player, isActive, activate }) => {
+const ShogiPiece = ({ location, target, tile, player, activate }) => {
   let tileStyle = {
     backgroundImage: `url(${getTokenImage(tile, player)})`,
   };
@@ -14,7 +14,7 @@ const ShogiPiece = ({ coords, tile, player, isActive, activate }) => {
     <div
       className="shogi__token"
       style={tileStyle}
-      onClick={() => player.color === tile.color && activate(coords)}
+      onClick={() => player.color === tile.color && activate(location, target)}
     >
       {tile.name}
     </div>

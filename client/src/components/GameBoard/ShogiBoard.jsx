@@ -1,6 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { boardIds } from '../../../lib/constants';
+import helpers from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
@@ -11,14 +12,16 @@ const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
 
-const GridSpace = ({ coords, hints = [], selected = false, owned = false, piece = null, player, activate, movePiece }) => {
+const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, activate, movePiece }) => {
   let classNames = ['space'];
   let [x, y] = coords;
   let promotes = x < 3 ? 'white' : x > 5 ? 'black' : null;
   if ((y + 1) % 3 === 0 && y < 8) classNames.push('right-border');
   if ((x + 1) % 3 === 0 && x < 8) classNames.push('lower-border');
   if (piece && owned) classNames.push('active');
-  if (selected) classNames.push('selected'); // and remove active
+  if (selected && selected.location === 'board' && selected.target[0] === x && selected.target[1] === y) {
+    classNames.push('selected');
+  }
 
   let isHint = false;
   if (hints.length) {
@@ -34,10 +37,10 @@ const GridSpace = ({ coords, hints = [], selected = false, owned = false, piece 
     >
       {piece ?
         <ShogiPiece
-          coords={coords}
+          location="board"
+          target={coords}
           tile={piece}
           player={player}
-          isActive={selected}
           activate={activate}
         /> : ' ' }
     </td>
@@ -79,6 +82,7 @@ class ShogiBoard extends Component {
     }
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
+    this.localPlayer = this.localPlayer.bind(this);
     this.movePiece = this.movePiece.bind(this);
     this.reverseBoard = this.reverseBoard.bind(this);
   }
@@ -103,16 +107,19 @@ class ShogiBoard extends Component {
   }
 
   getPiece([x, y]) {
-    // PLACEHOLDER
     let pieceAtCoords = this.state.board[x][y];
     if (pieceAtCoords.trim()) {
-      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y], 'King Rat');
+      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y]);
     }
     return null;
   }
 
+  // for after player refactor
+  localPlayer() {
+    return this.state.players.white.active ? this.state.players.white : this.state.players.black;
+  }
+
   capture([x, y]) {
-    // may need to change depending on socket events
     let pieceToCapture = this.state.board[x][y];
     let updatePlayer = {...this.state.player};
 
@@ -123,17 +130,26 @@ class ShogiBoard extends Component {
     })
   }
 
-  movePiece(coords) {
+  movePiece([x, y]) {
     if (this.state.selected) {
-      let [fromX, fromY] = this.state.selected;
-      let [toX, toY] = coords;
-      if (this.getPiece(coords)) {
-        this.capture(coords);
+      let updateBoard = copyMatrix(this.state.board);
+      let { location, target } = this.state.selected;
+
+      if (location === 'board') {
+        // board moves may result in a capture
+        let [fromX, fromY] = target;
+        if (this.getPiece([x, y])) {
+          this.capture([x, y]);
+        }
+        let pieceToMove = this.state.board[fromX][fromY];
+        updateBoard[fromX][fromY] = ' ';
+        updateBoard[x][y] = pieceToMove;
+      } else {
+        let [playerColor, pieceToPlace] = target.split(':');
+        // with drops, spot will always be empty
+        updateBoard[x][y] = pieceToPlace;
+        // decrement piece count in player hand based on target
       }
-      let pieceToMove = this.state.board[fromX][fromY];
-      let updateBoard = this.state.board.slice().map(row => row.slice());
-      updateBoard[fromX][fromY] = ' ';
-      updateBoard[toX][toY] = pieceToMove;
       this.setState({
         board: updateBoard,
         hints: [],
@@ -143,11 +159,30 @@ class ShogiBoard extends Component {
     }
   }
 
-  togglePiece(coords) {
-    let [incomingX, incomingY] = coords;
+  togglePiece(location, target) {
+    let updateSelected;
     let current = this.state.selected;
-    let updateSelected = current ? incomingX === current[0] && incomingY === current[1] ? null : coords : coords;
 
+    // clicks on board sends [x, y]
+    if (location === 'board') {
+      let [incomingX, incomingY] = target;
+      if (current && current.location === location) {
+        // check for equality since same type
+        let [currentX, currentY] = current.target;
+        // unset if clicked on same loc x target
+        updateSelected = incomingX === currentX && incomingY === currentY ? null : { location, target };
+      } else {
+        // overwrite if differing type or null
+        updateSelected = { location, target };
+      }
+    // clicks on hand sends {color}:{piece} as ref
+    } else {
+      if (current && current.location === location) {
+        updateSelected = target === current.target ? null : { location, target };
+      } else {
+        updateSelected = { location, target };
+      }
+    }
     // set or unset move hints
     this.setState({
       selected: updateSelected,
@@ -155,18 +190,25 @@ class ShogiBoard extends Component {
   }
 
   toggleHints() {
-    // TODO:  variant for player hand click
+    console.log(this.state.selected);
     if (this.state.selected) {
-      let selectedPiece = this.getPiece(this.state.selected);
-      // prune impossible moves
-      let updateHints = selectedPiece.findMoves(this.state.board).reduce((moves, [x, y]) => {
-        let inBounds = x >= 0 && x <= 8 && y >= 0 && y <= 8;
-        if (inBounds) moves.push([x, y]);
-        return moves;
-      }, [])
-      this.setState({
-        hints: updateHints,
-      })
+      if (this.state.selected.location === 'board') {
+        let selectedPiece = this.getPiece(this.state.selected.target);
+        this.setState({
+          hints: selectedPiece.findMoves(this.state.board),
+        })
+      } else {
+        // placeholder
+        let [playerColor, piece] = this.state.selected.target;
+        // set up game tile
+        let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
+        // run the canDrop() function for hints and set state
+        let validLocations = helpers.validDropLocations(gameTile, this.state.board);
+        console.log(validLocations);
+        this.setState({
+          hints: validLocations,
+        })
+      }
     } else {
       this.setState({
         hints: [],
@@ -175,7 +217,6 @@ class ShogiBoard extends Component {
   }
 
   render() {
-    const [selectedX, selectedY] = this.state.selected || [-1, -1];
     const hints = this.state.hints;
     const playerColor = this.state.player.color;
 
@@ -184,7 +225,14 @@ class ShogiBoard extends Component {
     }
     return(
       <div className="match">
-        <PlayerPanel id={'opponent'} player={this.state.opponent} turn={!this.state.isTurn} />
+        <PlayerPanel
+          id={'opponent'}
+          local={false}
+          selected={this.state.selected}
+          player={this.state.opponent}
+          turn={!this.state.isTurn}
+          activate={this.togglePiece}
+        />
         <table className="match__board" style={boardStyle}>
           <tbody>
             {this.state.board.map((row, ri) => {
@@ -193,11 +241,11 @@ class ShogiBoard extends Component {
                   {row.map((cell, ci) =>
                     <GridSpace
                       key={`${ri}x${ci}`}
-                      selected={ri === selectedX && ci === selectedY }
+                      selected={this.state.selected}
                       hints={hints}
                       owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                       coords={[ri, ci]}
-                      piece={cell.trim() ? new GameTile(boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci], 'Temp') : null}
+                      piece={cell.trim() ? new GameTile(boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci]) : null}
                       player={this.state.player}
                       activate={this.togglePiece}
                       movePiece={this.movePiece}
@@ -208,7 +256,14 @@ class ShogiBoard extends Component {
             })}
           </tbody>
         </table>
-        <PlayerPanel id={'player'} player={this.state.player} turn={this.state.isTurn} />
+        <PlayerPanel
+          id={'player'}
+          local={true}
+          selected={this.state.selected}
+          player={this.state.player}
+          turn={this.state.isTurn}
+          activate={this.togglePiece}
+        />
       </div>
     )
   }

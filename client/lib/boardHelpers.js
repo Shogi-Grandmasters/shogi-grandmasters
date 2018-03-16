@@ -31,3 +31,7 @@ export const validDropLocations = (tile, board) => {
 
   return validDrops;
 }
+
+export default {
+  validDropLocations,
+}
