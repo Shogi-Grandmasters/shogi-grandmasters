@@ -21,7 +21,7 @@ class SocketTest extends Component {
   
   async componentDidMount() {
     await this.socket.on("server.gameChat", messages => {
-      messages.length && this.setState({ messages: JSON.parse(messages) });
+      messages.length && this.setState({ messages: messages });
     });
   }
 
