@@ -3,7 +3,6 @@
   class GameTile {
     constructor(name, color, loc, isPromoted = false) {
       this.name = name;
-      this.promotedName = promotedName;
       this.color = color;
       this.isPromoted = isPromoted;
       this.canPromote = false;
@@ -45,9 +44,9 @@
         moveSet = this._lanceMoves(board);
       }
 
-      if (this.name = 'King') {
-        moveSet = this._kingMoves(board, moveSet)
-      }
+      // if (this.name = 'King') {
+      //   moveSet = this._kingMoves(board, moveSet)
+      // }
 
       moveSet = moveSet.map(move => [
         this.loc[0] + move[0],
@@ -219,7 +218,6 @@
     }
     for (let i = 1; i < boardSize; i++) {
       let position = [this.loc[0] + i, this.loc[1] + i];
-      console.log(position);
       if (position[0] === boardSize || position[1] === boardSize) {
         break;
       } else {
@@ -335,27 +333,27 @@
     return result;
   };
 
-  GameTile.prototype._kingMoves = function(board, moveSet) {
-    let teamMoves = [];
-    board.forEach((row, r) => row.forEach((col, c) => {
-    if (this.color === 'black') {
-      if (board[r][c].charCodeAt(0) > 90) {
-        let p = new GameTile(boardIds[board[r][c][0]], 'white', [r, c]);
-        if (board[r][c][1] === '+') {
-          p.promote();
-        }
-        teamMoves = teamMoves.concat(p.findMoves(board));
-      }
-    } else {
-      if (board[r][c].charCodeAt(0) < 91) {
-        let p = new GameTile(boardIds[board[r][c][0]], 'black', [r, c]);
-        if (board[r][c][1] === '+') {
-          p.promote();
-        }
-        teamMoves = teamMoves.concat(p.findMoves(board));
-      }
-    }
-    }));
-  }
+  // GameTile.prototype._kingMoves = function(board, moveSet) {
+  //   let teamMoves = [];
+  //   board.forEach((row, r) => row.forEach((col, c) => {
+  //   if (this.color === 'black') {
+  //     if (board[r][c].charCodeAt(0) > 90) {
+  //       let p = new GameTile(boardIds[board[r][c][0]], 'white', [r, c]);
+  //       if (board[r][c][1] === '+') {
+  //         p.promote();
+  //       }
+  //       teamMoves = teamMoves.concat(p.findMoves(board));
+  //     }
+  //   } else {
+  //     if (board[r][c].charCodeAt(0) < 91) {
+  //       let p = new GameTile(boardIds[board[r][c][0]], 'black', [r, c]);
+  //       if (board[r][c][1] === '+') {
+  //         p.promote();
+  //       }
+  //       teamMoves = teamMoves.concat(p.findMoves(board));
+  //     }
+  //   }
+  //   }));
+  // }
 
   export default GameTile;
