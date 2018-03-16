@@ -21,10 +21,10 @@ passport.use(
   new LocalStrategy(localOptions, async (username, password, done) => {
     try {
       const user = await loginQuery({ username });
-      if (!user.length) {
+      if (!user.rows.length) {
         return done(null, false, { message: "Incorrect username." });
       }
-      const passwordsMatch = await comparePasswords(password, user[0].password);
+      const passwordsMatch = await comparePasswords(password, user.rows[0].password);
       if (!passwordsMatch) {
         return done(null, false, { message: "Incorrect password " });
       }

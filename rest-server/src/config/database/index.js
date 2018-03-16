@@ -1,10 +1,7 @@
-require("dotenv").config();
-
+import { Pool } from "pg";
 import Promise from "bluebird";
 
 import { success, error } from "../../lib/log";
-
-const Sequelize = require("sequelize");
 
 const config = {
   user:
@@ -27,29 +24,21 @@ const config = {
     process.env.NODE_ENV === "production"
       ? process.env.AWS_PORT
       : process.env.LOCAL_PORT,
+  max: 20
 };
 
-const db = new Sequelize(config.database, config.user, config.password, {
-  host: config.host,
-  port: config.port,
-  dialect: "postgres",
-  protocol: "postgres",
-  logging: false,
+const db = new Pool(config);
 
-  pool: {
-    max: 20,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
+db.on("connect", () => {
+  success("successfully connected to db", config.database);
 });
 
-db
-  .authenticate()
-  .then(() => success("grandmaster database connected"))
-  .catch(err => error("Error: ", err));
+db.on("error", err => {
+  error("error in pg ", err);
+});
+
+db.connect();
 
 Promise.promisifyAll(db);
-Promise.promisifyAll(Sequelize);
 
-module.exports = { db, Sequelize };
+export default db;

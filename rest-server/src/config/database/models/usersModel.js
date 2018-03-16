@@ -1,15 +1,34 @@
+import db from "../index";
 import { success, error } from "../../../lib/log";
 
-const { db } = require("../index");
-const Sequelize = require('sequelize');
+export const createUsersTable = async () => {
+  try {
+    await db.queryAsync(
+      `
+      CREATE TABLE IF NOT EXISTS users
+      (
+      id SERIAL,
+      email TEXT UNIQUE NOT NULL,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      wins INT,
+      losses INT,
+      CONSTRAINT users_pk
+        PRIMARY KEY(id)
+      )
+      `
+    );
+    success("successfully created users table");
+  } catch (err) {
+    error("error creating users table ", err);
+  }
+};
 
-
-const Users = db.define("users", {
-  email: { type: Sequelize.STRING, unique: true },
-  username: { type: Sequelize.STRING, unique: true },
-  password: Sequelize.STRING
-  }, { 
-  timestamps: false
-});
-
-module.exports = Users;
+export const dropUsersTable = async () => {
+  try {
+    await db.queryAsync(`DROP TABLE IF EXISTS users`);
+    success("successfully dropped users table");
+  } catch (err) {
+    error("error dropping users table ", err);
+  }
+};
