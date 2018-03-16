@@ -9,7 +9,7 @@ export const createMessagesTable = async () => {
       (
         id SERIAL,
         user_id INT NOT NULL,
-        match_id INT NOT NULL,
+        match_id TEXT NOT NULL,
         content TEXT NOt NULL,
         CONSTRAINT messages_pk
           PRIMARY KEY(id),

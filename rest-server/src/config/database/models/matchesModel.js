@@ -7,7 +7,7 @@ export const createMatchesTable = async () => {
       `
       CREATE TABLE IF NOT EXISTS matches
       (
-        id SERIAL,
+        id TEXT NOT NULL,
         board JSON NOT NULL,
         outcome INT NOT NULL,
         turn INT NOT NULL,
