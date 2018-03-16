@@ -23,7 +23,7 @@ class OpenMatches extends Component {
           {this.props.openMatches && this.props.openMatches.map(match => {
             return (
               <option key={match.id} value={JSON.stringify(match)}>
-                {match.id}
+                {match.username}
               </option>
             );
           })}

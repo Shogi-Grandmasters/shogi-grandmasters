@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import randomstring from "randomstring";
+import io from "socket.io-client/dist/socket.io.js";
 
 import OpenMatches from "../OpenMatches/index.jsx";
 
@@ -15,8 +16,19 @@ class Home extends Component {
     this.handleMatchSelect = this.handleMatchSelect.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
+  }
+  
+  async componentDidMount() {
     this.fetchOpenMatches();
+    this.socket = io("http://localhost:4155", {
+      query: {
+        roomId: "home"
+      }
+    });
+    this.socket.on("updateOpenMatches", () => {
+      this.fetchOpenMatches();
+    });
   }
 
   async fetchOpenMatches() {
@@ -29,18 +41,6 @@ class Home extends Component {
     this.props.history.push("/login");
   };
 
-  board = JSON.stringify([
-    ["L", "H", "S", "G", "K", "G", "S", "H", "L"],
-    [" ", "R", " ", " ", " ", " ", " ", "B", " "],
-    ["P", "P", "P", "P", "P", "P", "P", "P", "P"],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    ["p", "p", "p", "p", "p", "p", "p", "p", "p"],
-    [" ", "b", " ", " ", " ", " ", " ", "r", " "],
-    ["l", "h", "s", "g", "k", "g", "s", "h", "l"]
-  ]);
-
   matchId = randomstring.generate();
 
   async handleInitiateMatchClick() {
@@ -49,11 +49,23 @@ class Home extends Component {
       matchId: this.matchId,
       player1
     });
-    this.fetchOpenMatches();
+    this.props.history.push({
+      pathname: `/${this.matchId}`,
+      state: {
+        match: this.matchId,
+        player1: localStorage.getItem("username"),
+        opponent: false
+      },
+      history: this.props.history
+    });
+    this.socket.emit("client.listOpenGames");
   }
 
   async handleMatchSelect(match) {
     await this.setState({ selectedMatch: JSON.parse(match) });
+  }
+
+  async handleJoinMatchClick(match) {
     await axios.delete("http://localhost:3396/api/openmatches", {
       data: { matchId: this.state.selectedMatch.id }
     });
@@ -81,7 +93,7 @@ class Home extends Component {
           openMatches={this.state.openMatches}
           handleMatchSelect={this.handleMatchSelect}
         />
-        <button onClick={() => this.logout()}>Join Match</button>
+        <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
       </div>
     );
   }
