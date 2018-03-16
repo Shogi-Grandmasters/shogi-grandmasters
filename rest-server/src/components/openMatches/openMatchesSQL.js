@@ -8,12 +8,12 @@ export const createOpenMatchHelper = ({ matchId, player1 }) => {
 
 export const fetchOpenMatchHelper = () => {
   return `
-    SELECT * FROM open_matches
+    SELECT m.id,u.username FROM open_matches AS m, users AS u
+    WHERE m.player1=u.id
   `;
 };
 
 export const deleteOpenMatchHelper = ({matchId}) => {
-  console.log('matchId: ', typeof matchId);
   return `
     DELETE FROM open_matches
     WHERE id='${matchId}'
