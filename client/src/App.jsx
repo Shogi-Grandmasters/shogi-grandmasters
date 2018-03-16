@@ -6,7 +6,8 @@ import Signup from "./components/Auth/Signup.jsx";
 import Login from "./components/Auth/Login.jsx";
 import ShogiBoard from "./components/GameBoard/ShogiBoard.jsx";
 import Home from "./components/Home/index.jsx";
-import Protected from './components/Global/Protected.jsx';
+import Protected from "./components/Global/Protected.jsx";
+import Account from "./components/Account/index.jsx"
 
 
 class App extends Component {
@@ -24,6 +25,9 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/home" component={(props) => (
             <Protected component={Home} {...props} />
+          )}/>
+          <Route path="/account" component={(props) => (
+            <Protected component={Account} {...props} />
           )}/>
         </Switch>
       </div>

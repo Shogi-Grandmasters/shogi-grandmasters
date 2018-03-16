@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 class Nav extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      username: localStorage.username,
+    };
   }
 
   logout = () => {
@@ -13,7 +15,11 @@ class Nav extends Component {
 
   render() {
     return (
-      
+      <div>
+        <h1>{this.state.username}</h1>
+      </div>
     )
   }
 }
+
+export default Nav;
