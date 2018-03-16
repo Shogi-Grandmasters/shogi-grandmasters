@@ -30,9 +30,27 @@ export const moveSets = {
 
 export const boardSize = 9;
 
+export const oppositeBoardSide = {
+  0: 8,
+  1: 7,
+  2: 6,
+  3: 5,
+  4: 4,
+  5: 3,
+  6: 2,
+  7: 1,
+  8: 0
+};
+
+export const oppositeColor = {
+  white: 'black',
+  black: 'white'
+};
 
 export default {
   moveSets,
   boardIds,
-  boardSize
+  boardSize,
+  oppositeBoardSide,
+  oppositeColor
 };
