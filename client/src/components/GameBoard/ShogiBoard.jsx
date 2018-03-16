@@ -199,7 +199,7 @@ class ShogiBoard extends Component {
         })
       } else {
         // placeholder
-        let [playerColor, piece] = this.state.selected.target;
+        let [playerColor, piece] = this.state.selected.target.split(':');
         // set up game tile
         let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
         // run the canDrop() function for hints and set state
