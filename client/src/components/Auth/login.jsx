@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
+import Logo from '../Global/Logo/index.js'
+import './Auth.css';
 
 class Login extends Component {
   constructor() {
@@ -13,6 +15,7 @@ class Login extends Component {
     const body = { username, password }
     try {
       const data = await axios.post(`http://localhost:3396/api/auth/login`, body);
+      localStorage.setItem('email', data.data.username)
       localStorage.setItem('username', data.data.username)
       localStorage.setItem('id', data.data.id)
       localStorage.setItem('token', data.data.token.accessToken)
@@ -29,25 +32,28 @@ class Login extends Component {
 
   render() {
     return(
-      <div>
-        <form>
-          <input
-            name='username'
-            type='text'
-            placeholder={'enter username'}
-            onChange={this.handleInputChange}
-            />
-          <input 
-            name='password'
-            type='text'
-            placeholder={'enter your password'}
-            onChange={this.handleInputChange}
-            />
-          <input
-            type='submit'
-            onClick={(e) => this.submitAuthData(e)}
-            />
-        </form>
+      <div className='auth-container'>
+        <Logo /><br />
+        <input
+          name='username'
+          type='text'
+          placeholder={'enter username'}
+          className='auth-form'
+          onChange={this.handleInputChange}
+          /><br />   
+        <input 
+          name='password'
+          type='password'
+          placeholder={'enter your password'}
+          className='auth-form'
+          id='password'
+          onChange={this.handleInputChange}
+          /><br />
+        <input
+          type='submit'
+          className='auth-button'
+          onClick={(e) => this.submitAuthData(e)}
+          />
       </div>
     )
   }

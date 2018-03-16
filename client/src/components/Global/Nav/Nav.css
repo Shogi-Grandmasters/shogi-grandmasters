@@ -1,0 +1,37 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #cecece;
+}
+
+li {
+  float: right;
+}
+
+li a {
+  display: block;
+  color: white;
+  height: 50px;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 16px;
+  line-height: 50px; 
+  font-family: 'Shift', sans-serif
+}
+
+li a:hover {
+  background-color: #6a6969;
+}
+
+.logo {
+  float: left;
+  border-right: none;
+}
+
+.sg-logo {
+  height: 50px;
+}
