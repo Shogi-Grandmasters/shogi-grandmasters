@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Logo from '../Global/Logo/index.js'
 
 import './Auth.css';
 
@@ -29,6 +30,7 @@ class Signup extends Component {
   render() {
     return (
       <div className='auth-container'>
+        <Logo /><br />
         <input
           name='email'
           type='text'
@@ -50,7 +52,7 @@ class Signup extends Component {
           id='password'
           placeholder={'enter your password'}
           onChange={this.handleInputChange}
-          />
+          /><br />
         <input
           type='submit'
           className='auth-button'

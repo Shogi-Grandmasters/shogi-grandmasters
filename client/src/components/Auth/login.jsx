@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import Logo from '../Global/Logo/index.js'
 import './Auth.css';
 
 class Login extends Component {
@@ -32,6 +32,7 @@ class Login extends Component {
   render() {
     return(
       <div className='auth-container'>
+        <Logo /><br />
         <input
           name='username'
           type='text'
