@@ -5,9 +5,6 @@ import "./OpenMatches.css";
 class OpenMatches extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selected: {}
-    };
   }
 
   componentDidMount() {
@@ -15,13 +12,13 @@ class OpenMatches extends Component {
 
   onChange = e => {
     e.preventDefault();
-    this.props.handlematchSelect(e.target);
+    this.props.handleMatchSelect(e.target.value);
   };
 
   render() {
     return (
       <div className="open-matches">
-        <select onChange={this.onChange}>
+        <select onChange={this.onChange} size="20">
           <option>Select a Match</option>
           {this.props.openMatches && this.props.openMatches.map(match => {
             return (

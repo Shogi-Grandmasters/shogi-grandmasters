@@ -12,18 +12,16 @@ class Home extends Component {
       selectedMatch: ""
     };
     this.fetchOpenMatches = this.fetchOpenMatches.bind(this);
+    this.handleMatchSelect = this.handleMatchSelect.bind(this);
   }
 
   componentDidMount() {
     this.fetchOpenMatches();
   }
-  
+
   async fetchOpenMatches() {
-    axios
-    .get("http://localhost:3396/api/openmatches")
-    .then(({ data }) => {
-      this.setState({ openMatches: data })
-      });
+    const { data } = await axios.get("http://localhost:3396/api/openmatches");
+    this.setState({ openMatches: data });
   }
 
   logout = () => {
@@ -43,12 +41,31 @@ class Home extends Component {
     ["l", "h", "s", "g", "k", "g", "s", "h", "l"]
   ]);
 
-  handleInitiateMatchClick() {
-    const matchId = randomstring.generate();
+  matchId = randomstring.generate();
+
+  async handleInitiateMatchClick() {
     const player1 = localStorage.getItem("username");
-    axios
-      .post("http://localhost:3396/api/openmatches", { matchId, player1 })
-      .then(() => this.fetchOpenMatches());
+    await axios.post("http://localhost:3396/api/openmatches", {
+      matchId: this.matchId,
+      player1
+    });
+    this.fetchOpenMatches();
+  }
+
+  async handleMatchSelect(match) {
+    await this.setState({ selectedMatch: JSON.parse(match) });
+    await axios.delete("http://localhost:3396/api/openmatches", {
+      data: { matchId: this.state.selectedMatch.id }
+    });
+    this.props.history.push({
+      pathname: `/${this.state.selectedMatch.id}`,
+      state: {
+        match: this.state.selectedMatch.id,
+        player2: localStorage.getItem("username"),
+        opponent: true
+      },
+      history: this.props.history
+    });
   }
 
   render() {
@@ -60,7 +77,10 @@ class Home extends Component {
         <button onClick={() => this.handleInitiateMatchClick()}>
           Initiate Match
         </button>
-        <OpenMatches openMatches={this.state.openMatches} fetchOpenMatches={this.fetchOpenMatches} />
+        <OpenMatches
+          openMatches={this.state.openMatches}
+          handleMatchSelect={this.handleMatchSelect}
+        />
         <button onClick={() => this.logout()}>Join Match</button>
       </div>
     );
