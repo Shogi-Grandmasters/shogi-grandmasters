@@ -1,6 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { boardIds } from '../../../lib/constants';
+import helpers from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
@@ -113,8 +114,8 @@ class ShogiBoard extends Component {
     return null;
   }
 
+  // for after player refactor
   localPlayer() {
-    // for player refactor
     return this.state.players.white.active ? this.state.players.white : this.state.players.black;
   }
 
@@ -200,9 +201,12 @@ class ShogiBoard extends Component {
         // placeholder
         let [playerColor, piece] = this.state.selected.target;
         // set up game tile
+        let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
         // run the canDrop() function for hints and set state
+        let validLocations = helpers.validDropLocations(gameTile, this.state.board);
+        console.log(validLocations);
         this.setState({
-          hints: [],
+          hints: validLocations,
         })
       }
     } else {
