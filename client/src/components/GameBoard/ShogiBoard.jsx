@@ -245,7 +245,7 @@ class ShogiBoard extends Component {
                       hints={hints}
                       owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                       coords={[ri, ci]}
-                      piece={cell.trim() ? new GameTile(boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci], 'Temp') : null}
+                      piece={cell.trim() ? new GameTile(boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci]) : null}
                       player={this.state.player}
                       activate={this.togglePiece}
                       movePiece={this.movePiece}
