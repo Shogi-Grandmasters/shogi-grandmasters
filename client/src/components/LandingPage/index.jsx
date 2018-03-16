@@ -10,7 +10,7 @@ class LandingPage extends Component {
   render() {
     return (
       <div className="landing-page-container">
-        <Logo />
+        <Logo width="25%"/>
         <h1 className="title">Shogi Grandmasters</h1>
         <input
           type="submit"

@@ -16,7 +16,7 @@ class Signup extends Component {
     const body = { email, password, username };
     try {
       const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
-      data ? this.props.history.push('/login') : this.props.history.push('/auth');
+      data ? this.props.history.push('/login') : this.props.history.push('/signup');
     } catch (err) {
       throw new Error(err);
     }
