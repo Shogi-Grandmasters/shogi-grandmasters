@@ -4,7 +4,6 @@ import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 
 const PlayerHandTile = ({ player, local, piece, count, selected, activate }) => {
-
   let tile = new GameTile(boardIds[piece], player.color, [10,10]);
   // set active hover for owned pieces
   let tileStyles = ['player__hand-tile'];
@@ -31,9 +30,7 @@ const PlayerHandTile = ({ player, local, piece, count, selected, activate }) => 
   )
 }
 
-
 const PlayerHand = ({ player, local, selected, activate }) => {
-
   let hand = player.hand.reduce((counts, piece) => {
     counts[piece] = counts[piece] + 1 || 1;
     return counts;
@@ -56,10 +53,11 @@ const PlayerHand = ({ player, local, selected, activate }) => {
   )
 }
 
-// todo: implement new selected state pass
 const PlayerPanel = ({ player, local, turn, selected, activate }) => (
   <div className="match__player">
     <div className="player__profile">
+      <div className="player__color-indicator"></div>
+      <div className="player__turn-indicator"></div>
       <h2>{player.user.name}</h2>
     </div>
     <PlayerHand
