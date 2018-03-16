@@ -1,4 +1,5 @@
-  import {moveSets, boardSize} from './constants.js';
+  import {moveSets, boardSize, oppositeBoardSide, oppositeColor} from './constants.js';
+  import {reverseBoard, getCombinedMoveSet} from './boardHelpers.js'
 
   class GameTile {
     constructor(name, color, loc, isPromoted = false) {
@@ -22,9 +23,9 @@
     findMoves(board) {
       let moveSet = this.isPromoted ? this.promotedMoves : this.moves || [];
 
-      if (this.color === "black") {
-        moveSet = moveSet.map(loc => [-loc[0], -loc[1]]);
-      }
+      // if (this.color === "black") {
+      //   moveSet = moveSet.map(loc => [-loc[0], -loc[1]]);
+      // }
 
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
@@ -44,14 +45,14 @@
         moveSet = this._lanceMoves(board);
       }
 
-      // if (this.name = 'King') {
-      //   moveSet = this._kingMoves(board, moveSet)
-      // }
-
       moveSet = moveSet.map(move => [
         this.loc[0] + move[0],
         this.loc[1] + move[1]
       ]);
+
+      if (this.name = 'King') {
+        moveSet = this._kingMoves(board, moveSet)
+      }
 
       return moveSet;
     }
@@ -333,27 +334,20 @@
     return result;
   };
 
-  // GameTile.prototype._kingMoves = function(board, moveSet) {
-  //   let teamMoves = [];
-  //   board.forEach((row, r) => row.forEach((col, c) => {
-  //   if (this.color === 'black') {
-  //     if (board[r][c].charCodeAt(0) > 90) {
-  //       let p = new GameTile(boardIds[board[r][c][0]], 'white', [r, c]);
-  //       if (board[r][c][1] === '+') {
-  //         p.promote();
-  //       }
-  //       teamMoves = teamMoves.concat(p.findMoves(board));
-  //     }
-  //   } else {
-  //     if (board[r][c].charCodeAt(0) < 91) {
-  //       let p = new GameTile(boardIds[board[r][c][0]], 'black', [r, c]);
-  //       if (board[r][c][1] === '+') {
-  //         p.promote();
-  //       }
-  //       teamMoves = teamMoves.concat(p.findMoves(board));
-  //     }
-  //   }
-  //   }));
-  // }
+  GameTile.prototype._kingMoves = function(board, moveSet) {
+    let oppTeam = getCombinedMoveSet(reverseBoard(board));
+    let kingsOpts = moveSet.map((move) => [oppositeBoardSide[move[0]], oppositeBoardSide[move[1]]]);
+    return kingsOpts
+      .reduce((set, move) => {
+        if (!oppTeam.includes(move)) {
+          return set.concat([move]);
+        }
+        return set;
+      }, [])
+      .map(move => [
+        oppositeBoardSide[move[0]],
+        oppositeBoardSide[move[1]]
+      ]);
+  }
 
   export default GameTile;
