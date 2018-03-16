@@ -1,6 +1,6 @@
 import db from "../../config/database/";
 import { success, error } from "../../lib/log";
-import { createOpenMatchHelper, fetchOpenMatchHelper } from "./openMatchesSQL";
+import { createOpenMatchHelper, fetchOpenMatchHelper, deleteOpenMatchHelper } from "./openMatchesSQL";
 
 export const createOpenMatchQuery = async body => {
   try {
@@ -8,7 +8,7 @@ export const createOpenMatchQuery = async body => {
     const data = await db.query(queryString);
     success(
       "createOpenMatchQuery - successfully saved open match",
-      JSON.stringify(data[0])
+      JSON.stringify(data.rows[0])
     );
     return data;
   } catch (err) {
@@ -28,6 +28,21 @@ export const fetchOpenMatchQuery = async () => {
     return data.rows;
   } catch (err) {
     error("fetchOpenMatchQuery - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const deleteOpenMatchQuery = async (body) => {
+  try {
+    const queryString = deleteOpenMatchHelper(body);
+    const data = await db.query(queryString);
+    success(
+      "deleteOpenMatchQuery - successfully deleted open match",
+      JSON.stringify(data.rows[0])
+    );
+    return data.rows[0];
+  } catch (err) {
+    error("deleteOpenMatchQuery - error= ", err);
     throw new Error(err);
   }
 };

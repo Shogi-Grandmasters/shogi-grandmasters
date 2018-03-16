@@ -2,7 +2,8 @@ import express from "express";
 
 import {
   createOpenMatchController,
-  fetchOpenMatchController
+  fetchOpenMatchController,
+  deleteOpenMatchController
 } from "./openMatchesControllers";
 
 const router = express.Router();
@@ -10,6 +11,7 @@ const router = express.Router();
 router
   .route("/")
   .post(createOpenMatchController)
-  .get(fetchOpenMatchController);
+  .get(fetchOpenMatchController)
+  .delete(deleteOpenMatchController);
 
 export default router;

@@ -1,7 +1,8 @@
 import db from "../../config/database";
 import {
   createOpenMatchQuery,
-  fetchOpenMatchQuery
+  fetchOpenMatchQuery,
+  deleteOpenMatchQuery
 } from "./openMatchesHelpers";
 import { success, error } from "../../lib/log";
 
@@ -29,6 +30,20 @@ export const fetchOpenMatchController = async (req, res) => {
     return res.status(200).send(data);
   } catch (err) {
     error("fetchOpenMatchController - error= ", err);
+    res.status(404).send(err);
+  }
+};
+
+export const deleteOpenMatchController = async (req, res) => {
+  try {
+    const data = await deleteOpenMatchQuery(req.body);
+    success(
+      "deleteOpenMatchController - successfully deleted open match data",
+      JSON.stringify(data)
+    );
+    return res.status(200).send(data);
+  } catch (err) {
+    error("deleteOpenMatchController - error= ", err);
     res.status(404).send(err);
   }
 };

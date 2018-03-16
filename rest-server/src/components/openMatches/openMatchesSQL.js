@@ -11,3 +11,11 @@ export const fetchOpenMatchHelper = () => {
     SELECT * FROM open_matches
   `;
 };
+
+export const deleteOpenMatchHelper = ({matchId}) => {
+  console.log('matchId: ', typeof matchId);
+  return `
+    DELETE FROM open_matches
+    WHERE id='${matchId}'
+  `;
+};
