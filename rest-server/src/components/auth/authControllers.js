@@ -8,17 +8,17 @@ export const signUpController = async (req, res) => {
   try {
     req.body.password = await hashPassword(req.body.password);
     const data = await signUpQuery(req.body);
-    const { id, email } = data[0];
+    const { id, email } = data.rows[0];
     success(
       "signUpController - successfully retrieved data ",
-      JSON.stringify(data[0])
+      JSON.stringify(data.rows[0])
     );
     const token = await generateToken(id, email);
-    data[0].token = token;
+    data.rows[0].token = token;
     return res
       .status(200)
       .append("authorization", JSON.stringify(token))
-      .send(data[0]);
+      .send(data.rows[0]);
   } catch (err) {
     error("signUpController - error= ", err);
     res.status(404).send(err);
@@ -28,15 +28,18 @@ export const signUpController = async (req, res) => {
 export const loginController = async (req, res) => {
   try {
     const data = await loginQuery(req.body);
-    delete data[0].password;
-    const { id, username } = data[0];
-    success("loginController - successfully retrieved data ", JSON.stringify(data[0]));
+    delete data.rows[0].password;
+    const { id, username } = data.rows[0];
+    success(
+      "loginController - successfully retrieved data ",
+      JSON.stringify(data.rows[0])
+    );
     const token = await generateToken(id, username);
-    data[0].token = token;
+    data.rows[0].token = token;
     return res
       .status(200)
       .append("authorization", JSON.stringify(token))
-      .send(data[0]);
+      .send(data.rows[0]);
   } catch (err) {
     error("loginController - error= ", err);
     res.status(404).send(err);

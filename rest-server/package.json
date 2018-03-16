@@ -26,8 +26,7 @@
     "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",
     "pg": "^7.4.1",
-    "chalk": "^2.3.0",
-    "sequelize": "^4.33.4"
+    "chalk": "^2.3.0"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
