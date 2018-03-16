@@ -1,10 +1,13 @@
 import React from 'react';
 import { Component } from 'react';
+
 import { boardIds } from '../../../lib/constants';
 import helpers from '../../../lib/boardHelpers';
+
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
+import ModalPrompt from '../Global/ModalPrompt.jsx';
 
 import './ShogiBoard.css';
 
@@ -58,7 +61,7 @@ class ShogiBoard extends Component {
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+        [' ', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
         ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
       ],
@@ -76,14 +79,20 @@ class ShogiBoard extends Component {
         color: 'black',
         hand: [],
       },
+      pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
+      showModal: false,
+      modalContent: null,
       selected: null,
       hints: [],
       isTurn: true,
     }
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
-    this.localPlayer = this.localPlayer.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.movePiece = this.movePiece.bind(this);
+    this.checkPromotion = this.checkPromotion.bind(this);
+    this.promptForPromote = this.promptForPromote.bind(this);
+    this.promotePiece = this.promotePiece.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
     this.reverseBoard = this.reverseBoard.bind(this);
   }
@@ -94,8 +103,15 @@ class ShogiBoard extends Component {
     }
   }
 
+  toggleModal(content = null) {
+    this.setState(prevState => ({
+      pendingDecision: !prevState.pendingDecision,
+      showModal: !prevState.showModal,
+      modalContent: content,
+    }))
+  }
+
   playerColorFromId(id) {
-    if (id.length > 1) id = id[1];
     return id.charCodeAt(0) > 90 ? 'white' : 'black';
   }
 
@@ -110,20 +126,17 @@ class ShogiBoard extends Component {
   getPiece([x, y]) {
     let pieceAtCoords = this.state.board[x][y];
     if (pieceAtCoords.trim()) {
-      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y]);
+      let isPromoted = false;
+      if (pieceAtCoords.length > 1) { isPromoted = true; pieceAtCoords = pieceAtCoords[0]; }
+      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y], isPromoted);
     }
     return null;
-  }
-
-  // for after player refactor
-  localPlayer() {
-    return this.state.players.white.active ? this.state.players.white : this.state.players.black;
   }
 
   capture([x, y]) {
     let pieceToCapture = this.state.board[x][y];
     let updatePlayer = {...this.state.player};
-
+    pieceToCapture = pieceToCapture[0]; // removes promoted state, if present
     pieceToCapture = this.state.player.color === 'white' ? pieceToCapture.toLowerCase() : pieceToCapture.toUpperCase();
     updatePlayer.hand = [...updatePlayer.hand, pieceToCapture];
     this.setState({
@@ -142,6 +155,53 @@ class ShogiBoard extends Component {
     })
   }
 
+  promotePiece([x, y], fromPrompt = false) {
+    let updateBoard = copyMatrix(this.state.board);
+    let pieceId = updateBoard[x][y];
+    pieceId = pieceId.trim() && pieceId.length === 1 ? pieceId + '+' : pieceId;
+    updateBoard[x][y] = pieceId;
+    if (fromPrompt) {
+      this.toggleModal();
+    }
+    this.setState({
+      board: updateBoard,
+    });
+  }
+
+  promptForPromote(coords) {
+    let choices = [
+      {
+        cta: 'Yes',
+        action: this.promotePiece,
+        args: [coords, true],
+      },
+      {
+        cta: 'No',
+        action: this.toggleModal,
+        args: [null],
+      }
+    ];
+    let content = <ModalPrompt message="Promote?" choices={choices} />;
+    this.toggleModal(content);
+  }
+
+  checkPromotion(coords, pieceId) {
+    let [x, y] = coords;
+    if (x < 3 && pieceId.length === 1) {
+      let willPromote = false;
+      // if it has no available moves, it has to promote
+      let destination = new GameTile(boardIds[pieceId], this.playerColorFromId(pieceId), [x, y]);
+      if (!destination.findMoves(this.state.board).length) willPromote = true;
+
+      if (!willPromote) {
+        // prompt user for choice
+        this.promptForPromote(coords);
+      }
+      pieceId = willPromote ? pieceId + '+' : pieceId;
+    }
+    return pieceId;
+  }
+
   movePiece([x, y]) {
     if (this.state.selected) {
       let updateBoard = copyMatrix(this.state.board);
@@ -154,6 +214,7 @@ class ShogiBoard extends Component {
           this.capture([x, y]);
         }
         let pieceToMove = this.state.board[fromX][fromY];
+        pieceToMove = this.checkPromotion([x, y], pieceToMove);
         updateBoard[fromX][fromY] = ' ';
         updateBoard[x][y] = pieceToMove;
       } else {
@@ -235,6 +296,9 @@ class ShogiBoard extends Component {
     const boardStyle = {
       backgroundImage: `url(${'./textures/wood.jpg'})`
     }
+
+    const modal = this.state.showModal ? this.state.modalContent : null;
+
     return(
       <div className="match">
         <PlayerPanel
@@ -257,7 +321,7 @@ class ShogiBoard extends Component {
                       hints={hints}
                       owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                       coords={[ri, ci]}
-                      piece={cell.trim() ? new GameTile(boardIds[cell.toLowerCase()], this.playerColorFromId(cell), [ri, ci]) : null}
+                      piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], this.playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
                       player={this.state.player}
                       activate={this.togglePiece}
                       movePiece={this.movePiece}
@@ -276,6 +340,7 @@ class ShogiBoard extends Component {
           turn={this.state.isTurn}
           activate={this.togglePiece}
         />
+        { modal }
       </div>
     )
   }
