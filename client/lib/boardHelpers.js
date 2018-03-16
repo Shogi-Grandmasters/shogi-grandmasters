@@ -19,8 +19,8 @@ export const validDropLocations = (tile, board) => {
 
   board.forEach((row, r) => row.forEach((col, c) => {
     if (board[r][c] === ' ') {
-      if (c > 0 || (tile.name !== 'Lance' && tile.name !== 'Pawn')) {
-        if (c > 1 && tile.name !== 'Knight') {
+      if (r > 0 || (tile.name !== 'Lance' && tile.name !== 'Pawn')) {
+        if (r > 1 || tile.name !== 'Knight') {
           if (tile.name !== 'Pawn' || !pawnLocs.includes(c)) {
             validDrops.push([r, c]);
           }
