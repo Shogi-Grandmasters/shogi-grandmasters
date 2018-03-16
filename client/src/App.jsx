@@ -26,7 +26,7 @@ class App extends Component {
           <Route path="/home" component={(props) => (
             <Protected component={Home} {...props} />
           )}/>
-          <Route path="/account" component={(props) => (
+          <Route path="/acct" component={(props) => (
             <Protected component={Account} {...props} />
           )}/>
         </Switch>
