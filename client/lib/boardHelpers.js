@@ -21,7 +21,7 @@ export const validDropLocations = (tile, board) => {
     if (board[r][c] === ' ') {
       if (c > 0 || (tile.name !== 'Lance' && tile.name !== 'Pawn')) {
         if (c > 1 && tile.name !== 'Knight') {
-          if (tile.name === 'Pawn' && !pawnLocs.includes(c)) {
+          if (tile.name !== 'Pawn' || !pawnLocs.includes(c)) {
             validDrops.push([r, c]);
           }
         }
