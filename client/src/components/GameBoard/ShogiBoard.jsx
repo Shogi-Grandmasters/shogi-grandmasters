@@ -9,6 +9,7 @@ import ShogiPiece from './ShogiPiece.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
 import PlayerHand from './PlayerHand.jsx';
 import ModalPrompt from '../Global/ModalPrompt.jsx';
+import TurnIndicator from './TurnIndicator.jsx';
 
 import './ShogiBoard.css';
 
@@ -335,6 +336,7 @@ class ShogiBoard extends Component {
           <PlayerPanel
             player={this.state.opponent}
           />
+          <TurnIndicator isTurn={this.state.isTurn} />
           <PlayerPanel
             player={this.state.player}
           />
