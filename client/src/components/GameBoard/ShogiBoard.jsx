@@ -287,7 +287,7 @@ class ShogiBoard extends Component {
 
         action.move.isPending = false;
         action.after.board[x][y] = pieceToDrop;
-        action.after[this.player.color] = this.removeFromHand(pieceToDrop, action.after[this.player.color]);
+        action.after[this.state.player.color] = this.removeFromHand(pieceToDrop, action.after[this.state.player.color]);
       }
 
       // add the move to state
@@ -364,7 +364,7 @@ class ShogiBoard extends Component {
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
         console.log(this.state.kings);
-        let validLocations = helpers.validDropLocations(gameTile, this.state.board, this.state.kings);
+        let validLocations = helpers.validDropLocations(this.state.board, this.state.kings, gameTile);
         console.log(validLocations);
         this.setState({
           hints: validLocations,
