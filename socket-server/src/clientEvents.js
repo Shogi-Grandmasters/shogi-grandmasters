@@ -8,6 +8,7 @@ import {
   serverRun,
   serverLoadMessages,
   serverGameReady,
+  serverHomeChat,
   serverGameChat,
   serverUpdateGames
 } from "./serverEvents";
@@ -48,21 +49,30 @@ const clientDisconnect = ({ io, client, room }) => {
 //   }
 // };
 
-// const clientFetchMessages = async ({ io, client, room }, payload) => {
-//   success("client load message request heard");
-//   try {
-//     await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
-//       result && serverGameChat({ io, client, room }, result);
-//     });
-//   } catch (err) {
-//     error("error fetching messages from database. e = ", err);
-//   }
-// };
+const clientFetchMessages = async ({ io, client, room }, payload) => {
+  success("client load message request heard");
+  try {
+    await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
+      result && serverGameChat({ io, client, room }, result);
+    });
+  } catch (err) {
+    error("error fetching messages from database. e = ", err);
+  }
+};
+
+const clientHomeChat = async ({ io, client, room }, payload) => {
+  success("client home chat heard");
+  try {
+    serverHomeChat({ io, client, room }, payload);
+  } catch (err) {
+    error("client home chat error: ", err);
+  }
+};
 
 const clientGameChat = async ({ io, client, room }, payload) => {
   success("client game chat heard");
   try {
-    serverGameChat({ io, client, room }, payload.messages);
+    serverGameChat({ io, client, room }, payload);
   } catch (err) {
     error("client game chat error: ", err);
   }
@@ -104,6 +114,7 @@ const clientEmitters = {
   // "client.run": clientRun,
   // "client.fetchMessages": clientFetchMessages,
   "client.gameReady": clientGameReady,
+  "client.homeChat": clientHomeChat,
   "client.gameChat": clientGameChat,
   "client.listOpenGames": clientListGames
 };
