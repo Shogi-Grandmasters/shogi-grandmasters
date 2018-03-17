@@ -1,0 +1,46 @@
+.turn__indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.turn__indicator > * {
+  flex: 1;
+  margin: 4px;
+}
+
+.turn__indicator-north {
+  width: 0px;
+  height: 0px;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom-style: solid;
+  border-bottom-width: 30px;
+  border-bottom-color: #ececec;
+}
+
+.north__active {
+  border-bottom-color: #000;
+}
+
+.turn__indicator-south {
+  width: 0px;
+  height: 0px;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top-style: solid;
+  border-top-width: 30px;
+  border-top-color: #ececec;
+}
+
+.south__active {
+  border-top-color: #000;
+}
+
+.turn__timer {
+  font-size: 24px;
+  font-weight: 800;
+  font-style: italic;
+  color: #999;
+}
