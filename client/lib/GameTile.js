@@ -1,4 +1,4 @@
-  import {moveSets, boardSize, oppositeBoardSide, oppositeColor} from './constants.js';
+  import {moveSets, boardSize, oppositeBoardSide, oppositeColor, includesLoc} from './constants.js';
   import {reverseBoard, getCombinedMoveSet} from './boardHelpers.js'
 
   class GameTile {
@@ -31,7 +31,6 @@
           }
           return set;
         }, []);
-        console.log(moveSet);
       } else {
         moveSet = moveSet.reduce((set, move) => {
           let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
@@ -342,11 +341,11 @@
   };
 
   GameTile.prototype._kingMoves = function(board, moveSet) {
-    let oppTeam = getCombinedMoveSet(reverseBoard(board), oppositeColor[this.color]);
+    let oppTeam = getCombinedMoveSet(reverseBoard(board), oppositeColor(this.color));
     let kingsOpts = moveSet.map((move) => [oppositeBoardSide(move[0]), oppositeBoardSide(move[1])]);
     return kingsOpts
       .reduce((set, move) => {
-        let open = oppTeam.every((tuple) => !(tuple[0] === move[0] && tuple[1] === move[1]));
+        let open = !includesLoc(oppTeam, move);
         if (open) {
           return set.concat([move]);
         }

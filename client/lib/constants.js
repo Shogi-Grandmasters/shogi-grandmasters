@@ -44,15 +44,15 @@ export const boardSize = 9;
 
 export const oppositeBoardSide = (x) => Math.abs(x - 8);
 
-export const oppositeColor = {
-  white: 'black',
-  black: 'white'
-};
+export const oppositeColor = (color) => color === 'white' ? 'black' : 'white';
+
+export const includesLoc = (set, loc) => set.some(tuple => tuple[0] === loc[0] && tuple[1] === loc[1]);
 
 export default {
   moveSets,
   boardIds,
   boardSize,
   oppositeBoardSide,
-  oppositeColor
+  oppositeColor,
+  includesLoc
 };
