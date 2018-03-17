@@ -93,6 +93,7 @@ class ShogiBoard extends Component {
         hand: [],
       },
       kings: null,
+      pendingMove: null,
       pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
       showModal: false,
       modalContent: null,
@@ -104,6 +105,7 @@ class ShogiBoard extends Component {
     this.toggleHints = this.toggleHints.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.movePiece = this.movePiece.bind(this);
+    this.submitMove = this.submitMove.bind(this);
     this.updateKings = this.updateKings.bind(this);
     this.checkPromotion = this.checkPromotion.bind(this);
     this.promptForPromote = this.promptForPromote.bind(this);
@@ -131,7 +133,13 @@ class ShogiBoard extends Component {
       pendingDecision: !prevState.pendingDecision,
       showModal: !prevState.showModal,
       modalContent: content,
-    }))
+    }, () => submitMove()))
+  }
+
+  submitMove() {
+    if (this.state.pendingMove) {
+
+    }
   }
 
   playerColorFromId(id) {
@@ -225,7 +233,6 @@ class ShogiBoard extends Component {
       if (!destination.findMoves(this.state.board).length) willPromote = true;
 
       if (!willPromote && !['King', 'Gold'].includes(boardIds[pieceId])) {
-        // prompt user for choice
         this.promptForPromote(coords);
       }
       pieceId = willPromote ? pieceId + '+' : pieceId;
@@ -238,9 +245,17 @@ class ShogiBoard extends Component {
       let updateBoard = copyMatrix(this.state.board);
       let { location, target } = this.state.selected;
 
+      let currentMove = {
+        game: {
+          id: 'MATCH ID',
+        },
+        move: {
+          to: [x, y],
+        },
+      };
+
       if (location === 'board') {
         let [fromX, fromY] = target;
-        // movement on the board may result in a capture
         if (this.getPiece([x, y])) {
           this.capture([x, y]);
         }
@@ -248,14 +263,26 @@ class ShogiBoard extends Component {
         pieceToMove = this.checkPromotion([x, y], pieceToMove);
         updateBoard[fromX][fromY] = ' ';
         updateBoard[x][y] = pieceToMove;
-        // update kings in state
         if (['k', 'K'].includes(pieceToMove)) this.updateKings(this.playerColorFromId(pieceToMove), [x, y]);
+
+        currentMove.move.source = pieceToMove;
+        currentMove.move.from = [fromX, fromY];
+
       } else {
-        let [playerColor, pieceToPlace] = target.split(':');
-        // spot can be trusted to be empty based on hints logic
-        updateBoard[x][y] = pieceToPlace;
-        this.removeFromHand(pieceToPlace);
+        let [playerColor, pieceToDrop] = target.split(':');
+        updateBoard[x][y] = pieceToDrop;
+        this.removeFromHand(pieceToDrop);
+
+        currentMove.move.source = pieceToDrop;
+        currentMove.move.from = [10, 10];
       }
+
+      // set up move request values
+      currentMove.game.board = updateBoard;
+      currentMove.game[this.state.player.color] = this.state.player.hand;
+      currentMove.game[this.state.opponent.color] = this.state.opponent.hand;
+
+      console.log(currentMove);
       // send move
       // check for OK, compare updateBoard to board returned from socket as a double check
       // animate, then transition turn
