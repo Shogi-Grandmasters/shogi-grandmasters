@@ -115,6 +115,7 @@ class ShogiBoard extends Component {
   }
 
   componentDidMount() {
+    let localUser = localStorage.getItem('username');
     // roll this into an init()
     //   set players
     //   render board
@@ -126,6 +127,11 @@ class ShogiBoard extends Component {
     this.setState({
       kings: kingPositions,
     });
+
+    // events to listen for:
+    //    player enter / leave  =>  update player online indicator
+    //    move =>  update board, turn state
+    //    game state => check / checkmate / concede
   }
 
   toggleModal(content = null) {
@@ -133,13 +139,16 @@ class ShogiBoard extends Component {
       pendingDecision: !prevState.pendingDecision,
       showModal: !prevState.showModal,
       modalContent: content,
-    }, () => submitMove()))
+    }))
+  }
+
+  receiveMove(game, move) {
+
   }
 
   submitMove() {
-    if (this.state.pendingMove) {
-
-    }
+    // check to / from piece state in currentMove
+    // emit client:move
   }
 
   playerColorFromId(id) {
