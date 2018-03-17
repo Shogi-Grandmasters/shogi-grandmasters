@@ -77,12 +77,15 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     });
     await axios.post("http://localhost:3396/api/matches", {
       matchId,
-      board: JSON.stringify(data.board) || room.get("board"),
+      board: JSON.stringify(data.board) || JSON.stringify(room.get("board")),
       black,
       white,
       hand_white: JSON.stringify(data.hand_black) || "[]",
       hand_black: JSON.stringify(data.hand_white) || "[]"
     });
+    payload.board = data.board || room.get("board");
+    payload.hand_black = data.hand_black || [];
+    payload.hand_white = data.hand_white || [];
     serverGameReady({ io, client, room }, payload);
   } catch (err) {
     error("error creating game. e = ", err);
