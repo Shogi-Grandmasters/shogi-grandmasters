@@ -8,8 +8,15 @@ export const createFriendsTable = async () => {
       CREATE TABLE IF NOT EXISTS friends
       (
         u_id INT NOT NULL,
+<<<<<<< HEAD
         f_id INT NOT NULL,
         status INT NOT NULL,
+=======
+        f_id INT NOT NULL
+        status INT NOT NULL,
+        CONSTRAINT friends_pk
+          PRIMARY KEY(id),
+>>>>>>> [acct] Working on friends model
         CONSTRAINT fk_friends_u_id
           FOREIGN KEY(u_id) REFERENCES users(id),
         CONSTRAINT fk_friends_f_id

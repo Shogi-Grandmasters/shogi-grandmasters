@@ -3,14 +3,9 @@ import axios from "axios";
 import randomstring from "randomstring";
 import io from "socket.io-client/dist/socket.io.js";
 
-<<<<<<< HEAD
 import HomeChat from "./Chat/index.jsx";
 import OpenMatches from "./OpenMatches/index.jsx";
 import Nav from "../Global/Nav/Nav.jsx"
-=======
-import OpenMatches from "./OpenMatches/index.jsx";
-import HomeChat from "./Chat/index.jsx";
->>>>>>> Added chat to home page.
 
 class Home extends Component {
   constructor() {
@@ -73,7 +68,6 @@ class Home extends Component {
     await this.setState({ selectedMatch: JSON.parse(match) });
   }
 
-<<<<<<< HEAD
   async handleJoinMatchClick() {
     if (this.state.selectedMatch) {
       let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
@@ -90,28 +84,6 @@ class Home extends Component {
         history: this.props.history
       });
     }
-=======
-  async handleJoinMatchClick(match) {
-    let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
-      data: { matchId: this.state.selectedMatch.id }
-    });
-    let black = data.username;
-    // await axios.post("http://localhost:3396/api/matches", {
-    //   matchId: this.state.selectedMatch.id,
-    //   board: this.board,
-    //   black,
-    //   white: localStorage.getItem("username")
-    // });
-    this.props.history.push({
-      pathname: `/${this.state.selectedMatch.id}`,
-      state: {
-        matchId: this.state.selectedMatch.id,
-        black,
-        white: localStorage.getItem("username")
-      },
-      history: this.props.history
-    });
->>>>>>> Added chat to home page.
   }
 
   render() {
@@ -128,7 +100,7 @@ class Home extends Component {
         />
         <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
         <br />
-        <HomeChat socket={this.socket}/>
+        <HomeChat socket={this.socket} />
       </div>
     );
   }
