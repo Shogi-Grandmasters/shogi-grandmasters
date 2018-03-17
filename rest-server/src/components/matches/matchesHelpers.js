@@ -5,12 +5,12 @@ import { createMatchHelper, fetchMatchHelper, updateMatchHelper } from "./matche
 export const createMatchQuery = async body => {
   try {
     const queryString = createMatchHelper(body);
-    const data = await db.query(queryString);
+    const { rows } = await db.query(queryString);
     success(
       "createMatchQuery - successfully saved match",
-      JSON.stringify(data.rows[0])
+      JSON.stringify(rows[0])
     );
-    return data.rows[0];
+    return rows[0];
   } catch (err) {
     error("createMatchpQuery - error= ", err);
     throw new Error(err);
@@ -20,9 +20,9 @@ export const createMatchQuery = async body => {
 export const fetchMatchQuery = async query => {
   try {
     const queryString = fetchMatchHelper(query);
-    const data = db.queryAsync(queryString);
-    success("fetchMatchQuery - successfully fetched open duel ", data.rows);
-    return data.rows;
+    const { rows } = await db.queryAsync(queryString);
+    success("fetchMatchQuery - successfully fetched open match ", rows[0]);
+    return rows[0];
   } catch (err) {
     error("fetchMatchQuery - error=", err);
   }
@@ -31,12 +31,12 @@ export const fetchMatchQuery = async query => {
 export const updateMatchQuery = async body => {
   try {
     const queryString = updateMatchHelper(body);
-    const data = await db.query(queryString);
+    const { rows } = await db.query(queryString);
     success(
       "updateMatchQuery - successfully updated match",
-      JSON.stringify(data.rows[0])
+      JSON.stringify(rows[0])
     );
-    return data.rows[0];
+    return rows[0];
   } catch (err) {
     error("updateMatchQuery - error= ", err);
     throw new Error(err);
