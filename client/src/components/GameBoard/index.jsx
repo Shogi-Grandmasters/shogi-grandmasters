@@ -19,13 +19,17 @@ class BoardIndex extends Component {
   }
   
   async componentDidMount() {
-    this.socket.on("server.joined", ({ matchId, black, white }) => {
+    this.socket.on("server.joined", ({ matchId, black, white, board, hand_black, hand_white }) => {
       this.setState({
         waiting: false,
         matchId,
         black,
-        white
+        white,
+        board,
+        hand_black,
+        hand_white
       });
+      console.log(this.state);
     });
     
     let { matchId, black, white } = this.props.location.state;
