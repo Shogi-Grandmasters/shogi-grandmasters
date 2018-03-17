@@ -4,12 +4,12 @@ export const serverInitialState = ({ client, room }, payload) => {
   if (!room.get("match")) {
     room.set("match", payload);
     client.emit("server.initialState", {
-      id: client.username,
+      id: client.handshake.query.username,
       match: payload
     });
   } else {
     client.emit("server.initialState", {
-      id: client.username,
+      id: client.handshake.query.username,
       match: room.get("match")
     });
   }
@@ -35,7 +35,7 @@ export const serverLoadMessages = ({ io, room }, messages) => {
   io.in(room.get("id")).emit("server.loadMessages", messages);
 };
 
-export const serverGameReady = ({ io, room }, payload) => {
+export const serverGameReady = ({ io, client, room }, payload) => {
   io.in(room.get("id")).emit("server.joined", payload);
 };
 

@@ -1,10 +1,16 @@
-export const createMatchHelper = ({ matchId, board, black, white }) => {
+export const createMatchHelper = ({ matchId, board, black, white, hand_black, hand_white }) => {
   return `
     INSERT INTO matches
     VALUES ('${matchId}', '${board}', 0, 1,
     (SELECT id FROM users WHERE username='${black}'),
-    (SELECT id FROM users WHERE username='${white}'), '""', '""')
+    (SELECT id FROM users WHERE username='${white}'), '${hand_black}', '${hand_white}')
     RETURNING id, board, turn
+  `;
+};
+
+export const fetchMatchHelper = ({ matchId }) => {
+  return `
+    SELECT * FROM matches WHERE id='${matchId}'
   `;
 };
 
