@@ -1,4 +1,4 @@
-import {boardIds, oppositeBoardSide, oppositeColor} from './constants.js';
+import {boardIds, oppositeBoardSide, oppositeColor, includesLoc} from './constants.js';
 import GameTile from './GameTile.js';
 
 export const validDropLocations = (tile, board, kings, color) => {
@@ -43,12 +43,65 @@ export const isCheckOrMate = (board, kings, color, tile) => {
   let check = false;
   let checkmate = false;
   let moveSet = tile.findMoves(board);
-  if (moveSet.some((tuple) => (tuple[0] === kings[oppositeColor[color]][0] && tuple[1] === kings[oppositeColor[color]][1]))) {
+  if (includesLoc(moveSet, [kings[oppositeColor(color)][0], kings[oppositeColor(color)][1]])) {
     check = true;
-    boardCopy = reverseBoard(board);
-    let king = new GameTile('King', oppositeColor[color], [oppositeBoardSide(kings[oppositeColor[color]][0]), oppositeBoardSide(kings[oppositeColor[color]][0])]);
-    if (king.findMoves(boardCopy).length === 0) {
-      checkmate = true;
+    const boardCopy = reverseBoard(board);
+    let king = new GameTile('King', oppositeColor(color), [oppositeBoardSide(kings[oppositeColor(color)][0]), oppositeBoardSide(kings[oppositeColor(color)][1])]);
+    let kingsMoves = king.findMoves(boardCopy);
+    if (kingsMoves.length === 0) {
+      if (tile.name !== 'Knight') {
+        // find squares between king and tile
+        //   determine difference between two squares
+        let spaceBetween = [];
+        const difference = [Math.abs(kings[oppositeColor(color)][0] - tile.loc[0]), Math.abs(kings[oppositeColor(color)][1] - tile.loc[1])];
+        //   determine direction
+        const horizontalDirection = kings[oppositeColor(color)][1] < tile.loc[1] ? -1 : 1;
+        const verticalDirection = kings[oppositeColor(color)][0] < tile.loc[0] ? -1 : 1;
+        //   iterate saving each square from tile to king
+        if (difference[0] > 0) {
+          if (difference[1] > 0) {
+            for (let i = 1; i < difference[1]; i++) {
+              spaceBetween.push([tile.loc[0] + (i * verticalDirection), tile.loc[1] + (i * horizontalDirection)]);
+            }
+          } else {
+            for (let i = 1; i < difference[0]; i++) {
+              spaceBetween.push([tile.loc[0] + (i * verticalDirection), tile.loc[1]]);
+            }
+          }
+        } else {
+          for (let i = 1; i < difference[1]; i++) {
+            spaceBetween.push([tile.loc[0], tile.loc[1] + (i * horizontalDirection)]);
+          }
+        }
+        // find king's team's moveSet
+        //   getCombinedMoves
+        let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(color));
+        let tempMoves = king.findMoves(boardCopy, true);
+        let adjustedMoves = [];
+
+        for (let i = 0; i < teamMoves.length; i++) {
+          if (!includesLoc(tempMoves, teamMoves[i])) {
+            adjustedMoves.push(teamMoves[i]);
+          }
+          tempMoves.shift();
+          if (tempMoves.length === 0) {
+            break;
+          }
+        }
+
+        // reverse squares locations
+        spaceBetween = spaceBetween.map(move => [
+          oppositeBoardSide(move[0]),
+          oppositeBoardSide(move[1])
+        ]);
+
+        // check combined moves for any squares
+        if (!spaceBetween.some(move => includesLoc(adjustedMoves, move))){
+          checkmate = true;
+        }
+      } else {
+        checkmate = true;
+      }
     }
   }
   return [checkmate, check];
@@ -59,10 +112,10 @@ const copyMatrix = (matrix) => {
 }
 
 export const reverseBoard = (board) => {
-    let boardCopy = copyMatrix(board);
-    boardCopy = boardCopy.reverse().map(row => row.reverse());
-    return boardCopy;
-  }
+  let boardCopy = copyMatrix(board);
+  boardCopy = boardCopy.reverse().map(row => row.reverse());
+  return boardCopy;
+}
 
 // the board as the team's owner sees it and that player's color
 export const getCombinedMoveSet = (board, color) => {
@@ -85,7 +138,7 @@ export const getCombinedMoveSet = (board, color) => {
 
 export const isValidMove = (board, tile, loc) => {
   let moveSet = tile.findMoves(board);
-  return moveSet.some(tuple => tuple[0] === loc[0] && tuple[1] === loc[1]);
+  return includesLoc(moveSet, loc);
 }
 
 export default {
@@ -94,5 +147,30 @@ export default {
   reverseBoard,
   validDropLocations,
   getCombinedMoveSet,
+  includesLoc
 }
+
+// TESTING
+// const testBoard = [
+//   ["L", " ", " ", " ", "K", " ", "S", "H", "L"],
+//   [" ", " ", " ", " ", " ", " ", " ", "B", " "],
+//   ["P", " ", " ", " ", " ", "r", " ", "P", "P"],
+//   [" ", "b", " ", " ", "s", " ", "P", " ", " "],
+//   [" ", " ", "r", " ", " ", " ", " ", " ", " "],
+//   [" ", " ", " ", "l", " ", " ", " ", " ", " "],
+//   ["p", "p", "p", "p", "p", " ", "p", "p", "p"],
+//   [" ", "b", " ", " ", " ", " ", " ", " ", " "],
+//   [" ", " ", "s", "g", "k", " ", "s", "h", "l"]
+// ];
+
+// const testKings = {
+//   white: [8, 4],
+//   black: [0, 4]
+// };
+
+// const testColor = 'white';
+
+// const testTile = new GameTile('Silver', testColor, [3, 4]);
+
+// console.log(isValidMove(testBoard, testTile, [7, 5]));
 
