@@ -5,12 +5,12 @@ import { createOpenMatchHelper, fetchOpenMatchHelper, deleteOpenMatchHelper } fr
 export const createOpenMatchQuery = async body => {
   try {
     const queryString = createOpenMatchHelper(body);
-    const data = await db.query(queryString);
+    const { rows } = await db.query(queryString);
     success(
       "createOpenMatchQuery - successfully saved open match",
-      JSON.stringify(data.rows[0])
+      JSON.stringify(rows[0])
     );
-    return data;
+    return rows[0];
   } catch (err) {
     error("createOpenMatchQuery - error= ", err);
     throw new Error(err);
@@ -20,12 +20,12 @@ export const createOpenMatchQuery = async body => {
 export const fetchOpenMatchQuery = async () => {
   try {
     const queryString = fetchOpenMatchHelper();
-    const data = await db.query(queryString);
+    const { rows } = await db.query(queryString);
     success(
       "fetchOpenMatchQuery - successfully fetched open match",
-      JSON.stringify(data.rows)
+      JSON.stringify(rows)
     );
-    return data.rows;
+    return rows;
   } catch (err) {
     error("fetchOpenMatchQuery - error= ", err);
     throw new Error(err);
@@ -35,12 +35,12 @@ export const fetchOpenMatchQuery = async () => {
 export const deleteOpenMatchQuery = async (body) => {
   try {
     const queryString = deleteOpenMatchHelper(body);
-    const data = await db.query(queryString);
+    const { rows } = await db.query(queryString);
     success(
       "deleteOpenMatchQuery - successfully deleted open match",
-      JSON.stringify(data.rows[0])
+      JSON.stringify(rows[0])
     );
-    return data.rows[0];
+    return rows[0];
   } catch (err) {
     error("deleteOpenMatchQuery - error= ", err);
     throw new Error(err);

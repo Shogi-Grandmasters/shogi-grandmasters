@@ -11,9 +11,9 @@ export const createOpenMatchController = async (req, res) => {
     const data = await createOpenMatchQuery(req.body);
     success(
       "createOpenMatchController - successfully created open match",
-      JSON.stringify(data.rows[0])
+      JSON.stringify(data)
     );
-    return res.status(200).send(data.rows[0]);
+    return res.status(200).send(data);
   } catch (err) {
     error("createOpenMatchController - error= ", err);
     res.status(404).send(err);
