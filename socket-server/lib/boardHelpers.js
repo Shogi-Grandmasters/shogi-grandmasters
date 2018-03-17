@@ -42,7 +42,7 @@ export const validDropLocations = (tile, board, kings) => {
                 ]
               };
               if (
-                tile.name === "Pawn" &&
+                tile.name !== "Pawn" &&
                 !isCheckOrMate(
                   copyMatrix(board),
                   reverseKings,
