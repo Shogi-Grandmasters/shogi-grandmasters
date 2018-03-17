@@ -16,9 +16,8 @@ class Home extends Component {
     this.handleMatchSelect = this.handleMatchSelect.bind(this);
   }
 
-  componentWillMount() {
-  }
-  
+  componentWillMount() {}
+
   async componentDidMount() {
     this.fetchOpenMatches();
     this.socket = io("http://localhost:4155", {
@@ -32,7 +31,7 @@ class Home extends Component {
   }
 
   async fetchOpenMatches() {
-    const { data } = await axios.get("http://localhost:3396/api/openmatches");
+    let { data } = await axios.get("http://localhost:3396/api/openmatches");
     this.setState({ openMatches: data });
   }
 
@@ -41,10 +40,22 @@ class Home extends Component {
     this.props.history.push("/login");
   };
 
+  board = JSON.stringify([
+    ["L", "H", "S", "G", "K", "G", "S", "H", "L"],
+    [" ", "R", " ", " ", " ", " ", " ", "B", " "],
+    ["P", "P", "P", "P", "P", "P", "P", "P", "P"],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["p", "p", "p", "p", "p", "p", "p", "p", "p"],
+    [" ", "b", " ", " ", " ", " ", " ", "r", " "],
+    ["l", "h", "s", "g", "k", "g", "s", "h", "l"]
+  ]);
+
   matchId = randomstring.generate();
 
   async handleInitiateMatchClick() {
-    const player1 = localStorage.getItem("username");
+    let player1 = localStorage.getItem("username");
     await axios.post("http://localhost:3396/api/openmatches", {
       matchId: this.matchId,
       player1
@@ -53,7 +64,7 @@ class Home extends Component {
       pathname: `/${this.matchId}`,
       state: {
         match: this.matchId,
-        player1: localStorage.getItem("username"),
+        black: localStorage.getItem("username"),
         opponent: false
       },
       history: this.props.history
@@ -66,15 +77,25 @@ class Home extends Component {
   }
 
   async handleJoinMatchClick(match) {
-    await axios.delete("http://localhost:3396/api/openmatches", {
-      data: { matchId: this.state.selectedMatch.id }
+    let {data} = await axios.delete(
+      "http://localhost:3396/api/openmatches",
+      {
+        data: { matchId: this.state.selectedMatch.id }
+      }
+    );
+    let black = data.username;
+    await axios.post("http://localhost:3396/api/matches", {
+      matchId: this.state.selectedMatch.id,
+      board: this.board,
+      black,
+      white: localStorage.getItem("username")
     });
     this.props.history.push({
       pathname: `/${this.state.selectedMatch.id}`,
       state: {
-        match: this.state.selectedMatch.id,
-        player2: localStorage.getItem("username"),
-        opponent: true
+        matchId: this.state.selectedMatch.id,
+        black,
+        white: localStorage.getItem("username"),
       },
       history: this.props.history
     });
