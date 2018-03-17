@@ -16,6 +16,17 @@ const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
 
+const findKings = (board) => {
+  let white, black;
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === 'k') white = [i, j];
+      if (board[i][j] === 'K') black = [i, j];
+    }
+  }
+  return { white, black };
+}
+
 const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, activate, movePiece }) => {
   let classNames = ['space'];
   let [x, y] = coords;
@@ -80,6 +91,7 @@ class ShogiBoard extends Component {
         color: 'black',
         hand: [],
       },
+      kings: null,
       pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
       showModal: false,
       modalContent: null,
@@ -91,6 +103,7 @@ class ShogiBoard extends Component {
     this.toggleHints = this.toggleHints.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.movePiece = this.movePiece.bind(this);
+    this.updateKings = this.updateKings.bind(this);
     this.checkPromotion = this.checkPromotion.bind(this);
     this.promptForPromote = this.promptForPromote.bind(this);
     this.promotePiece = this.promotePiece.bind(this);
@@ -99,9 +112,17 @@ class ShogiBoard extends Component {
   }
 
   componentDidMount() {
+    // roll this into an init()
+    //   set players
+    //   render board
+    //   find kings
     if (this.state.player.color === 'black') {
       this.reverseBoard();
     }
+    let kingPositions = findKings(this.state.board);
+    this.setState({
+      kings: kingPositions,
+    });
   }
 
   toggleModal(content = null) {
@@ -121,6 +142,14 @@ class ShogiBoard extends Component {
     boardCopy = boardCopy.reverse().map(row => row.reverse());
     this.setState({
       board: boardCopy,
+    })
+  }
+
+  updateKings(color, coords) {
+    let updateKings = {...this.state.kings};
+    updateKings[color] = coords;
+    this.setState({
+      kings: updateKings,
     })
   }
 
@@ -194,7 +223,7 @@ class ShogiBoard extends Component {
       let destination = new GameTile(boardIds[pieceId], this.playerColorFromId(pieceId), [x, y]);
       if (!destination.findMoves(this.state.board).length) willPromote = true;
 
-      if (!willPromote) {
+      if (!willPromote && !['King', 'Gold'].includes(boardIds[pieceId])) {
         // prompt user for choice
         this.promptForPromote(coords);
       }
@@ -209,8 +238,8 @@ class ShogiBoard extends Component {
       let { location, target } = this.state.selected;
 
       if (location === 'board') {
-        // board moves may result in a capture
         let [fromX, fromY] = target;
+        // movement on the board may result in a capture
         if (this.getPiece([x, y])) {
           this.capture([x, y]);
         }
@@ -218,13 +247,17 @@ class ShogiBoard extends Component {
         pieceToMove = this.checkPromotion([x, y], pieceToMove);
         updateBoard[fromX][fromY] = ' ';
         updateBoard[x][y] = pieceToMove;
+        // update kings in state
+        if (['k', 'K'].includes(pieceToMove)) this.updateKings(this.playerColorFromId(pieceToMove), [x, y]);
       } else {
         let [playerColor, pieceToPlace] = target.split(':');
-        // with drops, spot will always be empty
+        // spot can be trusted to be empty based on hints logic
         updateBoard[x][y] = pieceToPlace;
-        // decrement piece count in player hand based on target
         this.removeFromHand(pieceToPlace);
       }
+      // send move
+      // check for OK, compare updateBoard to board returned from socket as a double check
+      // animate, then transition turn
       this.setState({
         board: updateBoard,
         hints: [],
@@ -265,7 +298,6 @@ class ShogiBoard extends Component {
   }
 
   toggleHints() {
-    console.log(this.state.selected);
     if (this.state.selected) {
       if (this.state.selected.location === 'board') {
         let selectedPiece = this.getPiece(this.state.selected.target);
@@ -273,11 +305,8 @@ class ShogiBoard extends Component {
           hints: selectedPiece.findMoves(this.state.board),
         })
       } else {
-        // placeholder
         let [playerColor, piece] = this.state.selected.target.split(':');
-        // set up game tile
         let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
-        // run the canDrop() function for hints and set state
         let validLocations = helpers.validDropLocations(gameTile, this.state.board);
         this.setState({
           hints: validLocations,
