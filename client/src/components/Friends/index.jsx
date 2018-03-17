@@ -98,7 +98,7 @@ class Friends extends Component {
         ))}
         </div>
         </div>
-    ) : ( 
+    ) : (
       <div />
     )
     return (
