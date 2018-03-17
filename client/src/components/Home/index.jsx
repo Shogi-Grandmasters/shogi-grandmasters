@@ -3,8 +3,9 @@ import axios from "axios";
 import randomstring from "randomstring";
 import io from "socket.io-client/dist/socket.io.js";
 
-import OpenMatches from "./OpenMatches/index.jsx";
 import HomeChat from "./Chat/index.jsx";
+import OpenMatches from "../OpenMatches/index.jsx";
+import Nav from "../Global/Nav/Nav.jsx"
 
 class Home extends Component {
   constructor() {
@@ -92,8 +93,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        {localStorage.getItem("username")}
-        <button onClick={() => this.logout()}>Logout</button>
+        <Nav />
         <br />
         <button onClick={() => this.handleInitiateMatchClick()}>
           Initiate Match
