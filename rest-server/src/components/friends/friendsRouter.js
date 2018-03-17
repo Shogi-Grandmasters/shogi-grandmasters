@@ -1,13 +1,13 @@
-// import express from "express";
-// import validate from "express-validation";
-// import passport from "passport";
+import express from "express";
+import validate from "express-validation";
 
-// import { addFriendController } from "./friendsControllers";
-// import formValidation from "../../middleware/validation/formValidation";
-// import "../../middleware/validation/passport";
+import { friendController } from "./friendsControllers";
+import formValidation from "../../middleware/validation/formValidation";
+import "../../middleware/validation/passport";
 
-// const router = express.Router();
+const router = express.Router();
 
-// // router.route("/friends").post(validate(formValidation.findUser), friendsController);
+router.route("/add")
+  .post(validate(formValidation.findUser), friendController);
 
-// export default router;
+export default router;
