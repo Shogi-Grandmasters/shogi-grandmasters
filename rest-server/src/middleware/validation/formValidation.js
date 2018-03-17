@@ -16,8 +16,7 @@ export default {
   },
   findUser: {
     params: {
-      username: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-      email: Joi.string().email()
+      username: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/)
     }
   },
   saveChallenges: {
