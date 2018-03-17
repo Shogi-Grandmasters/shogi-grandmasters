@@ -6,31 +6,35 @@ import WaitingPage from "../WaitingPage/index.jsx";
 
 class BoardIndex extends Component {
   state = {
-    socket: null,
     waiting: true
   };
 
   componentWillMount() {
-    // const challenge =
-    //   typeof this.props.location.state.challenge === "string"
-    //     ? JSON.parse(this.props.location.state.challenge)
-    //     : { title: "" };
     this.socket = io("http://localhost:4155", {
       query: {
-        roomId: this.props.location.pathname.slice(1)
+        roomId: this.props.location.pathname.slice(1),
+        username: localStorage.getItem("username")
       }
     });
   }
-
+  
   async componentDidMount() {
-    this.socket.on("server.joined", () => {
-      this.setState({ waiting: false });
+    this.socket.on("server.joined", ({ matchId, black, white }) => {
+      this.setState({
+        waiting: false,
+        matchId,
+        black,
+        white
+      });
     });
-
-    if (this.props.location.state) {
-      if (this.props.location.state.opponent) {
-        this.socket.emit("client.gameReady");
-      }
+    
+    let { matchId, black, white } = this.props.location.state;
+    if (white) {
+      this.socket.emit("client.gameReady", {
+        matchId,
+        black,
+        white
+      });
     }
   }
 
@@ -43,8 +47,7 @@ class BoardIndex extends Component {
     ) : (
       <ShogiBoard
         socket={this.socket}
-        challenge={this.props.location.state.challenge}
-        history={this.props.history}
+        match={this.state}
       />
     );
   }

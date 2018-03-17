@@ -68,9 +68,27 @@ const clientGameChat = async ({ io, client, room }, payload) => {
   }
 };
 
-const clientGameReady = async ({ io, client, room }) => {
+const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
-  serverGameReady({ io, client, room });
+  let { matchId, black, white } = payload;
+  let { data } = await axios.get("http://localhost:3396/api/matches", {
+    params: { matchId }
+  });
+  let board, hand_black, hand_white;
+  if (data.length) {
+    board = JSON.parse(data[0].board);
+    hand_black = JSON.parse(data[0].hand_black);
+    hand_white = JSON.parse(data[0].hand_white);
+  }
+  await axios.post("http://localhost:3396/api/matches", {
+    matchId,
+    board: board || room.get("board"),
+    black,
+    white,
+    hand_white: hand_black || "[]",
+    hand_black: hand_white || "[]"
+  });
+  serverGameReady({ io, client, room }, payload);
 };
 
 const clientListGames = async ({ io, client, room }) => {

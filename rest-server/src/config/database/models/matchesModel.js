@@ -9,18 +9,21 @@ export const createMatchesTable = async () => {
       (
         id TEXT NOT NULL,
         board JSON NOT NULL,
-        outcome INT NOT NULL,
+        status INT NOT NULL,
         turn INT NOT NULL,
-        hand_white JSON NOT NULL,
+        black INT NOT NULL,
+        white INT NOT NULL,
         hand_black JSON NOT NULL,
-        player1 INT NOT NULL,
-        player2 INT NOT NULL,
+        hand_white JSON NOT NULL,
+        winner INT,
         CONSTRAINT matches_pk
           PRIMARY KEY(id),
-        CONSTRAINT fk_matches_player1
-          FOREIGN KEY(player1) REFERENCES users(id),
-        CONSTRAINT fk_matches_player2
-          FOREIGN KEY(player2) REFERENCES users(id)
+        CONSTRAINT fk_matches_black
+          FOREIGN KEY(black) REFERENCES users(id),
+        CONSTRAINT fk_matches_white
+          FOREIGN KEY(white) REFERENCES users(id),
+        CONSTRAINT fk_matches_winner
+          FOREIGN KEY(winner) REFERENCES users(id)
       )
       `
     );
