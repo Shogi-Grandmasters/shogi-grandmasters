@@ -33,7 +33,15 @@ const envBuild = {
     "SOCKET_SERVER_URL=http://localhost:4155",
     "REACT_APP_SOCKET_SERVER_URL=http://localhost:4155",
     "REACT_APP_REST_SERVER_URL=http://localhost:4990"
-  ]
+  ],
+  "services/boardsolver": [
+    "NODE_ENV=DEVELOPMENT",
+    "DEBUG=TRUE",
+    "HOST=http://localhost",
+    "PORT=4000",
+    "REST_SERVER_URL=http://localhost:3396",
+    "SOCKET_SERVER_URL=http://localhost:4155"
+  ],
 };
 
 module.exports = envBuild;
