@@ -5,7 +5,7 @@ import logo from './logo.svg';
 
 const Logo = () => {
   return (
-    <Link to="/home">
+    <Link to="/">
       <img  
         className="sg-logo"
         alt="sg-logo"

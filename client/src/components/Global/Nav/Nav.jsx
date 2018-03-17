@@ -20,7 +20,7 @@ class Nav extends Component {
       <ul className="topnav">
         <li className="logo"><Logo /></li>
         <li><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
-        <li><a href="#contact">History</a></li>
+        <li><Link to="/home">Challenge</Link></li>
         <li><Link to="/acct">Account</Link></li>
       </ul>
     )

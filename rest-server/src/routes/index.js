@@ -5,6 +5,8 @@ import openMatchesRouter from "../components/openMatches/openMatchesRouter";
 import matchesRouter from "../components/matches/matchesRouter";
 import messagesRouter from "../components/messages/messagesRouter";
 import userRouter from "../components/users/userRouter"
+import friendsRouter from "../components/friends/friendsRouter";
+
 
 const router = express.Router();
 
@@ -13,5 +15,6 @@ router.use("/openmatches", openMatchesRouter);
 router.use("/matches", matchesRouter);
 router.use("/messages", messagesRouter);
 router.use("/users", userRouter);
+router.use("/friends", friendsRouter);
 
 export default router;
