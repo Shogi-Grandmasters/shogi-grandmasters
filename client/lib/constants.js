@@ -1,3 +1,15 @@
+export const intialBoard = [
+  ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
+  [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
+  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+  [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
+  ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
+];
+
 export const boardIds = {
   k: "King",
   g: "Gold",
@@ -30,27 +42,17 @@ export const moveSets = {
 
 export const boardSize = 9;
 
-export const oppositeBoardSide = {
-  0: 8,
-  1: 7,
-  2: 6,
-  3: 5,
-  4: 4,
-  5: 3,
-  6: 2,
-  7: 1,
-  8: 0
-};
+export const oppositeBoardSide = (x) => Math.abs(x - 8);
 
-export const oppositeColor = {
-  white: 'black',
-  black: 'white'
-};
+export const oppositeColor = (color) => color === 'white' ? 'black' : 'white';
+
+export const includesLoc = (set, loc) => set.some(tuple => tuple[0] === loc[0] && tuple[1] === loc[1]);
 
 export default {
   moveSets,
   boardIds,
   boardSize,
   oppositeBoardSide,
-  oppositeColor
+  oppositeColor,
+  includesLoc
 };
