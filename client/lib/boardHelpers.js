@@ -1,7 +1,7 @@
 import {boardIds, oppositeBoardSide, oppositeColor, includesLoc} from './constants.js';
 import GameTile from './GameTile.js';
 
-export const validDropLocations = (tile, board, kings, color) => {
+export const validDropLocations = (tile, board, kings) => {
   let validDrops = [];
   let pawnLocs = [];
 
@@ -27,7 +27,7 @@ export const validDropLocations = (tile, board, kings, color) => {
               white: [oppositeBoardSide(kings['white'][0]), oppositeBoardSide(kings['white'][1])],
               black: [oppositeBoardSide(kings['black'][0]), oppositeBoardSide(kings['black'][1])]
             };
-            if(tile.name === 'Pawn' && !isCheckOrMate(copyMatrix(board), reverseKings, color, new GameTile('Pawn', color, [r, c]))[0]) {
+            if(tile.name === 'Pawn' && !isCheckOrMate(copyMatrix(board), reverseKings, tile.color, new GameTile('Pawn', tile.color, [r, c]))[0]) {
               validDrops.push([r, c]);
             }
           }
