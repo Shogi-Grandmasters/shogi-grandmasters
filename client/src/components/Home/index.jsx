@@ -22,7 +22,8 @@ class Home extends Component {
     this.fetchOpenMatches();
     this.socket = io("http://localhost:4155", {
       query: {
-        roomId: "home"
+        roomId: "home",
+        username: localStorage.getItem("username")
       }
     });
     this.socket.on("updateOpenMatches", () => {
@@ -39,18 +40,6 @@ class Home extends Component {
     window.localStorage.clear();
     this.props.history.push("/login");
   };
-
-  board = JSON.stringify([
-    ["L", "H", "S", "G", "K", "G", "S", "H", "L"],
-    [" ", "R", " ", " ", " ", " ", " ", "B", " "],
-    ["P", "P", "P", "P", "P", "P", "P", "P", "P"],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    ["p", "p", "p", "p", "p", "p", "p", "p", "p"],
-    [" ", "b", " ", " ", " ", " ", " ", "r", " "],
-    ["l", "h", "s", "g", "k", "g", "s", "h", "l"]
-  ]);
 
   matchId = randomstring.generate();
 
@@ -84,12 +73,12 @@ class Home extends Component {
       }
     );
     let black = data.username;
-    await axios.post("http://localhost:3396/api/matches", {
-      matchId: this.state.selectedMatch.id,
-      board: this.board,
-      black,
-      white: localStorage.getItem("username")
-    });
+    // await axios.post("http://localhost:3396/api/matches", {
+    //   matchId: this.state.selectedMatch.id,
+    //   board: this.board,
+    //   black,
+    //   white: localStorage.getItem("username")
+    // });
     this.props.history.push({
       pathname: `/${this.state.selectedMatch.id}`,
       state: {

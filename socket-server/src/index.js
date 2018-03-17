@@ -13,7 +13,7 @@ let clientCache;
 
 io.on("connection", client => {
   success("client connected");
-  const { roomId } = client.handshake.query;
+  const { roomId  } = client.handshake.query;
   const room = rooms.findOrCreate(roomId || "default");
   client.join(room.get("id"));
 
