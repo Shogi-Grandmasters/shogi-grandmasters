@@ -308,7 +308,9 @@ class ShogiBoard extends Component {
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
-        let validLocations = helpers.validDropLocations(gameTile, this.state.board);
+        console.log(this.state.kings);
+        let validLocations = helpers.validDropLocations(gameTile, this.state.board, this.state.kings);
+        console.log(validLocations);
         this.setState({
           hints: validLocations,
         })
