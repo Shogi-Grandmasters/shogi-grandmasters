@@ -17,5 +17,7 @@ export const deleteOpenMatchHelper = ({matchId}) => {
   return `
     DELETE FROM open_matches
     WHERE id='${matchId}'
+    RETURNING (SELECT username FROM users
+    WHERE id=player1)
   `;
 };
