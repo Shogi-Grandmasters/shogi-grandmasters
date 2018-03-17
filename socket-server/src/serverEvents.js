@@ -1,18 +1,16 @@
 import { success, error } from "./lib/log";
 
 export const serverInitialState = ({ client, room }, payload) => {
-  if (!room.get("challenge")) {
-    room.set("challenge", payload);
+  if (!room.get("match")) {
+    room.set("match", payload);
     client.emit("server.initialState", {
-      id: client.id,
-      text: room.get("text"),
-      challenge: payload
+      id: client.username,
+      match: payload
     });
   } else {
     client.emit("server.initialState", {
-      id: client.id,
-      text: room.get("text"),
-      challenge: room.get("challenge")
+      id: client.username,
+      match: room.get("match")
     });
   }
 };
@@ -37,8 +35,8 @@ export const serverLoadMessages = ({ io, room }, messages) => {
   io.in(room.get("id")).emit("server.loadMessages", messages);
 };
 
-export const serverGameReady = ({ io, room }) => {
-  io.in(room.get("id")).emit("server.joined");
+export const serverGameReady = ({ io, room }, payload) => {
+  io.in(room.get("id")).emit("server.joined", payload);
 };
 
 export const serverGameChat = ({ io, room }, messages) => {
@@ -46,7 +44,5 @@ export const serverGameChat = ({ io, room }, messages) => {
 };
 
 export const serverUpdateGames = ({ io, room }) => {
-  io.in(room.get("id")).emit("updateOpenMatches", {
-    message: "fetchall open matches!!!"
-  });
+  io.in(room.get("id")).emit("updateOpenMatches");
 };
