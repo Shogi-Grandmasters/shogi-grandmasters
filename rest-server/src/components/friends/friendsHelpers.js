@@ -4,7 +4,7 @@ import { addFriendHelper } from './friendsSQL';
 
 export const friendsQuery = async body => {
   try {
-    const queryString = addFriendHelper(body);
+    const queryString = await addFriendHelper(body);
     const data = await db.queryAsync(queryString);
     success("friendsQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
     return data;
