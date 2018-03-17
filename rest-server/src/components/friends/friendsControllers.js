@@ -44,3 +44,5 @@ export const updateFriendController = async (req, res) => {
     return res.status(400).send(err);
   }
 };
+
+//${JSON.stringify(data.rows[0])}
