@@ -68,9 +68,9 @@ const clientGameChat = async ({ io, client, room }, payload) => {
   }
 };
 
-const clientGameReady = async ({ io, client, room }) => {
+const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
-  serverGameReady({ io, client, room });
+  serverGameReady({ io, client, room }, payload);
 };
 
 const clientListGames = async ({ io, client, room }) => {
