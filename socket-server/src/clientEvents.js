@@ -8,6 +8,7 @@ import {
   serverRun,
   serverLoadMessages,
   serverGameReady,
+  serverSendMessages,
   serverHomeChat,
   serverGameChat,
   serverUpdateGames,
