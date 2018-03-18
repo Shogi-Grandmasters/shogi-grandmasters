@@ -39,6 +39,10 @@ export const serverGameReady = ({ io, client, room }, payload) => {
   io.in(room.get("id")).emit("server.joined", payload);
 };
 
+export const serverSendMessages = ({ io, client, room }, payload) => {
+  io.in(room.get("id")).emit("server.sendMessages", payload);
+};
+
 export const serverHomeChat = ({ io, room }, messages) => {
   io.in(room.get("id")).emit("server.homeChat", messages);
 };

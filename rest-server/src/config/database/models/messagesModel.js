@@ -14,9 +14,7 @@ export const createMessagesTable = async () => {
         CONSTRAINT messages_pk
           PRIMARY KEY(id),
         CONSTRAINT fk_messages_user_id
-          FOREIGN KEY(user_id) REFERENCES users(id),
-        CONSTRAINT fk_messages_match_id
-          FOREIGN KEY(match_id) REFERENCES matches(id)
+          FOREIGN KEY(user_id) REFERENCES users(id)
       )
       `
     );

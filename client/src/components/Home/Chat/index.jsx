@@ -11,12 +11,15 @@ class HomeChat extends Component {
   }
 
   componentWillMount() {
-    // this.props.socket.emit("client.fetchHomeMessages");
+    this.props.socket.emit("client.fetchMessages");
   }
 
   async componentDidMount() {
     await this.props.socket.on("server.homeChat", message => {
       this.setState({ messages: [...this.state.messages, message] });
+    });
+    await this.props.socket.on("server.sendMessages", messages => {
+      this.setState({ messages });
     });
   }
 
@@ -27,7 +30,7 @@ class HomeChat extends Component {
   handleSubmit() {
     this.props.socket.emit("client.homeChat", {
       username: localStorage.getItem("username"),
-      message: this.state.message
+      content: this.state.message
     });
   }
 
@@ -49,7 +52,9 @@ class HomeChat extends Component {
         <div className="chatbox">
           {this.state.messages.length > 0 &&
             this.state.messages.map((message, i) => {
-              return <div key={i}>{`${message.username}: ${message.message}`}</div>;
+              return (
+                <div key={i}>{`${message.username}: ${message.content}`}</div>
+              );
             })}
         </div>
       </div>
