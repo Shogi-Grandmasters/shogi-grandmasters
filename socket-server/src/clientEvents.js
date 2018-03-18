@@ -8,6 +8,7 @@ import {
   serverRun,
   serverLoadMessages,
   serverGameReady,
+  serverSendMessages,
   serverHomeChat,
   serverGameChat,
   serverUpdateGames
@@ -52,9 +53,8 @@ const clientDisconnect = ({ io, client, room }) => {
 const clientFetchMessages = async ({ io, client, room }, payload) => {
   success("client load message request heard");
   try {
-    await clientCache.get(`${room.get("id")}/messages`, (err, result) => {
-      result && serverGameChat({ io, client, room }, result);
-    });
+    const { data } = await axios.get("http://localhost:3396/api/messages");
+    serverSendMessages({ io, client, room }, data);
   } catch (err) {
     error("error fetching messages from database. e = ", err);
   }
@@ -63,6 +63,11 @@ const clientFetchMessages = async ({ io, client, room }, payload) => {
 const clientHomeChat = async ({ io, client, room }, payload) => {
   success("client home chat heard");
   try {
+    await axios.post("http://localhost:3396/api/messages", {
+      matchId: room.get("id"),
+      message: payload.content,
+      username: payload.username
+    });
     serverHomeChat({ io, client, room }, payload);
   } catch (err) {
     error("client home chat error: ", err);
@@ -112,7 +117,7 @@ const clientEmitters = {
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,
-  // "client.fetchMessages": clientFetchMessages,
+  "client.fetchMessages": clientFetchMessages,
   "client.gameReady": clientGameReady,
   "client.homeChat": clientHomeChat,
   "client.gameChat": clientGameChat,
