@@ -13,9 +13,10 @@ let clientCache;
 
 io.on("connection", client => {
   success("client connected");
-  const { roomId  } = client.handshake.query;
+  const { roomId } = client.handshake.query;
   const room = rooms.findOrCreate(roomId || "default");
   client.join(room.get("id"));
+  client.emit("server.connect", room.get("waiting"));
 
   each(clientEvents, (handler, event) => {
     client.on(event, handler.bind(null, { io, client, room }));
