@@ -11,14 +11,16 @@ class Friends extends Component {
 
   addFriend = async () => {
     const id = localStorage.getItem("id");
-    const username = this.state.friend;
-    const {data} = await axios.post(`http://localhost:3396/api/users/find/`, { username });
-    const fid = data[0].id + "";
+    const { username } = this.state;
+    console.log(username)
+    const { data } = await axios.post(`http://localhost:3396/api/users/find/`, { username });
+    const fid = data.id + "";
+    console.log(fid)
     const body = {
       u_id: id,
       f_id: fid,
     }
-    const added = await axios.post(`http://localhost:3396/api/friends/addFriend`, body);
+    const added = await axios.post(`http://localhost:3396/api/friends/add`, body);
     // this.fetchFriends();
   }
 
@@ -30,7 +32,7 @@ class Friends extends Component {
   render() {
     return (
       <div>
-        <input name="friend" type="text" placeholder="Add a friend" onChange={() => this.handleInput()} />
+        <input name="username" type="text" placeholder="Search by username" onChange={this.handleInput} />
         <input type="submit" onClick={() => this.addFriend()} />
       </div>
     )
