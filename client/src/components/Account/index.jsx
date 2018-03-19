@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Logo from '../Global/Logo/index.js';
 import Nav from '../Global/Nav/Nav.jsx';
+import Friends from '../Friends/index.jsx';
 
 class Account extends Component {
   constructor() {
@@ -13,6 +14,7 @@ class Account extends Component {
     return(
       <div>
         <Nav />
+        <Friends />
       </div>
     )
   }
