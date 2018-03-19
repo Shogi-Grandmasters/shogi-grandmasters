@@ -12,7 +12,7 @@ class Friends extends Component {
   addFriend = async () => {
     const id = localStorage.getItem("id");
     const username = this.state.friend;
-    const {data} = await axios.get(`http://localhost:3396/api/users/fetchUsername/${username}`);
+    const {data} = await axios.post(`http://localhost:3396/api/users/find/`, { username });
     const fid = data[0].id + "";
     const body = {
       u_id: id,
@@ -22,9 +22,17 @@ class Friends extends Component {
     // this.fetchFriends();
   }
 
+  handleInput = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  }
+
   render() {
     return (
-
+      <div>
+        <input name="friend" type="text" placeholder="Add a friend" onChange={() => this.handleInput()} />
+        <input type="submit" onClick={() => this.addFriend()} />
+      </div>
     )
   }
 }
