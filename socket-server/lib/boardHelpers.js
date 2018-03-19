@@ -6,11 +6,7 @@ import {
 } from "./constants.js";
 import GameTile from "./GameTile.js";
 
-<<<<<<< HEAD
-export const validDropLocations = (tile, board, kings, color) => {
-=======
 export const validDropLocations = (tile, board, kings) => {
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
   let validDrops = [];
   let pawnLocs = [];
 
@@ -46,21 +42,12 @@ export const validDropLocations = (tile, board, kings) => {
                 ]
               };
               if (
-<<<<<<< HEAD
-                tile.name === "Pawn" &&
-                !isCheckOrMate(
-                  copyMatrix(board),
-                  reverseKings,
-                  color,
-                  new GameTile("Pawn", color, [r, c])
-=======
                 tile.name !== "Pawn" &&
                 !isCheckOrMate(
                   copyMatrix(board),
                   reverseKings,
                   tile.color,
                   new GameTile("Pawn", tile.color, [r, c])
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
                 )[0]
               ) {
                 validDrops.push([r, c]);
@@ -75,36 +62,21 @@ export const validDropLocations = (tile, board, kings) => {
   return validDrops;
 };
 
-<<<<<<< HEAD
-export const isCheckOrMate = (board, kings, color, tile) => {
-=======
 export const isCheckOrMate = (board, kings, tile) => {
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
   let check = false;
   let checkmate = false;
   let moveSet = tile.findMoves(board);
   if (
     includesLoc(moveSet, [
-<<<<<<< HEAD
-      kings[oppositeColor(color)][0],
-      kings[oppositeColor(color)][1]
-=======
       kings[oppositeColor(tile.color)][0],
       kings[oppositeColor(tile.color)][1]
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
     ])
   ) {
     check = true;
     const boardCopy = reverseBoard(board);
-<<<<<<< HEAD
-    let king = new GameTile("King", oppositeColor(color), [
-      oppositeBoardSide(kings[oppositeColor(color)][0]),
-      oppositeBoardSide(kings[oppositeColor(color)][1])
-=======
     let king = new GameTile("King", oppositeColor(tile.color), [
       oppositeBoardSide(kings[oppositeColor(tile.color)][0]),
       oppositeBoardSide(kings[oppositeColor(tile.color)][1])
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
     ]);
     let kingsMoves = king.findMoves(boardCopy);
     if (kingsMoves.length === 0) {
@@ -113,16 +85,6 @@ export const isCheckOrMate = (board, kings, tile) => {
         //   determine difference between two squares
         let spaceBetween = [];
         const difference = [
-<<<<<<< HEAD
-          Math.abs(kings[oppositeColor(color)][0] - tile.loc[0]),
-          Math.abs(kings[oppositeColor(color)][1] - tile.loc[1])
-        ];
-        //   determine direction
-        const horizontalDirection =
-          kings[oppositeColor(color)][1] < tile.loc[1] ? -1 : 1;
-        const verticalDirection =
-          kings[oppositeColor(color)][0] < tile.loc[0] ? -1 : 1;
-=======
           Math.abs(kings[oppositeColor(tile.color)][0] - tile.loc[0]),
           Math.abs(kings[oppositeColor(tile.color)][1] - tile.loc[1])
         ];
@@ -131,7 +93,6 @@ export const isCheckOrMate = (board, kings, tile) => {
           kings[oppositeColor(tile.color)][1] < tile.loc[1] ? -1 : 1;
         const verticalDirection =
           kings[oppositeColor(tile.color)][0] < tile.loc[0] ? -1 : 1;
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
         //   iterate saving each square from tile to king
         if (difference[0] > 0) {
           if (difference[1] > 0) {
@@ -159,14 +120,10 @@ export const isCheckOrMate = (board, kings, tile) => {
         }
         // find king's team's moveSet
         //   getCombinedMoves
-<<<<<<< HEAD
-        let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(color));
-=======
         let teamMoves = getCombinedMoveSet(
           boardCopy,
           oppositeColor(tile.color)
         );
->>>>>>> 1c98b67579ba1c9b60971135b60571619ee3d108
         let tempMoves = king.findMoves(boardCopy, true);
         let adjustedMoves = [];
 
