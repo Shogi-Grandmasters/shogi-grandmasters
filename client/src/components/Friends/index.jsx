@@ -83,11 +83,6 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
-  handleInput = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  }
-
   render() {
     const pending = this.state.pending.length ? (
       <div>
