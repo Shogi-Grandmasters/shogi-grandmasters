@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import io from "socket.io-client/dist/socket.io.js";
 
-class HomeChat extends Component {
+class GameChat extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,4 +70,4 @@ class HomeChat extends Component {
   }
 }
 
-export default HomeChat;
+export default GameChat;
