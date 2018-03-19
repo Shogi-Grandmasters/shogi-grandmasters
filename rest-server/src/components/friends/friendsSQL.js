@@ -5,3 +5,21 @@ export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
     RETURNING u_id, f_id, status
   `;
 };
+
+export const fetchAllFriendsHelper = ({ u_id }) => {
+  return `
+    SELECT u.id, u.email, u.username, u.wins, u.losses
+    FROM users AS u
+      INNER JOIN friends AS f
+      ON (u.id=f.f_id)
+      WHERE f.u_id=${u_id}
+  `;
+};
+
+export const delFriendHelper = ({ u_id, f_id }) => {
+  return `
+    DELETE FROM friends
+    WHERE u_id=${u_id} AND f_id=${f_id}
+    RETURNING u_id, f_id
+  `;
+}
