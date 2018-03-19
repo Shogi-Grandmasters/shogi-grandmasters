@@ -3,7 +3,7 @@ import express from "express";
 import {
   createMessageController,
   fetchMessageController,
-  deleteMessageController
+  // deleteMessageController
 } from "./messagesControllers";
 
 const router = express.Router();
@@ -11,7 +11,7 @@ const router = express.Router();
 router
   .route("/")
   .post(createMessageController)
-  .get(fetchMessageController)
-  .delete(deleteMessageController);
+  .get(fetchMessageController);
+  // .delete(deleteMessageController);
 
 export default router;

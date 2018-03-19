@@ -10,7 +10,7 @@ export const createMessageController = async (req, res) => {
   try {
     const data = await createMessageQuery(req.body);
     success(
-      "createMessageController - successfully created open match",
+      "createMessageController - successfully created message",
       JSON.stringify(data)
     );
     return res.status(200).send(data);
@@ -24,7 +24,7 @@ export const fetchMessageController = async (req, res) => {
   try {
     const data = await fetchMessageQuery(req.query);
     success(
-      "fetchMessageController - successfully fetched open match data",
+      "fetchMessageController - successfully fetched messages",
       JSON.stringify(data)
     );
     return res.status(200).send(data);
@@ -34,16 +34,16 @@ export const fetchMessageController = async (req, res) => {
   }
 };
 
-export const deleteMessageController = async (req, res) => {
-  try {
-    const data = await deleteMessageQuery(req.body);
-    success(
-      "deleteMessageController - successfully deleted open match data",
-      JSON.stringify(data)
-    );
-    return res.status(200).send(data);
-  } catch (err) {
-    error("deleteMessageController - error= ", err);
-    res.status(404).send(err);
-  }
-};
+// export const deleteMessageController = async (req, res) => {
+//   try {
+//     const data = await deleteMessageQuery(req.body);
+//     success(
+//       "deleteMessageController - successfully deleted message",
+//       JSON.stringify(data)
+//     );
+//     return res.status(200).send(data);
+//   } catch (err) {
+//     error("deleteMessageController - error= ", err);
+//     res.status(404).send(err);
+//   }
+// };
