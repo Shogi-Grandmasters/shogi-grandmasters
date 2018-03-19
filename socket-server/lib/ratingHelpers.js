@@ -18,6 +18,7 @@ export const endMatch = ([winner, loser], draw = false) => {
   let winnerExpected = elo.getExpected(winner.rating, loser.rating);
   let winnerUpdated = elo.updateRating(winnerExpected, draw ? 0.5 : 1, winner.rating);
   winner.rating = winnerUpdated > 99 ? winnerUpdated : 100;
+  let updatedWinner = update(winner.id, winner.rating);
 
   if (loser <= 2000) {
     elo = new eloRank(32);
@@ -29,6 +30,7 @@ export const endMatch = ([winner, loser], draw = false) => {
   let loserExpected = elo.getExpected(loser.rating, winner.rating);
   let loserUpdated = elo.updateRating(loserExpected, draw ? 0.5 : 1, loser.rating);
   loser.rating = loserUpdated > 99 ? loserUpdated : 100;
+  let updatedLoser = update(loser.id, loser.rating);
 
   return [winner, loser]
 }
