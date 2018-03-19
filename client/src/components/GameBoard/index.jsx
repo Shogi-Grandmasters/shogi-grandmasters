@@ -17,21 +17,22 @@ class BoardIndex extends Component {
       }
     });
   }
-  
+
   async componentDidMount() {
-    this.socket.on("server.joined", ({ matchId, black, white, board, hand_black, hand_white }) => {
+    this.socket.on("server.joined", ({ matchId, black, white, board, turn, hand_black, hand_white }) => {
       this.setState({
         waiting: false,
         matchId,
         black,
         white,
+        turn,
         board,
         hand_black,
         hand_white
       });
       console.log(this.state);
     });
-    
+
     let { matchId, black, white } = this.props.location.state;
     if (white) {
       this.socket.emit("client.gameReady", {

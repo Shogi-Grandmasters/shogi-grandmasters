@@ -17,6 +17,11 @@ const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
 
+const reverseMatrix = (matrix) => {
+  let matrixCopy = copyMatrix(matrix);
+  return matrixCopy.reverse().map(row => row.reverse());
+}
+
 const findKings = (board) => {
   let white, black;
   for (let i = 0; i < 9; i++) {
@@ -67,7 +72,7 @@ class ShogiBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      board: props.board || [
+      board: props.match.board || [
         ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
@@ -78,17 +83,14 @@ class ShogiBoard extends Component {
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
         ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
       ],
+      matchId: props.match.matchId,
       player: {
-        user: {
-          name: 'Ocheyo',
-        },
+        user: { name: 'Player One' },
         color: 'white',
         hand: [],
       },
       opponent: {
-        user: {
-          name: 'rgonewildplus'
-        },
+        user: { name: 'Player Two' },
         color: 'black',
         hand: [],
       },
@@ -112,21 +114,54 @@ class ShogiBoard extends Component {
     this.promptForPromote = this.promptForPromote.bind(this);
     this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
-    this.reverseBoard = this.reverseBoard.bind(this);
   }
 
   componentDidMount() {
     let localUser = localStorage.getItem('username');
-    // roll this into an init()
-    //   set players
-    //   render board
-    //   find kings
-    if (this.state.player.color === 'black') {
-      this.reverseBoard();
+    let updatePlayer = {...this.state.player};
+    let updateOpponent = {...this.state.opponent};
+
+    if (localUser === this.props.match.black) {
+      updatePlayer = {
+        user: {
+          name: localUser,
+        },
+        color: 'black',
+        hand: this.props.match.hand_black || [],
+      };
+      updateOpponent = {
+        user: {
+          name: this.props.match.white,
+        },
+        color: 'white',
+        hand: this.props.match.hand_white || [],
+      }
+    } else {
+      updatePlayer = {
+        user: {
+          name: localUser,
+        },
+        color: 'white',
+        hand: this.props.match.hand_white || [],
+      };
+      updateOpponent = {
+        user: {
+          name: this.props.match.black,
+        },
+        color: 'black',
+        hand: this.props.match.hand_black || [],
+      }
     }
+    let updateBoard = updatePlayer.color === 'black' ? reverseMatrix(this.state.board) : copyMatrix(this.state.board);
     let kingPositions = findKings(this.state.board);
+    let isTurn = this.props.match.turn ? updatePlayer.color === 'black' : updatePlayer.color === 'white'; // turn = 0 (black), 1 (white)
+
     this.setState({
+      player: updatePlayer,
+      opponent: updateOpponent,
+      board: updateBoard,
       kings: kingPositions,
+      isTurn,
     });
 
     // events to listen for:
@@ -154,14 +189,6 @@ class ShogiBoard extends Component {
 
   playerColorFromId(id) {
     return id.charCodeAt(0) > 90 ? 'white' : 'black';
-  }
-
-  reverseBoard() {
-    let boardCopy = copyMatrix(this.state.board);
-    boardCopy = boardCopy.reverse().map(row => row.reverse());
-    this.setState({
-      board: boardCopy,
-    })
   }
 
   updateKings(color, coords) {
