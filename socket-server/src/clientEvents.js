@@ -95,11 +95,13 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     !data && await axios.post("http://localhost:3396/api/matches", {
       matchId,
       board: JSON.stringify(data.board) || JSON.stringify(room.get("board")),
+      turn: data.turn || 0,
       black,
       white,
       hand_white: JSON.stringify(data.hand_black) || "[]",
       hand_black: JSON.stringify(data.hand_white) || "[]"
     });
+    payload.turn = data.turn || 0;
     payload.board = data.board || room.get("board");
     payload.hand_black = data.hand_black || [];
     payload.hand_white = data.hand_white || [];
