@@ -22,6 +22,7 @@ export default class Rooms {
       room = new Map();
       room.set("id", roomId);
       room.set("board", board);
+      room.set("waiting", true);
       this.store.set(roomId, room);
     }
     return room;
