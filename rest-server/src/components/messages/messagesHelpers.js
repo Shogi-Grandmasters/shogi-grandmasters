@@ -11,10 +11,10 @@ export const createMessageQuery = async body => {
     const queryString = createMessageHelper(body);
     const { rows } = await db.query(queryString);
     success(
-      "createMessageQuery - successfully saved open match",
-      JSON.stringify(rows[0])
+      "createMessageQuery - successfully saved message",
+      JSON.stringify(rows)
     );
-    return rows[0];
+    return rows;
   } catch (err) {
     error("createMessageQuery - error= ", err);
     throw new Error(err);
@@ -26,7 +26,7 @@ export const fetchMessageQuery = async query => {
     const queryString = fetchMessageHelper(query);
     const { rows } = await db.query(queryString);
     success(
-      "fetchMessageQuery - successfully fetched open match",
+      "fetchMessageQuery - successfully fetched messages",
       JSON.stringify(rows)
     );
     return rows;
@@ -36,17 +36,17 @@ export const fetchMessageQuery = async query => {
   }
 };
 
-export const deleteMessageQuery = async body => {
-  try {
-    const queryString = deleteMessageHelper(body);
-    const { rows } = await db.query(queryString);
-    success(
-      "deleteMessageQuery - successfully deleted open match",
-      JSON.stringify(rows[0])
-    );
-    return rows[0];
-  } catch (err) {
-    error("deleteMessageQuery - error= ", err);
-    throw new Error(err);
-  }
-};
+// export const deleteMessageQuery = async body => {
+//   try {
+//     const queryString = deleteMessageHelper(body);
+//     const { rows } = await db.query(queryString);
+//     success(
+//       "deleteMessageQuery - successfully deleted message",
+//       JSON.stringify(rows[0])
+//     );
+//     return rows[0];
+//   } catch (err) {
+//     error("deleteMessageQuery - error= ", err);
+//     throw new Error(err);
+//   }
+// };
