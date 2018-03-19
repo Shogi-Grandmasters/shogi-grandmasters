@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route("/find")
   .post(validate(formValidation.findUser), userController);
-
+  
 export default router;
 
 // .post(validate(formValidation.findUser), userController);
