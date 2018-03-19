@@ -8,7 +8,7 @@ export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
 
 export const fetchAllFriendsHelper = ({ u_id }) => {
   return `
-    SELECT u.id, u.email, u.username, u.wins, u.losses
+    SELECT u.id, u.email, u.username, u.wins, u.losses, f.status
     FROM users AS u
       INNER JOIN friends AS f
       ON (u.id=f.f_id)
