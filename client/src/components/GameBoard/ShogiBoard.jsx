@@ -33,7 +33,7 @@ const findKings = (board) => {
   return { white, black };
 }
 
-const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, activate, movePiece }) => {
+const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, turn, activate, movePiece }) => {
   let classNames = ['space'];
   let [x, y] = coords;
   let promotes = x < 3 ? 'white' : x > 5 ? 'black' : null;
@@ -54,7 +54,7 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
     <td
       id={`${x}-${y}`}
       className={classNames.join(' ')}
-      onClick={() => isHint && movePiece([x, y])}
+      onClick={() => isHint && turn && movePiece([x, y])}
     >
       {piece ?
         <ShogiPiece
@@ -72,6 +72,7 @@ class ShogiBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      matchId: props.match.matchId,
       board: props.match.board || [
         ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
@@ -83,7 +84,6 @@ class ShogiBoard extends Component {
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
         ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
       ],
-      matchId: props.match.matchId,
       player: {
         user: { name: 'Player One' },
         color: 'white',
@@ -103,12 +103,16 @@ class ShogiBoard extends Component {
       hints: [],
       isTurn: true,
     }
+    this.socket = props.socket;
+
+    this.initializeMatch = this.initializeMatch.bind(this);
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.movePiece = this.movePiece.bind(this);
     this.commitMove = this.commitMove.bind(this);
     this.submitMove = this.submitMove.bind(this);
+    this.receiveMove = this.receiveMove.bind(this);
     this.updateKings = this.updateKings.bind(this);
     this.moveWillPromote = this.moveWillPromote.bind(this);
     this.promptForPromote = this.promptForPromote.bind(this);
@@ -117,9 +121,18 @@ class ShogiBoard extends Component {
   }
 
   componentDidMount() {
+    this.initializeMatch();
+    this.socket.on("server.playerMove", (payload) => console.log(payload));
+    // events to listen for:
+    //    player enter / leave  =>  update player online indicator
+    //    move =>  update board, turn state
+    //    game state => check / checkmate / concede
+  }
+
+  initializeMatch() {
     let localUser = localStorage.getItem('username');
-    let updatePlayer = {...this.state.player};
-    let updateOpponent = {...this.state.opponent};
+    let updatePlayer = { ...this.state.player };
+    let updateOpponent = { ...this.state.opponent };
 
     if (localUser === this.props.match.black) {
       updatePlayer = {
@@ -163,11 +176,6 @@ class ShogiBoard extends Component {
       kings: kingPositions,
       isTurn,
     });
-
-    // events to listen for:
-    //    player enter / leave  =>  update player online indicator
-    //    move =>  update board, turn state
-    //    game state => check / checkmate / concede
   }
 
   toggleModal(content = null) {
@@ -176,15 +184,6 @@ class ShogiBoard extends Component {
       showModal: !prevState.showModal,
       modalContent: content,
     }))
-  }
-
-  receiveMove(game, move) {
-
-  }
-
-  submitMove() {
-    // check to / from piece state in currentMove
-    // emit client:move
   }
 
   playerColorFromId(id) {
@@ -326,15 +325,55 @@ class ShogiBoard extends Component {
     }
   }
 
+  receiveMove(payload) {
+    console.log(payload);
+
+    // if (!this.state.isTurn) {
+    //   let { board, white, black, kings } = after;
+
+    //   let updatePlayer = { ...this.state.player };
+    //   updatePlayer.hand = updatePlayer.color === 'white' ? white : black;
+    //   let updateOpponent = { ...this.state.opponent };
+    //   updatePlayer.hand = updateOpponent.color === 'white' ? white : black;
+
+    //   this.setState(prevState => ({
+    //     board,
+    //     player: updatePlayer,
+    //     opponent: updateOpponent,
+    //     kings,
+    //     isTurn: !prevState.isTurn,
+    //   }), () => console.log('received turn'))
+    // }
+  }
+
+  submitMove(matchId, before, after, move) {
+    console.log('sending: ', {
+      matchId,
+      before,
+      after,
+      move
+    })
+    this.socket.emit("client.submitMove", {
+      matchId,
+      before,
+      after,
+      move
+    })
+    console.log('sent move');
+  }
+
   commitMove() {
     if (this.state.pendingMove) {
       let { board, kings } = this.state.pendingMove.after;
 
       let updatePlayer = {...this.state.player};
-      updatePlayer.hand = updatePlayer.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.white;
+      updatePlayer.hand = updatePlayer.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.black;
 
       let updateOpponent = {...this.state.opponent};
-      updatePlayer.hand = updateOpponent.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.white;
+      updatePlayer.hand = updateOpponent.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.black;
+
+      let { before, after, move } = this.state.pendingMove;
+      this.submitMove(this.state.matchId, before, after, move);
 
       this.setState({
         board,
@@ -345,7 +384,6 @@ class ShogiBoard extends Component {
         pendingMove: false,
         pendingDecision: false,
         selected: null,
-        isTurn: false,
       });
     }
   }
@@ -390,9 +428,7 @@ class ShogiBoard extends Component {
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
-        console.log(this.state.kings);
         let validLocations = helpers.validDropLocations(this.state.board, this.state.kings, gameTile);
-        console.log(validLocations);
         this.setState({
           hints: validLocations,
         })
@@ -439,6 +475,7 @@ class ShogiBoard extends Component {
                       coords={[ri, ci]}
                       piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], this.playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
                       player={this.state.player}
+                      turn={this.state.isTurn}
                       activate={this.togglePiece}
                       movePiece={this.movePiece}
                     />

@@ -54,3 +54,7 @@ export const serverGameChat = ({ io, room }, messages) => {
 export const serverUpdateGames = ({ io, room }) => {
   io.in(room.get("id")).emit("updateOpenMatches");
 };
+
+export const serverPlayerMove = ({ io, client, room }, payload) => {
+  io.in(room.get("id")).emit("server.playerMove", payload);
+};

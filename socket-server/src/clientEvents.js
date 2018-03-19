@@ -11,7 +11,8 @@ import {
   serverSendMessages,
   serverHomeChat,
   serverGameChat,
-  serverUpdateGames
+  serverUpdateGames,
+  serverPlayerMove
 } from "./serverEvents";
 
 const clientReady = ({ io, client, room }, payload) => {
@@ -117,6 +118,44 @@ const clientListGames = async ({ io, client, room }) => {
   serverUpdateGames({ io, client, room });
 };
 
+const clientSelectedPiece = async ({ io, client, room }, payload) => {
+  // deconstruct payload
+  let { matchId, board, piece, location } = payload;
+  // create GameTile instance
+  // generate hint tiles
+  //  if location == [10,10] > validDropLocations
+  //  else > validMoves
+  // invert hint coords for opponent display
+
+}
+
+const clientDeselectedPiece = async ({ io, client, room }, payload) => {
+
+}
+
+const clientSubmitMove = async ({ io, client, room }, payload) => {
+  // deconstruct payload
+  let { matchId, before, after, move } = payload;
+  //    matchId
+  //    game => board, white_hand, black_hand, turn
+  //    move => from, to
+  // validate move
+  //    turn and user match
+  //    move is valid
+  // if success, update game state
+  //    check / checkmate?
+  //      if so, append to response
+  //    update hand if
+  //      capture
+  //      drop (location of [10,10])
+  //    update board
+  //    update turn
+  //    log the move
+  //    save game state to match
+  // broadcast
+  serverPlayerMove({ io, client, room }, payload);
+}
+
 const clientEmitters = {
   "client.ready": clientReady,
   "client.update": clientUpdate,
@@ -126,7 +165,8 @@ const clientEmitters = {
   "client.gameReady": clientGameReady,
   "client.homeChat": clientHomeChat,
   "client.gameChat": clientGameChat,
-  "client.listOpenGames": clientListGames
+  "client.listOpenGames": clientListGames,
+  "client.submitMove": clientSubmitMove,
 };
 
 export default clientEmitters;
