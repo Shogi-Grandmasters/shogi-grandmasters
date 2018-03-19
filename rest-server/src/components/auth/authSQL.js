@@ -1,8 +1,8 @@
 export const signUpHelper = ({ email, username, password }) => {
   return `
-    INSERT INTO users (email, username, password)
-    VALUES ('${email}', '${username}', '${password}')
-    RETURNING id, email, username
+    INSERT INTO users (email, username, password, rating)
+    VALUES ('${email}', '${username}', '${password}', '1000')
+    RETURNING id, email, username, rating
   `;
 };
 
