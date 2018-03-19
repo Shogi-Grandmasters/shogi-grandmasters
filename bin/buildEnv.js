@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const envBuild = require("../config/.env.sample.js");
+const envBuild = require("../config/.env.js");
 
 const buildEnv = () => {
   for (let pathname in envBuild) {
