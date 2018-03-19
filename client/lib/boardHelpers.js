@@ -27,9 +27,17 @@ export const validDropLocations = (board, kings, tile) => {
               white: [oppositeBoardSide(kings['white'][0]), oppositeBoardSide(kings['white'][1])],
               black: [oppositeBoardSide(kings['black'][0]), oppositeBoardSide(kings['black'][1])]
             };
-            if(tile.name !== 'Pawn' && !isCheckOrMate(copyMatrix(board), reverseKings, new GameTile('Pawn', tile.color, [r, c]))[0]) {
-              validDrops.push([r, c]);
-            }
+          if (
+            tile.name !== "Pawn" ||
+            (tile.name === "Pawn" &&
+              !isCheckOrMate(
+                copyMatrix(board),
+                reverseKings,
+                new GameTile("Pawn", tile.color, [r, c])
+              )[0])
+          ) {
+            validDrops.push([r, c]);
+          }
           }
         }
       }
