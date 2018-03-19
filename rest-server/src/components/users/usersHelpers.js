@@ -5,8 +5,6 @@ import { findUsernameHelper } from './usersSQL';
 export const usersQuery = async body => {
   try {
     const queryString = findUsernameHelper(body);
-    console.log(body)
-    console.log(queryString)
     const data = await db.queryAsync(queryString);
     success("usersQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
     return data;
