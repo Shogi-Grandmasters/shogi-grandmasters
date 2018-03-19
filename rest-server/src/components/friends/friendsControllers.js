@@ -1,15 +1,35 @@
-import { friendsQuery } from './friendsHelpers';
+import { addFriendQuery, fetchFriendQuery, delFriendQuery } from './friendsHelpers';
 import { success, error } from "../../lib/log";
 
-export const friendController = async (req, res) => {
+export const addFriendController = async (req, res) => {
   try {
-    const data = await friendsQuery(req.body);
-    success("friendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    const data = await addFriendQuery(req.body);
+    success("addFriendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
     return res.status(200).send(data.rows[0]);
   } catch (err) {
-    error("friendController - error= ", err);
+    error("addFriendController - error= ", err);
     return res.status(400).send(err);
   }
 };
 
-//${JSON.stringify(data.rows[0])}
+export const fetchFriendController = async (req, res) => {
+  try {
+    const data = await fetchFriendQuery(req.params);
+    success("fetchFriendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    return res.status(200).send(data.rows);
+  } catch (err) {
+    error("fetchFriendController - error= ", err);
+    return res.status(400).send(err);
+  }
+};
+
+export const delFriendController = async (req, res) => {
+  try {
+    const data = await delFriendQuery(req.params);
+    success("delFriendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    return res.status(200).send(data.rows);
+  } catch (err) {
+    error("delFriendController - error= ", err);
+    return res.status(400).send(err);
+  }
+};

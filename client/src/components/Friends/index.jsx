@@ -12,10 +12,8 @@ class Friends extends Component {
   addFriend = async () => {
     const id = localStorage.getItem("id");
     const { username } = this.state;
-    console.log(username)
     const { data } = await axios.post(`http://localhost:3396/api/users/find/`, { username });
     const fid = data.id + "";
-    console.log(fid)
     const body = {
       u_id: id,
       f_id: fid,
