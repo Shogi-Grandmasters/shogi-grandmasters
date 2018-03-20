@@ -68,26 +68,22 @@ class Home extends Component {
     await this.setState({ selectedMatch: JSON.parse(match) });
   }
 
-  async handleJoinMatchClick(match) {
-    let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
-      data: { matchId: this.state.selectedMatch.id }
-    });
-    let black = data.username;
-    // await axios.post("http://localhost:3396/api/matches", {
-    //   matchId: this.state.selectedMatch.id,
-    //   board: this.board,
-    //   black,
-    //   white: localStorage.getItem("username")
-    // });
-    this.props.history.push({
-      pathname: `/${this.state.selectedMatch.id}`,
-      state: {
-        matchId: this.state.selectedMatch.id,
-        black,
-        white: localStorage.getItem("username")
-      },
-      history: this.props.history
-    });
+  async handleJoinMatchClick() {
+    if (this.state.selectedMatch) {
+      let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
+        data: { matchId: this.state.selectedMatch.id }
+      });
+      let black = data.username;
+      this.props.history.push({
+        pathname: `/${this.state.selectedMatch.id}`,
+        state: {
+          matchId: this.state.selectedMatch.id,
+          black,
+          white: localStorage.getItem("username")
+        },
+        history: this.props.history
+      });
+    }
   }
 
   render() {
