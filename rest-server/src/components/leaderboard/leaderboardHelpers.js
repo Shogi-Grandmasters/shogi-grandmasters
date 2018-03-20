@@ -67,6 +67,7 @@ export const updateLeaderboardQuery = async body => {
     throw new Error(err);
   }
 };
+<<<<<<< HEAD
 
 export const fetchLeaderboardFromRatingQuery = async body => {
   try {
@@ -82,3 +83,5 @@ export const fetchLeaderboardFromRatingQuery = async body => {
     throw new Error(err);
   }
 };
+=======
+>>>>>>> created leaderboard table
