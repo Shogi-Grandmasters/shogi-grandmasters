@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { FriendsList } from "./friendsList.jsx";
 import { PendingList } from "./pendingList.jsx";
+import { AwaitingList } from "./awaitingList.jsx";
 
 
 class Friends extends Component {
@@ -38,16 +39,18 @@ class Friends extends Component {
 
   fetchFriends = async () => {
     const id = localStorage.getItem("id");
-    const flist = [];
-    const pending = [];
+    const {flist, pending, awaiting} = [];
+    // const pending = [];
+    // const awaiting
     const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
     data.forEach(friend => {
-      if(friend.status === 0 && friend.f_id != localStorage.getItem("id")) pending.push(friend)
+      if(friend.status === 0 && friend.f_id != localStorage.getItem("id")) awaitng.push(friend)
       if(friend.status === 1 && friend.f_id != localStorage.getItem("id")) flist.push(friend)
       if(friend.status === 2) this.deleteFriend(e.id = friend.id)
     })
     this.setState({ friends: flist });
     this.setState({ pending: pending });
+    this.setState({ awaiting: awaiting });
   }
 
   deleteFriend = async (e) => {
@@ -116,6 +119,14 @@ class Friends extends Component {
         ))}
         </div>
         {pending}
+        {this.state.pending.map((user, index) => (
+          <div>
+          <AwaitingList
+            key={index}
+            user={user}
+          />
+          </div>
+        ))}
       </div>
     )
   }

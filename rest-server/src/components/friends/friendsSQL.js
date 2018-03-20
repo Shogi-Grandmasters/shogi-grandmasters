@@ -1,7 +1,7 @@
 export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
   return `
     INSERT INTO friends (u_id, f_id, status)
-    VALUES (${u_id}, ${f_id}, ${status})
+    VALUES (${u_id}, ${f_id}, ${status}), (${f_id}, ${u_id}, ${status})
     RETURNING u_id, f_id, status
   `;
 };
@@ -29,7 +29,8 @@ export const updateFriendHelper = ({ u_id, f_id, status }) => {
   return `
     UPDATE friends
     SET status=${status}
-    WHERE u_id=${u_id} AND f_id=${f_id}
+    WHERE u_id in(${u_id}, ${f_id})
+    AND f_id in(${u_id}, ${f_id})
     RETURNING u_id, f_id, status
   `;
 }
