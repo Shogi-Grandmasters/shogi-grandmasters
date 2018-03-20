@@ -132,10 +132,10 @@ class ShogiBoard extends Component {
   }
 
   initializeMatch() {
-    console.log(this.props.match)
     let localUser = localStorage.getItem('username');
     let updatePlayer = { ...this.state.player };
     let updateOpponent = { ...this.state.opponent };
+
     if (localUser === this.props.match.black) {
       updatePlayer = {
         user: {

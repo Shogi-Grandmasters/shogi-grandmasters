@@ -121,6 +121,7 @@ const clientListGames = async ({ io, client, room }) => {
 };
 
 const clientSelectedPiece = async ({ io, client, room }, payload) => {
+  // deconstruct payload
   let { matchId, board, piece, location } = payload;
   // create GameTile instance
   // generate hint tiles
