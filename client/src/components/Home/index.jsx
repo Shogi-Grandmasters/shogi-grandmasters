@@ -10,6 +10,8 @@ import Nav from "../Global/Nav/Nav.jsx";
 
 import "./Home.css";
 
+import "./Home.css";
+
 class Home extends Component {
   constructor() {
     super();
