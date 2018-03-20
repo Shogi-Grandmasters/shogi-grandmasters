@@ -4,6 +4,7 @@ import {
   fetchLeaderboardHelper,
   fetchUserLeaderboardHelper,
   addUserLeaderboardHelper,
+<<<<<<< HEAD
   updateLeaderboardHelper,
   fetchLeaderboardFromRatingHelper
 } from "./leaderboardSQL";
@@ -11,6 +12,14 @@ import {
 export const fetchLeaderboardQuery = async () => {
   try {
     const queryString = fetchLeaderboardHelper();
+=======
+  updateLeaderboardHelper
+} from "./leaderboardSQL";
+
+export const fetchLeaderboardQuery = async body => {
+  try {
+    const queryString = fetchLeaderboardHelper(body);
+>>>>>>> created leaderboard table
     const { rows } = await db.queryAsync(queryString);
     success(
       "fetchLeaderboardQuery - successfully retrieved data ",
@@ -18,7 +27,11 @@ export const fetchLeaderboardQuery = async () => {
     );
     return rows;
   } catch (err) {
+<<<<<<< HEAD
     error("fetchLeaderboardQuery - error= ", err);
+=======
+    error("usersQuery - error= ", err);
+>>>>>>> created leaderboard table
     throw new Error(err);
   }
 };
