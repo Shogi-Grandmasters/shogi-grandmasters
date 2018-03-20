@@ -8,20 +8,22 @@ import {
   createOpenMatchesTable,
   dropOpenMatchesTable
 } from "./models/openMatchesModel.js";
-import { createFriendsTable, dropFriendsTable } from "./models/friendsModel.js"
+import { createFriendsTable, dropFriendsTable } from "./models/friendsModel.js";
+import { createLeaderboardTable, dropLeaderboardTable } from "./models/leaderboardTable.js";
 
 const setup = async () => {
+  await dropLeaderboardTable();
+  await dropFriendsTable();
   await dropMessagesTable();
   await dropOpenMatchesTable();
   await dropMatchesTable();
   await dropUsersTable();
-  await dropFriendsTable();
   await createUsersTable();
   await createOpenMatchesTable();
   await createMatchesTable();
   await createMessagesTable();
   await createFriendsTable();
-
+  await createLeaderboardTable();
 };
 
 setup();
