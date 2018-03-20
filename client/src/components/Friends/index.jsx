@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { FriendsList } from "./friendsList.jsx";
+import { PendingList } from "./pendingList.jsx";
+
 
 class Friends extends Component {
   constructor() {
@@ -40,8 +42,8 @@ class Friends extends Component {
     const pending = [];
     const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
     data.forEach(friend => {
-      if(friend.status === 0) pending.push(friend)
-      if(friend.status === 1) flist.push(friend)
+      if(friend.status === 0 && friend.f_id != localStorage.getItem("id")) pending.push(friend)
+      if(friend.status === 1 && friend.f_id != localStorage.getItem("id")) flist.push(friend)
       if(friend.status === 2) this.deleteFriend(e.id = friend.id)
     })
     this.setState({ friends: flist });
@@ -57,7 +59,48 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
+  acceptFriend = async (e) => {
+    const id = localStorage.getItem("id");
+    const fid = e.id;
+    const { data } = await axios.put(
+      `http://localhost:3396/api/friends/${id}/${fid}/1`
+    );
+    const body = {
+      u_id: id,
+      f_id: fid,
+      status: 1
+    }
+    const added = await axios.post(`http://localhost:3396/api/friends/add`, body);
+    this.fetchFriends();
+  }
+
+  rejectFriend = async (e) => {
+    const id = localStorage.getItem("id");
+    const fid = e.id;
+    const { data } = await axios.put(
+      `http://localhost:3396/api/friends/${id}/${fid}/2`
+    );
+    this.fetchFriends();
+  }
+
   render() {
+    const pending = this.state.pending.length ? (
+      <div>
+        <h5>Pending Requests:</h5>
+        <div>
+        {this.state.pending.map((user, index) => (
+          <PendingList
+            key={index}
+            user={user}
+            acceptFriend={this.acceptFriend.bind(this)}
+            rejectFriend={this.rejectFriend.bind(this)}
+          />
+        ))}
+        </div>
+        </div>
+    ) : ( 
+      <div />
+    )
     return (
       <div>
         <input name="username" type="text" placeholder="Search by username" onChange={this.handleInput} />
@@ -72,16 +115,7 @@ class Friends extends Component {
           />
         ))}
         </div>
-        <div>
-        <h5>Pending Requests:</h5>
-        {this.state.pending.map((user, index) => (
-          <FriendsList
-            key={index}
-            user={user}
-            deleteFriend={this.deleteFriend.bind(this)}
-          />
-        ))}
-        </div>
+        {pending}
       </div>
     )
   }
