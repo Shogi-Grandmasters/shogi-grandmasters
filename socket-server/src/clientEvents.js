@@ -179,16 +179,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
   catch (err) {
     error('issue validating player move, e = ', err);
   }
-  // if success, update game state
-  //    check / checkmate?
-  //      if so, append to response
-  //    update hand if
-  //      capture
-  //      drop (location of [10,10])
-  //    update board
-  //    update turn
-  //    log the move
-  //    save game state to match
 }
 
 const clientEmitters = {
