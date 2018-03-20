@@ -97,8 +97,8 @@ const clientGameReady = async ({ io, client, room }, payload) => {
       matchId,
       board: JSON.stringify(data.board) || JSON.stringify(room.get("board")),
       turn: data.turn || 0,
-      black,
-      white,
+      black: data.black || black,
+      white: data.white || white,
       hand_white: JSON.stringify(data.hand_black) || "[]",
       hand_black: JSON.stringify(data.hand_white) || "[]"
     });
@@ -134,14 +134,41 @@ const clientDeselectedPiece = async ({ io, client, room }, payload) => {
 }
 
 const clientSubmitMove = async ({ io, client, room }, payload) => {
-  // deconstruct payload
-  let { matchId, before, after, move } = payload;
-  //    matchId
-  //    game => board, white_hand, black_hand, turn
-  //    move => from, to
-  // validate move
-  //    turn and user match
-  //    move is valid
+  try {
+    let { matchId, before, after, move } = payload;
+    let { data } = await axios.get("http://localhost:3396/api/matches", {
+      params: { matchId }
+    });
+    // validation
+    let messages = [];
+    // turn and user match
+    let correctTurn = data.turn === 0 && move.color === 'black' || data.turn === 1 && move.color === 'white';
+    if (!correctTurn) messages.push('Move submitted was not for the correct turn.');
+    // move is valid (solver server?)
+    // save new state
+    let success = correctTurn;
+
+    if (success) {
+      console.log('before put, data is\n', data);
+      await axios.put("http://localhost:3396/api/matches", {
+        matchId,
+        board: JSON.stringify(after.board),
+        status: 0,
+        turn: data.turn ? 0 : 1,
+        hand_white: JSON.stringify(after.white),
+        hand_black: JSON.stringify(after.black),
+      });
+    }
+    payload.status = {
+      success,
+      messages
+    };
+    // broadcast move
+    serverPlayerMove({ io, client, room }, payload);
+  }
+  catch (err) {
+    error('issue validating player move, e = ', err);
+  }
   // if success, update game state
   //    check / checkmate?
   //      if so, append to response
@@ -152,8 +179,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
   //    update turn
   //    log the move
   //    save game state to match
-  // broadcast
-  serverPlayerMove({ io, client, room }, payload);
 }
 
 const clientEmitters = {

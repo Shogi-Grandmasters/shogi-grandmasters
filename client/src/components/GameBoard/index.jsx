@@ -26,12 +26,13 @@ class BoardIndex extends Component {
 
     this.socket.on(
       "server.joined",
-      ({ matchId, black, white, board, hand_black, hand_white }) => {
+      ({ matchId, black, white, board, turn, hand_black, hand_white }) => {
         this.setState({
           waiting: false,
           matchId,
           black,
           white,
+          turn,
           board,
           hand_black,
           hand_white

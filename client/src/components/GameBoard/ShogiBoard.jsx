@@ -87,11 +87,13 @@ class ShogiBoard extends Component {
       player: {
         user: { name: 'Player One' },
         color: 'white',
+        facing: 'north',
         hand: [],
       },
       opponent: {
         user: { name: 'Player Two' },
         color: 'black',
+        facing: 'south',
         hand: [],
       },
       kings: null,
@@ -122,7 +124,7 @@ class ShogiBoard extends Component {
 
   componentDidMount() {
     this.initializeMatch();
-    this.socket.on("server.playerMove", (payload) => console.log(payload));
+    this.socket.on("server.playerMove", this.receiveMove);
     // events to listen for:
     //    player enter / leave  =>  update player online indicator
     //    move =>  update board, turn state
@@ -130,16 +132,17 @@ class ShogiBoard extends Component {
   }
 
   initializeMatch() {
+    console.log(this.props.match)
     let localUser = localStorage.getItem('username');
     let updatePlayer = { ...this.state.player };
     let updateOpponent = { ...this.state.opponent };
-
     if (localUser === this.props.match.black) {
       updatePlayer = {
         user: {
           name: localUser,
         },
         color: 'black',
+        facing: 'north',
         hand: this.props.match.hand_black || [],
       };
       updateOpponent = {
@@ -147,6 +150,7 @@ class ShogiBoard extends Component {
           name: this.props.match.white,
         },
         color: 'white',
+        facing: 'south',
         hand: this.props.match.hand_white || [],
       }
     } else {
@@ -155,6 +159,7 @@ class ShogiBoard extends Component {
           name: localUser,
         },
         color: 'white',
+        facing: 'north',
         hand: this.props.match.hand_white || [],
       };
       updateOpponent = {
@@ -162,6 +167,7 @@ class ShogiBoard extends Component {
           name: this.props.match.black,
         },
         color: 'black',
+        facing: 'south',
         hand: this.props.match.hand_black || [],
       }
     }
@@ -203,7 +209,7 @@ class ShogiBoard extends Component {
     if (pieceAtCoords.trim()) {
       let isPromoted = false;
       if (pieceAtCoords.length > 1) { isPromoted = true; pieceAtCoords = pieceAtCoords[0]; }
-      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y], isPromoted);
+      return new GameTile(boardIds[pieceAtCoords.toLowerCase()], this.playerColorFromId(pieceAtCoords), [x, y], isPromoted);
     }
     return null;
   }
@@ -258,7 +264,7 @@ class ShogiBoard extends Component {
     let pendingInput = false;
     if (x < 3 && pieceId.length === 1) {
       // if it has no available moves, it has to promote
-      let destination = new GameTile(boardIds[pieceId], this.playerColorFromId(pieceId), [x, y]);
+      let destination = new GameTile(boardIds[pieceId.toLowerCase()], this.playerColorFromId(pieceId), [x, y]);
       if (!destination.findMoves(this.state.board).length) willPromote = true;
       // if it wasn't forced to promote, and it's not a King or GG, which never promote
       // prompt user for choice.  with pending input, move will not be submitted until after
@@ -289,6 +295,7 @@ class ShogiBoard extends Component {
           kings: {...this.state.kings},
         },
         move: {
+          color: this.state.player.color,
           from: location === 'board' ? [...target] : [10, 10],
           to: [x, y],
         },
@@ -325,41 +332,36 @@ class ShogiBoard extends Component {
     }
   }
 
-  receiveMove(payload) {
-    console.log(payload);
+  receiveMove({ before, after, move }) {
+    let { board, white, black, kings } = after;
+    let updatePlayer = { ...this.state.player };
+    updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
+    let updateOpponent = { ...this.state.opponent };
+    updateOpponent.hand = updateOpponent.color === 'white' ? [...white] : [...black];
+    console.log('received hands\n', 'white: \n', white, '\nblack: \n', black)
+    console.log('set hands\n', 'p1: \n', updatePlayer.hand, '\np2: \n', updateOpponent.hand)
+    board = move.color === this.state.player.color ? board : reverseMatrix(board);
 
-    // if (!this.state.isTurn) {
-    //   let { board, white, black, kings } = after;
-
-    //   let updatePlayer = { ...this.state.player };
-    //   updatePlayer.hand = updatePlayer.color === 'white' ? white : black;
-    //   let updateOpponent = { ...this.state.opponent };
-    //   updatePlayer.hand = updateOpponent.color === 'white' ? white : black;
-
-    //   this.setState(prevState => ({
-    //     board,
-    //     player: updatePlayer,
-    //     opponent: updateOpponent,
-    //     kings,
-    //     isTurn: !prevState.isTurn,
-    //   }), () => console.log('received turn'))
-    // }
+    this.setState(prevState => ({
+      board,
+      player: updatePlayer,
+      opponent: updateOpponent,
+      kings,
+      isTurn: !prevState.isTurn,
+      hints: [],
+      pendingMove: false,
+      pendingDecision: false,
+      selected: null,
+    }), () => console.log('New Turn: ', this.state.isTurn ? this.state.player.user.name : this.state.opponent.user.name))
   }
 
   submitMove(matchId, before, after, move) {
-    console.log('sending: ', {
-      matchId,
-      before,
-      after,
-      move
-    })
     this.socket.emit("client.submitMove", {
       matchId,
       before,
       after,
       move
     })
-    console.log('sent move');
   }
 
   commitMove() {
@@ -375,16 +377,16 @@ class ShogiBoard extends Component {
       let { before, after, move } = this.state.pendingMove;
       this.submitMove(this.state.matchId, before, after, move);
 
-      this.setState({
-        board,
-        player: updatePlayer,
-        opponent: updateOpponent,
-        kings,
-        hints: [],
-        pendingMove: false,
-        pendingDecision: false,
-        selected: null,
-      });
+      // this.setState({
+      //   board,
+      //   player: updatePlayer,
+      //   opponent: updateOpponent,
+      //   kings,
+      //   hints: [],
+      //   pendingMove: false,
+      //   pendingDecision: false,
+      //   selected: null,
+      // });
     }
   }
 
@@ -427,7 +429,7 @@ class ShogiBoard extends Component {
         })
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
-        let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
+        let gameTile = new GameTile(boardIds[piece.toLowerCase()], playerColor, [10,10]);
         let validLocations = helpers.validDropLocations(this.state.board, this.state.kings, gameTile);
         this.setState({
           hints: validLocations,

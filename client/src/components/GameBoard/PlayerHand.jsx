@@ -4,7 +4,7 @@ import GameTile from '../../../lib/GameTile';
 import ShogiPiece from './ShogiPiece.jsx';
 
 const PlayerHandTile = ({ player, local, piece, count, selected, activate }) => {
-  let tile = new GameTile(boardIds[piece], player.color, [10, 10]);
+  let tile = new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10]);
   // set active hover for owned pieces
   let tileStyles = ['player__hand-tile'];
   local && tileStyles.push('active');
@@ -21,8 +21,9 @@ const PlayerHandTile = ({ player, local, piece, count, selected, activate }) => 
         key={`${piece}x${count}`}
         location="hand"
         target={`${player.color}:${piece}`}
-        tile={new GameTile(boardIds[piece], player.color, [10, 10])}
+        tile={new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10])}
         player={player}
+        local={local}
         activate={activate}
       />
       <div className="player__hand-count">{count}</div>
