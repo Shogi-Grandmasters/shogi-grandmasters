@@ -20,8 +20,6 @@ class App extends Component {
     return (
       <div>
         <Switch>
-          <Route path="/board" component={ShogiBoard} />
-          <Route exact path="/" component={LandingPage} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <Route path="/acct" component={(props) => (
@@ -31,6 +29,7 @@ class App extends Component {
             <Protected component={Home} {...props} />
           )}/>
           <Route path="/:matchId" component={BoardIndex} />
+          <Route exact path="/" component={LandingPage} />
         </Switch>
       </div>
     );

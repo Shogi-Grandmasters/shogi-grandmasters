@@ -332,7 +332,10 @@ class ShogiBoard extends Component {
     }
   }
 
-  receiveMove({ before, after, move }) {
+  receiveMove({ success, before, after, move }) {
+    if (!status.success) {
+      console.warn(status.messages);
+    }
     let { board, white, black, kings } = after;
     let updatePlayer = { ...this.state.player };
     updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
@@ -374,17 +377,6 @@ class ShogiBoard extends Component {
 
       let { before, after, move } = this.state.pendingMove;
       this.submitMove(this.state.matchId, before, after, move);
-
-      // this.setState({
-      //   board,
-      //   player: updatePlayer,
-      //   opponent: updateOpponent,
-      //   kings,
-      //   hints: [],
-      //   pendingMove: false,
-      //   pendingDecision: false,
-      //   selected: null,
-      // });
     }
   }
 
