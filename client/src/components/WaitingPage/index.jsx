@@ -5,7 +5,11 @@ import axios from "axios";
 import "./WaitingPage.css";
 
 class WaitingPage extends Component {
+
   async handleCancelMatchclick() {
+    let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
+      data: { matchId: this.props.match }
+    });
     this.props.history.push("/home");
   }
 
