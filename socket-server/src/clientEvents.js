@@ -13,6 +13,7 @@ import {
   serverGameChat,
   serverUpdateGames
 } from "./serverEvents";
+import {isValidMove, reverseBoard} from "./lib/boardHelpers";
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");

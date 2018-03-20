@@ -1,4 +1,5 @@
 import eloRank from 'elo-rank';
+import axios from 'axios';
 
 // new players start at 1000
 // players below 2000 have K-factor of 32
@@ -30,4 +31,15 @@ export const endMatch = ([winner, loser], draw = false) => {
   loser.rating = loserUpdated > 99 ? loserUpdated : 100;
 
   return [winner, loser]
+}
+
+const update = async (id, rating) => {
+  try {
+    const data = await axios.put("http://localhost:3396/api/users", {
+      userId: id,
+      rating: rating
+    });
+  } catch (err) {
+    console.log('ERROR updating user rating', id, err);
+  }
 }

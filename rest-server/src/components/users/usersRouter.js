@@ -1,15 +1,21 @@
 import express from "express";
-import validate from "express-validation";
+import validate from "express-validation"
 
-import { userController } from "./usersControllers";
+import {
+  findUserController,
+  fetchUserController,
+  deleteUserController,
+  updateUserController
+} from "./userControllers";
 import formValidation from "../../middleware/validation/formValidation";
 
 const router = express.Router();
 
-router.route("/find")
-  .post(validate(formValidation.findUser), userController);
-  
-export default router;
+router
+  .route("/")
+  .post(validate(formValidation.findUser), findUserController)
+  .get(fetchUserController)
+  .delete(deleteUserController)
+  .put(updateUserController);
 
-// .post(validate(formValidation.findUser), userController);
-// .post(userController);
+export default router;
