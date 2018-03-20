@@ -1,4 +1,4 @@
-import { addFriendQuery, fetchFriendQuery, delFriendQuery } from './friendsHelpers';
+import { addFriendQuery, fetchFriendQuery, delFriendQuery, updateFriendQuery } from './friendsHelpers';
 import { success, error } from "../../lib/log";
 
 export const addFriendController = async (req, res) => {
@@ -30,6 +30,17 @@ export const delFriendController = async (req, res) => {
     return res.status(200).send(data.rows);
   } catch (err) {
     error("delFriendController - error= ", err);
+    return res.status(400).send(err);
+  }
+};
+
+export const updateFriendController = async (req, res) => {
+  try {
+    const data = await updateFriendQuery(req.params);
+    success("updateFriendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    return res.status(200).send(data.rows);
+  } catch (err) {
+    error("updateFriendController - error= ", err);
     return res.status(400).send(err);
   }
 };

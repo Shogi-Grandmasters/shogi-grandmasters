@@ -1,5 +1,5 @@
 import express from "express";
-import { addFriendController, fetchFriendController, delFriendController } from "./friendsControllers";
+import { addFriendController, fetchFriendController, delFriendController, updateFriendController } from "./friendsControllers";
 
 const router = express.Router();
 
@@ -11,5 +11,8 @@ router.route("/fetchFriends/:u_id/")
 
 router.route("/deleteFriend/:u_id/:f_id")
   .delete(delFriendController);
+
+router.route("/:u_id/:f_id/:status")
+  .put(updateFriendController);
 
 export default router;
