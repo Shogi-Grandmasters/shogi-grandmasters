@@ -25,7 +25,7 @@ export const updateMatchHelper = ({
   return `
     UPDATE matches
     SET board='${board}', turn='${turn}', status='${status}', hand_white='${hand_white}', hand_black='${hand_black}'
-    WHERE id=${matchId}
+    WHERE id='${matchId}'
     RETURNING id, board, turn, status, hand_white, hand_black
   `;
 };

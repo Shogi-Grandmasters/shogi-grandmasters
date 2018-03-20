@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { success, error } from "./lib/log";
+import { success, log, error } from "./lib/log";
 import {
   serverInitialState,
   serverChanged,
@@ -14,6 +14,7 @@ import {
   serverUpdateGames,
   serverPlayerMove
 } from "./serverEvents";
+import helpers from '../lib/boardHelpers';
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
@@ -95,12 +96,11 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     });
     !data && await axios.post("http://localhost:3396/api/matches", {
       matchId,
-      board: JSON.stringify(data.board) || JSON.stringify(room.get("board")),
-      turn: data.turn || 0,
-      black: data.black || black,
-      white: data.white || white,
-      hand_white: JSON.stringify(data.hand_black) || "[]",
-      hand_black: JSON.stringify(data.hand_white) || "[]"
+      board: JSON.stringify(room.get("board")),
+      black: black,
+      white: white,
+      hand_white: "[]",
+      hand_black: "[]"
     });
     payload.turn = data.turn || 0;
     payload.board = data.board || room.get("board");
@@ -146,14 +146,15 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn) messages.push('Move submitted was not for the correct turn.');
     // move is valid (solver server?)
     // save new state
-    let success = correctTurn;
+    let success = correctTurn; // and other checks
 
     if (success) {
-      console.log('before put, data is\n', data);
+      // reorient board for default
+      board = move.color === 'black' ? helpers.reverseBoard(board) : board;
       await axios.put("http://localhost:3396/api/matches", {
         matchId,
         board: JSON.stringify(after.board),
-        status: 0,
+        status: 0, // check, checkmate?
         turn: data.turn ? 0 : 1,
         hand_white: JSON.stringify(after.white),
         hand_black: JSON.stringify(after.black),

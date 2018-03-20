@@ -338,8 +338,6 @@ class ShogiBoard extends Component {
     updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
     let updateOpponent = { ...this.state.opponent };
     updateOpponent.hand = updateOpponent.color === 'white' ? [...white] : [...black];
-    console.log('received hands\n', 'white: \n', white, '\nblack: \n', black)
-    console.log('set hands\n', 'p1: \n', updatePlayer.hand, '\np2: \n', updateOpponent.hand)
     board = move.color === this.state.player.color ? board : reverseMatrix(board);
 
     this.setState(prevState => ({
@@ -443,16 +441,13 @@ class ShogiBoard extends Component {
   }
 
   render() {
-    const hints = this.state.hints;
-    const playerColor = this.state.player.color;
-
     const boardStyle = {
       backgroundImage: `url(${'./textures/wood.jpg'})`
     }
 
     const modal = this.state.showModal ? this.state.modalContent : null;
 
-    return(
+    return (
       <div className="match">
         <div className="match__timer">
           <PlayerPanel
@@ -472,7 +467,7 @@ class ShogiBoard extends Component {
                     <GridSpace
                       key={`${ri}x${ci}`}
                       selected={this.state.selected}
-                      hints={hints}
+                      hints={this.state.hints}
                       owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
                       coords={[ri, ci]}
                       piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], this.playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
