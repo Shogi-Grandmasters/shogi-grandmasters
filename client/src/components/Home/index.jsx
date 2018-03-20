@@ -4,7 +4,7 @@ import randomstring from "randomstring";
 import io from "socket.io-client/dist/socket.io.js";
 
 import HomeChat from "./Chat/index.jsx";
-import OpenMatches from "../OpenMatches/index.jsx";
+import OpenMatches from "./OpenMatches/index.jsx";
 import Nav from "../Global/Nav/Nav.jsx"
 
 class Home extends Component {
