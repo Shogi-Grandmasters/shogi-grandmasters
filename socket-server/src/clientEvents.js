@@ -1,6 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { success, log, error } from "./lib/log";
+import { isValidMove, reverseBoard } from './lib/boardHelpers';
+import GameTile from './lib/GameTile';
+import { success, log, error } from './lib/log';
 import {
   serverInitialState,
   serverChanged,
@@ -13,8 +15,8 @@ import {
   serverGameChat,
   serverUpdateGames,
   serverPlayerMove
-} from "./serverEvents";
-import {isValidMove, reverseBoard} from "./lib/boardHelpers";
+} from './serverEvents';
+
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
@@ -119,7 +121,6 @@ const clientListGames = async ({ io, client, room }) => {
 };
 
 const clientSelectedPiece = async ({ io, client, room }, payload) => {
-  // deconstruct payload
   let { matchId, board, piece, location } = payload;
   // create GameTile instance
   // generate hint tiles
@@ -145,12 +146,12 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let correctTurn = data.turn === 0 && move.color === 'black' || data.turn === 1 && move.color === 'white';
     if (!correctTurn) messages.push('Move submitted was not for the correct turn.');
     // move is valid (solver server?)
+    let validMove = isValidMove(after.board, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.from), move.to);
+    if (!validMove) messages.push('Invalid move');
     // save new state
-    let success = correctTurn; // and other checks
+    let success = correctTurn && validMove; // and other checks
 
     if (success) {
-      // reorient board for default
-      board = move.color === 'black' ? helpers.reverseBoard(board) : board;
       await axios.put("http://localhost:3396/api/matches", {
         matchId,
         board: JSON.stringify(after.board),

@@ -1,10 +1,5 @@
-import {
-  boardIds,
-  oppositeBoardSide,
-  oppositeColor,
-  includesLoc
-} from "./constants.js";
-import GameTile from "./GameTile.js";
+import { boardIds, oppositeBoardSide, oppositeColor, includesLoc } from './constants.js';
+import GameTile from './GameTile.js';
 
 export const validDropLocations = (tile, board, kings) => {
   let validDrops = [];
