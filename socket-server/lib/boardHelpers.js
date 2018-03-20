@@ -14,11 +14,11 @@ export const validDropLocations = (tile, board, kings) => {
   board.forEach((row, r) =>
     row.forEach((col, c) => {
       if (tile.color === "white") {
-        if (board[r][c] === "p") {
+        if (col === "p") {
           pawnLocs.push(c);
         }
       } else {
-        if (board[r][c] === "P") {
+        if (col === "P") {
           pawnLocs.push(c);
         }
       }
@@ -27,7 +27,7 @@ export const validDropLocations = (tile, board, kings) => {
 
   board.forEach((row, r) =>
     row.forEach((col, c) => {
-      if (board[r][c] === " ") {
+      if (col === " ") {
         if (r > 0 || (tile.name !== "Lance" && tile.name !== "Pawn")) {
           if (r > 1 || tile.name !== "Knight") {
             if (tile.name !== "Pawn" || !pawnLocs.includes(c)) {
@@ -170,21 +170,21 @@ export const getCombinedMoveSet = (board, color) => {
   let teamMoves = [];
   board.forEach((row, r) =>
     row.forEach((col, c) => {
-      if (board[r][c] !== " ") {
+      if (col !== " ") {
         let p;
-        if (color === "white" && board[r][c].charCodeAt(0) > 90) {
+        if (color === "white" && col.charCodeAt(0) > 90) {
           p = new GameTile(
-            boardIds[board[r][c].charAt(0).toLowerCase()],
+            boardIds[col.charAt(0).toLowerCase()],
             color,
             [r, c],
-            board[r][c].charAt(1) === "+" ? true : false
+            col.charAt(1) === "+" ? true : false
           );
-        } else if (color === "black" && board[r][c].charCodeAt(0) < 91) {
+        } else if (color === "black" && col.charCodeAt(0) < 91) {
           p = new GameTile(
-            boardIds[board[r][c].charAt(0).toLowerCase()],
+            boardIds[col.charAt(0).toLowerCase()],
             color,
             [r, c],
-            board[r][c].charAt(1) === "+" ? true : false
+            col.charAt(1) === "+" ? true : false
           );
         }
         if (p) {
@@ -201,13 +201,34 @@ export const isValidMove = (board, tile, loc) => {
   return includesLoc(moveSet, loc);
 };
 
+export const calcImpasse = board => {
+  let white = [];
+  let whiteTot = 0;
+  let black = [];
+  let blackTot = 0;
+  board.forEach((row, r) => row.forEach((col, c) => {
+    if (col !== ' ') {
+      if (col.charCodeAt(0) > 90 && col !== 'k') {
+        white.push(col);
+      } else if (col !== 'K') {
+        black.push(col);
+      }
+    }
+  }));
+  white.forEach(char => whiteTot += (char === 'r' || char === 'b') ? 5 : 1);
+  black.forEach(char => blackTot += (char === 'R' || char === 'B') ? 5 : 1);
+
+  return {white: whiteTot, black: blackTot};
+};
+
 export default {
   isValidMove,
   isCheckOrMate,
   reverseBoard,
   validDropLocations,
   getCombinedMoveSet,
-  includesLoc
+  includesLoc,
+  calcImpasse
 };
 
 // TESTING
