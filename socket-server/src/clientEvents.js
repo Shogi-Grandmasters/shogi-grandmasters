@@ -14,7 +14,7 @@ import {
   serverUpdateGames,
   serverPlayerMove
 } from "./serverEvents";
-import helpers from '../lib/boardHelpers';
+import {isValidMove, reverseBoard} from "./lib/boardHelpers";
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
