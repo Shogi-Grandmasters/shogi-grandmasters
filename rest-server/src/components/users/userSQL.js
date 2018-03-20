@@ -1,3 +1,11 @@
+export const findUserHelper = ({ username }) => {
+   return `
+    SELECT id, email, username, wins, losses
+    FROM users
+    WHERE username='${username}'
+  `;
+};
+
 export const fetchUserHelper = ({ userId }) => {
   return `
     SELECT id, username, email, rating FROM users

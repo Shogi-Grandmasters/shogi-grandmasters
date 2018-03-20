@@ -3,11 +3,7 @@ import http from "http";
 import App from "./config/express";
 import { success } from "./lib/log";
 import "./config/database";
-<<<<<<< HEAD
 // import './config/database/setup';  //-- this resets the databases
-=======
-//import './config/database/setup';  //-- this resets the databases
->>>>>>> wrote update to update player ratings
 
 const app = App.express;
 
