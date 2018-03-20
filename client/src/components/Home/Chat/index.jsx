@@ -53,9 +53,9 @@ class HomeChat extends Component {
       <div className="home-chat-container">
         <form onSubmit={e => this.resetInput(e)}>
           <textarea onKeyUp={e => this.handleChat(e)} />
-          <button type="submit" onClick={() => this.handleSubmit()}>
+          {/* <button type="submit" onClick={() => this.handleSubmit()}>
             Submit
-          </button>
+          </button> */}
         </form>
         <div className="chatbox">
           {this.state.messages.length > 0 &&
