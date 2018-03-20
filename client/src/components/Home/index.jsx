@@ -7,6 +7,8 @@ import HomeChat from "./Chat/index.jsx";
 import OpenMatches from "./OpenMatches/index.jsx";
 import Nav from "../Global/Nav/Nav.jsx"
 
+import "./Home.css";
+
 class Home extends Component {
   constructor() {
     super();
@@ -91,16 +93,22 @@ class Home extends Component {
       <div>
         <Nav />
         <br />
-        <button onClick={() => this.handleInitiateMatchClick()}>
-          Initiate Match
-        </button>
-        <OpenMatches
-          openMatches={this.state.openMatches}
-          handleMatchSelect={this.handleMatchSelect}
-        />
-        <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
-        <br />
-        <HomeChat socket={this.socket} />
+        <div id="home-container">
+          <div id="match-play">
+            <button onClick={() => this.handleInitiateMatchClick()}>
+              Initiate Match
+            </button>
+            <OpenMatches
+              openMatches={this.state.openMatches}
+              handleMatchSelect={this.handleMatchSelect}
+            />
+            <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
+          </div>
+          <br />
+          <div id="chat">
+            <HomeChat socket={this.socket}/>
+          </div>
+        </div>
       </div>
     );
   }
