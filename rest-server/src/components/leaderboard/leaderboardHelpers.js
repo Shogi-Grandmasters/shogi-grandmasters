@@ -4,12 +4,13 @@ import {
   fetchLeaderboardHelper,
   fetchUserLeaderboardHelper,
   addUserLeaderboardHelper,
-  updateLeaderboardHelper
+  updateLeaderboardHelper,
+  fetchLeaderboardFromRatingHelper
 } from "./leaderboardSQL";
 
-export const fetchLeaderboardQuery = async body => {
+export const fetchLeaderboardQuery = async () => {
   try {
-    const queryString = fetchLeaderboardHelper(body);
+    const queryString = fetchLeaderboardHelper();
     const { rows } = await db.queryAsync(queryString);
     success(
       "fetchLeaderboardQuery - successfully retrieved data ",
@@ -17,7 +18,7 @@ export const fetchLeaderboardQuery = async body => {
     );
     return rows;
   } catch (err) {
-    error("usersQuery - error= ", err);
+    error("fetchLeaderboardQuery - error= ", err);
     throw new Error(err);
   }
 };
@@ -63,6 +64,21 @@ export const updateLeaderboardQuery = async body => {
     return rows[0];
   } catch (err) {
     error("updateLeaderboardQuery - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const fetchLeaderboardFromRatingQuery = async body => {
+  try {
+    const queryString = fetchLeaderboardFromRatingHelper(body);
+    const { rows } = await db.queryAsync(queryString);
+    success(
+      "fetchLeaderboardFromRatingQuery - successfully retrieved data ",
+      JSON.stringify(data.rows)
+    );
+    return rows;
+  } catch (err) {
+    error("fetchLeaderboardFromRatingQuery - error= ", err);
     throw new Error(err);
   }
 };
