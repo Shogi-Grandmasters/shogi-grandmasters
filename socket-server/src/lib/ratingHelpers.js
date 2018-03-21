@@ -78,7 +78,3 @@ export const updateLeaderboard = async (player) => {
     throw new Error(err);
   }
 }
-
-export const updateLeaderboard = await ({ id, rating }) => {
-
-}
