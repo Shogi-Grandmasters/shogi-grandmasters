@@ -25,7 +25,8 @@ class Home extends Component {
     });
   }
 
-  async componentDidMount() {}
+  async componentDidMount() {
+  }
 
   logout = () => {
     window.localStorage.clear();

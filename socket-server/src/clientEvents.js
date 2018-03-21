@@ -15,15 +15,8 @@ import {
   serverSendMessages,
   serverHomeChat,
   serverGameChat,
-<<<<<<< HEAD
-  serverUpdateGames,
-  serverPlayerMove
-} from './serverEvents';
-=======
   serverUpdateGames
 } from "./serverEvents";
-import { isValidMove, reverseBoard } from "./lib/boardHelpers";
->>>>>>> Added prev matches to home page and updated fetch match query helper.
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
@@ -103,8 +96,7 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     let { data } = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId }
     });
-    console.log(matchId);
-    !data &&
+    !data.length &&
       (await axios.post("http://localhost:3396/api/matches", {
         matchId,
         board: JSON.stringify(room.get("board")),
@@ -113,9 +105,9 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         hand_white: "[]",
         hand_black: "[]"
       }));
-    payload.board = data ? data[0].board : room.get("board");
-    payload.hand_black = data ? data[0].hand_black : [];
-    payload.hand_white = data ? data[0].hand_white : [];
+    payload.board = data.length ? data[0].board : room.get("board");
+    payload.hand_black = data.length ? data[0].hand_black : [];
+    payload.hand_white = data.length ? data[0].hand_white : [];
     room.set("waiting", false);
     serverGameReady({ io, client, room }, payload);
   } catch (err) {
