@@ -10,6 +10,8 @@ import PlayerPanel from './PlayerPanel.jsx';
 import PlayerHand from './PlayerHand.jsx';
 import ModalPrompt from '../Global/ModalPrompt.jsx';
 import TurnIndicator from './TurnIndicator.jsx';
+import GameChat from './GameChat/index.jsx';
+import MatchLog from './MatchLog.jsx';
 
 import './ShogiBoard.css';
 
@@ -65,7 +67,7 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
   }
 
   return (
-    <td
+    <div
       id={`${x}-${y}`}
       className={classNames.join(' ')}
       onClick={() => isHint && turn && movePiece([x, y])}
@@ -78,7 +80,7 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
           player={player}
           activate={activate}
         /> : ' ' }
-    </td>
+    </div>
   );
 }
 
@@ -451,56 +453,55 @@ class ShogiBoard extends Component {
 
     return (
       <div className="match">
-        <div className="match__timer">
-          <PlayerPanel
-            player={this.state.opponent}
-          />
+        <MatchLog />
+        <div className="match__turn">
+          <PlayerPanel player={this.state.opponent} />
           <TurnIndicator isTurn={this.state.isTurn} />
-          <PlayerPanel
-            player={this.state.player}
-          />
+          <PlayerPanel player={this.state.player} />
         </div>
-        <table className="match__board" style={boardStyle}>
-          <tbody>
-            {this.state.board.map((row, ri) => {
-              return (
-                <tr key={ri}>
-                  {row.map((cell, ci) =>
-                    <GridSpace
-                      key={`${ri}x${ci}`}
-                      selected={this.state.selected}
-                      hints={this.state.hints}
-                      owned={cell.trim() && this.state.player.color === playerColorFromId(cell)}
-                      coords={[ri, ci]}
-                      piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
-                      player={this.state.player}
-                      turn={this.state.isTurn}
-                      activate={this.togglePiece}
-                      movePiece={this.movePiece}
-                    />
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <div className="match__hands">
-          <PlayerHand
-            id={'opponent'}
-            local={false}
-            selected={this.state.selected}
-            player={this.state.opponent}
-            turn={!this.state.isTurn}
-            activate={this.togglePiece}
-          />
-          <PlayerHand
-            id={'player'}
-            local={true}
-            selected={this.state.selected}
-            player={this.state.player}
-            turn={this.state.isTurn}
-            activate={this.togglePiece}
-          />
+        <div className="match__play">
+          <div className="match__hand">
+            <PlayerHand
+              id={'opponent'}
+              local={false}
+              selected={this.state.selected}
+              player={this.state.opponent}
+              turn={!this.state.isTurn}
+              activate={this.togglePiece}
+            />
+          </div>
+          <div className="match__board" style={boardStyle}>
+            {this.state.board.map((row, ri) =>
+              row.map((cell, ci) =>
+                <GridSpace
+                  key={`${ri}x${ci}`}
+                  selected={this.state.selected}
+                  hints={this.state.hints}
+                  owned={cell.trim() && this.state.player.color === playerColorFromId(cell)}
+                  coords={[ri, ci]}
+                  piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
+                  player={this.state.player}
+                  turn={this.state.isTurn}
+                  activate={this.togglePiece}
+                  movePiece={this.movePiece}
+                />
+              ))}
+          </div>
+          <div className="match__hand">
+            <PlayerHand
+              id={'player'}
+              local={true}
+              selected={this.state.selected}
+              player={this.state.player}
+              turn={this.state.isTurn}
+              activate={this.togglePiece}
+            />
+          </div>
+        </div>
+        <div className="match__chat">
+          <div></div>
+          <GameChat socket={this.socket} />
+          <div></div>
         </div>
         { modal }
       </div>
