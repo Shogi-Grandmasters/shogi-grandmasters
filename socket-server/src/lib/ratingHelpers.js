@@ -79,6 +79,6 @@ export const updateLeaderboard = async (player) => {
   }
 }
 
-export const updateLeaderboard = ({id, rating}) => {
+export const updateLeaderboard = await ({ id, rating }) => {
 
 }
