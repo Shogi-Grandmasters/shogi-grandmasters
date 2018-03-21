@@ -11,6 +11,7 @@ class Friends extends Component {
     this.state = {
       friends: [],
       pending: [],
+      awaiting: [],
     };
   }
 
@@ -39,15 +40,21 @@ class Friends extends Component {
 
   fetchFriends = async () => {
     const id = localStorage.getItem("id");
-    const {flist, pending, awaiting} = [];
-    // const pending = [];
-    // const awaiting
+    const flist = [];
+    const pending = [];
+    const awaiting = [];
     const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
-    data.forEach(friend => {
-      if(friend.status === 0 && friend.f_id != localStorage.getItem("id")) awaitng.push(friend)
-      if(friend.status === 1 && friend.f_id != localStorage.getItem("id")) flist.push(friend)
+    for(let friend of data) {
+      const fid = friend.u_id;
+      const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
+      friend.permId = user.data[0].id
+      friend.name = user.data[0].username
+      console.log(friend)
+      if(friend.status === 0 && friend.u_id === parseInt(localStorage.getItem("id"))) awaiting.push(friend)
+      if(friend.status === 0 && friend.u_id !== parseInt(localStorage.getItem("id"))) pending.push(friend)
+      if(friend.status == 1 && friend.id !== parseInt(localStorage.getItem("id"))) flist.push(friend)
       if(friend.status === 2) this.deleteFriend(e.id = friend.id)
-    })
+    }
     this.setState({ friends: flist });
     this.setState({ pending: pending });
     this.setState({ awaiting: awaiting });
@@ -64,7 +71,8 @@ class Friends extends Component {
 
   acceptFriend = async (e) => {
     const id = localStorage.getItem("id");
-    const fid = e.id;
+    const fid = e.permId;
+    console.log('our accept friend event', e)
     const { data } = await axios.put(
       `http://localhost:3396/api/friends/${id}/${fid}/1`
     );
@@ -104,6 +112,21 @@ class Friends extends Component {
     ) : (
       <div />
     )
+    const awaiting = this.state.awaiting.length ? (
+      <div>
+        <h5>Awaiting Response:</h5>
+        <div>
+        {this.state.awaiting.map((user, index) => (
+          <AwaitingList
+            key={index}
+            user={user}
+          />
+        ))}
+        </div>
+        </div>
+    ) : (
+      <div />
+    )
     return (
       <div>
         <input name="username" type="text" placeholder="Search by username" onChange={this.handleInput} />
@@ -119,14 +142,7 @@ class Friends extends Component {
         ))}
         </div>
         {pending}
-        {this.state.pending.map((user, index) => (
-          <div>
-          <AwaitingList
-            key={index}
-            user={user}
-          />
-          </div>
-        ))}
+        {awaiting}
       </div>
     )
   }

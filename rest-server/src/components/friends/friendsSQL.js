@@ -1,7 +1,7 @@
 export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
   return `
     INSERT INTO friends (u_id, f_id, status)
-    VALUES (${u_id}, ${f_id}, ${status}), (${f_id}, ${u_id}, ${status})
+    VALUES (${u_id}, ${f_id}, ${status})
     RETURNING u_id, f_id, status
   `;
 };
@@ -12,7 +12,7 @@ export const fetchAllFriendsHelper = ({ u_id }) => {
     FROM users AS u
       INNER JOIN friends AS f
       ON (u.id=f.f_id)
-      WHERE f.u_id=${u_id}
+      WHERE (f.u_id=${u_id} OR u.id=${u_id})
   `;
 };
 
@@ -34,3 +34,5 @@ export const updateFriendHelper = ({ u_id, f_id, status }) => {
     RETURNING u_id, f_id, status
   `;
 }
+
+//, (${f_id}, ${u_id}, ${status})

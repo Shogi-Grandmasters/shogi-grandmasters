@@ -11,11 +11,15 @@ import formValidation from "../../middleware/validation/formValidation";
 
 const router = express.Router();
 
+router.route("/:userId")
+  .get(fetchUserController)
+
 router
   .route("/")
   .post(validate(formValidation.findUser), findUserController)
-  .get(fetchUserController)
   .delete(deleteUserController)
   .put(updateUserController);
+
+
 
 export default router;
