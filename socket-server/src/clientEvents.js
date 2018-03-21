@@ -18,7 +18,6 @@ import {
   serverPlayerMove
 } from './serverEvents';
 
-
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
   serverInitialState({ io, client, room }, payload);

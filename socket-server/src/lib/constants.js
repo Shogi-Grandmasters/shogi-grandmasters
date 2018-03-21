@@ -1,3 +1,4 @@
+
 export const initialBoard = [
   ["L", "H", "S", "G", "K", "G", "S", "H", "L"],
   [" ", "R", " ", " ", " ", " ", " ", "B", " "],
