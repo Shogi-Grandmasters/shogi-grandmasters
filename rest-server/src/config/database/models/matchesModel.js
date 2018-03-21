@@ -9,8 +9,8 @@ export const createMatchesTable = async () => {
       (
         id TEXT NOT NULL,
         board JSON NOT NULL,
-        status INT NOT NULL,
-        turn INT NOT NULL,
+        status INT DEFAULT 0,
+        turn INT DEFAULT 0,
         black INT NOT NULL,
         white INT NOT NULL,
         hand_black JSON NOT NULL,

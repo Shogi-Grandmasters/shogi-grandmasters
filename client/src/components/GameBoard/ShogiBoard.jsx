@@ -17,6 +17,25 @@ const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
 
+const reverseMatrix = (matrix) => {
+  let matrixCopy = copyMatrix(matrix);
+  return matrixCopy.reverse().map(row => row.reverse());
+}
+
+const playerColorFromId = (id) => {
+  return id.charCodeAt(0) > 90 ? 'white' : 'black';
+}
+
+const getPiece = (board, [x, y]) => {
+  let pieceAtCoords = board[x][y];
+  if (pieceAtCoords.trim()) {
+    let isPromoted = false;
+    if (pieceAtCoords.length > 1) { isPromoted = true; pieceAtCoords = pieceAtCoords[0]; }
+    return new GameTile(boardIds[pieceAtCoords.toLowerCase()], playerColorFromId(pieceAtCoords), [x, y], isPromoted);
+  }
+  return null;
+}
+
 const findKings = (board) => {
   let white, black;
   for (let i = 0; i < 9; i++) {
@@ -28,28 +47,28 @@ const findKings = (board) => {
   return { white, black };
 }
 
-const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, activate, movePiece }) => {
+const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, turn, activate, movePiece }) => {
   let classNames = ['space'];
   let [x, y] = coords;
   let promotes = x < 3 ? 'white' : x > 5 ? 'black' : null;
   if ((y + 1) % 3 === 0 && y < 8) classNames.push('right-border');
   if ((x + 1) % 3 === 0 && x < 8) classNames.push('lower-border');
-  if (piece && owned) classNames.push('active');
+  if (piece && owned) classNames.push(`active-${player.color || 'white'}`);
   if (selected && selected.location === 'board' && selected.target[0] === x && selected.target[1] === y) {
-    classNames.push('selected');
+    classNames.push(`selected-${selected.piece.color}`);
   }
 
   let isHint = false;
   if (hints.length) {
     isHint = hints.some(([hintX, hintY]) => x === hintX && y === hintY);
-    if (isHint) classNames.push('hinted');
+    if (isHint) classNames.push(`hinted-${selected ? selected.piece.color : 'white'}`);
   }
 
   return (
     <td
       id={`${x}-${y}`}
       className={classNames.join(' ')}
-      onClick={() => isHint && movePiece([x, y])}
+      onClick={() => isHint && turn && movePiece([x, y])}
     >
       {piece ?
         <ShogiPiece
@@ -67,7 +86,8 @@ class ShogiBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      board: props.board || [
+      matchId: props.match.matchId,
+      board: props.match.board || [
         ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
@@ -79,17 +99,15 @@ class ShogiBoard extends Component {
         ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
       ],
       player: {
-        user: {
-          name: 'Ocheyo',
-        },
+        user: { name: 'Player One' },
         color: 'white',
+        facing: 'north',
         hand: [],
       },
       opponent: {
-        user: {
-          name: 'rgonewildplus'
-        },
+        user: { name: 'Player Two' },
         color: 'black',
+        facing: 'south',
         hand: [],
       },
       kings: null,
@@ -101,38 +119,80 @@ class ShogiBoard extends Component {
       hints: [],
       isTurn: true,
     }
+    this.socket = props.socket;
+
+    this.initializeMatch = this.initializeMatch.bind(this);
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.movePiece = this.movePiece.bind(this);
     this.commitMove = this.commitMove.bind(this);
     this.submitMove = this.submitMove.bind(this);
+    this.receiveMove = this.receiveMove.bind(this);
     this.updateKings = this.updateKings.bind(this);
     this.moveWillPromote = this.moveWillPromote.bind(this);
     this.promptForPromote = this.promptForPromote.bind(this);
     this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
-    this.reverseBoard = this.reverseBoard.bind(this);
   }
 
   componentDidMount() {
-    let localUser = localStorage.getItem('username');
-    // roll this into an init()
-    //   set players
-    //   render board
-    //   find kings
-    if (this.state.player.color === 'black') {
-      this.reverseBoard();
-    }
-    let kingPositions = findKings(this.state.board);
-    this.setState({
-      kings: kingPositions,
-    });
+    this.initializeMatch();
+    this.socket.on("server.playerMove", this.receiveMove);
+    // this.socket.on("server.playerSelect", this.toggleOpponentHints);
+  }
 
-    // events to listen for:
-    //    player enter / leave  =>  update player online indicator
-    //    move =>  update board, turn state
-    //    game state => check / checkmate / concede
+  initializeMatch() {
+    let localUser = localStorage.getItem('username');
+    let updatePlayer = { ...this.state.player };
+    let updateOpponent = { ...this.state.opponent };
+
+    if (localUser === this.props.match.black) {
+      updatePlayer = {
+        user: {
+          name: localUser,
+        },
+        color: 'black',
+        facing: 'north',
+        hand: this.props.match.hand_black || [],
+      };
+      updateOpponent = {
+        user: {
+          name: this.props.match.white,
+        },
+        color: 'white',
+        facing: 'south',
+        hand: this.props.match.hand_white || [],
+      }
+    } else {
+      updatePlayer = {
+        user: {
+          name: localUser,
+        },
+        color: 'white',
+        facing: 'north',
+        hand: this.props.match.hand_white || [],
+      };
+      updateOpponent = {
+        user: {
+          name: this.props.match.black,
+        },
+        color: 'black',
+        facing: 'south',
+        hand: this.props.match.hand_black || [],
+      }
+    }
+    let updateBoard = updatePlayer.color === 'black' ? reverseMatrix(this.state.board) : copyMatrix(this.state.board);
+    let kingPositions = findKings(this.state.board);
+    let isTurn = this.props.match.turn ? updatePlayer.color === 'black' : updatePlayer.color === 'white'; // turn = 0 (black), 1 (white)
+
+    this.setState({
+      player: updatePlayer,
+      opponent: updateOpponent,
+      board: updateBoard,
+      kings: kingPositions,
+      isTurn,
+    });
   }
 
   toggleModal(content = null) {
@@ -143,27 +203,6 @@ class ShogiBoard extends Component {
     }))
   }
 
-  receiveMove(game, move) {
-
-  }
-
-  submitMove() {
-    // check to / from piece state in currentMove
-    // emit client:move
-  }
-
-  playerColorFromId(id) {
-    return id.charCodeAt(0) > 90 ? 'white' : 'black';
-  }
-
-  reverseBoard() {
-    let boardCopy = copyMatrix(this.state.board);
-    boardCopy = boardCopy.reverse().map(row => row.reverse());
-    this.setState({
-      board: boardCopy,
-    })
-  }
-
   updateKings(color, coords) {
     let updateKings = {...this.state.kings};
     updateKings[color] = coords;
@@ -172,12 +211,12 @@ class ShogiBoard extends Component {
     })
   }
 
-  getPiece([x, y]) {
+  getPiece(board, [x, y]) {
     let pieceAtCoords = this.state.board[x][y];
     if (pieceAtCoords.trim()) {
       let isPromoted = false;
       if (pieceAtCoords.length > 1) { isPromoted = true; pieceAtCoords = pieceAtCoords[0]; }
-      return new GameTile(boardIds[pieceAtCoords], this.playerColorFromId(pieceAtCoords), [x, y], isPromoted);
+      return new GameTile(boardIds[pieceAtCoords.toLowerCase()], playerColorFromId(pieceAtCoords), [x, y], isPromoted);
     }
     return null;
   }
@@ -232,7 +271,7 @@ class ShogiBoard extends Component {
     let pendingInput = false;
     if (x < 3 && pieceId.length === 1) {
       // if it has no available moves, it has to promote
-      let destination = new GameTile(boardIds[pieceId], this.playerColorFromId(pieceId), [x, y]);
+      let destination = new GameTile(boardIds[pieceId.toLowerCase()], playerColorFromId(pieceId), [x, y]);
       if (!destination.findMoves(this.state.board).length) willPromote = true;
       // if it wasn't forced to promote, and it's not a King or GG, which never promote
       // prompt user for choice.  with pending input, move will not be submitted until after
@@ -263,6 +302,7 @@ class ShogiBoard extends Component {
           kings: {...this.state.kings},
         },
         move: {
+          color: this.state.player.color,
           from: location === 'board' ? [...target] : [10, 10],
           to: [x, y],
         },
@@ -271,7 +311,7 @@ class ShogiBoard extends Component {
       if (location === 'board') {
         let [fromX, fromY] = action.move.from;
         // push captured piece into player's hand in move
-        if (this.getPiece([x, y])) action.after[this.state.player.color].push(this.capture([x, y]));
+        if (getPiece(this.state.board, [x, y])) action.after[this.state.player.color].push(this.capture([x, y]));
         let pieceToMove = this.state.board[fromX][fromY];
         let [willPromote, pendingChoice] = this.moveWillPromote([x, y], pieceToMove);
 
@@ -299,27 +339,51 @@ class ShogiBoard extends Component {
     }
   }
 
+  receiveMove({ success, before, after, move }) {
+    if (!status.success) {
+      console.warn(status.messages);
+    }
+    let { board, white, black, kings } = after;
+    let updatePlayer = { ...this.state.player };
+    updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
+    let updateOpponent = { ...this.state.opponent };
+    updateOpponent.hand = updateOpponent.color === 'white' ? [...white] : [...black];
+    board = move.color === this.state.player.color ? board : reverseMatrix(board);
+
+    this.setState(prevState => ({
+      board,
+      player: updatePlayer,
+      opponent: updateOpponent,
+      kings,
+      isTurn: !prevState.isTurn,
+      hints: [],
+      pendingMove: false,
+      pendingDecision: false,
+      selected: null,
+    }), () => console.log('New Turn: ', this.state.isTurn ? this.state.player.user.name : this.state.opponent.user.name))
+  }
+
+  submitMove(matchId, before, after, move) {
+    this.socket.emit("client.submitMove", {
+      matchId,
+      before,
+      after,
+      move
+    })
+  }
+
   commitMove() {
     if (this.state.pendingMove) {
       let { board, kings } = this.state.pendingMove.after;
 
       let updatePlayer = {...this.state.player};
-      updatePlayer.hand = updatePlayer.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.white;
+      updatePlayer.hand = updatePlayer.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.black;
 
       let updateOpponent = {...this.state.opponent};
-      updatePlayer.hand = updateOpponent.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.white;
+      updatePlayer.hand = updateOpponent.color === 'white' ? this.state.pendingMove.after.white : this.state.pendingMove.after.black;
 
-      this.setState({
-        board,
-        player: updatePlayer,
-        opponent: updateOpponent,
-        kings,
-        hints: [],
-        pendingMove: false,
-        pendingDecision: false,
-        selected: null,
-        isTurn: false,
-      });
+      let { before, after, move } = this.state.pendingMove;
+      this.submitMove(this.state.matchId, before, after, move);
     }
   }
 
@@ -330,21 +394,24 @@ class ShogiBoard extends Component {
     // clicks on board sends [x, y]
     if (location === 'board') {
       let [incomingX, incomingY] = target;
+      let piece = getPiece(this.state.board, target);
       if (current && current.location === location) {
         // check for equality since same type
         let [currentX, currentY] = current.target;
         // unset if clicked on same loc x target
-        updateSelected = incomingX === currentX && incomingY === currentY ? null : { location, target };
+        updateSelected = incomingX === currentX && incomingY === currentY ? null : { location, target, piece };
       } else {
         // overwrite if differing type or null
-        updateSelected = { location, target };
+        updateSelected = { location, target, piece };
       }
     // clicks on hand sends {color}:{piece} as ref
     } else {
+      let [playerColor, selectedPiece] = target;
+      let piece = new GameTile(boardIds[selectedPiece], playerColor, [10,10], false);
       if (current && current.location === location) {
-        updateSelected = target === current.target ? null : { location, target };
+        updateSelected = target === current.target ? null : { location, target, piece };
       } else {
-        updateSelected = { location, target };
+        updateSelected = { location, target, piece };
       }
     }
     // set or unset move hints
@@ -356,16 +423,14 @@ class ShogiBoard extends Component {
   toggleHints() {
     if (this.state.selected) {
       if (this.state.selected.location === 'board') {
-        let selectedPiece = this.getPiece(this.state.selected.target);
+        let selectedPiece = getPiece(this.state.board, this.state.selected.target);
         this.setState({
           hints: selectedPiece.findMoves(this.state.board),
         })
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
-        let gameTile = new GameTile(boardIds[piece], playerColor, [10,10]);
-        console.log(this.state.kings);
+        let gameTile = new GameTile(boardIds[piece.toLowerCase()], playerColor, [10,10]);
         let validLocations = helpers.validDropLocations(this.state.board, this.state.kings, gameTile);
-        console.log(validLocations);
         this.setState({
           hints: validLocations,
         })
@@ -378,16 +443,13 @@ class ShogiBoard extends Component {
   }
 
   render() {
-    const hints = this.state.hints;
-    const playerColor = this.state.player.color;
-
     const boardStyle = {
       backgroundImage: `url(${'./textures/wood.jpg'})`
     }
 
     const modal = this.state.showModal ? this.state.modalContent : null;
 
-    return(
+    return (
       <div className="match">
         <div className="match__timer">
           <PlayerPanel
@@ -407,11 +469,12 @@ class ShogiBoard extends Component {
                     <GridSpace
                       key={`${ri}x${ci}`}
                       selected={this.state.selected}
-                      hints={hints}
-                      owned={cell.trim() && this.state.player.color === this.playerColorFromId(cell)}
+                      hints={this.state.hints}
+                      owned={cell.trim() && this.state.player.color === playerColorFromId(cell)}
                       coords={[ri, ci]}
-                      piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], this.playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
+                      piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
                       player={this.state.player}
+                      turn={this.state.isTurn}
                       activate={this.togglePiece}
                       movePiece={this.movePiece}
                     />

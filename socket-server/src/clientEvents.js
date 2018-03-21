@@ -1,6 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { success, error } from "./lib/log";
+import { boardIds } from './lib/constants';
+import { isValidMove, isCheckOrMate, reverseBoard } from './lib/boardHelpers';
+import GameTile from './lib/GameTile';
+import { success, log, error } from './lib/log';
 import {
   serverInitialState,
   serverChanged,
@@ -11,9 +14,9 @@ import {
   serverSendMessages,
   serverHomeChat,
   serverGameChat,
-  serverUpdateGames
-} from "./serverEvents";
-import {isValidMove, reverseBoard} from "./lib/boardHelpers";
+  serverUpdateGames,
+  serverPlayerMove
+} from './serverEvents';
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
@@ -95,12 +98,13 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     });
     !data && await axios.post("http://localhost:3396/api/matches", {
       matchId,
-      board: JSON.stringify(data.board) || JSON.stringify(room.get("board")),
-      black,
-      white,
-      hand_white: JSON.stringify(data.hand_black) || "[]",
-      hand_black: JSON.stringify(data.hand_white) || "[]"
+      board: JSON.stringify(room.get("board")),
+      black: black,
+      white: white,
+      hand_white: "[]",
+      hand_black: "[]"
     });
+    payload.turn = data.turn || 0;
     payload.board = data.board || room.get("board");
     payload.hand_black = data.hand_black || [];
     payload.hand_white = data.hand_white || [];
@@ -116,6 +120,66 @@ const clientListGames = async ({ io, client, room }) => {
   serverUpdateGames({ io, client, room });
 };
 
+const clientSelectedPiece = async ({ io, client, room }, payload) => {
+  // deconstruct payload
+  let { matchId, board, piece, location } = payload;
+  // create GameTile instance
+  // generate hint tiles
+  //  if location == [10,10] > validDropLocations
+  //  else > validMoves
+  // invert hint coords for opponent display
+
+}
+
+const clientDeselectedPiece = async ({ io, client, room }, payload) => {
+
+}
+
+const clientSubmitMove = async ({ io, client, room }, payload) => {
+  try {
+    let { matchId, before, after, move } = payload;
+    let { data } = await axios.get("http://localhost:3396/api/matches", {
+      params: { matchId }
+    });
+    // validation
+    let messages = [];
+    // turn and user match
+    let correctTurn = data.turn === 0 && move.color === 'black' || data.turn === 1 && move.color === 'white';
+    if (!correctTurn) messages.push('Move submitted was not for the correct turn.');
+    // move is valid (solver server?)
+    let validMove = isValidMove(after.board, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.from, move.didPromote), move.to);
+    if (!validMove) messages.push('Invalid move');
+    // board state is check or checkmate
+    let [check, checkmate] = isCheckOrMate(after.board, after.kings, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.didPromote));
+    let gameStatus = data.status;
+    if (check && !checkmate) gameStatus = 1;
+    if (check && checkmate) gameStatus = 2;
+    // save new state if the move was successful
+    let success = correctTurn && validMove;
+    if (success) {
+      await axios.put("http://localhost:3396/api/matches", {
+        matchId,
+        board: JSON.stringify(after.board),
+        status: gameStatus,
+        turn: data.turn ? 0 : 1,
+        hand_white: JSON.stringify(after.white),
+        hand_black: JSON.stringify(after.black),
+      });
+    }
+    payload.status = {
+      success,
+      check,
+      checkmate,
+      messages
+    };
+    // broadcast move
+    serverPlayerMove({ io, client, room }, payload);
+  }
+  catch (err) {
+    error('issue validating player move, e = ', err);
+  }
+}
+
 const clientEmitters = {
   "client.ready": clientReady,
   "client.update": clientUpdate,
@@ -125,7 +189,8 @@ const clientEmitters = {
   "client.gameReady": clientGameReady,
   "client.homeChat": clientHomeChat,
   "client.gameChat": clientGameChat,
-  "client.listOpenGames": clientListGames
+  "client.listOpenGames": clientListGames,
+  "client.submitMove": clientSubmitMove,
 };
 
 export default clientEmitters;

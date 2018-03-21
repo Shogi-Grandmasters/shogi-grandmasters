@@ -100,7 +100,7 @@ class Home extends Component {
         />
         <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
         <br />
-        <HomeChat socket={this.socket}/>
+        <HomeChat socket={this.socket} />
       </div>
     );
   }

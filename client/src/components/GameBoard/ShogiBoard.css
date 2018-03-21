@@ -54,25 +54,40 @@ body {
   margin: 0px;
 }
 
-.active {
+.active-white, .active-black {
   cursor: pointer;
 }
 
-.active:hover {
-  background-color: rgba(247, 238, 117, 0.4);
+.active-white:hover {
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
-.selected {
-  background-color: rgba(247, 238, 117, 0.3);;
+.active-black:hover {
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
-.hinted {
+.selected-white {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.selected-black {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.hinted-white {
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
+}
+.hinted-white:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
-.hinted:hover {
+.hinted-black {
   cursor: pointer;
+  background: rgba(0, 0, 0, 0.3);
+}
+.hinted-black:hover {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .player__hand {
