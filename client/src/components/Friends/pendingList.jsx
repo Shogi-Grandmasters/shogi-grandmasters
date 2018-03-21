@@ -7,7 +7,7 @@ export const PendingList = (props) => {
       <div>
         <div><b>{props.user.name}</b></div>
         <a onClick={() => props.acceptFriend(props.user)}>Accept</a>
-        <a onClick={() => props.rejectFriend(props.user.permId)}>Reject</a>
+        <a onClick={() => props.rejectFriend(props.user)}>Reject</a>
       </div>
     );
     

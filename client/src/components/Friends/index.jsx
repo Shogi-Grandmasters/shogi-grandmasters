@@ -49,7 +49,6 @@ class Friends extends Component {
       const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
-      console.log(friend)
       if(friend.status === 0 && friend.u_id === parseInt(localStorage.getItem("id"))) awaiting.push(friend)
       if(friend.status === 0 && friend.u_id !== parseInt(localStorage.getItem("id"))) pending.push(friend)
       if(friend.status == 1 && friend.id !== parseInt(localStorage.getItem("id"))) flist.push(friend)
@@ -72,7 +71,6 @@ class Friends extends Component {
   acceptFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.permId;
-    console.log('our accept friend event', e)
     const { data } = await axios.put(
       `http://localhost:3396/api/friends/${id}/${fid}/1`
     );
