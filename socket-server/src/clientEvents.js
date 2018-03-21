@@ -15,8 +15,9 @@ import {
   serverSendMessages,
   serverHomeChat,
   serverGameChat,
-  serverUpdateGames
-} from "./serverEvents";
+  serverUpdateGames,
+  serverPlayerMove
+} from './serverEvents';
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");

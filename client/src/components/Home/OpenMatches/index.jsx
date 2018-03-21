@@ -73,7 +73,10 @@ class OpenMatches extends Component {
   render() {
     return (
       <div className="open-matches">
+<<<<<<< HEAD
         <div>Open Matches</div>
+=======
+>>>>>>> Added prev matches to home page and updated fetch match query helper.
         <button onClick={() => this.handleInitiateMatchClick()}>
           Initiate Match
         </button>
