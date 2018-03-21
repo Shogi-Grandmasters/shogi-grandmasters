@@ -15,18 +15,24 @@ export const createMatchHelper = ({
   `;
 };
 
-export const fetchMatchHelper = ({ matchId, username }) => {
-  if (username) {
+export const fetchMatchHelper = ({ matchId, userId }) => {
+  if (userId) {
     return `
-      SELECT * FROM matches WHERE 
-      status=0 AND (black=(select id from users where username='${username}') 
-      OR white=(select id from users where username='${username}'))
+      SELECT id,black,white FROM matches
+      WHERE status=0 AND (black='${userId}'
+      OR white='${userId}')
     `;
   } else {
     return `
       SELECT * FROM matches WHERE id='${matchId}'
     `;
   }
+};
+
+export const fetchOpponentHelper = opponents => {
+  return `
+    SELECT id,username from users WHERE id = ANY(ARRAY[${opponents}])
+  `;
 };
 
 export const updateMatchHelper = ({
