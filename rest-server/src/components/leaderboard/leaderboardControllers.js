@@ -3,22 +3,14 @@ import {
   fetchLeaderboardQuery,
   fetchUserLeaderboardQuery,
   addUserLeaderboardQuery,
-<<<<<<< HEAD
   updateLeaderboardQuery,
   fetchLeaderboardFromRating
-=======
-  updateLeaderboardQuery
->>>>>>> created leaderboard table
 } from "./leaderboardHelpers";
 import { success, error } from "../../lib/log";
 
 export const fetchLeaderboardController = async (req, res) => {
   try {
-<<<<<<< HEAD
     const data = await fetchLeaderboardQuery();
-=======
-    const data = await fetchLeaderboardQuery(req.body);
->>>>>>> created leaderboard table
     success(
       `fetchLeaderboardController - sucessfully retrieved data ${JSON.stringify(
         data.rows
@@ -33,11 +25,7 @@ export const fetchLeaderboardController = async (req, res) => {
 
 export const fetchUserLeaderboardController = async (req, res) => {
   try {
-<<<<<<< HEAD
     const data = await fetchUserLeaderboardQuery(req.params);
-=======
-    const data = await fetchUserLeaderboardQuery(req.body);
->>>>>>> created leaderboard table
     success(
       "fetchUserLeaderBoardController - successfully fetched leaderboard user data",
       JSON.stringify(data)
