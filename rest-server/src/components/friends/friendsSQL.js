@@ -12,14 +12,15 @@ export const fetchAllFriendsHelper = ({ u_id }) => {
     FROM users AS u
       INNER JOIN friends AS f
       ON (u.id=f.f_id)
-      WHERE f.u_id=${u_id}
+      WHERE (f.u_id=${u_id} OR u.id=${u_id})
   `;
 };
 
 export const delFriendHelper = ({ u_id, f_id }) => {
   return `
     DELETE FROM friends
-    WHERE u_id=${u_id} AND f_id=${f_id}
+    WHERE u_id in(${u_id}, ${f_id})
+    AND f_id in(${u_id}, ${f_id})
     RETURNING u_id, f_id
   `;
 }
@@ -28,7 +29,10 @@ export const updateFriendHelper = ({ u_id, f_id, status }) => {
   return `
     UPDATE friends
     SET status=${status}
-    WHERE u_id=${u_id} AND f_id=${f_id}
+    WHERE u_id in(${u_id}, ${f_id})
+    AND f_id in(${u_id}, ${f_id})
     RETURNING u_id, f_id, status
   `;
 }
+
+//, (${f_id}, ${u_id}, ${status})

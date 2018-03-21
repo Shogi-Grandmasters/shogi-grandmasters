@@ -1,30 +1,30 @@
 import db from "../../config/database";
 import {
   findUserQuery,
-  fetchUsersQuery,
-  deleteUsersQuery,
+  fetchUserQuery,
+  deleteUserQuery,
   updateUserQuery
 } from "./userHelpers";
 import { success, error } from "../../lib/log";
 
 export const findUserController = async (req, res) => {
   try {
-    const data = await usersQuery(req.body);
+    const data = await findUserQuery(req.body);
     success(
-      `userController - sucessfully retrieved data ${JSON.stringify(
+      `findUserController - sucessfully retrieved data ${JSON.stringify(
         data.rows[0]
       )}`
     );
     return res.status(200).send(data.rows[0]);
   } catch (err) {
-    error(`userController - error= ${err}`);
+    error(`findUserController - error= ${err}`);
     return res.status(400).send(err);
   }
 };
 
 export const fetchUserController = async (req, res) => {
   try {
-    const data = await fetchUserQuery(req.body);
+    const data = await fetchUserQuery(req.params);
     success(
       "fetchUserController - successfully fetched user data",
       JSON.stringify(data)
