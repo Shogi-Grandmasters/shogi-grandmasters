@@ -4,15 +4,23 @@ import {
   fetchLeaderboardController,
   fetchUserLeaderboardController,
   addUserLeaderboardController,
-  updateLeaderboardController
+  updateLeaderboardController,
+  fetchLeaderboardFromRatingController
 } from "./leaderboardControllers";
 
 const router = express.Router();
 
 router
+  .route("/user/:userId")
+    .get(fetchUserLeaderboardController);
+
+router
+  .route("/rating/:rating")
+    .get(fetchLeaderboardFromRatingController);
+
+router
   .route("/")
   .get(fetchLeaderboardController)
-  .get(fetchUserLeaderboardController)
   .post(addUserLeaderboardController)
   .put(updateLeaderboardController);
 
