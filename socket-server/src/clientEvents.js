@@ -14,9 +14,15 @@ import {
   serverSendMessages,
   serverHomeChat,
   serverGameChat,
+<<<<<<< HEAD
   serverUpdateGames,
   serverPlayerMove
 } from './serverEvents';
+=======
+  serverUpdateGames
+} from "./serverEvents";
+import { isValidMove, reverseBoard } from "./lib/boardHelpers";
+>>>>>>> Added prev matches to home page and updated fetch match query helper.
 
 const clientReady = ({ io, client, room }, payload) => {
   success("client ready heard");
@@ -58,7 +64,7 @@ const clientFetchMessages = async ({ io, client, room }, payload) => {
   success("client load message request heard");
   try {
     const { data } = await axios.get("http://localhost:3396/api/messages", {
-      params: {matchId: room.get("id")}
+      params: { matchId: room.get("id") }
     });
     serverSendMessages({ io, client, room }, data);
   } catch (err) {
@@ -96,18 +102,19 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     let { data } = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId }
     });
-    !data && await axios.post("http://localhost:3396/api/matches", {
-      matchId,
-      board: JSON.stringify(room.get("board")),
-      black: black,
-      white: white,
-      hand_white: "[]",
-      hand_black: "[]"
-    });
-    payload.turn = data.turn || 0;
-    payload.board = data.board || room.get("board");
-    payload.hand_black = data.hand_black || [];
-    payload.hand_white = data.hand_white || [];
+    console.log(matchId);
+    !data &&
+      (await axios.post("http://localhost:3396/api/matches", {
+        matchId,
+        board: JSON.stringify(room.get("board")),
+        black,
+        white,
+        hand_white: "[]",
+        hand_black: "[]"
+      }));
+    payload.board = data ? data[0].board : room.get("board");
+    payload.hand_black = data ? data[0].hand_black : [];
+    payload.hand_white = data ? data[0].hand_white : [];
     room.set("waiting", false);
     serverGameReady({ io, client, room }, payload);
   } catch (err) {

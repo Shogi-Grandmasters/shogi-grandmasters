@@ -1,10 +1,17 @@
-/* #home-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-} */
+#home-container {
+  /* display: inline-block; */
+  /* flex-direction: row;
+  justify-content: center; */
+}
 
-#match-play {
+#match-new {
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* justify-content: center; */
+  float: left;
+}
+
+#match-rejoin {
   /* display: flex; */
   /* flex-direction: row; */
   /* justify-content: center; */

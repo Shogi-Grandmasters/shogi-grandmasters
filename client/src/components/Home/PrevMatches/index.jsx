@@ -1,58 +1,40 @@
 import React, { Component } from "react";
 import axios from "axios";
-import randomstring from "randomstring";
 
-import "./OpenMatches.css";
+// import "./PrevMatches.css";
 
-class OpenMatches extends Component {
+class PrevMatches extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openMatches: [],
+      PrevMatches: [],
       selectedMatch: ""
     };
   }
 
   componentDidMount() {
-    this.fetchOpenMatches();
-    this.props.socket.on("updateOpenMatches", () => {
-      this.fetchOpenMatches();
+    this.fetchPrevMatches();
+    this.props.socket.on("updatePrevMatches", () => {
+      this.fetchPrevMatches();
     });
   }
 
-  async fetchOpenMatches() {
-    let { data } = await axios.get("http://localhost:3396/api/openmatches");
-    this.setState({ openMatches: data });
-  }
-
-  async handleInitiateMatchClick() {
-    let player1 = localStorage.getItem("username");
-    await axios.post("http://localhost:3396/api/openmatches", {
-      matchId: this.matchId,
-      player1
+  async fetchPrevMatches() {
+    let { data } = await axios.get("http://localhost:3396/api/matches", {
+      params: { username: localStorage.getItem("username")}
     });
-    this.props.history.push({
-      pathname: `/${this.matchId}`,
-      state: {
-        match: this.matchId,
-        black: localStorage.getItem("username"),
-        opponent: false
-      },
-      history: this.props.history
-    });
-    this.props.socket.emit("client.listOpenGames");
+    console.log(data);
+    this.setState({ prevMatches: data });
   }
 
   async handleMatchSelect(e) {
     await this.setState({ selectedMatch: JSON.parse(e.target.value) });
   }
 
-  matchId = randomstring.generate();
-
   async handleJoinMatchClick() {
     if (this.state.selectedMatch) {
       let { data } = await axios.delete(
-        "http://localhost:3396/api/openmatches",
+        "http://localhost:3396/api/Prevmatches",
         {
           data: { matchId: this.state.selectedMatch.id }
         }
@@ -72,21 +54,21 @@ class OpenMatches extends Component {
 
   render() {
     return (
-      <div className="open-matches">
+      <div className="Prev-matches">
         <button onClick={() => this.handleInitiateMatchClick()}>
           Initiate Match
         </button>
         <div>
           <select onChange={e => this.handleMatchSelect(e)} size="20">
             <option>Select a Match</option>
-            {this.state.openMatches &&
-              this.state.openMatches.map(match => {
+            {/* {this.state.prevMatches &&
+              this.state.prevMatches.map(match => {
                 return (
                   <option key={match.id} value={JSON.stringify(match)}>
                     {match.username}
                   </option>
                 );
-              })}
+              })} */}
           </select>
         </div>
         <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
@@ -95,4 +77,4 @@ class OpenMatches extends Component {
   }
 }
 
-export default OpenMatches;
+export default PrevMatches;
