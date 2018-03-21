@@ -34,7 +34,11 @@ export const endMatch = ([winner, loser], draw = false) => {
   return [winner, loser]
 }
 
+<<<<<<< HEAD
 export const updateRating = async ({ id, rating }) => {
+=======
+export const updateRating = async (id, rating) => {
+>>>>>>> updated leaderboard added route to rest server
   try {
     const { rows } = await axios.put("http://localhost:3396/api/users", {
       userId: id,
@@ -79,6 +83,10 @@ export const updateLeaderboard = async (player) => {
   }
 }
 
+<<<<<<< HEAD
 export const updateLeaderboard = await ({ id, rating }) => {
+=======
+export const updateLeaderboard = ({id, rating}) => {
+>>>>>>> updated leaderboard added route to rest server
 
 }
