@@ -9,11 +9,14 @@ export const createLeaderboardTable = async () => {
       (
       id SERIAL,
       user_id INT UNIQUE,
+      rating INT
       CONSTRAINT place_pk
         PRIMARY KEY(id)
       CONSTRAINT user_fk
         FORIEGN KEY(user_id)
           REFERENCES users(id)
+      CONSTRAINT nomore_than_x_rows
+        CHECK( table_id < 20 );
       )
       `
     );

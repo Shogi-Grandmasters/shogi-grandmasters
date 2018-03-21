@@ -12,12 +12,12 @@ export const findUserQuery = async body => {
     const queryString = findUsernameHelper(body);
     const data = await db.queryAsync(queryString);
     success(
-      "usersQuery - successfully retrieved data ",
+      "findUserQuery - successfully retrieved data ",
       JSON.stringify(data.rows[0])
     );
     return data;
   } catch (err) {
-    error("usersQuery - error= ", err);
+    error("findUserQuery - error= ", err);
     throw new Error(err);
   }
 };
