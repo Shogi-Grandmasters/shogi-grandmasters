@@ -82,4 +82,3 @@ export const fetchLeaderboardFromRatingQuery = async body => {
     throw new Error(err);
   }
 };
-
