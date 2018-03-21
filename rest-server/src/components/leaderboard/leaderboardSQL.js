@@ -14,21 +14,28 @@ export const fetchUserLeaderboardHelper = ({ placeId }) => {
   `;
 };
 
-export const addUserLeaderboardHelper = ({ userId }) => {
+export const addUserLeaderboardHelper = ({ userId, rating }) => {
   return `
-    INSERT INTO leaderboard (user_id)
-    VALUES (${userId})
+    INSERT INTO leaderboard (user_id, rating)
+    VALUES (${userId}, ${rating})
     RETURNING *
     JOIN users ON leaderboard.user_id = users.id
   `;
 };
 
-export const updateUserHelper = ({ userId,  placeId}) => {
+export const updateUserHelper = ({ placeId, userId, rating}) => {
   return `
     UPDATE leaderboard
-    SET user_id = '${userId}'
+    SET user_id, rating = '${userId}', '${rating}'
     WHERE id = '${placeId}'
     RETURNING *
     JOIN users ON leaderboard.user_id = users.id
+  `;
+};
+
+export const fetchLeaderboardFromRating = ({ rating }) => {
+  return `
+    SELECT * FROM leaderboard
+    WHERE rating < '${rating}'
   `;
 };

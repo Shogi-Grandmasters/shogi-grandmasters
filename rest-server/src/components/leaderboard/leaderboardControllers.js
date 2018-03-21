@@ -3,13 +3,14 @@ import {
   fetchLeaderboardQuery,
   fetchUserLeaderboardQuery,
   addUserLeaderboardQuery,
-  updateLeaderboardQuery
+  updateLeaderboardQuery,
+  fetchLeaderboardFromRating
 } from "./leaderboardHelpers";
 import { success, error } from "../../lib/log";
 
 export const fetchLeaderboardController = async (req, res) => {
   try {
-    const data = await fetchLeaderboardQuery(req.body);
+    const data = await fetchLeaderboardQuery();
     success(
       `fetchLeaderboardController - sucessfully retrieved data ${JSON.stringify(
         data.rows
@@ -24,7 +25,7 @@ export const fetchLeaderboardController = async (req, res) => {
 
 export const fetchUserLeaderboardController = async (req, res) => {
   try {
-    const data = await fetchUserLeaderboardQuery(req.body);
+    const data = await fetchUserLeaderboardQuery(req.params);
     success(
       "fetchUserLeaderBoardController - successfully fetched leaderboard user data",
       JSON.stringify(data)
@@ -61,5 +62,20 @@ export const updateLeaderboardController = async (req, res) => {
   } catch (err) {
     error("updateleaderboardController - error= ", err);
     res.status(404).send(err);
+  }
+};
+
+export const fetchLeaderboardFromRatingController = async (req, res) => {
+  try {
+    const data = await fetchLeaderboardFromRatingQuery(req.params);
+    success(
+      `fetchLeaderboardFromRatingController - sucessfully retrieved data ${JSON.stringify(
+        data.rows
+      )}`
+    );
+    return res.status(200).send(data.rows);
+  } catch (err) {
+    error(`fetchLeaderboardFromRatingController - error= ${err}`);
+    return res.status(400).send(err);
   }
 };
