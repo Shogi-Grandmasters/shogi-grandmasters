@@ -59,7 +59,6 @@ class BoardIndex extends Component {
     ) : (
       <div>
         <ShogiBoard socket={this.socket} match={this.state} />
-        <GameChat socket={this.socket} />
       </div>
     );
   }
