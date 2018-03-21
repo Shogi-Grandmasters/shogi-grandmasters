@@ -5,19 +5,15 @@ import io from "socket.io-client/dist/socket.io.js";
 
 import HomeChat from "./Chat/index.jsx";
 import OpenMatches from "./OpenMatches/index.jsx";
-import Nav from "../Global/Nav/Nav.jsx"
+import PrevMatches from "./PrevMatches/index.jsx";
+import Nav from "../Global/Nav/Nav.jsx";
 
 import "./Home.css";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = {
-      openMatches: [],
-      selectedMatch: ""
-    };
-    this.fetchOpenMatches = this.fetchOpenMatches.bind(this);
-    this.handleMatchSelect = this.handleMatchSelect.bind(this);
+    this.state = {};
   }
 
   componentWillMount() {
@@ -29,64 +25,12 @@ class Home extends Component {
     });
   }
 
-  async componentDidMount() {
-    this.fetchOpenMatches();
-    this.socket.on("updateOpenMatches", () => {
-      this.fetchOpenMatches();
-    });
-  }
-
-  async fetchOpenMatches() {
-    let { data } = await axios.get("http://localhost:3396/api/openmatches");
-    this.setState({ openMatches: data });
-  }
+  async componentDidMount() {}
 
   logout = () => {
     window.localStorage.clear();
     this.props.history.push("/login");
   };
-
-  matchId = randomstring.generate();
-
-  async handleInitiateMatchClick() {
-    let player1 = localStorage.getItem("username");
-    await axios.post("http://localhost:3396/api/openmatches", {
-      matchId: this.matchId,
-      player1
-    });
-    this.props.history.push({
-      pathname: `/match/${this.matchId}`,
-      state: {
-        match: this.matchId,
-        black: localStorage.getItem("username"),
-        opponent: false
-      },
-      history: this.props.history
-    });
-    this.socket.emit("client.listOpenGames");
-  }
-
-  async handleMatchSelect(match) {
-    await this.setState({ selectedMatch: JSON.parse(match) });
-  }
-
-  async handleJoinMatchClick() {
-    if (this.state.selectedMatch) {
-      let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
-        data: { matchId: this.state.selectedMatch.id }
-      });
-      let black = data.username;
-      this.props.history.push({
-        pathname: `/match/${this.state.selectedMatch.id}`,
-        state: {
-          matchId: this.state.selectedMatch.id,
-          black,
-          white: localStorage.getItem("username")
-        },
-        history: this.props.history
-      });
-    }
-  }
 
   render() {
     return (
@@ -94,19 +38,23 @@ class Home extends Component {
         <Nav />
         <br />
         <div id="home-container">
-          <div id="match-play">
-            <button onClick={() => this.handleInitiateMatchClick()}>
-              Initiate Match
-            </button>
+          <div id="match-new">
             <OpenMatches
-              openMatches={this.state.openMatches}
-              handleMatchSelect={this.handleMatchSelect}
+              history={this.props.history}
+              socket={this.socket}
             />
-            <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
           </div>
-          <br />
+          <div id="match-rejoin">
+            <PrevMatches
+              history={this.props.history}
+              socket={this.socket}
+            />
+            <button onClick={() => this.handleJoinMatchClick()}>
+              Rejoin Match
+            </button>
+          </div>
           <div id="chat">
-            <HomeChat socket={this.socket}/>
+            <HomeChat socket={this.socket} />
           </div>
         </div>
       </div>

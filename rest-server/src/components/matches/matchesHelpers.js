@@ -21,8 +21,8 @@ export const fetchMatchQuery = async query => {
   try {
     const queryString = fetchMatchHelper(query);
     const { rows } = await db.queryAsync(queryString);
-    success("fetchMatchQuery - successfully fetched open match ", rows[0]);
-    return rows[0];
+    success("fetchMatchQuery - successfully fetched open match ", rows);
+    return rows;
   } catch (err) {
     error("fetchMatchQuery - error=", err);
   }
