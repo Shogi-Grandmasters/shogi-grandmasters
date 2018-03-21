@@ -1,10 +1,29 @@
-.player__profile {
-  width: 300px;
-  height: 180px;
+.player__profile-north {
+  width: 140px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+
+.player__profile-south {
+  width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column-reverse;
+}
+
+.player__avatar {
+  width: 80px;
+  height: 80px;
+  background: #333;
+}
+
+.player__name {
+  margin: 4px;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .player__color {
@@ -14,19 +33,10 @@
   border-radius: 10px;
   border: solid 1px #ececec;
 }
+
 .white {
   background-color: #fff;
 }
 .black {
   background-color: #000;
-}
-
-.player__name {
-  margin: 4px;
-  font-size: 18px;
-  font-weight: 800;
-}
-.player__stats {
-  font-size: 14px;
-  font-style: italic;
 }
