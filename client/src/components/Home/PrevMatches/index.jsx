@@ -7,8 +7,10 @@ class PrevMatches extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      PrevMatches: [],
-      selectedMatch: ""
+      prevMatches: [],
+      selectedMatch: "",
+      username: localStorage.getItem("username"),
+      userId: localStorage.getItem("id")
     };
   }
 
@@ -21,10 +23,17 @@ class PrevMatches extends Component {
 
   async fetchPrevMatches() {
     let { data } = await axios.get("http://localhost:3396/api/matches", {
-      params: { username: localStorage.getItem("username")}
+      params: { userId: this.state.userId }
     });
+    const opponents = {};
     console.log(data);
-    this.setState({ prevMatches: data });
+    data.opponents && data.opponents.forEach(opponent => opponents[opponent.id] = opponent.username);
+    const prevMatches = data.matches.map(match => {
+      match.black = opponents[match.black] ? opponents[match.black] : this.state.username;
+      match.white = opponents[match.white] ? opponents[match.white] : this.state.username;
+      return match;
+    });
+    this.setState({ prevMatches });
   }
 
   async handleMatchSelect(e) {
@@ -33,19 +42,13 @@ class PrevMatches extends Component {
 
   async handleJoinMatchClick() {
     if (this.state.selectedMatch) {
-      let { data } = await axios.delete(
-        "http://localhost:3396/api/Prevmatches",
-        {
-          data: { matchId: this.state.selectedMatch.id }
-        }
-      );
-      let black = data.username;
+      let {id, black, white} = this.state.selectedMatch;
       this.props.history.push({
-        pathname: `/${this.state.selectedMatch.id}`,
+        pathname: `/${id}`,
         state: {
-          matchId: this.state.selectedMatch.id,
+          matchId: id,
           black,
-          white: localStorage.getItem("username")
+          white,
         },
         history: this.props.history
       });
@@ -61,14 +64,14 @@ class PrevMatches extends Component {
         <div>
           <select onChange={e => this.handleMatchSelect(e)} size="20">
             <option>Select a Match</option>
-            {/* {this.state.prevMatches &&
+            {this.state.prevMatches &&
               this.state.prevMatches.map(match => {
                 return (
                   <option key={match.id} value={JSON.stringify(match)}>
-                    {match.username}
+                    {match.black === this.state.username ? match.white : match.black}
                   </option>
                 );
-              })} */}
+              })}
           </select>
         </div>
         <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
