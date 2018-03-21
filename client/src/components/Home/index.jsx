@@ -7,11 +7,6 @@ import HomeChat from "./Chat/index.jsx";
 import OpenMatches from "./OpenMatches/index.jsx";
 import PrevMatches from "./PrevMatches/index.jsx";
 import Nav from "../Global/Nav/Nav.jsx";
-<<<<<<< HEAD
-
-import "./Home.css";
-=======
->>>>>>> Added prev matches to home page and updated fetch match query helper.
 
 import "./Home.css";
 
@@ -30,12 +25,8 @@ class Home extends Component {
     });
   }
 
-<<<<<<< HEAD
   async componentDidMount() {
   }
-=======
-  async componentDidMount() {}
->>>>>>> Added prev matches to home page and updated fetch match query helper.
 
   logout = () => {
     window.localStorage.clear();
@@ -59,12 +50,6 @@ class Home extends Component {
               history={this.props.history}
               socket={this.socket}
             />
-<<<<<<< HEAD
-=======
-            <button onClick={() => this.handleJoinMatchClick()}>
-              Rejoin Match
-            </button>
->>>>>>> Added prev matches to home page and updated fetch match query helper.
           </div>
           <div id="chat">
             <HomeChat socket={this.socket} />
