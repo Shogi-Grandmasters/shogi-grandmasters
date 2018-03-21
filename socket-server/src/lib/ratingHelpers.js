@@ -33,7 +33,7 @@ export const endMatch = ([winner, loser], draw = false) => {
   return [winner, loser]
 }
 
-export const updateRating = async (id, rating) => {
+export const updateRating = async ({ id, rating }) => {
   try {
     const data = await axios.put("http://localhost:3396/api/users", {
       userId: id,
@@ -44,6 +44,6 @@ export const updateRating = async (id, rating) => {
   }
 }
 
-export const updateLeaderboard = ({id, rating}) => {
+export const updateLeaderboard = await ({ id, rating }) => {
 
 }
