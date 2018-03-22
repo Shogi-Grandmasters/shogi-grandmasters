@@ -14,6 +14,7 @@ export const createUsersTable = async () => {
       wins INT,
       losses INT,
       rating INT,
+      avatar TEXT,
       CONSTRAINT users_pk
         PRIMARY KEY(id)
       )
