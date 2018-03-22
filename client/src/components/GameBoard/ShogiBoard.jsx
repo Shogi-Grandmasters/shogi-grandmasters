@@ -90,7 +90,7 @@ class ShogiBoard extends Component {
     this.state = {
       matchId: props.match.matchId,
       board: props.match.board || [
-        ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
+        ['L', 'N', 'S', 'G', 'K', 'G', 'S', 'N', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -98,7 +98,7 @@ class ShogiBoard extends Component {
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
-        ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
+        ['l', 'n', 's', 'g', 'k', 'g', 's', 'n', 'l']
       ],
       player: {
         user: { name: 'Player One' },
@@ -307,13 +307,17 @@ class ShogiBoard extends Component {
           color: this.state.player.color,
           from: location === 'board' ? [...target] : [10, 10],
           to: [x, y],
+          didCapture: false,
         },
       };
 
       if (location === 'board') {
         let [fromX, fromY] = action.move.from;
         // push captured piece into player's hand in move
-        if (getPiece(this.state.board, [x, y])) action.after[this.state.player.color].push(this.capture([x, y]));
+        if (getPiece(this.state.board, [x, y])) {
+          action.move.didCapture = true;
+          action.after[this.state.player.color].push(this.capture([x, y]));
+        }
         let pieceToMove = this.state.board[fromX][fromY];
         let [willPromote, pendingChoice] = this.moveWillPromote([x, y], pieceToMove);
 
@@ -326,7 +330,7 @@ class ShogiBoard extends Component {
 
       } else {
         let [playerColor, pieceToDrop] = target.split(':');
-
+        action.move.piece = pieceToDrop;
         action.move.isPending = false;
         action.after.board[x][y] = pieceToDrop;
         action.after[this.state.player.color] = this.removeFromHand(pieceToDrop, action.after[this.state.player.color]);
@@ -341,10 +345,12 @@ class ShogiBoard extends Component {
     }
   }
 
-  receiveMove({ success, before, after, move }) {
+  receiveMove({ log, status, before, after, move }) {
     if (!status.success) {
       console.warn(status.messages);
     }
+    console.log(move);
+    console.log(log);
     let { board, white, black, kings } = after;
     let updatePlayer = { ...this.state.player };
     updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];

@@ -6,7 +6,7 @@ import ShogiPiece from './ShogiPiece.jsx';
 const PlayerHandTile = ({ player, local, piece, count, selected, activate }) => {
   let tile = new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10]);
   // set active hover for owned pieces
-  let tileStyles = ['player__hand-tile'];
+  let tileStyles = ['player__hand-tile', player.facing];
   local && tileStyles.push('active');
 
   // determine if it's selected
@@ -38,7 +38,7 @@ const PlayerHand = ({ player, local, selected, activate }) => {
   }, {})
 
   let handStyles = ['player__hand'];
-  local ? handStyles.push('north') : handStyles.push('south');
+  // local ? handStyles.push('north') : handStyles.push('south');
   return (
     <div className={handStyles.join(' ')}>
       {Object.entries(hand).map(([piece, count]) =>
