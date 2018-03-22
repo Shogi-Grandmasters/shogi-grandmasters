@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { FriendsList } from "./friendsList.jsx";
-import { PendingList } from "./pendingList.jsx";
-import { AwaitingList } from "./awaitingList.jsx";
+import { FriendsList } from "./FriendsList.jsx";
+import { PendingList } from "./PendingList.jsx";
+import { AwaitingList } from "./AwaitingList.jsx";
 
+import "./Friends.css";
 
 class Friends extends Component {
   constructor() {
@@ -126,7 +127,7 @@ class Friends extends Component {
       <div />
     )
     return (
-      <div>
+      <div className="friends-container"> 
         <input name="username" type="text" placeholder="Search by username" onChange={this.handleInput} />
         <input type="submit" onClick={() => this.addFriend()} />
         <div>
