@@ -414,7 +414,7 @@ class ShogiBoard extends Component {
       }
     // clicks on hand sends {color}:{piece} as ref
     } else {
-      let [playerColor, selectedPiece] = target;
+      let [playerColor, selectedPiece] = target.split(':');
       let piece = new GameTile(boardIds[selectedPiece], playerColor, [10,10], false);
       if (current && current.location === location) {
         updateSelected = target === current.target ? null : { location, target, piece };
@@ -434,14 +434,14 @@ class ShogiBoard extends Component {
         let selectedPiece = getPiece(this.state.board, this.state.selected.target);
         this.setState({
           hints: selectedPiece.findMoves(this.state.board),
-        })
+        });
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(boardIds[piece.toLowerCase()], playerColor, [10,10]);
         let validLocations = helpers.validDropLocations(this.state.board, this.state.kings, gameTile);
         this.setState({
           hints: validLocations,
-        })
+        });
       }
     } else {
       this.setState({
