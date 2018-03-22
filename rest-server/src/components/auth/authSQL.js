@@ -8,7 +8,7 @@ export const signUpHelper = ({ email, username, password }) => {
 
 export const loginHelper = ({ username }) => {
   return `
-    SELECT id, email, username, password, wins, losses
+    SELECT *
     FROM users
     WHERE username='${username}'
   `;
