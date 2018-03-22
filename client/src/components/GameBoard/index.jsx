@@ -20,10 +20,11 @@ class BoardIndex extends Component {
   }
 
   async componentDidMount() {
-    this.socket.on("server.connect", (waiting) => {
-      this.setState({ waiting });
+    let { matchId, black, white } = this.props.location.state;
+    this.socket.on("server.reconnect", ({black, white}) => {
+      black && white && this.socket.emit("client.gameReady", {matchId, black, white});
     });
-
+    
     this.socket.on(
       "server.joined",
       ({ matchId, black, white, board, turn, hand_black, hand_white, event_log }) => {
@@ -40,8 +41,7 @@ class BoardIndex extends Component {
         });
       }
     );
-
-    let { matchId, black, white } = this.props.location.state;
+    
     if (this.state.waiting && white) {
       this.socket.emit("client.gameReady", {
         matchId,

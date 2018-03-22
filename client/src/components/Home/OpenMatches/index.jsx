@@ -34,7 +34,7 @@ class OpenMatches extends Component {
     this.props.history.push({
       pathname: `/match/${this.matchId}`,
       state: {
-        match: this.matchId,
+        matchId: this.matchId,
         black: localStorage.getItem("username"),
         opponent: false
       },
