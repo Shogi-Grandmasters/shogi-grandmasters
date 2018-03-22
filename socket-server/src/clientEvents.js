@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { boardIds } from './lib/constants';
-import { isValidMove, isCheckOrMate, reverseBoard } from './lib/boardHelpers';
-import { moveToString } from './lib/matchLog';
-import GameTile from './lib/GameTile';
-import { success, log, error } from './lib/log';
+import { boardIds } from "./lib/constants";
+import { isValidMove, isCheckOrMate, reverseBoard } from "./lib/boardHelpers";
+import { moveToString } from "./lib/matchLog";
+import GameTile from "./lib/GameTile";
+import { success, log, error } from "./lib/log";
 import {
   serverInitialState,
   serverChanged,
@@ -111,6 +111,8 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     payload.board = data.length ? data[0].board : room.get("board");
     payload.hand_black = data.length ? data[0].hand_black : [];
     payload.hand_white = data.length ? data[0].hand_white : [];
+    payload.turn = data.length ? data[0].turn : 0;
+    payload.event_log = data.length ? data[0].event_log : undefined;
     serverGameReady({ io, client, room }, payload);
   } catch (err) {
     error("error creating game. e = ", err);
@@ -132,11 +134,23 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     // validation
     let messages = [];
     // turn and user match
-    let correctTurn = data.turn === 1 && move.color === 'black' || data.turn === 0 && move.color === 'white';
-    if (!correctTurn) messages.push('Move submitted was not for the correct turn.');
+    let correctTurn =
+      (data.turn === 1 && move.color === "black") ||
+      (data.turn === 0 && move.color === "white");
+    if (!correctTurn)
+      messages.push("Move submitted was not for the correct turn.");
     // move is valid
-    let validMove = isValidMove(before.board, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.from, move.didPromote), move.to);
-    if (!validMove) messages.push('Invalid move');
+    let validMove = isValidMove(
+      before.board,
+      new GameTile(
+        boardIds[move.piece.toLowerCase()],
+        move.color,
+        move.from,
+        move.didPromote
+      ),
+      move.to
+    );
+    if (!validMove) messages.push("Invalid move");
     // board state is check or checkmate
     let check = false;
     let checkmate = false;
@@ -148,14 +162,15 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let success = correctTurn && validMove;
     // if (success) {
     // orient board to default
-    let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
+    let savedBoard =
+      move.color === "black" ? reverseBoard(after.board) : after.board;
     // prep event log
     let eventLog = data.event_log || [];
     let event = {
       moveNumber: eventLog.length + 1,
       notation: moveToString(move),
-      move,
-    }
+      move
+    };
     eventLog.push(event);
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
@@ -176,11 +191,10 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     };
     // broadcast move
     serverPlayerMove({ io, client, room }, payload);
+  } catch (err) {
+    error("issue validating player move, e = ", err);
   }
-  catch (err) {
-    error('issue validating player move, e = ', err);
-  }
-}
+};
 
 const clientEmitters = {
   "client.ready": clientReady,
@@ -192,7 +206,7 @@ const clientEmitters = {
   "client.homeChat": clientHomeChat,
   "client.gameChat": clientGameChat,
   "client.listOpenGames": clientListGames,
-  "client.submitMove": clientSubmitMove,
+  "client.submitMove": clientSubmitMove
 };
 
 export default clientEmitters;
