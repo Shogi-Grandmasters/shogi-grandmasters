@@ -127,6 +127,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let { data } = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId }
     });
+    data = data[0];
     // validation
     let messages = [];
     // turn and user match
@@ -149,13 +150,15 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     // orient board to default
     let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
     // prep event log
-    let eventLog = data.event_log ? JSON.parse(data.event_log) : [];
+    let eventLog = data.event_log || [];
+    console.log('after assignment, \n', eventLog);
     let event = {
       moveNumber: eventLog.length + 1,
       notation: moveToString(move),
       move,
     }
     eventLog.push(event);
+    console.log('>>> EVENTS\n', eventLog)
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
       board: JSON.stringify(savedBoard),
