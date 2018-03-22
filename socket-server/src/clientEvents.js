@@ -121,21 +121,6 @@ const clientListGames = async ({ io, client, room }) => {
   serverUpdateGames({ io, client, room });
 };
 
-const clientSelectedPiece = async ({ io, client, room }, payload) => {
-  // deconstruct payload
-  let { matchId, board, piece, location } = payload;
-  // create GameTile instance
-  // generate hint tiles
-  //  if location == [10,10] > validDropLocations
-  //  else > validMoves
-  // invert hint coords for opponent display
-
-}
-
-const clientDeselectedPiece = async ({ io, client, room }, payload) => {
-
-}
-
 const clientSubmitMove = async ({ io, client, room }, payload) => {
   try {
     let { matchId, before, after, move } = payload;
@@ -155,15 +140,18 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let check = false;
     let checkmate = false;
     //let [check, checkmate] = isCheckOrMate(after.board, after.kings, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.didPromote));
-    let gameStatus = data.status;
+    let gameStatus = data.status || 0;
     if (check && !checkmate) gameStatus = 1;
     if (check && checkmate) gameStatus = 2;
     // save new state if the move was successful
     let success = correctTurn && validMove;
     // if (success) {
+
+    // orient board to default
+    let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
-      board: JSON.stringify(after.board),
+      board: JSON.stringify(savedBoard),
       status: gameStatus,
       turn: data.turn ? 0 : 1,
       hand_white: JSON.stringify(after.white),

@@ -7,16 +7,15 @@ export const createLeaderboardTable = async () => {
       `
       CREATE TABLE IF NOT EXISTS leaderboard
       (
-      id SERIAL,
-      user_id INT UNIQUE,
-      rating INT
-      CONSTRAINT place_pk
-        PRIMARY KEY(id)
-      CONSTRAINT user_fk
-        FORIEGN KEY(user_id)
-          REFERENCES users(id)
-      CONSTRAINT nomore_than_x_rows
-        CHECK( table_id < 20 );
+        id SERIAL,
+        user_id INT UNIQUE,
+        rating INT,
+        CONSTRAINT place_pk
+          PRIMARY KEY(id),
+        CONSTRAINT user_fk
+          FOREIGN KEY(user_id) REFERENCES users(id),
+        CONSTRAINT nomore_than_x_rows
+          CHECK(id < 20)
       )
       `
     );
@@ -26,7 +25,7 @@ export const createLeaderboardTable = async () => {
   }
 };
 
-export const dropUsersTable = async () => {
+export const dropLeaderboardTable = async () => {
   try {
     await db.queryAsync(`DROP TABLE IF EXISTS leaderboard`);
     success("successfully dropped leaderboard table");
