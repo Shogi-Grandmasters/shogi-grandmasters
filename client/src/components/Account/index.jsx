@@ -12,7 +12,7 @@ class Account extends Component {
     this.state = {};
   }
 
-  
+
 
   render() {
     return(
@@ -25,10 +25,10 @@ class Account extends Component {
           <li>Account Info</li>
         </ul>
         <Switch>
-          <Route path="/acct/friends" component={Friends} /> 
+          <Route path="/acct/friends" component={Friends} />
           <Route path="/acct/edit" component={EditProfile} />
           <Redirect from="/acct/" to="/acct/friends" />
-        </Switch> 
+        </Switch>
       </div>
     )
   }
@@ -40,4 +40,3 @@ export default Account
 // <Switch>
 //  <Route to="/acct/edit"> Edit Profile </Route>
 // </Switch>
-  
