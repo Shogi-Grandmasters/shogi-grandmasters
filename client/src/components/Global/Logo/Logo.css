@@ -1,4 +1,6 @@
 .sg-logo {
   background: url(./logo.svg);
   background-size: cover;
+  height: 80px;
+  width: 110px; 
 }

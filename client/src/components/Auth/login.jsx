@@ -14,11 +14,12 @@ class Login extends Component {
     const { username, password } = this.state;
     const body = { username, password }
     try {
-      const data = await axios.post(`http://localhost:3396/api/auth/login`, body);
-      localStorage.setItem('email', data.data.username)
-      localStorage.setItem('username', data.data.username)
-      localStorage.setItem('id', data.data.id)
-      localStorage.setItem('token', data.data.token.accessToken)
+      const { data } = await axios.post(`http://localhost:3396/api/auth/login`, this.state);
+      localStorage.setItem('email', data.email);
+      localStorage.setItem('username', data.username);
+      localStorage.setItem('id', data.id);
+      localStorage.setItem('token', data.token.accessToken);
+      localStorage.setItem('rank', data.rating)
       data ? this.props.history.push('/home') : this.props.history.push('/login');
     } catch (err) {
       throw new Error(err);
