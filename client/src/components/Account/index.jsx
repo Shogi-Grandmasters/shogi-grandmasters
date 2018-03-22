@@ -6,6 +6,8 @@ import Friends from '../Friends/index.jsx';
 import { Link, Switch, Route, Redirect } from "react-router-dom";
 import EditProfile from "./EditProfile.jsx";
 
+import './Account.css';
+
 class Account extends Component {
   constructor() {
     super();
@@ -17,16 +19,16 @@ class Account extends Component {
     return(
       <div>
         <Nav />
-        <ul>
-          <li><Link to="/acct/friends">Friends</Link></li>
-          <li><Link to="/acct/edit">Edit</Link></li>
-          <li>Leader</li>
-          <li>Account Info</li>
+        <br />
+        <ul className="vert-container">
+          <li className="vert-nav"><Link to="/acct/friends">Friends</Link></li>
+          <li className="vert-nav"><Link to="/acct/edit">Edit</Link></li>
+          <li className="vert-nav"><a>Leader</a></li>
+          <li className="vert-nav"><a>Account Info</a></li>
         </ul>
         <Switch>
           <Route path="/acct/friends" component={Friends} />
           <Route path="/acct/edit" component={EditProfile} />
-          <Redirect from="/acct/" to="/acct/friends" />
         </Switch>
       </div>
     )
@@ -39,3 +41,6 @@ export default Account
 // <Switch>
 //  <Route to="/acct/edit"> Edit Profile </Route>
 // </Switch>
+//          <Redirect from="/acct/" to="/acct/friends" />
+
+

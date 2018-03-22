@@ -19,9 +19,9 @@ class Nav extends Component {
     return (
       <ul className="topnav">
         <li className="logo"><Logo /></li>
-        <li><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
-        <li><Link to="/home">Challenge</Link></li>
-        <li><Link to="/acct">Account</Link></li>
+        <li className="nav"><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
+        <li className="nav"><Link to="/home">Challenge</Link></li>
+        <li className="nav"><Link to="/acct">Account</Link></li>
       </ul>
     )
   }
