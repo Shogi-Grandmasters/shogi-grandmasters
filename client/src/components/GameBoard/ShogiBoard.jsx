@@ -10,6 +10,8 @@ import PlayerPanel from './PlayerPanel.jsx';
 import PlayerHand from './PlayerHand.jsx';
 import ModalPrompt from '../Global/ModalPrompt.jsx';
 import TurnIndicator from './TurnIndicator.jsx';
+import GameChat from './GameChat/index.jsx';
+import MatchLog from './MatchLog.jsx';
 
 import './ShogiBoard.css';
 
@@ -65,7 +67,7 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
   }
 
   return (
-    <td
+    <div
       id={`${x}-${y}`}
       className={classNames.join(' ')}
       onClick={() => isHint && turn && movePiece([x, y])}
@@ -78,25 +80,26 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
           player={player}
           activate={activate}
         /> : ' ' }
-    </td>
+    </div>
   );
 }
 
 class ShogiBoard extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       matchId: props.match.matchId,
       board: props.match.board || [
-        ['L', 'H', 'S', 'G', 'K', 'G', 'S', 'H', 'L'],
+        ['L', 'N', 'S', 'G', 'K', 'G', 'S', 'N', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', 'p+', ' ', ' ', ' ', ' '],
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
         ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
-        ['l', 'h', 's', 'g', 'k', 'g', 's', 'h', 'l']
+        ['l', 'n', 's', 'g', 'k', 'g', 's', 'n', 'l']
       ],
       player: {
         user: { name: 'Player One' },
@@ -118,6 +121,7 @@ class ShogiBoard extends Component {
       selected: null,
       hints: [],
       isTurn: true,
+      log: props.match.event_log || [],
     }
     this.socket = props.socket;
 
@@ -305,13 +309,17 @@ class ShogiBoard extends Component {
           color: this.state.player.color,
           from: location === 'board' ? [...target] : [10, 10],
           to: [x, y],
+          didCapture: false,
         },
       };
 
       if (location === 'board') {
         let [fromX, fromY] = action.move.from;
         // push captured piece into player's hand in move
-        if (getPiece(this.state.board, [x, y])) action.after[this.state.player.color].push(this.capture([x, y]));
+        if (getPiece(this.state.board, [x, y])) {
+          action.move.didCapture = true;
+          action.after[this.state.player.color].push(this.capture([x, y]));
+        }
         let pieceToMove = this.state.board[fromX][fromY];
         let [willPromote, pendingChoice] = this.moveWillPromote([x, y], pieceToMove);
 
@@ -324,7 +332,7 @@ class ShogiBoard extends Component {
 
       } else {
         let [playerColor, pieceToDrop] = target.split(':');
-
+        action.move.piece = pieceToDrop;
         action.move.isPending = false;
         action.after.board[x][y] = pieceToDrop;
         action.after[this.state.player.color] = this.removeFromHand(pieceToDrop, action.after[this.state.player.color]);
@@ -339,10 +347,11 @@ class ShogiBoard extends Component {
     }
   }
 
-  receiveMove({ success, before, after, move }) {
+  receiveMove({ log, status, before, after, move }) {
     if (!status.success) {
       console.warn(status.messages);
     }
+    console.log(log);
     let { board, white, black, kings } = after;
     let updatePlayer = { ...this.state.player };
     updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
@@ -360,6 +369,7 @@ class ShogiBoard extends Component {
       pendingMove: false,
       pendingDecision: false,
       selected: null,
+      log
     }), () => console.log('New Turn: ', this.state.isTurn ? this.state.player.user.name : this.state.opponent.user.name))
   }
 
@@ -406,7 +416,7 @@ class ShogiBoard extends Component {
       }
     // clicks on hand sends {color}:{piece} as ref
     } else {
-      let [playerColor, selectedPiece] = target;
+      let [playerColor, selectedPiece] = target.split(':');
       let piece = new GameTile(boardIds[selectedPiece], playerColor, [10,10], false);
       if (current && current.location === location) {
         updateSelected = target === current.target ? null : { location, target, piece };
@@ -426,14 +436,14 @@ class ShogiBoard extends Component {
         let selectedPiece = getPiece(this.state.board, this.state.selected.target);
         this.setState({
           hints: selectedPiece.findMoves(this.state.board),
-        })
+        });
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(boardIds[piece.toLowerCase()], playerColor, [10,10]);
         let validLocations = helpers.validDropLocations(this.state.board, this.state.kings, gameTile);
         this.setState({
           hints: validLocations,
-        })
+        });
       }
     } else {
       this.setState({
@@ -444,63 +454,62 @@ class ShogiBoard extends Component {
 
   render() {
     const boardStyle = {
-      backgroundImage: `url(${'./textures/wood.jpg'})`
+      backgroundImage: `url(${'../textures/wood.jpg'})`
     }
 
     const modal = this.state.showModal ? this.state.modalContent : null;
 
     return (
       <div className="match">
-        <div className="match__timer">
-          <PlayerPanel
-            player={this.state.opponent}
-          />
+        <MatchLog events={this.state.log} />
+        <div className="match__turn">
+          <PlayerPanel player={this.state.opponent} />
           <TurnIndicator isTurn={this.state.isTurn} />
-          <PlayerPanel
-            player={this.state.player}
-          />
+          <PlayerPanel player={this.state.player} />
         </div>
-        <table className="match__board" style={boardStyle}>
-          <tbody>
-            {this.state.board.map((row, ri) => {
-              return (
-                <tr key={ri}>
-                  {row.map((cell, ci) =>
-                    <GridSpace
-                      key={`${ri}x${ci}`}
-                      selected={this.state.selected}
-                      hints={this.state.hints}
-                      owned={cell.trim() && this.state.player.color === playerColorFromId(cell)}
-                      coords={[ri, ci]}
-                      piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
-                      player={this.state.player}
-                      turn={this.state.isTurn}
-                      activate={this.togglePiece}
-                      movePiece={this.movePiece}
-                    />
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <div className="match__hands">
-          <PlayerHand
-            id={'opponent'}
-            local={false}
-            selected={this.state.selected}
-            player={this.state.opponent}
-            turn={!this.state.isTurn}
-            activate={this.togglePiece}
-          />
-          <PlayerHand
-            id={'player'}
-            local={true}
-            selected={this.state.selected}
-            player={this.state.player}
-            turn={this.state.isTurn}
-            activate={this.togglePiece}
-          />
+        <div className="match__play">
+          <div className="match__hand">
+            <PlayerHand
+              id={'opponent'}
+              local={false}
+              selected={this.state.selected}
+              player={this.state.opponent}
+              turn={!this.state.isTurn}
+              activate={this.togglePiece}
+            />
+          </div>
+          <div className="match__board">
+            {this.state.board.map((row, ri) =>
+              row.map((cell, ci) =>
+                <GridSpace
+                  key={`${ri}x${ci}`}
+                  selected={this.state.selected}
+                  hints={this.state.hints}
+                  owned={cell.trim() && this.state.player.color === playerColorFromId(cell)}
+                  coords={[ri, ci]}
+                  piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
+                  player={this.state.player}
+                  turn={this.state.isTurn}
+                  activate={this.togglePiece}
+                  movePiece={this.movePiece}
+                />
+              ))}
+          </div>
+          <div className="match__hand">
+            <PlayerHand
+              id={'player'}
+              local={true}
+              selected={this.state.selected}
+              player={this.state.player}
+              turn={this.state.isTurn}
+              activate={this.togglePiece}
+            />
+          </div>
+        </div>
+        <div className="match__chat">
+          <div></div>
+          <GameChat socket={this.socket} />
+          <div></div>
         </div>
         { modal }
       </div>

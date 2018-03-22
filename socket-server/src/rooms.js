@@ -1,14 +1,4 @@
-const shogiBoard = [
-  ["L", "H", "S", "G", "K", "G", "S", "H", "L"],
-  [" ", "R", " ", " ", " ", " ", " ", "B", " "],
-  ["P", "P", "P", "P", "P", "P", "P", "P", "P"],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-  ["p", "p", "p", "p", "p", "p", "p", "p", "p"],
-  [" ", "b", " ", " ", " ", " ", " ", "r", " "],
-  ["l", "h", "s", "g", "k", "g", "s", "h", "l"]
-];
+import { initialBoard } from './lib/constants';
 
 export default class Rooms {
   constructor(io) {
@@ -16,7 +6,7 @@ export default class Rooms {
     this.store = new Map();
   }
 
-  findOrCreate(roomId, board = shogiBoard) {
+  findOrCreate(roomId, board = initialBoard) {
     let room = this.store.get(roomId);
     if (!room) {
       room = new Map();

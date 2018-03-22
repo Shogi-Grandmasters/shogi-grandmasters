@@ -1,0 +1,23 @@
+.home-chat-container {
+  padding: 8px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+}
+
+.home-chat-container input {
+  width: 220px;
+  height: 32px;
+  line-height: 28px;
+  font-size: 14px;
+  color: #333;
+}
+
+.chatbox {
+  display: flex;
+  flex-flow: column-reverse nowrap;
+}
+
+.chat__message {
+  padding: 8px 4px;
+}

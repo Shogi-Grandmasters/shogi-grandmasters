@@ -13,7 +13,7 @@ class BoardIndex extends Component {
   componentWillMount() {
     this.socket = io("http://localhost:4155", {
       query: {
-        roomId: this.props.location.pathname.slice(1),
+        roomId: this.props.match.params.matchId,
         username: localStorage.getItem("username")
       }
     });
@@ -26,7 +26,7 @@ class BoardIndex extends Component {
 
     this.socket.on(
       "server.joined",
-      ({ matchId, black, white, board, turn, hand_black, hand_white }) => {
+      ({ matchId, black, white, board, turn, hand_black, hand_white, event_log }) => {
         this.setState({
           waiting: false,
           matchId,
@@ -35,7 +35,8 @@ class BoardIndex extends Component {
           turn,
           board,
           hand_black,
-          hand_white
+          hand_white,
+          event_log
         });
       }
     );
@@ -59,7 +60,6 @@ class BoardIndex extends Component {
     ) : (
       <div>
         <ShogiBoard socket={this.socket} match={this.state} />
-        <GameChat socket={this.socket} />
       </div>
     );
   }

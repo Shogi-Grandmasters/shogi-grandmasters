@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import io from "socket.io-client/dist/socket.io.js";
 
+import './GameChat.css';
+
 class GameChat extends Component {
   constructor(props) {
     super(props);
@@ -51,20 +53,20 @@ class GameChat extends Component {
   render() {
     return (
       <div className="home-chat-container">
-        <form onSubmit={e => this.resetInput(e)}>
-          <textarea onKeyUp={e => this.handleChat(e)} />
-          <button type="submit" onClick={() => this.handleSubmit()}>
-            Submit
-          </button>
-        </form>
         <div className="chatbox">
           {this.state.messages.length > 0 &&
             this.state.messages.slice(0, 20).map((message, i) => {
               return (
-                <div key={i}>{`${message.username}: ${message.content}`}</div>
+                <div className="chat__message" key={i}><strong>{message.username}</strong>: {message.content}</div>
               );
             })}
         </div>
+        <form onSubmit={e => this.resetInput(e)}>
+          <input onKeyUp={e => this.handleChat(e)} />
+          <button type="submit" onClick={() => this.handleSubmit()}>
+            Send
+          </button>
+        </form>
       </div>
     );
   }

@@ -41,7 +41,7 @@ class PrevMatches extends Component {
 
   async handleJoinMatchClick() {
     if (this.state.selectedMatch) {
-      let {id, black, white} = this.state.selectedMatch;
+      let { id, black, white } = this.state.selectedMatch;
       this.props.history.push({
         pathname: `/${id}`,
         state: {

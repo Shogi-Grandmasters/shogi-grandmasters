@@ -14,8 +14,6 @@ class Account extends Component {
     this.state = {};
   }
 
-  
-
   render() {
     return(
       <div>
@@ -44,4 +42,3 @@ export default Account
 // </Switch>
 //          <Redirect from="/acct/" to="/acct/friends" />
 
-  

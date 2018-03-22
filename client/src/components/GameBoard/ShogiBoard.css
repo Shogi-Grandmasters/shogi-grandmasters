@@ -2,56 +2,83 @@ body {
   margin: 0px;
 }
 
+button {
+  width: 120px;
+  height: 36px;
+  margin: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #eee;
+  background: #333;
+}
+
 .match {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr 5fr 3fr;
+  margin: 0 auto;
 }
 
-.match__player {
-  flex: 2 80px;
-  margin: 0;
-  border: solid 1px #ececec;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+.match__status {
+  width: 200px;
 }
 
-.match__timer, .match__hands {
-  width: 320px;
+.match__turn {
   display: flex;
   flex-direction: column;
-  align-content: space-between;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
+  background: #eee;
 }
-.match__hands > * {
-  flex: 1 auto;
+
+.match__play {
+  display: grid;
+  grid-template-rows: 1fr 9fr 1fr;
+}
+
+.match__chat {
+  display: grid;
+  grid-template-rows: 1fr 9fr 1fr;
+  background: #eee;
+}
+
+.match__hand {
+  display: grid;
+  grid-auto-rows: minmax(60px, auto);
+  background: #eee;
 }
 
 .match__board {
-  background-repeat: repeat;
-  overflow: hidden;
-  flex: 6 720px;
-  max-width: 720px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-auto-columns: minmax(60px, auto);
+  grid-auto-rows: minmax(60px, auto);
   border-collapse: collapse;
 }
 
 .shogi__token {
   text-indent: -999px;
   overflow: hidden;
-  width: 60px;
-  height: 70px;
+  width: 80%;
+  height: 90%;
   margin: 0 auto;
   background-repeat: no-repeat;
   background-size: contain;
 }
 
+.player__hand-tile > .shogi__token {
+  width: 60%;
+  height: 70%;
+}
+
 .space {
-  width: 80px;
-  height: 80px;
-  border: solid 2px rgba(255,255,255,0.3);
+  border: solid 1px rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.2);
   margin: 0px;
+  padding: 8px 8px;
 }
 
 .active-white, .active-black {
@@ -91,11 +118,12 @@ body {
 }
 
 .player__hand {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-auto-rows: minmax(60px, auto);
 }
 .north{
+  flex-direction: column-reverse;
   align-content: flex-end;
   align-items: flex-end;
 }
@@ -106,24 +134,25 @@ body {
 
 .player__hand-tile {
   cursor: pointer;
-  width: 80px;
-  height: 80px;
-  display: inline-block;
-  margin: 2px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 .player__hand-count {
   text-align: center;
 }
 
 .lower-border {
-  border-bottom-color: rgba(0,0,0,0.4);
+  border-bottom-color: rgba(0,0,0,0.6);
 }
 .upper-border {
-  border-top-color: rgba(0,0,0,0.4);;
+  border-top-color: rgba(0,0,0,0.6);
 }
 .right-border {
-  border-right-color: rgba(0,0,0,0.4);;
+  border-right-color: rgba(0,0,0,0.6);
 }
 .left-border {
-  border-left-color: rgba(0,0,0,0.4);;
+  border-left-color: rgba(0,0,0,0.6);
 }
