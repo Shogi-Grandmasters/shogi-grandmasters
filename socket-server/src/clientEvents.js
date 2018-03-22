@@ -106,10 +106,11 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         hand_white: "[]",
         hand_black: "[]"
       }));
+    room.set("black", black);
+    room.set("white", white);
     payload.board = data.length ? data[0].board : room.get("board");
     payload.hand_black = data.length ? data[0].hand_black : [];
     payload.hand_white = data.length ? data[0].hand_white : [];
-    room.set("waiting", false);
     serverGameReady({ io, client, room }, payload);
   } catch (err) {
     error("error creating game. e = ", err);
