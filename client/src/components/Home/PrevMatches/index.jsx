@@ -26,7 +26,6 @@ class PrevMatches extends Component {
       params: { userId: this.state.userId }
     });
     const opponents = {};
-    console.log(data);
     data.opponents && data.opponents.forEach(opponent => opponents[opponent.id] = opponent.username);
     const prevMatches = data.matches.map(match => {
       match.black = opponents[match.black] ? opponents[match.black] : this.state.username;
@@ -58,14 +57,11 @@ class PrevMatches extends Component {
   render() {
     return (
       <div className="Prev-matches">
-        <button onClick={() => this.handleInitiateMatchClick()}>
-          Initiate Match
-        </button>
         <div>
+          <div>Pending Matches</div>
           <select onChange={e => this.handleMatchSelect(e)} size="20">
             <option>Select a Match</option>
-            {this.state.prevMatches &&
-              this.state.prevMatches.map(match => {
+            {this.state.prevMatches.map(match => {
                 return (
                   <option key={match.id} value={JSON.stringify(match)}>
                     {match.black === this.state.username ? match.white : match.black}
@@ -74,7 +70,7 @@ class PrevMatches extends Component {
               })}
           </select>
         </div>
-        <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
+        <button onClick={() => this.handleJoinMatchClick()}>Rejoin Match</button>
       </div>
     );
   }
