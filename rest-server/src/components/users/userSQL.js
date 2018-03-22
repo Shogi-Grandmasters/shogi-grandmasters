@@ -29,3 +29,12 @@ export const updateUserHelper = ({ userId, rating }) => {
     RETURNING id, username, rating
   `;
 };
+
+export const updatePicUserHelper = ({ userId, avatar }) => {
+  return `
+    UPDATE users
+    SET avatar = '${avatar}'
+    WHERE id = '${userId}'
+    RETURNING id, username, rating
+  `;
+};
