@@ -13,7 +13,7 @@ class BoardIndex extends Component {
   componentWillMount() {
     this.socket = io("http://localhost:4155", {
       query: {
-        roomId: this.props.location.pathname.slice(1),
+        room: this.props.match.params.matchId,
         username: localStorage.getItem("username")
       }
     });

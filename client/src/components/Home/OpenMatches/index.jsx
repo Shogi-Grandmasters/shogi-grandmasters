@@ -32,7 +32,7 @@ class OpenMatches extends Component {
       player1
     });
     this.props.history.push({
-      pathname: `/${this.matchId}`,
+      pathname: `/match/${this.matchId}`,
       state: {
         match: this.matchId,
         black: localStorage.getItem("username"),
@@ -59,7 +59,7 @@ class OpenMatches extends Component {
       );
       let black = data.username;
       this.props.history.push({
-        pathname: `/${this.state.selectedMatch.id}`,
+        pathname: `/match/${this.state.selectedMatch.id}`,
         state: {
           matchId: this.state.selectedMatch.id,
           black,

@@ -9,7 +9,7 @@ import {
   dropOpenMatchesTable
 } from "./models/openMatchesModel.js";
 import { createFriendsTable, dropFriendsTable } from "./models/friendsModel.js";
-import { createLeaderboardTable, dropLeaderboardTable } from "./models/leaderboardTable.js";
+import { createLeaderboardTable, dropLeaderboardTable } from "./models/leaderboardModel.js";
 
 const setup = async () => {
   await dropLeaderboardTable();
