@@ -69,6 +69,11 @@ button {
   background-size: contain;
 }
 
+.player__hand-tile > .shogi__token {
+  width: 60%;
+  height: 70%;
+}
+
 .space {
   border: solid 1px rgba(255,255,255,0.2);
   background: rgba(0,0,0,0.2);
@@ -113,11 +118,12 @@ button {
 }
 
 .player__hand {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-auto-rows: minmax(60px, auto);
 }
 .north{
+  flex-direction: column-reverse;
   align-content: flex-end;
   align-items: flex-end;
 }
@@ -128,10 +134,11 @@ button {
 
 .player__hand-tile {
   cursor: pointer;
-  width: 80px;
-  height: 80px;
-  display: inline-block;
-  margin: 2px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 .player__hand-count {
   text-align: center;
