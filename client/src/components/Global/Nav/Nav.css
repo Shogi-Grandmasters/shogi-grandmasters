@@ -30,8 +30,11 @@ li a:hover {
 .logo {
   float: left;
   border-right: none;
+  background: url(../Logo/logo.svg);
+  background-size: cover;
 }
 
 .sg-logo {
   height: 50px;
+  width: 55px;
 }

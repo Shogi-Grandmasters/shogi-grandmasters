@@ -14,8 +14,8 @@ const setup = async () => {
   await dropMessagesTable();
   await dropOpenMatchesTable();
   await dropMatchesTable();
-  await dropUsersTable();
   await dropFriendsTable();
+  await dropUsersTable();
   await createUsersTable();
   await createOpenMatchesTable();
   await createMatchesTable();
