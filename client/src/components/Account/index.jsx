@@ -5,8 +5,11 @@ import Nav from '../Global/Nav/Nav.jsx';
 import Friends from '../Friends/index.jsx';
 import { Link, Switch, Route, Redirect } from "react-router-dom";
 import EditProfile from "./EditProfile.jsx";
+<<<<<<< HEAD
 
 import './Account.css';
+=======
+>>>>>>> 8f0faf6d8539ba5fe8c074f259b1e87db99e0384
 
 class Account extends Component {
   constructor() {
