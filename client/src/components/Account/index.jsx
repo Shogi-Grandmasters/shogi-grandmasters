@@ -14,7 +14,6 @@ class Account extends Component {
     this.state = {};
   }
 
-
   render() {
     return(
       <div>
@@ -27,9 +26,9 @@ class Account extends Component {
           <li className="vert-nav"><a>Account Info</a></li>
         </ul>
         <Switch>
-          <Route path="/acct/friends" component={Friends} />
+          <Route path="/acct/friends" component={Friends} /> 
           <Route path="/acct/edit" component={EditProfile} />
-        </Switch>
+        </Switch> 
       </div>
     )
   }
@@ -42,5 +41,4 @@ export default Account
 //  <Route to="/acct/edit"> Edit Profile </Route>
 // </Switch>
 //          <Redirect from="/acct/" to="/acct/friends" />
-
 
