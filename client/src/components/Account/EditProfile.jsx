@@ -1,25 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Logo from '../Global/Logo/index.js'
 
-import './Auth.css';
-
-class Signup extends Component {
+class EditProfile extends Component {
   constructor() {
     super();
     this.state = {};
-  }
-
-  submitAuthData = async (e) => {
-    e.preventDefault();
-    const { email, password, username } = this.state;
-    const body = { email, password, username };
-    try {
-      const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
-      data ? this.props.history.push('/login') : this.props.history.push('/signup');
-    } catch (err) {
-      throw new Error(err);
-    }
   }
 
   handleInputChange = (event) => {
@@ -29,34 +14,32 @@ class Signup extends Component {
 
   render() {
     return (
-      <div className='auth-container'>
-        <br/>
-        <Logo /><br />
+      <div className='edit-container'>
         <input
           name='email'
           type='text'
-          className='auth-form'
+          className='edit-form'
           placeholder={'enter email'}
           onChange={this.handleInputChange}
           />
         <input 
           name='username'
           type='text'
-          className='auth-form'
+          className='edit-form'
           placeholder={'enter your username'}
           onChange={this.handleInputChange}
           />
         <input 
           name='password'
           type='password'
-          className='auth-form'
+          className='edit-form'
           id='password'
           placeholder={'enter your password'}
           onChange={this.handleInputChange}
           /><br />
         <input
           type='submit'
-          className='auth-button'
+          className='edit-button'
           onClick={(e) => this.submitAuthData(e)}
           />
       </div>
@@ -64,4 +47,4 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+export default EditProfile;
