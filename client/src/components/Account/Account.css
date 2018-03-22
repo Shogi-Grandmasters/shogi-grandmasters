@@ -1,31 +1,21 @@
-.topnav {
+.vert-container {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  width: 100px;
   overflow: hidden;
   background-color: #cecece;
 }
 
-.logo a {
-  float: left;
-  border-right: none;
-  background: url(../Logo/logo.svg);
-  background-size: cover;
-  height: 80px;
-  width: 87px;
-}
-
-.nav a {
-  float: right;
+.vert-nav a {
   display: block;
   color: white;
-  height: 50px;
+  width: auto;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   text-align: center;
   font-size: 16px;
-  line-height: 50px; 
   font-family: 'Shift', sans-serif
 }
 
