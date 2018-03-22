@@ -3,8 +3,9 @@
   margin: 0;
   padding: 0;
   width: 100px;
-  overflow: hidden;
   background-color: #cecece;
+  height: 100%;
+  overflow: auto;
 }
 
 .vert-nav a {
@@ -16,7 +17,7 @@
   text-decoration: none;
   text-align: center;
   font-size: 16px;
-  font-family: 'Shift', sans-serif
+  font-family: 'Shift', sans-serif;
 }
 
 li a:hover {
