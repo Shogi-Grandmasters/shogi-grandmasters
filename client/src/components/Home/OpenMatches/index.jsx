@@ -73,6 +73,7 @@ class OpenMatches extends Component {
   render() {
     return (
       <div className="open-matches">
+        <div>Open Matches</div>
         <button onClick={() => this.handleInitiateMatchClick()}>
           Initiate Match
         </button>

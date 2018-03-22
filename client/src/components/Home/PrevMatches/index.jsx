@@ -58,7 +58,7 @@ class PrevMatches extends Component {
     return (
       <div className="Prev-matches">
         <div>
-          <div>Pending Matches</div>
+          <div>Pending Matches</div><br/>
           <select onChange={e => this.handleMatchSelect(e)} size="20">
             <option>Select a Match</option>
             {this.state.prevMatches.map(match => {
