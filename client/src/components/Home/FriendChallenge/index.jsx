@@ -8,11 +8,12 @@ class FriendChallenge extends Component {
     super(props);
     this.state = {
       users: {},
+      friends: [],
       selectedFriend: ""
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.socket.on("server.sendUsers", users => {
       this.setState({ users });
     });
@@ -28,13 +29,14 @@ class FriendChallenge extends Component {
       users[user.userId] = user;
       this.setState({ users });
     });
+
+    await this.fetchFriends();
   }
 
   async fetchFriendChallenge() {}
 
   async handleMatchSelect(e) {
     await this.setState({ selectedFriend: JSON.parse(e.target.value) });
-    console.log(this.state.selectedFriend);
   }
 
   async handleChallengeFriendClick() {
@@ -52,18 +54,30 @@ class FriendChallenge extends Component {
     }
   }
 
-  renderFriends() {
-    let friends = [];
-    let users = this.state.users;
-    for (let id in users) {
-      if (id !== localStorage.getItem("id") && users[id].loggedOn)
-      friends.push(
-        <option key={id} value={JSON.stringify(users[id])}>
-          {users[id].username}
-        </option>
-      );
+  fetchFriends = async () => {
+    const id = +localStorage.getItem("id");
+    const flist = [];
+    const { data } = await axios.get(
+      `http://localhost:3396/api/friends/fetchFriends/${id}`
+    );
+    for (let friend of data) {
+      const fid = friend.u_id;
+      const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
+      friend.status == 1 && friend.id !== id && flist.push(friend);
     }
-    return friends;
+    this.setState({ friends: flist });
+  };
+
+  renderLoggedOnFriends() {
+    return this.state.friends.map(friend => {
+      if (this.state.users[friend.id].loggedOn) {
+        return (
+          <option key={friend.id} value={JSON.stringify(friend)}>
+            {friend.username}
+          </option>
+        )
+      }
+    });
   }
 
   render() {
@@ -74,7 +88,7 @@ class FriendChallenge extends Component {
           <br />
           <select onChange={e => this.handleMatchSelect(e)}>
             <option>Challenge A Friend!</option>
-            {this.renderFriends()}
+            {this.renderLoggedOnFriends()}
           </select>
         </div>
         <button onClick={() => this.handleJoinMatchClick()}>
