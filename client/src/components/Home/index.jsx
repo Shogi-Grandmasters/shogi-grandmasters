@@ -20,7 +20,8 @@ class Home extends Component {
     this.socket = io("http://localhost:4155", {
       query: {
         roomId: "home",
-        username: localStorage.getItem("username")
+        username: localStorage.getItem("username"),
+        userId: localStorage.getItem("id"),
       }
     });
   }
