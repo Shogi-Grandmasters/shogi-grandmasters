@@ -3,7 +3,7 @@ import React from 'react';
 const getTokenImage = (tile, location, player) => {
   const prefix = location === 'board' ? tile.color === player.color ? 'N-' : 'S-' : player.facing === 'north' ? 'N-' : 'S-';
   const suffix = tile.isPromoted ? '-P' : '';
-  return './tokens/' + prefix + tile.name + suffix + '.svg';
+  return '../tokens/' + prefix + tile.name + suffix + '.svg';
 }
 
 const ShogiPiece = ({ location, target, tile, player, activate }) => {

@@ -349,7 +349,6 @@ class ShogiBoard extends Component {
     if (!status.success) {
       console.warn(status.messages);
     }
-    console.log(move);
     console.log(log);
     let { board, white, black, kings } = after;
     let updatePlayer = { ...this.state.player };
@@ -452,7 +451,7 @@ class ShogiBoard extends Component {
 
   render() {
     const boardStyle = {
-      backgroundImage: `url(${'./textures/wood.jpg'})`
+      backgroundImage: `url(${'../textures/wood.jpg'})`
     }
 
     const modal = this.state.showModal ? this.state.modalContent : null;
@@ -476,7 +475,7 @@ class ShogiBoard extends Component {
               activate={this.togglePiece}
             />
           </div>
-          <div className="match__board" style={boardStyle}>
+          <div className="match__board">
             {this.state.board.map((row, ri) =>
               row.map((cell, ci) =>
                 <GridSpace
