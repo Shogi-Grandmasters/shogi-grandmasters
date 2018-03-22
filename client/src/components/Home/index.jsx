@@ -30,6 +30,17 @@ class Home extends Component {
   }
 
   async componentDidMount() {
+    this.socket.on("server.userConnect", user => {
+      let users = this.state.users;
+      users[user.userId] = user;
+      this.setState({ users });
+    });
+
+    this.socket.on("server.userDisconnect", user => {
+      let users = this.state.users;
+      users[user.userId] = user;
+      this.setState({ users });
+    });
   }
 
   logout = () => {
