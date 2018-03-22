@@ -1,5 +1,6 @@
 import eloRank from 'elo-rank';
 import axios from 'axios';
+import { success, error } from "./log.js";
 
 // new players start at 1000
 // players below 2000 have K-factor of 32
@@ -33,13 +34,47 @@ export const endMatch = ([winner, loser], draw = false) => {
   return [winner, loser]
 }
 
-const update = async (id, rating) => {
+export const updateRating = async ({ id, rating }) => {
   try {
-    const data = await axios.put("http://localhost:3396/api/users", {
+    const { rows } = await axios.put("http://localhost:3396/api/users", {
       userId: id,
       rating: rating
     });
+    success(
+      "updateRating - successfully updated user rating",
+      JSON.stringify(rows[0])
+    );
+    return rows[0];
   } catch (err) {
-    console.log('ERROR updating user rating', id, err);
+    error("updateRating - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const updateLeaderboard = async (player) => {
+  let data;
+  try {
+    data = await axios.get(`http://localhost:3396/api/leaderboard/rating/:${player.rating}`);
+    success(
+      "updateLeaderboardQuery - successfully updated user leaderboard data",
+      JSON.stringify(data.rows)
+    );
+    if (data.rows.length > 0) {
+      let tempLeader;
+      data.rows.forEach(record => {
+        tempLeader = record;
+        if(tempLeader.user_id !== player.user_id) {
+          await axios.put("http://localhost:3396/api/leaderboard", {
+            id: record.id,
+            userId: player.id,
+            rating: player.rating
+          });
+        }
+        player = tempLeader;
+      });
+    }
+  } catch (err) {
+    error("updateLeaderboardQuery - error= ", err);
+    throw new Error(err);
   }
 }
