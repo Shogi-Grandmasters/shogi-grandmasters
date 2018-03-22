@@ -43,7 +43,7 @@ class PrevMatches extends Component {
     if (this.state.selectedMatch) {
       let { id, black, white } = this.state.selectedMatch;
       this.props.history.push({
-        pathname: `/${id}`,
+        pathname: `/match/${id}`,
         state: {
           matchId: id,
           black,
@@ -64,7 +64,7 @@ class PrevMatches extends Component {
             {this.state.prevMatches.map(match => {
                 return (
                   <option key={match.id} value={JSON.stringify(match)}>
-                    {match.black === this.state.username ? match.white : match.black}
+                    {`vs. ${match.black === this.state.username ? match.white : match.black}`}
                   </option>
                 );
               })}
