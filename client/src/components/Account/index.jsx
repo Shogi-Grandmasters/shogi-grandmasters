@@ -3,7 +3,7 @@ import axios from 'axios';
 import Logo from '../Global/Logo/index.js';
 import Nav from '../Global/Nav/Nav.jsx';
 import Friends from '../Friends/index.jsx';
-import { Link, Switch, Route } from "react-router-dom";
+import { Link, Switch, Route, Redirect } from "react-router-dom";
 import EditProfile from "./EditProfile.jsx";
 
 class Account extends Component {
@@ -18,11 +18,16 @@ class Account extends Component {
     return(
       <div>
         <Nav />
-        <Link to="/acct/friends">Friends</Link>
-        <Link to="/acct/edit">Edit</Link>
+        <ul>
+          <li><Link to="/acct/friends">Friends</Link></li>
+          <li><Link to="/acct/edit">Edit</Link></li>
+          <li>Leader</li>
+          <li>Account Info</li>
+        </ul>
         <Switch>
           <Route path="/acct/friends" component={Friends} /> 
           <Route path="/acct/edit" component={EditProfile} />
+          <Redirect from="/acct/" to="/acct/friends" />
         </Switch> 
       </div>
     )
