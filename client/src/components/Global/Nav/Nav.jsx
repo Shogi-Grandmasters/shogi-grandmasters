@@ -12,7 +12,7 @@ class Nav extends Component {
   }
 
   logout = () => {
-    window.localStorage.clear();
+    localStorage.clear();
   }
 
   render() {
