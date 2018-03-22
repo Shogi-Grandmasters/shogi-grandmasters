@@ -3,6 +3,10 @@
   grid-template-rows: 9fr 1fr;
 }
 
+.match__log-list {
+  overflow: hidden;
+}
+
 .match__log-item {
   display: flex;
   flex-flow: row nowrap;
