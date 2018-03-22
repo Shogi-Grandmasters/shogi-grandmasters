@@ -1,6 +1,6 @@
 
 export const initialBoard = [
-  ["L", "H", "S", "G", "K", "G", "S", "H", "L"],
+  ["L", "N", "S", "G", "K", "G", "S", "N", "L"],
   [" ", "R", " ", " ", " ", " ", " ", "B", " "],
   ["P", "P", "P", "P", "P", "P", "P", "P", "P"],
   [" ", " ", " ", " ", " ", " ", " ", " ", " "],
@@ -8,14 +8,14 @@ export const initialBoard = [
   [" ", " ", " ", " ", " ", " ", " ", " ", " "],
   ["p", "p", "p", "p", "p", "p", "p", "p", "p"],
   [" ", "b", " ", " ", " ", " ", " ", "r", " "],
-  ["l", "h", "s", "g", "k", "g", "s", "h", "l"]
+  ["l", "n", "s", "g", "k", "g", "s", "n", "l"]
 ];
 
 export const boardIds = {
   k: "King",
   g: "Gold",
   s: "Silver",
-  h: "Knight",
+  n: "Knight",
   p: "Pawn",
   r: "Rook",
   b: "Bishop",
