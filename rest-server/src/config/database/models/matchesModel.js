@@ -1,6 +1,41 @@
 import db from "../index";
 import { success, error } from "../../../lib/log";
 
+export const createModifiedDateFunction = async () => {
+  try {
+    await db.queryAsync(
+      `
+      CREATE OR REPLACE FUNCTION update_modified()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        NEW.modified = now();
+        RETURN NEW;
+      END;
+      $$ language 'plpgsql';
+      `
+    );
+    success("successfully created 'modified' field auto-updater function");
+  }
+  catch (err) {
+    error('error creating modified field function, e = ', err);
+  }
+};
+
+export const createModifiedDateTrigger = async (table) => {
+  try {
+    await db.queryAsync(
+      `
+      CREATE TRIGGER update_${table}_modified
+      BEFORE UPDATE ON ${table}
+      FOR EACH ROW EXECUTE PROCEDURE update_modified();
+      `
+    )
+  }
+  catch (err) {
+    error(`error adding modified date trigger to table: ${table}, e = `, err);
+  }
+}
+
 export const createMatchesTable = async () => {
   try {
     await db.queryAsync(
@@ -17,6 +52,8 @@ export const createMatchesTable = async () => {
         hand_white JSON NOT NULL,
         winner INT,
         event_log JSON,
+        created TIMESTAMP WITH TIME ZONE DEFAULT now(),
+        modified TIMESTAMP WITH TIME ZONE DEFAULT now(),
         CONSTRAINT matches_pk
           PRIMARY KEY(id),
         CONSTRAINT fk_matches_black

@@ -3,7 +3,12 @@ import {
   createMessagesTable,
   dropMessagesTable
 } from "./models/messagesModel.js";
-import { createMatchesTable, dropMatchesTable } from "./models/matchesModel.js";
+import {
+  createModifiedDateFunction,
+  createModifiedDateTrigger,
+  createMatchesTable,
+  dropMatchesTable,
+   } from "./models/matchesModel.js";
 import {
   createOpenMatchesTable,
   dropOpenMatchesTable
@@ -20,7 +25,9 @@ const setup = async () => {
   await dropUsersTable();
   await createUsersTable();
   await createOpenMatchesTable();
+  await createModifiedDateFunction();
   await createMatchesTable();
+  await createModifiedDateTrigger('matches');
   await createMessagesTable();
   await createFriendsTable();
   await createLeaderboardTable();
