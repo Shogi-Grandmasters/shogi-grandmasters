@@ -23,7 +23,6 @@ io.on("connection", client => {
 
   //reconnecting players to match
   client.emit("server.reconnect", {black: room.get("black"), white: room.get("white")});
-
   //add user to home and set loggedOn status to true
   const users = room.get("users");
   if (userId && username) {
