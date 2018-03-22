@@ -34,5 +34,3 @@ export const updateFriendHelper = ({ u_id, f_id, status }) => {
     RETURNING u_id, f_id, status
   `;
 }
-
-//, (${f_id}, ${u_id}, ${status})

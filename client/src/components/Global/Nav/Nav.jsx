@@ -28,5 +28,3 @@ class Nav extends Component {
 }
 
 export default Nav;
-
-// <li><a onClick={()=>this.account()}>Account</a></li>
