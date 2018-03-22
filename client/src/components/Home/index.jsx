@@ -50,9 +50,6 @@ class Home extends Component {
               history={this.props.history}
               socket={this.socket}
             />
-            <button onClick={() => this.handleJoinMatchClick()}>
-              Rejoin Match
-            </button>
           </div>
           <div id="chat">
             <HomeChat socket={this.socket} />
