@@ -280,7 +280,7 @@ class ShogiBoard extends Component {
       // if it wasn't forced to promote, and it's not a King or GG, which never promote
       // prompt user for choice.  with pending input, move will not be submitted until after
       // the prompt return functions are called
-      if (!willPromote && !['King', 'Gold'].includes(boardIds[pieceId])) {
+      if (!willPromote && !['King', 'Gold'].includes(boardIds[pieceId.toLowerCase()])) {
         pendingInput = true;
         this.promptForPromote(coords);
       }
@@ -294,10 +294,10 @@ class ShogiBoard extends Component {
 
       let action = {
         before: {
-          board: JSON.stringify(this.state.board),
-          [this.state.player.color]: JSON.stringify(this.state.player.hand),
-          [this.state.opponent.color]: JSON.stringify(this.state.opponent.hand),
-          kings: JSON.stringify(this.state.kings),
+          board: copyMatrix(this.state.board),
+          [this.state.player.color]: [...this.state.player.hand],
+          [this.state.opponent.color]: [...this.state.opponent.hand],
+          kings: {...this.state.kings},
         },
         after: {
           board: copyMatrix(this.state.board),
@@ -351,7 +351,6 @@ class ShogiBoard extends Component {
     if (!status.success) {
       console.warn(status.messages);
     }
-    console.log(log);
     let { board, white, black, kings } = after;
     let updatePlayer = { ...this.state.player };
     updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];

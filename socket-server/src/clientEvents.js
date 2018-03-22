@@ -133,10 +133,9 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     // turn and user match
     let correctTurn = data.turn === 1 && move.color === 'black' || data.turn === 0 && move.color === 'white';
     if (!correctTurn) messages.push('Move submitted was not for the correct turn.');
-    // move is valid (solver server?)
-    let validMove = true;
-    // let validMove = isValidMove(after.board, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.from, move.didPromote), move.to);
-    // if (!validMove) messages.push('Invalid move');
+    // move is valid
+    let validMove = isValidMove(before.board, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.from, move.didPromote), move.to);
+    if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
     let check = false;
     let checkmate = false;
@@ -151,14 +150,12 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
     // prep event log
     let eventLog = data.event_log || [];
-    console.log('after assignment, \n', eventLog);
     let event = {
       moveNumber: eventLog.length + 1,
       notation: moveToString(move),
       move,
     }
     eventLog.push(event);
-    console.log('>>> EVENTS\n', eventLog)
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
       board: JSON.stringify(savedBoard),

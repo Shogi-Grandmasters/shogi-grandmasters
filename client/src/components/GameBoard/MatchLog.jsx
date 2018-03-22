@@ -7,7 +7,7 @@ const MatchLog = ({ events }) => {
   return (
     <div className="match__log">
       <div className="match__log-list">
-      {events.map(event => (
+      {events.reverse().map(event => (
         <div className="match__log-item">
           <div className={`player__color ${event.move.color}`}></div>
           <div>{event.moveNumber}</div>

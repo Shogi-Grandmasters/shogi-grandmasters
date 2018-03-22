@@ -3,12 +3,19 @@
   grid-template-rows: 9fr 1fr;
 }
 
+.match__log-list {
+  overflow: scroll;
+  max-height: 90vh;
+}
+
 .match__log-item {
+  font-size: 10px;
+  font-weight: 600;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-around;
-  height: 60px;
+  height: 45px;
   padding: 4px;
   background: linear-gradient(#eee, #ddd);
   border-bottom: solid 1px #ccc;
