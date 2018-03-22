@@ -70,7 +70,7 @@ class FriendChallenge extends Component {
 
   renderLoggedOnFriends() {
     return this.state.friends.map(friend => {
-      if (this.state.users[friend.id].loggedOn) {
+      if (this.state.friends.length && this.state.users[friend.id].loggedOn) {
         return (
           <option key={friend.id} value={JSON.stringify(friend)}>
             {friend.username}
