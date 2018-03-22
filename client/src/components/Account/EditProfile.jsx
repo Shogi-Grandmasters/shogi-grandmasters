@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './Account.css';
 
 class EditProfile extends Component {
   constructor() {

@@ -16,18 +16,18 @@ class Account extends Component {
 
   render() {
     return(
-      <div>
+      <div className="acct-container">
         <Nav />
-        <br />
         <ul className="vert-container">
           <li className="vert-nav"><Link to="/acct/friends">Friends</Link></li>
           <li className="vert-nav"><Link to="/acct/edit">Edit</Link></li>
           <li className="vert-nav"><a>Leader</a></li>
           <li className="vert-nav"><a>Account Info</a></li>
+          <li className="vert-bar" />  
         </ul>
         <Switch>
-          <Route path="/acct/friends" component={Friends} /> 
-          <Route path="/acct/edit" component={EditProfile} />
+          <Route path="/acct/friends" className="acct-view" component={Friends} /> 
+          <Route path="/acct/edit" className="acct-view" component={EditProfile} />
         </Switch> 
       </div>
     )
