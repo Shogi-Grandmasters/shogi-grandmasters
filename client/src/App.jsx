@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, IndexRoute } from "react-router-dom";
 
 import LandingPage from "./components/LandingPage/index.jsx";
 import SocketTest from "./components/LandingPage/socketTest.jsx";
@@ -10,6 +10,8 @@ import Home from "./components/Home/index.jsx";
 import Protected from "./components/Global/Protected.jsx";
 import Account from "./components/Account/index.jsx"
 import BoardIndex from "./components/GameBoard/index.jsx";
+import Friends from "./components/Friends/index.jsx";
+import EditProfile from "./components/Account/EditProfile.jsx"
 
 class App extends Component {
   constructor() {
@@ -24,12 +26,16 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/acct" component={(props) => (
             <Protected component={Account} {...props} />
-          )}/>
+          )}>
+            <Route path="/acct/edit" component={EditProfile} />
+            <Route path="/acct/friends" component={Friends} />
+          </Route>
           <Route path="/home" component={(props) => (
             <Protected component={Home} {...props} />
           )}/>
-          <Route path="/:matchId" component={BoardIndex} />
+          <Route path="/match/:matchId" component={BoardIndex} />
           <Route exact path="/" component={LandingPage} />
+          <Route path="*" component={Home} />
         </Switch>
       </div>
     );

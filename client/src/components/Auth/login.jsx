@@ -33,6 +33,7 @@ class Login extends Component {
   render() {
     return(
       <div className='auth-container'>
+        <br/>
         <Logo /><br />
         <input
           name='username'
