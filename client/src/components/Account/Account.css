@@ -38,3 +38,20 @@ li a:hover {
   display: inline-block;
   vertical-align: top;
 }
+
+.faq {
+  display: inline-block;
+  vertical-align: top;
+  width: 600px;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+}
+
+.rankings-container {
+  display: inline-block;
+  vertical-align: top;
+  align-content: center;
+  width: 600px;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+}
