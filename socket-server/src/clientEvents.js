@@ -146,9 +146,16 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     // save new state if the move was successful
     let success = correctTurn && validMove;
     // if (success) {
-
     // orient board to default
     let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
+    // prep event log
+    let eventLog = data.event_log ? JSON.parse(data.event_log) : [];
+    let event = {
+      moveNumber: eventLog.length + 1,
+      notation: moveToString(move),
+      move,
+    }
+    eventLog.push(event);
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
       board: JSON.stringify(savedBoard),
@@ -156,9 +163,10 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       turn: data.turn ? 0 : 1,
       hand_white: JSON.stringify(after.white),
       hand_black: JSON.stringify(after.black),
+      event_log: JSON.stringify(eventLog)
     });
     // }
-    payload.log = moveToString(move);
+    payload.log = eventLog;
     payload.status = {
       success,
       check,

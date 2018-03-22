@@ -16,6 +16,7 @@ export const createMatchesTable = async () => {
         hand_black JSON NOT NULL,
         hand_white JSON NOT NULL,
         winner INT,
+        event_log JSON,
         CONSTRAINT matches_pk
           PRIMARY KEY(id),
         CONSTRAINT fk_matches_black

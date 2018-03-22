@@ -87,6 +87,7 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
 class ShogiBoard extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       matchId: props.match.matchId,
       board: props.match.board || [
@@ -120,6 +121,7 @@ class ShogiBoard extends Component {
       selected: null,
       hints: [],
       isTurn: true,
+      log: props.match.event_log || [],
     }
     this.socket = props.socket;
 
@@ -367,6 +369,7 @@ class ShogiBoard extends Component {
       pendingMove: false,
       pendingDecision: false,
       selected: null,
+      log
     }), () => console.log('New Turn: ', this.state.isTurn ? this.state.player.user.name : this.state.opponent.user.name))
   }
 
@@ -458,7 +461,7 @@ class ShogiBoard extends Component {
 
     return (
       <div className="match">
-        <MatchLog />
+        <MatchLog events={this.state.log} />
         <div className="match__turn">
           <PlayerPanel player={this.state.opponent} />
           <TurnIndicator isTurn={this.state.isTurn} />
