@@ -294,10 +294,10 @@ class ShogiBoard extends Component {
 
       let action = {
         before: {
-          board: JSON.stringify(this.state.board),
-          [this.state.player.color]: JSON.stringify(this.state.player.hand),
-          [this.state.opponent.color]: JSON.stringify(this.state.opponent.hand),
-          kings: JSON.stringify(this.state.kings),
+          board: copyMatrix(this.state.board),
+          [this.state.player.color]: [...this.state.player.hand],
+          [this.state.opponent.color]: [...this.state.opponent.hand],
+          kings: {...this.state.kings},
         },
         after: {
           board: copyMatrix(this.state.board),
