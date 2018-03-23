@@ -1,26 +1,49 @@
-#home-container {
-  /* display: inline-block; */
-  /* flex-direction: row;
-  justify-content: center; */
+body {
+  margin: 0px;
 }
 
-#match-new {
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* justify-content: center; */
-  float: left;
+button {
+  width: 120px;
+  height: 36px;
+  margin: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #eee;
+  background: #333;
 }
 
-#match-rejoin {
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* justify-content: center; */
-  float: left;
+.home {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 0 auto;
 }
 
-#chat {
-  /* display: flex; */
-  float: right;
-  /* flex-direction: row; */
-  /* justify-content: center; */
+
+
+.match_lists {
+  display: grid;
+  grid-template-rows: 5fr 5fr;
+  height: 100vh;
+  align-items: center;
+  /* justify-content: space-around; */
+  background: #eee;
+}
+
+.match_new, .match_rejoin {
+  display: grid;
+  grid-template-rows: 10fr;
+}
+
+.friend-challenge {
+  width: 200px;
+}
+
+.chat {
+  display: grid;
+  grid-template-rows: 1fr 9fr 1fr;
+  background: #eee;
 }
