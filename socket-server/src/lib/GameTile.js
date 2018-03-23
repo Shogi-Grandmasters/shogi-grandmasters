@@ -228,7 +228,6 @@ GameTile.prototype._rookMoves = function(board, _test) {
       }
     }
   }
-  console.log(_test, result);
   return result;
 };
 
@@ -402,9 +401,8 @@ GameTile.prototype._kingMoves = function(board, moveSet) {
     reverseBoard(board),
     oppositeColor(this.color)
   );
-  console.log("OPPTEAM ____", oppTeam);
   let kingsOpts = moveSet.map(move => reverseLoc(move));
-  console.log("KINGS OPTIONS ____ ", kingsOpts);
+
   return kingsOpts
     .reduce((set, move) => {
       let open = !includesLoc(oppTeam, move);
