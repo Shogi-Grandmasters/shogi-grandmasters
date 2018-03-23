@@ -72,14 +72,16 @@ class OpenMatches extends Component {
 
   render() {
     return (
-      <div className="open-matches">
-        <div>Open Matches</div>
-        <button onClick={() => this.handleInitiateMatchClick()}>
-          Initiate Match
-        </button>
-        <div>
+      <div className="open_matches">
+        <div className="match_actions">
+          <h3>Open Matches</h3>
+          <button onClick={() => this.handleInitiateMatchClick()}>
+            Initiate Match
+          </button>
+        </div>
+        <div className="match_select">
           <select onChange={e => this.handleMatchSelect(e)} size="20">
-            <option>Select a Match</option>
+            <option className="match__items">Select a Match</option>
             {this.state.openMatches &&
               this.state.openMatches.map(match => {
                 return (
@@ -90,7 +92,11 @@ class OpenMatches extends Component {
               })}
           </select>
         </div>
-        <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
+        <div className="match_actions">
+          <button onClick={() => this.handleJoinMatchClick()}>
+            Join Match
+          </button>
+        </div>
       </div>
     );
   }

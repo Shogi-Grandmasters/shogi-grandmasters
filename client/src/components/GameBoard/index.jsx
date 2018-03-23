@@ -55,7 +55,7 @@ class BoardIndex extends Component {
     return this.state.waiting ? (
       <WaitingPage
         history={this.props.history}
-        match={this.props.location.state.match}
+        match={this.props.location.state.matchId}
       />
     ) : (
       <div>

@@ -82,10 +82,9 @@ class FriendChallenge extends Component {
 
   render() {
     return (
-      <div className="Prev-matches">
+      <div className="friend-challenge">
         <div>
           <div>Pending Matches</div>
-          <br />
           <select onChange={e => this.handleMatchSelect(e)}>
             <option>Challenge A Friend!</option>
             {this.renderLoggedOnFriends()}
