@@ -3,7 +3,7 @@ import http from "http";
 import App from "./config/express";
 import { success } from "./lib/log";
 import "./config/database";
-import './config/database/setup';  //-- this resets the databases
+// import './config/database/setup';  //-- this resets the databases
 
 const app = App.express;
 

@@ -115,7 +115,7 @@ export const isCheckOrMate = (board, kings, tile) => {
   return [checkmate, check];
 }
 
-const copyMatrix = (matrix) => {
+export const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 }
 
@@ -152,6 +152,7 @@ export const isValidMove = (board, tile, loc) => {
 export default {
   isValidMove,
   isCheckOrMate,
+  copyMatrix,
   reverseBoard,
   validDropLocations,
   getCombinedMoveSet,
