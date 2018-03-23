@@ -53,7 +53,7 @@ class Friends extends Component {
       if(friend.status === 0 && friend.u_id === parseInt(localStorage.getItem("id"))) awaiting.push(friend)
       if(friend.status === 0 && friend.u_id !== parseInt(localStorage.getItem("id"))) pending.push(friend)
       if(friend.status == 1 && friend.id !== parseInt(localStorage.getItem("id"))) flist.push(friend)
-      if(friend.status === 2) this.deleteFriend(e.id = friend.id)
+      if(friend.status === 2) this.deleteFriend(friend)
     }
     this.setState({ friends: flist });
     this.setState({ pending: pending });
@@ -86,10 +86,12 @@ class Friends extends Component {
 
   rejectFriend = async (e) => {
     const id = localStorage.getItem("id");
-    const fid = e.id;
+    const fid = e.permId;
+    console.log('inside reject', e)
     const { data } = await axios.put(
       `http://localhost:3396/api/friends/${id}/${fid}/2`
     );
+    console.log('data', data)
     this.fetchFriends();
   }
 
