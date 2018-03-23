@@ -15,7 +15,6 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  text-align: center;
   font-size: 16px;
   font-family: 'Shift', sans-serif;
 }
@@ -39,12 +38,31 @@ li a:hover {
   vertical-align: top;
 }
 
-.faq {
+.faq-list {
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
   display: inline-block;
   vertical-align: top;
-  width: 600px;
   font-size: 16px;
   font-family: 'Shift', sans-serif;
+}
+
+.faq-container {
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+  justify-content: center
+}
+
+.title {
+  font-family: 'Shift', sans-serif;
+  font-size: 16px;
+  text-align: center;
 }
 
 .rankings-container {

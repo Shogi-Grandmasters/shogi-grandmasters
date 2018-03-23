@@ -54,8 +54,9 @@
   font-family: 'Shift', sans-serif;
   font-size: 16px;
   justify-content: center;
-  height: 55px;
+  height: 60px;
   padding: 5px;
+  vertical-align: center;
 }
 
 .friend-username {
