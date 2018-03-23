@@ -127,7 +127,7 @@ class Friends extends Component {
     return (
       <div className="friends-container"> 
         <div className="friend-top">
-          <h2>Friends List</h2>
+          <h2 className="friend-head">Friends List</h2>
           <input name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
           <input type="submit" className="friend-button" onClick={() => this.addFriend()} />
         </div>
@@ -139,9 +139,9 @@ class Friends extends Component {
             deleteFriend={this.deleteFriend.bind(this)}
           />
         ))}
-        </div>
         {pending}
         {awaiting}
+        </div>
       </div>
     )
   }

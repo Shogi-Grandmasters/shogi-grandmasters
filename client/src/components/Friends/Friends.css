@@ -3,10 +3,35 @@
   vertical-align: top;
 }
 
-.friend-button {
+.friend-top > * {
+  font-family: 'Shift', sans-serif;
+}
 
+.friend-head {
+  text-align: center;
+  width: auto;
+}
+
+.friend-button {
+  font-family: 'Shift', sans-serif;
+  background-color: #cecece;
+  color: #6a6969;
+  padding: 12px;
+  width: 80px;
+  font-size: 14px;
+  border-radius: 2px;
+  outline: 0;
+  cursor: pointer;
+  justify-content: center;
 }
 
 .friend-form {
-
+  font-family: 'Shift', sans-serif;
+  background-color: #cecece;
+  padding: 12px;
+  font-size: 16px;
+  margin: 1px;
+  border: 1px;
+  border-radius: 2px;
+  text-align: center;
 }
