@@ -31,8 +31,6 @@ class EditProfile extends Component {
         const img = fileURL.split('upload/').slice(1)
         localStorage.setItem('avi', img);
         axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`);
-        console.log('our avi update data')
-        //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
       })
     });
   }
