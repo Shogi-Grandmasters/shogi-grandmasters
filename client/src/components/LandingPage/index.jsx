@@ -14,7 +14,7 @@ class LandingPage extends Component {
         <Logo />
         <h1 className="title">Shogi Grandmasters</h1>
         <input
-          type="submit"
+          placeholder="submit"
           value="Login"
           className="landing-button"
           onClick={() => this.props.history.push("/login")}

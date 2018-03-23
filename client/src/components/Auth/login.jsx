@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Logo from '../Global/Logo/index.js'
-import './Auth.css';
+import React, { Component } from "react";
+import axios from "axios";
+import Logo from "../Global/Logo/index.js"
+import "./Auth.css";
 
 class Login extends Component {
   constructor() {
@@ -32,27 +32,28 @@ class Login extends Component {
 
   render() {
     return(
-      <div className='auth-container'>
+      <div className="auth-container">
         <br/>
         <Logo /><br />
         <input
-          name='username'
-          type='text'
-          placeholder={'enter username'}
-          className='auth-form'
+          name="username"
+          type="text"
+          placeholder={"enter username"}
+          className="auth-form"
           onChange={this.handleInputChange}
           /><br />   
         <input 
-          name='password'
-          type='password'
-          placeholder={'enter your password'}
-          className='auth-form'
-          id='password'
+          name="password"
+          type="password"
+          placeholder={"enter your password"}
+          className="auth-form"
+          id="password"
           onChange={this.handleInputChange}
           /><br />
         <input
-          type='submit'
-          className='auth-button'
+          type="submit"
+          value="Login"
+          className="auth-button"
           onClick={(e) => this.submitAuthData(e)}
           /><br />
         <input
