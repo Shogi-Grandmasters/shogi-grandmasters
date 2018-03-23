@@ -24,7 +24,7 @@ class Account extends Component {
           <li className="vert-nav"><Link to="/acct/friends">Friends</Link></li>
           <li className="vert-nav"><Link to="/acct/rank">Rankings</Link></li>
           <li className="vert-nav"><Link to="/acct/faq">FAQ</Link></li>
-          <li className="vert-nav"><Link to="/acct/edit">Edit Acct</Link></li>
+          <li className="vert-nav"><Link to="/acct/edit">Account</Link></li>
           <li className="vert-bar" />  
         </ul>
         <Switch>
@@ -32,7 +32,7 @@ class Account extends Component {
           <Route path="/acct/edit" component={EditProfile} />
           <Route path="/acct/faq" component={FrequentlyAsked} />
           <Route path="/acct/rank" component={Rankings} />
-          <Redirect from="/acct/" to="/acct/friends" />
+          <Redirect from="/acct/" to="/acct/edit" />
         </Switch> 
       </div>
     )

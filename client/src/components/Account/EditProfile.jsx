@@ -23,14 +23,16 @@ class EditProfile extends Component {
       formData.append("api_key", "913846924149284"); // add api key
       formData.append("timestamp", (Date.now() / 1000) | 0);
       
-      return axios.post("https://api.cloudinary.com/v1_1/shogigrandmasters/image/upload", formData, {
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-      }).then(response => {
+      return axios.post("https://api.cloudinary.com/v1_1/shogigrandmasters/image/upload", formData)
+      .then(response => {
         const data = response.data;
-        const fileURL = data.secure_url // You should store this URL for future references in your app
+        const fileURL = data.secure_url // full URL
         const img = fileURL.split('upload/').slice(1)
         localStorage.setItem('avi', img);
         axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`);
+        console.log('our avi update was successful')
+        //example url
+        //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
       })
     });
   }
