@@ -97,8 +97,8 @@ class Friends extends Component {
 
   render() {
     const awaiting = this.state.awaiting.length > 0 && (
-      <div>
-        <h5>Awaiting Response:</h5>
+      <div className="awaiting-container">
+        <h3 className="friend-title">Awaiting Response</h3>
         <div>
         {this.state.awaiting.map((user, index) => (
           <AwaitingList
@@ -110,8 +110,8 @@ class Friends extends Component {
         </div>
     )
     const pending = this.state.pending.length > 0 && (
-      <div>
-        <h5>Pending Requests:</h5>
+      <div className="pending-container">
+        <h3 className="friend-title">Pending Requests</h3>
         <div>
         {this.state.pending.map((user, index) => (
           <PendingList
@@ -134,6 +134,7 @@ class Friends extends Component {
           </div>
         </div>
         <div className="friend-list-container">
+        <h3 className="friend-title">Current</h3>
         {this.state.friends.map((user, index) => (
           <FriendsList
             key={index}

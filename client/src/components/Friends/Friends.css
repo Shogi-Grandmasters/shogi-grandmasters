@@ -45,7 +45,29 @@
   text-align: center;
   display: inline-block;
 }
-
-.friend-list-container {
-  
+.friend-title {
+  font-family: 'Shift', sans-serif;
+  font-size: 16px;
 }
+
+.current-friend-container {
+  font-family: 'Shift', sans-serif;
+  font-size: 16px;
+  justify-content: center;
+  height: 55px;
+  padding: 5px;
+}
+
+.friend-username {
+  padding: 0 15px;
+  text-align: center;
+  vertical-align: center;
+}
+
+.inline-button-friend {
+  padding: 0 15px;
+  text-align: center;
+  vertical-align: center;
+  cursor: pointer;
+}
+
