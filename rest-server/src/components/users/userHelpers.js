@@ -4,7 +4,8 @@ import {
   findUserHelper,
   fetchUserHelper,
   deleteUserHelper,
-  updateUserHelper
+  updateUserHelper,
+  updateUserAviHelper
 } from "./userSQL";
 
 export const findUserQuery = async body => {
@@ -63,6 +64,21 @@ export const updateUserQuery = async body => {
     return rows[0];
   } catch (err) {
     error("updateUserQuery - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const updateUserAviQuery = async body => {
+  try {
+    const queryString = updateUserAviHelper(body);
+    const { rows } = await db.query(queryString);
+    success(
+      "updateUserAviQuery - successfully updated user data",
+      JSON.stringify(rows[0])
+    );
+    return rows[0];
+  } catch (err) {
+    error("updateUserAviQuery - error= ", err);
     throw new Error(err);
   }
 };

@@ -5,7 +5,7 @@
   width: 100px;
   background-color: #cecece;
   height: 100%;
-  overflow: auto;
+  display: inline-block;
 }
 
 .vert-nav a {
@@ -20,6 +20,38 @@
   font-family: 'Shift', sans-serif;
 }
 
+.vert-bar {
+  background-color: #cecece;
+  width: 100px;
+  height: 100vh;
+}
+
+.acct-container {
+  height: 100%;
+}
+
 li a:hover {
   background-color: #6a6969;
+}
+
+.edit-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.faq {
+  display: inline-block;
+  vertical-align: top;
+  width: 600px;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+}
+
+.rankings-container {
+  display: inline-block;
+  vertical-align: top;
+  align-content: center;
+  width: 600px;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
 }

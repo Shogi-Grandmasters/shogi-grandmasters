@@ -30,11 +30,11 @@ export const updateUserHelper = ({ userId, rating }) => {
   `;
 };
 
-export const updatePicUserHelper = ({ userId, avatar }) => {
+export const updateUserAviHelper = ({ id, avi, url }) => {
   return `
     UPDATE users
-    SET avatar = '${avatar}'
-    WHERE id = '${userId}'
-    RETURNING id, username, rating
+    SET avatar = '${avi + '/' + url}'
+    WHERE id = '${id}'
+    RETURNING id, username, rating, avatar
   `;
 };
