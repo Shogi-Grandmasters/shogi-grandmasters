@@ -162,15 +162,11 @@ export const isCheckOrMate = (gameState, tile) => {
               )
             );
             //temp.map(move => reverseLoc(move));
-            console.log(p, temp);
             adjustedMoves = adjustedMoves.concat(temp);
-            console.log(adjustedMoves);
           });
 
           // reverse squares locations
           spaceBetween = spaceBetween.map(move => reverseLoc(move));
-          console.log(spaceBetween);
-          console.log(adjustedMoves);
 
           // check combined moves for any squares
           if (!spaceBetween.some(move => includesLoc(adjustedMoves, move))) {
@@ -273,38 +269,38 @@ export default {
 };
 
 // TESTING
-const testBoard = [
-  ["L", " ", " ", " ", "K", " ", "S", "N", "L"],
-  [" ", " ", " ", " ", " ", " ", " ", "B", " "],
-  ["P", " ", " ", " ", "p+", "r", " ", "P", "P"],
-  [" ", "b", " ", " ", " ", " ", "P", " ", " "],
-  [" ", " ", "r", " ", " ", " ", " ", " ", " "],
-  [" ", " ", " ", "l", " ", " ", " ", " ", " "],
-  ["p", "p", "p", "p", "p", " ", "p", "p", "p"],
-  [" ", "b", " ", " ", " ", " ", " ", " ", " "],
-  [" ", " ", "s", "g", "k", " ", "s", "n", "l"]
-];
+// const testBoard = [
+//   ["L", " ", " ", " ", "K", " ", "S", "N", "L"],
+//   [" ", " ", " ", " ", " ", " ", " ", "B", " "],
+//   ["P", " ", " ", " ", "p+", "r", " ", "P", "P"],
+//   [" ", "b", " ", " ", " ", " ", "P", " ", " "],
+//   [" ", " ", "r", " ", " ", " ", " ", " ", " "],
+//   [" ", " ", " ", "l", " ", " ", " ", " ", " "],
+//   ["p", "p", "p", "p", "p", " ", "p", "p", "p"],
+//   [" ", "b", " ", " ", " ", " ", " ", " ", " "],
+//   [" ", " ", "s", "g", "k", " ", "s", "n", "l"]
+// ];
 
-const testKings = {
-  white: [0, 4],
-  black: [0, 4]
-};
+// const testKings = {
+//   white: [0, 4],
+//   black: [0, 4]
+// };
 
-const testHands = {
-  white: ["r", "p"],
-  black: ["B", "N"]
-};
+// const testHands = {
+//   white: ["r", "p"],
+//   black: ["B", "N"]
+// };
 
-const testTile = new GameTile("Bishop", "white", [3, 1]);
+// const testTile = new GameTile("Bishop", "white", [3, 1]);
 
-console.log(
-  isCheckOrMate(
-    {
-      board: testBoard,
-      kings: testKings,
-      white: testHands.white,
-      black: testHands.black
-    },
-    testTile
-  )
-);
+// console.log(
+//   isCheckOrMate(
+//     {
+//       board: testBoard,
+//       kings: testKings,
+//       white: testHands.white,
+//       black: testHands.black
+//     },
+//     testTile
+//   )
+// );
