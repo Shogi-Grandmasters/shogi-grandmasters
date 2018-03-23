@@ -140,17 +140,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push("Move submitted was not for the correct turn.");
     // move is valid
-    let validMove = isValidMove(
-      before.board,
-      new GameTile(
-        boardIds[move.piece.toLowerCase()],
-        move.color,
-        move.from,
-        move.didPromote
-      ),
-      move.to
-    );
-    if (!validMove) messages.push("Invalid move");
+    let validMove = isValidMove(before.board, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to);
+    if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
     let check = false;
     let checkmate = false;
