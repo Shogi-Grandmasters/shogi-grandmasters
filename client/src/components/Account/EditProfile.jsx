@@ -29,8 +29,9 @@ class EditProfile extends Component {
         const fileURL = data.secure_url // full URL
         const img = fileURL.split('upload/').slice(1)
         localStorage.setItem('avi', img);
-        axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`);
-        console.log('our avi update was successful')
+        axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`)
+        .then(res => this.props.history.push('/acct'))
+        
         //example url
         //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
       })

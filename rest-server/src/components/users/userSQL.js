@@ -33,7 +33,7 @@ export const updateUserHelper = ({ userId, rating }) => {
 export const updateUserAviHelper = ({ id, avi, url }) => {
   return `
     UPDATE users
-    SET avatar = '${avi + url}'
+    SET avatar = '${avi + '/' + url}'
     WHERE id = '${id}'
     RETURNING id, username, rating, avatar
   `;
