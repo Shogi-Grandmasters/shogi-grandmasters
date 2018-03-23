@@ -12,16 +12,18 @@ class Nav extends Component {
   }
 
   logout = () => {
-    window.localStorage.clear();
+    localStorage.clear();
   }
 
   render() {
+    const avi = localStorage.avi ? <img width="50px" className="avi" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${localStorage.avi}`} /> : <img width="50px" className="avi" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
     return (
       <ul className="topnav">
         <li className="logo"><Logo /></li>
         <li className="nav"><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
         <li className="nav"><Link to="/home">Challenge</Link></li>
-        <li className="nav"><Link to="/acct">Account</Link></li>
+        <li className="nav"><Link to="/acct">{localStorage.username}</Link></li>
+        {avi}
       </ul>
     )
   }

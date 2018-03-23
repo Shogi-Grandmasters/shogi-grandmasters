@@ -5,7 +5,8 @@ import {
   findUserController,
   fetchUserController,
   deleteUserController,
-  updateUserController
+  updateUserController,
+  updateUserAviController
 } from "./userControllers";
 import formValidation from "../../middleware/validation/formValidation";
 
@@ -13,6 +14,9 @@ const router = express.Router();
 
 router.route("/:userId")
   .get(fetchUserController)
+  
+router.route("/:id/:avi/:url")
+  .put(updateUserAviController)
 
 router
   .route("/")

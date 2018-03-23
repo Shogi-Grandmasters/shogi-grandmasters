@@ -3,7 +3,8 @@ import {
   findUserQuery,
   fetchUserQuery,
   deleteUserQuery,
-  updateUserQuery
+  updateUserQuery,
+  updateUserAviQuery
 } from "./userHelpers";
 import { success, error } from "../../lib/log";
 
@@ -60,6 +61,20 @@ export const updateUserController = async (req, res) => {
     return res.status(200).send(data);
   } catch (err) {
     error("updateUserController - error= ", err);
+    res.status(404).send(err);
+  }
+};
+
+export const updateUserAviController = async (req, res) => {
+  try {
+    const data = await updateUserAviQuery(req.params);
+    success(
+      "updateUserAviController - successfully fetched user data",
+      JSON.stringify(data)
+    );
+    return res.status(200).send(data);
+  } catch (err) {
+    error("updateUserAviController - error= ", err);
     res.status(404).send(err);
   }
 };
