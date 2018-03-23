@@ -15,9 +15,10 @@
 }
 
 .player__avatar {
-  width: 80px;
-  height: 80px;
-  background: #333;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: #666;
 }
 
 .player__name {
