@@ -32,7 +32,7 @@ export class matchQueue {
 }
 
 export const findMatch = (openMatches, challenger) => {
-  let bestFit = [0, Number.POSITIVE_INFINITY];
+  let bestFit = [0, Infinity];
   openMatches.forEach((match) => {
     let spread = Math.abs(match.player1.rating - challenger.rating);
     if (spread < bestFit[1]) {
