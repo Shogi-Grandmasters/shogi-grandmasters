@@ -7,6 +7,7 @@ class EditProfile extends Component {
   constructor() {
     super();
     this.state = {};
+    this.handleDrop.bind(this)
   }
 
   handleInputChange = (event) => {
@@ -14,36 +15,33 @@ class EditProfile extends Component {
     this.setState({ [name]: value });
   }
 
-  handleDrop = files => {
-    // Push all the axios request promise into a single array
+  handleDrop = (files) => {
     const uploaders = files.map(file => {
-      // Initial FormData
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("tags", `codeinfuse, medium, gist`);
-      formData.append("upload_preset", "pvhilzh7"); // Replace the preset name with your own
-      formData.append("api_key", "1234567"); // Replace API key with your own Cloudinary key
+      formData.append("upload_preset", "pnjjwy1j"); // preset = img styling
+      formData.append("api_key", "913846924149284"); // add api key
       formData.append("timestamp", (Date.now() / 1000) | 0);
       
-      // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
-      return axios.post("https://api.cloudinary.com/v1_1/codeinfuse/image/upload", formData, {
+      return axios.post("https://api.cloudinary.com/v1_1/shogigrandmasters/image/upload", formData, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       }).then(response => {
         const data = response.data;
         const fileURL = data.secure_url // You should store this URL for future references in your app
-        console.log(data);
+        const img = fileURL.split('upload/').slice(1)
+        localStorage.setItem('avi', img);
+        axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`);
+        console.log('our avi update data')
+        //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
       })
-    });
-  
-    // Once all the files are uploaded 
-    axios.all(uploaders).then(() => {
-      // ... perform after upload is successful operation
     });
   }
 
   render() {
+    const avi = localStorage.avi ? <img width="50px" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${localStorage.avi}`} /> : <img width="50px" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
     return (
       <div className='edit-container'>
+        {avi}
         <input
           name='email'
           type='text'
