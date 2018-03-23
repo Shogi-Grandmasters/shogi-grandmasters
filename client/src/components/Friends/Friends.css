@@ -1,6 +1,9 @@
-.friends-container {
+.friend-container {
   display: inline-block;
   vertical-align: top;
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
 }
 
 .friend-top > * {
@@ -10,6 +13,10 @@
 .friend-head {
   text-align: center;
   width: auto;
+}
+
+.friend-search {
+  float: right;
 }
 
 .friend-button {
@@ -23,6 +30,7 @@
   outline: 0;
   cursor: pointer;
   justify-content: center;
+  align-content: right;
 }
 
 .friend-form {
@@ -30,8 +38,14 @@
   background-color: #cecece;
   padding: 12px;
   font-size: 16px;
+  width: 150px;
   margin: 1px;
   border: 1px;
   border-radius: 2px;
   text-align: center;
+  display: inline-block;
+}
+
+.friend-list-container {
+  
 }
