@@ -26,7 +26,7 @@ class OpenMatches extends Component {
   }
 
   async handleInitiateMatchClick() {
-    let player1 = localStorage.getItem("username");
+    let player1 = localStorage.getItem("id");
     await axios.post("http://localhost:3396/api/openmatches", {
       matchId: this.matchId,
       player1
@@ -57,29 +57,49 @@ class OpenMatches extends Component {
           data: { matchId: this.state.selectedMatch.id }
         }
       );
-      let black = data.username;
+      let black = data.player1;
       this.props.history.push({
         pathname: `/match/${this.state.selectedMatch.id}`,
         state: {
           matchId: this.state.selectedMatch.id,
           black,
-          white: localStorage.getItem("username")
+          white: localStorage.getItem("id")
         },
         history: this.props.history
       });
     }
   }
 
+  async handlePlayMatchClick() {
+    let player1 = localStorage.getItem("username");
+    this.props.history.push({
+      pathname: '/match/queue',
+      state: {
+        matchId: this.matchId,
+        black: localStorage.getItem("username"),
+        opponent: false
+      },
+      history: this.props.history
+    });
+    this.props.socket.emit("client.playMatch", {
+      matchId: this.matchId,
+      username: localStorage.getItem("username")
+    });
+  }
+
   render() {
     return (
-      <div className="open-matches">
-        <div>Open Matches</div>
-        <button onClick={() => this.handleInitiateMatchClick()}>
-          Initiate Match
-        </button>
-        <div>
+      <div className="open_matches">
+        <div className="match_actions">
+          <h3>Open Matches</h3>
+          <button onClick={() => this.handlePlayMatchClick()}>Play Now</button>
+          <button onClick={() => this.handleInitiateMatchClick()}>
+            Initiate Match
+          </button>
+        </div>
+        <div className="match_select">
           <select onChange={e => this.handleMatchSelect(e)} size="20">
-            <option>Select a Match</option>
+            <option className="match__items">Select a Match</option>
             {this.state.openMatches &&
               this.state.openMatches.map(match => {
                 return (
@@ -90,7 +110,11 @@ class OpenMatches extends Component {
               })}
           </select>
         </div>
-        <button onClick={() => this.handleJoinMatchClick()}>Join Match</button>
+        <div className="match_actions">
+          <button onClick={() => this.handleJoinMatchClick()}>
+            Join Match
+          </button>
+        </div>
       </div>
     );
   }

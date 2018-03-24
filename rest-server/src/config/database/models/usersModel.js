@@ -11,8 +11,8 @@ export const createUsersTable = async () => {
       email TEXT UNIQUE NOT NULL,
       username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
-      wins INT,
-      losses INT,
+      wins INT DEFAULT 0,
+      losses INT DEFAULT 0,
       rating INT,
       avatar TEXT,
       CONSTRAINT users_pk

@@ -29,8 +29,7 @@ class Home extends Component {
     });
   }
 
-  async componentDidMount() {
-  }
+  async componentDidMount() {}
 
   logout = () => {
     window.localStorage.clear();
@@ -41,18 +40,18 @@ class Home extends Component {
     return (
       <div>
         <Nav />
-        <br />
-        <div id="home-container">
-          <div id="match-new">
-            <OpenMatches history={this.props.history} socket={this.socket} />
+        <div className="home">
+          <div className="match_lists">
+              <OpenMatches history={this.props.history} socket={this.socket} />
+              <PrevMatches history={this.props.history} socket={this.socket} />
           </div>
-          <div id="match-rejoin">
-            <PrevMatches history={this.props.history} socket={this.socket} />
+          <div className="friend-challenge">
+            <FriendChallenge
+              history={this.props.history}
+              socket={this.socket}
+            />
           </div>
-          <div id="friend-challenge">
-            <FriendChallenge history={this.props.history} socket={this.socket} />
-          </div>
-          <div id="chat">
+          <div className="chat">
             <HomeChat socket={this.socket} />
           </div>
         </div>

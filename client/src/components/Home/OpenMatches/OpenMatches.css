@@ -1,0 +1,30 @@
+.open_matches {
+  display: grid;
+  grid-template-rows: 100px 10fr 50px;
+  height: 50vh;
+}
+
+.match_select {
+  overflow: scroll;
+  max-height: 90vh;
+}
+
+.match_items {
+  font-size: 10px;
+  font-weight: 600;
+  /* display: flex; */
+  /* flex-flow: row nowrap; */
+  align-items: center;
+  justify-content: space-around;
+  /* height: 45px; */
+  padding: 4px;
+  background: linear-gradient(#eee, #ddd);
+  border-bottom: solid 1px #ccc;
+}
+
+.match_actions {
+  /* display: flex;
+  flex-flow: column nowrap; */
+  align-items: center;
+  justify-content: space-around;
+}

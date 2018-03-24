@@ -20,6 +20,10 @@ body {
 h1, h2, h3, h4, h5 { font-family: 'Oswald' }
 strong { font-weight: 700; }
 
+a {
+  transition: all 0.4s ease;
+}
+
 button {
   width: 120px;
   height: 36px;
@@ -27,8 +31,17 @@ button {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #d0c7af;
-  background: #f15a4a;
+}
+
+.action {
+  background-color: #333;
+  text-shadow: 1px 1px 0px #14151b;
+  transition: background-color 0.4s ease;
+}
+
+.action:hover {
+  cursor: pointer;
+  background-color: #f15a4a;
 }
 
 .match {
@@ -113,6 +126,8 @@ button {
 
 .active {
   cursor: pointer;
+  transition: box-shadow 0.4s ease;
+  box-shadow: inset 0px 0px 0px 0px rgba(241, 90, 74, 0.0);
 }
 
 .active:hover {
