@@ -26,7 +26,7 @@ class OpenMatches extends Component {
   }
 
   async handleInitiateMatchClick() {
-    let player1 = localStorage.getItem("username");
+    let player1 = localStorage.getItem("id");
     await axios.post("http://localhost:3396/api/openmatches", {
       matchId: this.matchId,
       player1
@@ -57,13 +57,13 @@ class OpenMatches extends Component {
           data: { matchId: this.state.selectedMatch.id }
         }
       );
-      let black = data.username;
+      let black = data.player1;
       this.props.history.push({
         pathname: `/match/${this.state.selectedMatch.id}`,
         state: {
           matchId: this.state.selectedMatch.id,
           black,
-          white: localStorage.getItem("username")
+          white: localStorage.getItem("id")
         },
         history: this.props.history
       });
@@ -73,7 +73,7 @@ class OpenMatches extends Component {
   async handlePlayMatchClick() {
     let player1 = localStorage.getItem("username");
     this.props.history.push({
-      pathname: `/match/${this.matchId}`,
+      pathname: '/match/queue',
       state: {
         matchId: this.matchId,
         black: localStorage.getItem("username"),
