@@ -138,7 +138,7 @@ const clientListGames = async ({ io, client, room }) => {
 
 const clientSubmitMove = async ({ io, client, room }, payload) => {
   try {
-    let { matchId, before, after, move } = payload;
+    let { matchId, before, after, move, previous } = payload;
     let { data } = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId }
     });
@@ -152,12 +152,12 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push("Move submitted was not for the correct turn.");
     // move is valid
-    let validMove = isValidMove(before.board, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to);
+    let validMove = isValidMove(before, after, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
-    let check = false;
-    let checkmate = false;
-    //let [check, checkmate] = isCheckOrMate(after.board, after.kings, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
+    // let check = false;
+    // let checkmate = false;
+    let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
     if (check && !checkmate) gameStatus = 1;
     if (check && checkmate) gameStatus = 2;
