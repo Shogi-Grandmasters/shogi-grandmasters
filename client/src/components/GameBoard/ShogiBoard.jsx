@@ -337,7 +337,8 @@ class ShogiBoard extends Component {
       matchId,
       before,
       after,
-      move
+      move,
+      previous: this.state.log[this.state.log.length -1]
     })
   }
 
