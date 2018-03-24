@@ -24,7 +24,7 @@ const ModalPrompt = ({ message, choices }) => {
   return (
     <Modal>
       <div className="modal__backdrop">
-        {/* <CSSTransition {...transitionStyles} active={true}> */}
+        <CSSTransition {...transitionStyles} active={true} transitionAppear>
           <div className="modal">
             <div className="modal__message">
               <div className="modal__prompt">{message}</div>
@@ -35,7 +35,7 @@ const ModalPrompt = ({ message, choices }) => {
               </div>
             </div>
           </div>
-        {/* </CSSTransition> */}
+        </CSSTransition>
       </div>
     </Modal>
   )
