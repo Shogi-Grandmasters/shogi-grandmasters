@@ -70,11 +70,29 @@ class OpenMatches extends Component {
     }
   }
 
+  async handlePlayMatchClick() {
+    let player1 = localStorage.getItem("username");
+    this.props.history.push({
+      pathname: `/match/${this.matchId}`,
+      state: {
+        matchId: this.matchId,
+        black: localStorage.getItem("username"),
+        opponent: false
+      },
+      history: this.props.history
+    });
+    this.props.socket.emit("client.playMatch", {
+      matchId: this.matchId,
+      username: localStorage.getItem("username")
+    });
+  }
+
   render() {
     return (
       <div className="open_matches">
         <div className="match_actions">
           <h3>Open Matches</h3>
+          <button onClick={() => this.handlePlayMatchClick()}>Play Now</button>
           <button onClick={() => this.handleInitiateMatchClick()}>
             Initiate Match
           </button>
