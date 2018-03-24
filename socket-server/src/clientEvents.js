@@ -1,12 +1,14 @@
 import axios from "axios";
+import randomstring from "randomstring";
 
 import { boardIds } from "./lib/constants";
 import { isValidMove, isCheckOrMate, reverseBoard } from "./lib/boardHelpers";
 import { moveToString } from "./lib/matchLog";
 import GameTile from "./lib/GameTile";
 import { success, log, error } from "./lib/log";
+import { Queue } from "./lib/matchHelpers";
 import {
-  serverInitialState,
+  serverJoinMatch,
   serverChanged,
   serverLeave,
   serverRun,
@@ -19,9 +21,23 @@ import {
   serverPlayerMove
 } from "./serverEvents";
 
-const clientReady = ({ io, client, room }, payload) => {
-  success("client ready heard");
-  serverInitialState({ io, client, room }, payload);
+const matchQueue = new Queue();
+
+const clientPlayMatch = ({ io, client, room }, payload) => {
+  success("client play match heard");
+  try {
+    matchQueue.enqueue(payload);
+    let matchid, black, white;
+    if (matchQueue.size() > 1) {
+      matchId = randomstring.generate();
+      black = matchQueue.dequeue().username;
+      white = matchQueue.dequeue().username;
+    }
+    clientGameReady({ io, client, room }, {matchId, black, white});
+  } catch (err) {
+    error("client play match error", err);
+  }
+  serverJoinMatch({ io, client, room }, payload);
 };
 
 const clientUpdate = ({ io, client, room }, payload) => {
@@ -188,7 +204,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
 };
 
 const clientEmitters = {
-  "client.ready": clientReady,
+  "client.playMatch": clientPlayMatch,
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,
