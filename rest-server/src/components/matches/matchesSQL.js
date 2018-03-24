@@ -29,8 +29,8 @@ export const fetchMatchHelper = ({ matchId, userId, black, white }) => {
     return `
       BEGIN;
       SELECT * FROM matches WHERE id='${matchId}';
-      SELECT id,username,avatar,rating,wins,losses FROM users WHERE id='${black}';
-      SELECT id,username,avatar,rating,wins,losses FROM users WHERE id='${white}';
+      SELECT id,username,avatar,rating,wins,losses FROM users WHERE username='${black}';
+      SELECT id,username,avatar,rating,wins,losses FROM users WHERE username='${white}';
       COMMIT;
     `;
   }

@@ -106,36 +106,28 @@ class ShogiBoard extends Component {
     let updatePlayer = { ...this.state.player };
     let updateOpponent = { ...this.state.opponent };
 
-    if (localUser === this.props.match.black) {
+    if (localUser === this.props.match.black.username) {
       updatePlayer = {
-        user: {
-          name: localUser,
-        },
+        user: this.props.match.black,
         color: 'black',
         facing: 'north',
         hand: this.props.match.hand_black || [],
       };
       updateOpponent = {
-        user: {
-          name: this.props.match.white,
-        },
+        user: this.props.match.white,
         color: 'white',
         facing: 'south',
         hand: this.props.match.hand_white || [],
       }
     } else {
       updatePlayer = {
-        user: {
-          name: localUser,
-        },
+        user: this.props.match.white,
         color: 'white',
         facing: 'north',
         hand: this.props.match.hand_white || [],
       };
       updateOpponent = {
-        user: {
-          name: this.props.match.black,
-        },
+        user: this.props.match.black,
         color: 'black',
         facing: 'south',
         hand: this.props.match.hand_black || [],

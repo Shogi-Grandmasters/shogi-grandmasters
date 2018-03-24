@@ -28,6 +28,7 @@ class BoardIndex extends Component {
     });
 
     this.socket.on("server.joined", data => {
+      console.log(data);
       let { id, board, turn, hand_black, hand_white, event_log } = data[0];
       let black = data[1];
       let white = data[2];
