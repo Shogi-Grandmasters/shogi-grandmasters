@@ -43,7 +43,7 @@ class EditProfile extends Component {
     try {
       const { data } = await axios.post(`http://localhost:3396/api/auth/reset`, this.state);
       localStorage.setItem('token', data.token.accessToken);
-      data ? alert("Password reset successfully") : alert("Password reset failed!!!";
+      data ? alert("Password reset successfully") : alert("Password reset failed!!!");
     } catch (err) {
       throw new Error(err);
     }
@@ -87,7 +87,7 @@ class EditProfile extends Component {
             onChange={this.handleInputChange}
             /><br />
           <input 
-            name="password"
+            name="new_password"
             type="password"
             autoComplete="new-password"
             placeholder={"enter your new password"}
@@ -97,7 +97,7 @@ class EditProfile extends Component {
           <input
             type="submit"
             className="auth-button"
-            onClick={(e) => this.submitAuthData(e)}
+            onClick={(e) => this.submitPasswordReset(e)}
             />
         </form>
       </div>

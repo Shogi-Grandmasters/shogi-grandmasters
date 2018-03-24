@@ -1,5 +1,5 @@
 import db from "../../config/database";
-import { signUpQuery, loginQuery } from "./authHelpers";
+import { signUpQuery, loginQuery, resetPasswordQuery } from "./authHelpers";
 import { success, error } from "../../lib/log";
 import { generateToken } from "../../middleware/auth/jwt";
 import { hashPassword } from "../../middleware/auth/bcrypt";
@@ -43,5 +43,16 @@ export const loginController = async (req, res) => {
   } catch (err) {
     error("loginController - error= ", err);
     res.status(404).send(err);
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  try {
+    const data = await resetPasswordQuery(req.params);
+    success("resetPasswordController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    return res.status(200).send(data.rows);
+  } catch (err) {
+    error("resetPasswordController - error= ", err);
+    return res.status(400).send(err);
   }
 };

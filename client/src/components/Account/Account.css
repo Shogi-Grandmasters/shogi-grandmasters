@@ -82,8 +82,9 @@ li a:hover {
 
 .edit-form {
   background-color: #cecece;
-  padding: 12px;
+  padding: 12px 0px;
   font-size: 14px;
+  width: 200px;
   margin: 1px;
   border: 1px;
   border-radius: 2px;

@@ -15,16 +15,14 @@ export default {
     }
   },
   findUser: {
-    params: {
+    body: {
       username: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/)
     }
   },
-  saveChallenges: {
-    body: {
-      title: Joi.string().regex(/^[a-z\d\-_\,\s]+$/i),
-      description: Joi.string().regex(/^[a-z\d\-_\,\s]+$/i),
-      collaborators: Joi.string().regex(/^[a-z\d\-_\,\s]+$/i),
-      userId: Joi.number()
+  reset: {
+    params: {
+      username: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+      new_password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/)
     }
   }
 };

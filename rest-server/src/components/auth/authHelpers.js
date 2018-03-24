@@ -25,3 +25,15 @@ export const loginQuery = async body => {
     throw new Error(err);
   }
 };
+
+export const resetPasswordQuery = async body => {
+  try {
+    const queryString = passwordHelper(body);
+    const data = await db.queryAsync(queryString);
+    success("resetPasswordQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
+    return data;
+  } catch (err) {
+    error("resetPasswordQuery - error= ", err);
+    throw new Error(err);
+  }
+};
