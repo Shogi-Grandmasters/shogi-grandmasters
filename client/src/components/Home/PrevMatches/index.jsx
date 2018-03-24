@@ -31,10 +31,10 @@ class PrevMatches extends Component {
         opponent => (opponents[opponent.id] = opponent.username)
       );
     const prevMatches = data.matches.map(match => {
-      match.black = opponents[match.black]
+      match.blackName = opponents[match.black]
         ? opponents[match.black]
         : this.state.username;
-      match.white = opponents[match.white]
+      match.whiteName = opponents[match.white]
         ? opponents[match.white]
         : this.state.username;
       return match;
@@ -72,8 +72,8 @@ class PrevMatches extends Component {
               <div onClick={e => this.handleMatchSelect(e)} id={JSON.stringify(match)} key={match.id} className="match_items">
                 {`vs. ${
                   match.black === this.state.username
-                    ? match.white
-                    : match.black
+                    ? match.whiteName
+                    : match.blackName
                 }`}
               </div>
             );

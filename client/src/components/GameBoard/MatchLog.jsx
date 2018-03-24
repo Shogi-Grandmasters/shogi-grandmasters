@@ -2,6 +2,7 @@ import React from 'react';
 import ShogiPiece from './ShogiPiece.jsx';
 import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
+import { FadeInGroup } from '../Global/Animation/TransitionGroups.jsx';
 
 import './MatchLog.css';
 
@@ -61,14 +62,14 @@ const MatchLog = ({ events }) => {
       <div></div>
       <div className="match__log-list">
         <div className="match__log-list-inner">
-          {events.reverse().map((event, ei) => {
-            let moveType = event.notation.indexOf('*') >= 0 ? 'Drop' : event.notation.indexOf('x') >= 0 ? 'Capture' : 'Move';
-            let eventBreakout = [];
-            event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} />);
-            moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`}color={event.move.color} capturedPiece={event.move.capturedPiece} />)
-            eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} />);
-            return [...eventBreakout];
-          })}
+            {events.map((event, ei) => {
+              let moveType = event.notation.indexOf('*') >= 0 ? 'Drop' : event.notation.indexOf('x') >= 0 ? 'Capture' : 'Move';
+              let eventBreakout = [];
+              eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} />);
+              moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`}color={event.move.color} capturedPiece={event.move.capturedPiece} />)
+              event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} />);
+              return [...eventBreakout];
+            })}
         </div>
       </div>
       <div></div>

@@ -142,8 +142,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let { data } = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId }
     });
-    data = data[0];
     // validation
+    data = data[0];
     let messages = [];
     // turn and user match
     let correctTurn =
@@ -152,7 +152,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push("Move submitted was not for the correct turn.");
     // move is valid
-    let validMove = isValidMove(before.board, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to);
+    let validMove = isValidMove(before, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to);
     if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
     let check = false;
@@ -174,7 +174,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       notation: moveToString(move),
       move
     };
-    eventLog.push(event);
+    eventLog.unshift(event);
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
       board: JSON.stringify(savedBoard),

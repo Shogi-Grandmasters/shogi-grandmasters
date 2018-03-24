@@ -225,12 +225,12 @@ export const isValidMove = (gameState, tile, loc) => {
   if (includesLoc([tile.loc], [10, 10])) {
     moveSet = validDropLocations(
       //cannot read property 0 of undefined
-      JSON.parse(gameState.board),
-      JSON.parse(gameState.kings),
+      gameState.board,
+      gameState.kings,
       tile
     );
   } else {
-    moveSet = tile.findMoves(JSON.parse(gameState.board));
+    moveSet = tile.findMoves(gameState.board);
   }
   return includesLoc(moveSet, loc);
 };
