@@ -35,33 +35,35 @@ class Login extends Component {
       <div className="auth-container">
         <br/>
         <Logo /><br />
-        <input
-          name="username"
-          type="text"
-          placeholder={"enter username"}
-          className="auth-form"
-          onChange={this.handleInputChange}
-          /><br />   
-        <input 
-          name="password"
-          type="password"
-          placeholder={"enter your password"}
-          className="auth-form"
-          id="password"
-          onChange={this.handleInputChange}
-          /><br />
-        <input
-          type="submit"
-          value="Login"
-          className="auth-button"
-          onClick={(e) => this.submitAuthData(e)}
-          /><br />
-        <input
-          type="submit"
-          value="Signup"
-          className="auth-button"
-          onClick={() => this.props.history.push("/signup")}
-          />
+        <form className="auth-form-container">
+          <input
+            name="username"
+            type="text"
+            placeholder={"enter username"}
+            className="auth-form"
+            onChange={this.handleInputChange}
+            /><br />   
+          <input 
+            name="password"
+            type="current-password"
+            placeholder={"enter your password"}
+            className="auth-form"
+            id="password"
+            onChange={this.handleInputChange}
+            /><br />
+          <input
+            type="submit"
+            value="Login"
+            className="auth-button"
+            onClick={(e) => this.submitAuthData(e)}
+            /><br />
+          <input
+            type="submit"
+            value="Signup"
+            className="auth-button"
+            onClick={() => this.props.history.push("/signup")}
+            />
+        </form>
       </div>
     )
   }
