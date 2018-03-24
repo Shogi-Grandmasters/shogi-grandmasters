@@ -220,17 +220,25 @@ export const getCombinedMoveSet = (board, color) => {
   return teamMoves;
 };
 
-export const isValidMove = (gameState, tile, loc) => {
+export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc, prevGameState) => {
+
+  if (prevGameState && (isCheckOrMate({
+    board: gameStateBefore.board,
+    tile: new GameTile(boardIds[prevGameState.move.piece], prevGameStatemove.color, prevGameState.move.to, prevGameState.move.piece.length > 1)
+  }) && isCheckOrMate(gameStateAfter, tile))) {
+    return false;
+  }
+
   let moveSet;
   if (includesLoc([tile.loc], [10, 10])) {
     moveSet = validDropLocations(
       //cannot read property 0 of undefined
-      JSON.parse(gameState.board),
-      JSON.parse(gameState.kings),
+      gameStateBefore.board,
+      gameStateBefore.kings,
       tile
     );
   } else {
-    moveSet = tile.findMoves(JSON.parse(gameState.board));
+    moveSet = tile.findMoves(gameStateBefore.board);
   }
   return includesLoc(moveSet, loc);
 };
