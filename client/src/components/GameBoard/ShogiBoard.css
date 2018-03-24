@@ -126,6 +126,8 @@ button {
 
 .active {
   cursor: pointer;
+  transition: box-shadow 0.4s ease;
+  box-shadow: inset 0px 0px 0px 0px rgba(241, 90, 74, 0.0);
 }
 
 .active:hover {

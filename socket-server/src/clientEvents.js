@@ -142,8 +142,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let { data } = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId }
     });
-    data = data[0];
     // validation
+    data = data[0];
     let messages = [];
     // turn and user match
     let correctTurn =
@@ -174,7 +174,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       notation: moveToString(move),
       move
     };
-    eventLog.push(event);
+    eventLog.unshift(event);
     await axios.put("http://localhost:3396/api/matches", {
       matchId,
       board: JSON.stringify(savedBoard),
