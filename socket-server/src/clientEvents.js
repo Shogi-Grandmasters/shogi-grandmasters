@@ -1,12 +1,14 @@
 import axios from "axios";
+import randomstring from "randomstring";
 
 import { boardIds } from "./lib/constants";
 import { isValidMove, isCheckOrMate, reverseBoard } from "./lib/boardHelpers";
 import { moveToString } from "./lib/matchLog";
 import GameTile from "./lib/GameTile";
 import { success, log, error } from "./lib/log";
+import { Queue } from "./lib/matchHelpers";
 import {
-  serverInitialState,
+  serverJoinMatch,
   serverChanged,
   serverLeave,
   serverRun,
@@ -19,9 +21,23 @@ import {
   serverPlayerMove
 } from "./serverEvents";
 
-const clientReady = ({ io, client, room }, payload) => {
-  success("client ready heard");
-  serverInitialState({ io, client, room }, payload);
+const matchQueue = new Queue();
+
+const clientPlayMatch = ({ io, client, room }, payload) => {
+  success("client play match heard");
+  try {
+    matchQueue.enqueue(payload);
+    let matchid, black, white;
+    if (matchQueue.size() > 1) {
+      matchId = randomstring.generate();
+      black = matchQueue.dequeue().username;
+      white = matchQueue.dequeue().username;
+    }
+    clientGameReady({ io, client, room }, {matchId, black, white});
+  } catch (err) {
+    error("client play match error", err);
+  }
+  serverJoinMatch({ io, client, room }, payload);
 };
 
 const clientUpdate = ({ io, client, room }, payload) => {
@@ -94,26 +110,22 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
   try {
     let { matchId, black, white } = payload;
-    let { data } = await axios.get("http://localhost:3396/api/matches", {
-      params: { matchId }
+    let result = await axios.get("http://localhost:3396/api/matches", {
+      params: { matchId, black, white }
     });
-    !data.length &&
-      (await axios.post("http://localhost:3396/api/matches", {
+    if (result.data.length <  2) {
+      result = await axios.post("http://localhost:3396/api/matches", {
         matchId,
         board: JSON.stringify(room.get("board")),
         black,
         white,
         hand_white: "[]",
         hand_black: "[]"
-      }));
-    room.set("black", black);
-    room.set("white", white);
-    payload.board = data.length ? data[0].board : room.get("board");
-    payload.hand_black = data.length ? data[0].hand_black : [];
-    payload.hand_white = data.length ? data[0].hand_white : [];
-    payload.turn = data.length ? data[0].turn : 0;
-    payload.event_log = data.length ? data[0].event_log : undefined;
-    serverGameReady({ io, client, room }, payload);
+      });
+    }
+    room.set("black", result.data[1].id);
+    room.set("white", result.data[2].id);
+    serverGameReady({ io, client, room }, result.data);
   } catch (err) {
     error("error creating game. e = ", err);
   }
@@ -188,7 +200,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
 };
 
 const clientEmitters = {
-  "client.ready": clientReady,
+  "client.playMatch": clientPlayMatch,
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,

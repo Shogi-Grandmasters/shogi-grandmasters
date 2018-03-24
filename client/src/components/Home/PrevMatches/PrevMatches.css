@@ -1,0 +1,30 @@
+.prev_matches {
+  display: grid;
+  grid-template-rows: 50px 10fr;
+  height: 50vh;
+  width: 100%;
+  text-align: center;
+}
+
+.match_select {
+  overflow: scroll;
+  max-height: 90vh;
+}
+
+.match_items {
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-around;
+  height: 45px;
+  padding: 4px;
+  background: linear-gradient(#eee, #ddd);
+  border-bottom: solid 1px #ccc;
+}
+
+.match_items:hover {
+  cursor: pointer;
+  background: linear-gradient(rgba(238, 238, 238, 0), rgba(221, 221, 221, 0.199));
+}

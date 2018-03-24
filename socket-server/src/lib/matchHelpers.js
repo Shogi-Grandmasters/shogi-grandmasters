@@ -1,4 +1,4 @@
-export class matchQueue {
+export class Queue {
   constructor() {
     this.storage = [];
   }
@@ -40,9 +40,4 @@ export const findMatch = (openMatches, challenger) => {
     }
   });
   return bestFit[0];
-}
-
-module.exports = {
-  matchQueue,
-  findMatch
 }
