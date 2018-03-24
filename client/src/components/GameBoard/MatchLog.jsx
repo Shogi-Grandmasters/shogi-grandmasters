@@ -9,7 +9,7 @@ const LogCapture = ({ color, capturedPiece }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
     <div className="match__log-event">
-      Captured
+      <h3>Captured</h3>
     </div>
     <div className="match__log-piece">
       <ShogiPiece
@@ -33,7 +33,7 @@ const LogPromote = ({ color, piece }) => {
         />
       </div>
       <div className="match__log-event">
-        to
+        <span>to</span>
       </div>
       <div className="match__log-piece">
         <ShogiPiece
@@ -49,10 +49,8 @@ const LogMove = ({ color, moveType, notation }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
     <div className="match__log-event">
-      {moveType}
-    </div>
-    <div className="match__log-event">
-      {notation}
+      <h3>{moveType}</h3>
+      <span>{notation}</span>
     </div>
   </div>
 );
