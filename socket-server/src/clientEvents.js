@@ -155,8 +155,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let validMove = isValidMove(before, after, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
-    // let check = false;
-    // let checkmate = false;
     let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
     if (check && !checkmate) gameStatus = 1;

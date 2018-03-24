@@ -6,25 +6,10 @@ import './ModalPrompt.css'
 
 const ModalPrompt = ({ message, choices }) => {
 
-  const transitionStyles = {
-    defaultStyle: {
-      opacity: 0,
-    },
-    enterStyle: {
-      opacity: transit(1.0, 500, 'ease-in-out'),
-    },
-    leaveStyle: {
-      opacity: transit(0, 500, 'ease-in-out'),
-    },
-    activeStyle: {
-      opacity: 1,
-    },
-  };
-
   return (
     <Modal>
       <div className="modal__backdrop">
-        <CSSTransition {...transitionStyles} active={true} transitionAppear>
+        <FadeIn>
           <div className="modal">
             <div className="modal__message">
               <div className="modal__prompt">{message}</div>
@@ -35,7 +20,7 @@ const ModalPrompt = ({ message, choices }) => {
               </div>
             </div>
           </div>
-        </CSSTransition>
+        </FadeIn>
       </div>
     </Modal>
   )
