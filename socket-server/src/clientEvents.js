@@ -110,26 +110,22 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
   try {
     let { matchId, black, white } = payload;
-    let { data } = await axios.get("http://localhost:3396/api/matches", {
-      params: { matchId }
+    let result = await axios.get("http://localhost:3396/api/matches", {
+      params: { matchId, black, white }
     });
-    !data.length &&
-      (await axios.post("http://localhost:3396/api/matches", {
+    if (result.data.length <  2) {
+      result = await axios.post("http://localhost:3396/api/matches", {
         matchId,
         board: JSON.stringify(room.get("board")),
         black,
         white,
         hand_white: "[]",
         hand_black: "[]"
-      }));
-    room.set("black", black);
-    room.set("white", white);
-    payload.board = data.length ? data[0].board : room.get("board");
-    payload.hand_black = data.length ? data[0].hand_black : [];
-    payload.hand_white = data.length ? data[0].hand_white : [];
-    payload.turn = data.length ? data[0].turn : 0;
-    payload.event_log = data.length ? data[0].event_log : undefined;
-    serverGameReady({ io, client, room }, payload);
+      });
+    }
+    room.set("black", result.data[1].id);
+    room.set("white", result.data[2].id);
+    serverGameReady({ io, client, room }, result.data);
   } catch (err) {
     error("error creating game. e = ", err);
   }

@@ -5,14 +5,14 @@ import { createMatchHelper, fetchMatchHelper, fetchOpponentHelper, updateMatchHe
 export const createMatchQuery = async body => {
   try {
     const queryString = createMatchHelper(body);
-    const { rows } = await db.query(queryString);
+    const data = await db.query(queryString);
     success(
       "createMatchQuery - successfully saved match",
-      JSON.stringify(rows[0])
+      JSON.stringify(data)
     );
-    return rows[0];
+    return data.filter(result => result.rows.length).map(result => result.rows[0]);
   } catch (err) {
-    error("createMatchpQuery - error= ", err);
+    error("createMatchQuery - error= ", err);
     throw new Error(err);
   }
 };
@@ -20,17 +20,17 @@ export const createMatchQuery = async body => {
 export const fetchMatchQuery = async query => {
   try {
     const queryString = fetchMatchHelper(query);
-    const { rows } = await db.queryAsync(queryString);
-    success("fetchMatchQuery - successfully fetched open match ", rows);
+    const data = await db.queryAsync(queryString);
+    success("fetchMatchQuery - successfully fetched match ", data);
     if (query.userId) {
-      let opponents = rows.map(match => {
+      let opponents = data.rows.map(match => {
         return match.black !== +query.userId ? match.black : match.white;
       });
       const opponentsQueryString = fetchOpponentHelper(opponents);
       opponents.length ? opponents = await db.queryAsync(opponentsQueryString) : null;
-      return {matches: rows, opponents: opponents.rows};
+      return {matches: data.rows, opponents: opponents.rows};
     }
-    return rows;
+    return data.filter(data => data.rows.length).map(data => data.rows[0]);
   } catch (err) {
     error("fetchMatchQuery - error=", err);
   }
