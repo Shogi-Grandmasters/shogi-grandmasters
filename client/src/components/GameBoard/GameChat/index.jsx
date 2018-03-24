@@ -57,15 +57,17 @@ class GameChat extends Component {
           {this.state.messages.length > 0 &&
             this.state.messages.slice(0, 20).map((message, i) => {
               return (
-                <div className="chat__message" key={i}><strong>{message.username}</strong>: {message.content}</div>
+                <div className="chat__message" key={i}><strong>{message.username}</strong> {message.content}</div>
               );
             })}
         </div>
         <form onSubmit={e => this.resetInput(e)}>
-          <input onKeyUp={e => this.handleChat(e)} />
-          <button type="submit" onClick={() => this.handleSubmit()}>
-            Send
-          </button>
+          <div className="chat__input">
+            <input onKeyUp={e => this.handleChat(e)} />
+            <button type="submit" onClick={() => this.handleSubmit()}>
+              &gt;
+            </button>
+          </div>
         </form>
       </div>
     );

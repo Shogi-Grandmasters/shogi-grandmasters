@@ -12,7 +12,7 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
   // determine if it's selected
   if (selected && selected.location === 'hand') {
     let [playerColor, selectedPiece] = selected.target.split(':');
-    boardIds[selectedPiece] === tile.name && playerColor === tile.color && tileStyles.push(`selected-${player.color}`);
+    boardIds[selectedPiece] === tile.name && playerColor === tile.color && tileStyles.push('selected');
   }
 
   return (
