@@ -27,10 +27,10 @@ class EditProfile extends Component {
       .then(response => {
         const data = response.data;
         const fileURL = data.secure_url // full URL
-        const img = fileURL.split('upload/').slice(1)
-        localStorage.setItem('avi', img);
+        const img = fileURL.split("upload/").slice(1)
+        localStorage.setItem("avi", img);
         axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`)
-        .then(res => this.props.history.push('/acct'))
+        .then(res => this.props.history.push("/acct"))
         
         //example url
         //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
@@ -41,35 +41,40 @@ class EditProfile extends Component {
   render() {
     const avi = localStorage.avi ? <img width="50px" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${localStorage.avi}`} /> : <img width="50px" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
     return (
-      <div className='edit-container'>
-        {avi}
-        <input
-          name='email'
-          type='text'
-          className='edit-form'
-          placeholder={'enter email'}
-          onChange={this.handleInputChange}
-          />
-        <input 
-          name='username'
-          type='text'
-          className='edit-form'
-          placeholder={'enter your username'}
-          onChange={this.handleInputChange}
-          />
-        <input 
-          name='password'
-          type='password'
-          className='edit-form'
-          id='password'
-          placeholder={'enter your password'}
-          onChange={this.handleInputChange}
-          /><br />
-        <input
-          type='submit'
-          className='edit-button'
-          onClick={(e) => this.submitAuthData(e)}
-          />
+      <div className="edit-container">
+        <h2 className="title">Welcome back {localStorage.username}-san!</h2>
+        <form className="edit-form-container">
+          <h3 className="title">Reset your password:</h3>
+          <input 
+            name="username"
+            type="text"
+            autoComplete="username"
+            className="edit-form"
+            placeholder={"enter your username"}
+            onChange={this.handleInputChange}
+            />
+          <input 
+            name="password"
+            type="password"
+            className="edit-form"
+            autoComplete="current-password"
+            placeholder={"enter your old password"}
+            onChange={this.handleInputChange}
+            /><br />
+          <input 
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            placeholder={"enter your new password"}
+            className="edit-form"
+            onChange={this.handleInputChange}
+            />
+          <input
+            type="submit"
+            className="auth-button"
+            onClick={(e) => this.submitAuthData(e)}
+            />
+        </form>
         <Dropzone 
           onDrop={this.handleDrop} 
           multiple 

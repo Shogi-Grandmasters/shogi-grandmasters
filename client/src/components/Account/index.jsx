@@ -8,7 +8,7 @@ import EditProfile from "./EditProfile.jsx";
 import Rankings from "./Rankings.jsx";
 import FrequentlyAsked from "./FrequentlyAsked.jsx"
 
-import './Account.css';
+import "./Account.css";
 
 class Account extends Component {
   constructor() {
@@ -39,11 +39,4 @@ class Account extends Component {
   }
 }
 
-export default Account
-
-//<Friends />
-// <Switch>
-//  <Route to="/acct/edit"> Edit Profile </Route>
-// </Switch>
-//          <Redirect from="/acct/" to="/acct/friends" />
-
+export default Account;

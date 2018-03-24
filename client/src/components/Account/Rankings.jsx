@@ -4,7 +4,7 @@ import "./Account.css";
 const Rankings = (props) => {
   return (
     <div className="rankings-container">
-      <div><b>#1: {localStorage.username}</b></div><br />
+      <b>#1: {localStorage.username}</b><br />
     </div>
   );
 };

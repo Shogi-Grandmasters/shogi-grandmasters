@@ -39,16 +39,17 @@ class Login extends Component {
           <input
             name="username"
             type="text"
+            autoComplete="username"
             placeholder={"enter username"}
             className="auth-form"
             onChange={this.handleInputChange}
             /><br />   
           <input 
             name="password"
-            type="current-password"
+            type="password"
+            autoComplete="current-password"
             placeholder={"enter your password"}
             className="auth-form"
-            id="password"
             onChange={this.handleInputChange}
             /><br />
           <input

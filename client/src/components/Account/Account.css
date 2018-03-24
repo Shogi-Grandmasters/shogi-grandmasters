@@ -33,11 +33,6 @@ li a:hover {
   background-color: #6a6969;
 }
 
-.edit-container {
-  display: inline-block;
-  vertical-align: top;
-}
-
 .faq-list {
   min-width: 500px;
   width: 100%;
@@ -61,7 +56,6 @@ li a:hover {
 
 .title {
   font-family: 'Shift', sans-serif;
-  font-size: 16px;
   text-align: center;
 }
 
@@ -69,7 +63,41 @@ li a:hover {
   display: inline-block;
   vertical-align: top;
   align-content: center;
+  text-align: center;
   width: 600px;
   font-size: 16px;
   font-family: 'Shift', sans-serif;
 }
+
+.edit-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.edit-form-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.edit-form {
+  background-color: #cecece;
+  padding: 12px;
+  font-size: 14px;
+  margin: 1px;
+  border: 1px;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.edit-container {
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+  justify-content: center
+}
+

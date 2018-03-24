@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:security/recommended",
+    "eslint:recommended",
+    "plugin:node/recommended"
+  ],
+  "env": {
+    "jsx": true,
+    "browser": true,
+    "commonjs": true,
+    "node": true,
+    "es6": true
+  },
+  "plugins": ["node", "security", "mocha", "import", "react"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/prefer-default-export": 0,
+    "node/no-unsupported-features": 0,
+    "no-console": "off"
+  }
+}
