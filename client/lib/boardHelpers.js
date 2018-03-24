@@ -179,7 +179,7 @@ export const isCheckOrMate = (gameState, tile) => {
   return [check, checkmate];
 };
 
-const copyMatrix = matrix => {
+export const copyMatrix = (matrix) => {
   return matrix.slice().map(row => row.slice());
 };
 
@@ -260,6 +260,7 @@ export const calcImpasse = board => {
 export default {
   isValidMove,
   isCheckOrMate,
+  copyMatrix,
   reverseBoard,
   validDropLocations,
   getCombinedMoveSet,
