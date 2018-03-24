@@ -25,13 +25,17 @@ export const fetchMatchHelper = ({ matchId, userId, black, white }) => {
       WHERE status=0 AND (black='${userId}'
       OR white='${userId}')
     `;
-  } else {
+  } else if (black && white) {
     return `
       BEGIN;
       SELECT * FROM matches WHERE id='${matchId}';
       SELECT id,username,avatar,rating,wins,losses FROM users WHERE username='${black}';
       SELECT id,username,avatar,rating,wins,losses FROM users WHERE username='${white}';
       COMMIT;
+    `;
+  } else {
+    return `
+      SELECT * FROM matches WHERE id='${matchId}'
     `;
   }
 };

@@ -113,7 +113,7 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     let result = await axios.get("http://localhost:3396/api/matches", {
       params: { matchId, black, white }
     });
-    if (result.data.length <  2) {
+    if (result.data.length <  3) {
       result = await axios.post("http://localhost:3396/api/matches", {
         matchId,
         board: JSON.stringify(room.get("board")),

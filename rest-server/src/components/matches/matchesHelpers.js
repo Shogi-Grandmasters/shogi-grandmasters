@@ -29,8 +29,10 @@ export const fetchMatchQuery = async query => {
       const opponentsQueryString = fetchOpponentHelper(opponents);
       opponents.length ? opponents = await db.queryAsync(opponentsQueryString) : null;
       return {matches: data.rows, opponents: opponents.rows};
+    } else if (query.black && query.white) {
+      return data.filter(data => data.rows.length).map(data => data.rows[0]);
     }
-    return data.filter(data => data.rows.length).map(data => data.rows[0]);
+    return data.rows;
   } catch (err) {
     error("fetchMatchQuery - error=", err);
   }
