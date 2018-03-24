@@ -128,10 +128,10 @@ class Friends extends Component {
       <div className="friend-container"> 
         <div className="friend-top">
           <h2 className="friend-head">Friends List</h2>
-          <div className="friend-search">
+          <form className="friend-search">
             <input name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
             <input type="submit" className="friend-button" onClick={() => this.addFriend()} />
-          </div>
+          </form>
         </div>
         <div className="friend-list-container">
         <h3 className="friend-title">Current</h3>
