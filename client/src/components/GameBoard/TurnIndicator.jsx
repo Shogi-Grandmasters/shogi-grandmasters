@@ -9,7 +9,7 @@ const TurnIndicator = ({ isTurn }) => {
   return (
     <div className="turn__indicator">
       <div className={northStyles.join(' ')}></div>
-      <div className="turn__timer">2:00</div>
+      <div className="turn__timer">TURN</div>
       <div className={southStyles.join(' ')}></div>
     </div>
   )

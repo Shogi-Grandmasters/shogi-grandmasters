@@ -7,15 +7,15 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
   let promotes = x < 3 ? 'white' : x > 5 ? 'black' : null;
   if ((y + 1) % 3 === 0 && y < 8) classNames.push('right-border');
   if ((x + 1) % 3 === 0 && x < 8) classNames.push('lower-border');
-  if (piece && owned) classNames.push(`active-${player.color || 'white'}`);
+  if (piece && owned) classNames.push('active');
   if (selected && selected.location === 'board' && selected.target[0] === x && selected.target[1] === y) {
-    classNames.push(`selected-${selected.piece.color}`);
+    classNames.push('selected');
   }
 
   let isHint = false;
   if (hints.length) {
     isHint = hints.some(([hintX, hintY]) => x === hintX && y === hintY);
-    if (isHint) classNames.push(`hinted-${selected ? selected.piece.color : 'white'}`);
+    if (isHint) classNames.push('hinted');
   }
 
   return (

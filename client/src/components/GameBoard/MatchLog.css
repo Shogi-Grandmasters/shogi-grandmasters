@@ -1,29 +1,49 @@
 .match__log {
   display: grid;
-  grid-template-rows: 9fr 1fr;
+  grid-template-rows: 1fr 8fr 1fr;
 }
 
 .match__log-list {
-  overflow: scroll;
-  max-height: 90vh;
+  overflow: hidden;
+  max-height: 80vh;
+}
+.match__log-list-inner {
+  overflow: auto;
+  width: 100%;
+  height: 99%;
+  padding-right: 15px;
 }
 
 .match__log-item {
+  color: #d0c7af;
   font-size: 10px;
   font-weight: 600;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 45px;
   padding: 4px;
-  background: linear-gradient(#eee, #ddd);
-  border-bottom: solid 1px #ccc;
+  background: linear-gradient(#2c343f, #485562);
+  border-top: solid 1px rgba(255,255,255, 0.4);
+  border-right: solid 1px rgba(255,255,255, 0.2);
+  border-bottom: solid 1px #14151b;
+  border-left: solid 1px #14151b;
 }
 
-.match__actions {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: space-around;
+.match__log-piece {
+  width: 50px;
+  height: 50px;
+}
+
+.match__log-color {
+  width: 8px;
+  height: 100%;
+  margin-right: 8px;
+}
+.match__log-color.white {
+  background-color: #fff;
+}
+.match__log-color.black {
+  background-color: #000;
 }

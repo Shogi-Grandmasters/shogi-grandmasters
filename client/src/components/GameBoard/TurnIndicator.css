@@ -17,11 +17,11 @@
   border-right: 20px solid transparent;
   border-bottom-style: solid;
   border-bottom-width: 30px;
-  border-bottom-color: #ececec;
+  border-bottom-color: rgba(44, 52, 63, 0);
 }
 
 .north__active {
-  border-bottom-color: #000;
+  border-bottom-color: #d0c7af;
 }
 
 .turn__indicator-south {
@@ -31,16 +31,15 @@
   border-right: 20px solid transparent;
   border-top-style: solid;
   border-top-width: 30px;
-  border-top-color: #ececec;
+  border-top-color: rgba(44, 52, 63, 0);
 }
 
 .south__active {
-  border-top-color: #000;
+  border-top-color: #d0c7af;
 }
 
 .turn__timer {
   font-size: 24px;
   font-weight: 800;
-  font-style: italic;
-  color: #999;
+  color: #2c343f;
 }
