@@ -14,11 +14,12 @@ class LandingPage extends Component {
         <Logo />
         <h1 className="title">Shogi Grandmasters</h1>
         <input
-          placeholder="submit"
+          type="submit"
           value="Login"
           className="landing-button"
           onClick={() => this.props.history.push("/login")}
-        /><br />
+        />
+        <br />
         <input
           type="submit"
           value="Signup"
