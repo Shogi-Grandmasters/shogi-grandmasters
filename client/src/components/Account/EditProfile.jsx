@@ -38,11 +38,36 @@ class EditProfile extends Component {
     });
   }
 
+  submitPasswordReset = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(`http://localhost:3396/api/auth/reset`, this.state);
+      localStorage.setItem('token', data.token.accessToken);
+      data ? alert("Password reset successfully") : alert("Password reset failed!!!";
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   render() {
-    const avi = localStorage.avi ? <img width="50px" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${localStorage.avi}`} /> : <img width="50px" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
+    const avi = localStorage.avi ? <img width="100px" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${localStorage.avi}`} /> : <img width="50px" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
     return (
       <div className="edit-container">
-        <h2 className="title">Welcome back {localStorage.username}-san!</h2>
+      <h2 className="title">Welcome back {localStorage.username}-san!</h2>
+        <div className="edit-avatar-container">
+          <h3 className="title">Edit your Avatar:</h3>
+          <div className="edit-dropzone">
+          {avi}
+          <Dropzone 
+            onDrop={this.handleDrop} 
+            multiple 
+            accept="image/*" 
+            style={{"width" : "100px", "height" : "100px", "border" : "1px solid black", "borderRadius" : "5px"}}
+            >
+            <p style={{"textAlign" : "center"}}>Drop here</p>
+          </Dropzone><br />
+        </div>
+      </div>
         <form className="edit-form-container">
           <h3 className="title">Reset your password:</h3>
           <input 
@@ -75,13 +100,6 @@ class EditProfile extends Component {
             onClick={(e) => this.submitAuthData(e)}
             />
         </form>
-        <Dropzone 
-          onDrop={this.handleDrop} 
-          multiple 
-          accept="image/*" 
-          >
-          <p>Add an avatar!</p>
-        </Dropzone>
       </div>
     )
   }

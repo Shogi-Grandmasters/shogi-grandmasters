@@ -101,3 +101,12 @@ li a:hover {
   justify-content: center
 }
 
+.edit-avatar-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.edit-dropzone {
+  align-items: center;
+}
