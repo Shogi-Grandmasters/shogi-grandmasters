@@ -452,8 +452,8 @@ class ShogiBoard extends Component {
           <div></div>
           <GameChat socket={this.socket} />
           <div className="match__actions">
-            <button>Concede</button>
-            <button>Quit</button>
+            <button className="action">Concede</button>
+            <button className="action">Quit</button>
           </div>
         </div>
         { modal }
