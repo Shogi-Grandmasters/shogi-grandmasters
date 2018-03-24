@@ -2,7 +2,7 @@ import {
   boardIds,
   oppositeColor,
   includesLoc,
-  reverseLoc
+  reverseLoc,
 } from "./constants.js";
 import GameTile from "./GameTile.js";
 
@@ -62,10 +62,7 @@ export const isCheckOrMate = (gameState, tile) => {
   let checkmate = false;
   let moveSet = tile.findMoves(gameState.board);
   if (
-    includesLoc(moveSet, [
-      gameState.kings[oppositeColor(tile.color)][0],
-      gameState.kings[oppositeColor(tile.color)][1]
-    ])
+    includesLoc(moveSet, gameState.kings[oppositeColor(tile.color)])
   ) {
     check = true;
     const boardCopy = reverseBoard(gameState.board);
@@ -221,18 +218,20 @@ export const getCombinedMoveSet = (board, color) => {
 };
 
 export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc, prevGameState) => {
-
-  if (prevGameState && (isCheckOrMate({
-    board: gameStateBefore.board,
-    tile: new GameTile(boardIds[prevGameState.move.piece], prevGameStatemove.color, prevGameState.move.to, prevGameState.move.piece.length > 1)
-  }) && isCheckOrMate(gameStateAfter, tile))) {
-    return false;
+  if (prevGameState) {
+    const lastPieceMoved = new GameTile(boardIds[prevGameState.move.piece[0].toLowerCase()], prevGameState.move.color, prevGameState.move.to, prevGameState.move.piece.length > 1);
+    if (isCheckOrMate({
+      board: reverseBoard(gameStateBefore.board),
+      kings: gameStateBefore.kings
+      },
+      lastPieceMoved
+    )[0] && isCheckOrMate({board: reverseBoard(gameStateAfter.board), kings: gameStateBefore.kings}, lastPieceMoved)[0]) {
+      return false;
+    }
   }
-
   let moveSet;
   if (includesLoc([tile.loc], [10, 10])) {
     moveSet = validDropLocations(
-      //cannot read property 0 of undefined
       gameStateBefore.board,
       gameStateBefore.kings,
       tile
