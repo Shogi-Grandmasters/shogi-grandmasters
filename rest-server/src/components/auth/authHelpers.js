@@ -1,6 +1,6 @@
 import db from "../../config/database/";
 import { success, error } from "../../lib/log";
-import { signUpHelper, loginHelper } from './authSQL';
+import { signUpHelper, loginHelper, passwordHelper } from './authSQL';
 
 export const signUpQuery = async body => {
   try {
