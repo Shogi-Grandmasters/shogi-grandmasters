@@ -3,6 +3,7 @@ import randomstring from "randomstring";
 
 import { boardIds } from "./lib/constants";
 import { isValidMove, isCheckOrMate, reverseBoard } from "./lib/boardHelpers";
+import { endMatch } from './lib/ratingHelpers';
 import { moveToString } from "./lib/matchLog";
 import GameTile from "./lib/GameTile";
 import { success, log, error } from "./lib/log";
@@ -18,7 +19,8 @@ import {
   serverHomeChat,
   serverGameChat,
   serverUpdateGames,
-  serverPlayerMove
+  serverPlayerMove,
+  serverConcludeMatch
 } from "./serverEvents";
 
 const matchQueue = new Queue();
@@ -136,6 +138,16 @@ const clientListGames = async ({ io, client, room }) => {
   serverUpdateGames({ io, client, room });
 };
 
+const clientConcede = async ({ io, client, room }, payload) => {
+  try {
+    let { winner, loser } = payload;
+    serverConcludeMatch({ io, client, room}, { winner, loser });
+  }
+  catch (err) {
+    error('issue conceding match, e = ', err);
+  }
+}
+
 const clientSubmitMove = async ({ io, client, room }, payload) => {
   try {
     let { matchId, before, after, move, previous } = payload;
@@ -157,8 +169,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     // board state is check or checkmate
     let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
-    if (check && !checkmate) gameStatus = 1;
-    if (check && checkmate) gameStatus = 2;
+    // if (check && !checkmate) gameStatus = 1;
+    // if (check && checkmate) gameStatus = 2;
     // save new state if the move was successful
     let success = correctTurn && validMove;
     // if (success) {
@@ -207,7 +219,8 @@ const clientEmitters = {
   "client.homeChat": clientHomeChat,
   "client.gameChat": clientGameChat,
   "client.listOpenGames": clientListGames,
-  "client.submitMove": clientSubmitMove
+  "client.submitMove": clientSubmitMove,
+  "client.concede": clientConcede,
 };
 
 export default clientEmitters;

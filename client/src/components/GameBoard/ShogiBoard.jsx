@@ -93,12 +93,15 @@ class ShogiBoard extends Component {
     this.moveWillPromote = this.moveWillPromote.bind(this);
     this.promptForPromote = this.promptForPromote.bind(this);
     this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
+    this.promptToConcede = this.promptToConcede.bind(this);
+    this.confirmConcedeChoice = this.confirmConcedeChoice.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
   }
 
   componentDidMount() {
     this.initializeMatch();
     this.socket.on("server.playerMove", this.receiveMove);
+    this.socket.on("server.concludeMatch", this.concludeMatch);
   }
 
   initializeMatch() {
@@ -184,21 +187,6 @@ class ShogiBoard extends Component {
     return hand;
   }
 
-  confirmPromoteChoice(choice) {
-    if (this.state.pendingMove) {
-      let updateMove = {...this.state.pendingMove};
-      if (choice) {
-        let [x, y] = updateMove.move.to;
-        updateMove.after.board[x][y] = updateMove.after.board[x][y] + '+';
-      }
-      updateMove.move.didPromote = choice;
-      this.toggleModal();
-      this.setState({
-        pendingMove: updateMove,
-      }, () => this.commitMove());
-    }
-  }
-
   promptForPromote(coords) {
     let choices = [
       {
@@ -214,6 +202,48 @@ class ShogiBoard extends Component {
     ];
     let content = <ModalPrompt message="Promote?" choices={choices} />;
     this.toggleModal(content);
+  }
+
+  confirmPromoteChoice(choice) {
+    if (this.state.pendingMove) {
+      let updateMove = { ...this.state.pendingMove };
+      if (choice) {
+        let [x, y] = updateMove.move.to;
+        updateMove.after.board[x][y] = updateMove.after.board[x][y] + '+';
+      }
+      updateMove.move.didPromote = choice;
+      this.toggleModal();
+      this.setState({
+        pendingMove: updateMove,
+      }, () => this.commitMove());
+    }
+  }
+
+  promptToConcede() {
+    let choices = [
+      {
+        cta: 'Yes',
+        action: this.confirmConcedeChoice,
+        args: [true],
+      },
+      {
+        cta: 'No',
+        action: this.confirmConcedeChoice,
+        args: [false],
+      }
+    ];
+    let content = <ModalPrompt message="Are you sure you want to concede?" choices={choices} />;
+    this.toggleModal(content);
+  }
+
+  confirmConcedeChoice(choice) {
+    if (choice) {
+      this.socket.emit("client.concede", {
+        winner: this.state.opponent.user,
+        loser: this.state.player.user
+      });
+    }
+    this.toggleModal();
   }
 
   moveWillPromote(coords, pieceId) {
@@ -277,7 +307,7 @@ class ShogiBoard extends Component {
         action.move.didPromote = willPromote && !pendingChoice ? true : false;
         // when moving a king, the king's movement is reflected to the opposite-side coords to consider the opponent's moves
         // kings may not be moved into check or checkmate conditions
-        if (['k', 'K'].includes(pieceToMove)) action.after.kings[this.state.player.color] = [oppositeBoardSide(x), oppositBoardSite(y)];
+        if (['k', 'K'].includes(pieceToMove)) action.after.kings[this.state.player.color] = [oppositeBoardSide(x), oppositeBoardSide(y)];
         action.after.board[fromX][fromY] = ' ';
         action.after.board[x][y] = willPromote && !pendingChoice ? pieceToMove + '+' : pieceToMove;
       } else {
@@ -298,9 +328,8 @@ class ShogiBoard extends Component {
   }
 
   receiveMove({ log, status, before, after, move }) {
-    if (!status.success) {
-      console.warn(status.messages);
-    }
+    console.log(status)
+
     let { board, white, black, kings } = after;
     let updatePlayer = { ...this.state.player };
     updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
@@ -322,6 +351,10 @@ class ShogiBoard extends Component {
       selected: null,
       log
     }));
+  }
+
+  concludeMatch(payload) {
+    console.log(payload);
   }
 
   submitMove(matchId, before, after, move) {
@@ -453,7 +486,7 @@ class ShogiBoard extends Component {
           <div></div>
           <GameChat socket={this.socket} />
           <div className="match__actions">
-            <button className="action">Concede</button>
+            <button className="action" onClick={this.promptToConcede}>Concede</button>
             <button className="action">Quit</button>
           </div>
         </div>

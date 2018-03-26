@@ -2,6 +2,8 @@ import eloRank from 'elo-rank';
 import axios from 'axios';
 import { success, error } from "./log.js";
 
+const { REST_SERVER_URL } = process.env;
+
 // new players start at 1000
 // players below 2000 have K-factor of 32
 // players between 2000 and 2500 have K-factor of 24
@@ -9,9 +11,9 @@ import { success, error } from "./log.js";
 
 export const endMatch = ([winner, loser], draw = false) => {
   let elo;
-  if (winner <= 2000) {
+  if (winner.rating <= 2000) {
     elo = new eloRank(32);
-  } else if (winner <= 2500) {
+  } else if (winner.rating <= 2500) {
     elo = new eloRank(24);
   } else {
     elo = new eloRank(16);
@@ -20,9 +22,9 @@ export const endMatch = ([winner, loser], draw = false) => {
   let winnerUpdated = elo.updateRating(winnerExpected, draw ? 0.5 : 1, winner.rating);
   winner.rating = winnerUpdated > 99 ? winnerUpdated : 100;
 
-  if (loser <= 2000) {
+  if (loser.rating <= 2000) {
     elo = new eloRank(32);
-  } else if (loser <= 2500) {
+  } else if (loser.rating <= 2500) {
     elo = new eloRank(24);
   } else {
     elo = new eloRank(16);
@@ -36,7 +38,7 @@ export const endMatch = ([winner, loser], draw = false) => {
 
 export const updateRating = async ({ id, rating }) => {
   try {
-    const { rows } = await axios.put("http://localhost:3396/api/users", {
+    const { rows } = await axios.put(`${REST_SERVER_URL}/api/users`, {
       userId: id,
       rating: rating
     });
@@ -51,20 +53,26 @@ export const updateRating = async ({ id, rating }) => {
   }
 };
 
+const asyncForEach = async (array, callback) => {
+  for (let i = 0; i < array.length; i++) {
+    await callback(array[i], i, array);
+  }
+}
+
 export const updateLeaderboard = async (player) => {
   let data;
   try {
-    data = await axios.get(`http://localhost:3396/api/leaderboard/rating/:${player.rating}`);
+    data = await axios.get(`${REST_SERVER_URL}/api/leaderboard/rating/${player.rating}`);
     success(
       "updateLeaderboardQuery - successfully updated user leaderboard data",
       JSON.stringify(data.rows)
     );
     if (data.rows.length > 0) {
       let tempLeader;
-      data.rows.forEach(record => {
+      await asyncForEach(data.rows, (record) => {
         tempLeader = record;
         if(tempLeader.user_id !== player.user_id) {
-          await axios.put("http://localhost:3396/api/leaderboard", {
+          axios.put(`${REST_SERVER_URL}/api/leaderboard`, {
             id: record.id,
             userId: player.id,
             rating: player.rating

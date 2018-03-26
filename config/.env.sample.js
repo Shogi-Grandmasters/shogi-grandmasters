@@ -68,7 +68,7 @@ const envBuild = {
       "DEBUG=TRUE",
       "HOST=http://localhost",
       "PORT=4155",
-      "REST_SERVER_URL=http://localhost:4990",
+      "REST_SERVER_URL=http://localhost:3396",
       "TOKEN_SECRET=grandmaster"
     ],
     "client/server": ["PORT=1337"],
@@ -76,10 +76,10 @@ const envBuild = {
       "NODE_ENV=DEVELOPMENT",
       "DEBUG=TRUE",
       "ENVPREFIX=REACT_APP_",
-      "REST_SERVER_URL=http://localhost:4990",
+      "REST_SERVER_URL=http://localhost:3396",
       "SOCKET_SERVER_URL=http://localhost:4155",
       "REACT_APP_SOCKET_SERVER_URL=http://localhost:4155",
-      "REACT_APP_REST_SERVER_URL=http://localhost:4990",
+      "REACT_APP_REST_SERVER_URL=http://localhost:3396",
       "REACT_APP_AVATAR_URL=https://res.cloudinary.com/shogigrandmasters/image/upload/"
     ],
     "services/boardsolver": [
