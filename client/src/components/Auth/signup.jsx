@@ -45,14 +45,15 @@ class Signup extends Component {
         name='username'
         type='text'
         className='auth-form'
+        autoComplete="username"
         placeholder={'enter your username'}
         onChange={this.handleInputChange}
         />
       <input 
         name='password'
-        type='new-password'
+        type='password'
         className='auth-form'
-        id='password'
+        autoComplete="new-password"
         placeholder={'enter your password'}
         onChange={this.handleInputChange}
         /><br />
