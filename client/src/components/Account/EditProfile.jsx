@@ -41,10 +41,11 @@ class EditProfile extends Component {
   submitPasswordReset = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`http://localhost:3396/api/auth/reset`, this.state);
-      localStorage.setItem('token', data.token.accessToken);
+      const { data } = await axios.put(`http://localhost:3396/api/auth/reset`, this.state);
+      localStorage.setItem('token', data[0].token.accessToken);
       data ? alert("Password reset successfully") : alert("Password reset failed!!!");
     } catch (err) {
+      alert("Password reset failed!!!")
       throw new Error(err);
     }
   }

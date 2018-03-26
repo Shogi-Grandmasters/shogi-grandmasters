@@ -17,8 +17,8 @@ export const loginHelper = ({ username }) => {
 export const passwordHelper = ({ username, new_password }) => {
   return `
     UPDATE users
-    SET password=${new_password}
-    WHERE username=${username}
+    SET password='${new_password}'
+    WHERE username='${username}'
     RETURNING *
   `;
 }
