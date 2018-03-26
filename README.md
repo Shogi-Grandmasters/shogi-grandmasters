@@ -20,11 +20,12 @@ brew install yarn
 
 ```bash
 yarn
-yarn buildEnv
+yarn buildEnv {environment}
 yarn setup:rest-server
 yarn setup:socket-server
 yarn setup:client-server
 ```
+
 
 ### Start the Servers
 

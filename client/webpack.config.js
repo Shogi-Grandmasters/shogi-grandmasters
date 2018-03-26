@@ -1,4 +1,14 @@
-// require('dotenv').config();
+const path = require('path');
+const dotenv = require('dotenv').config({ path: path.resolve(__dirname, './.env') });
+
+const envPrefix = dotenv.parsed.ENVPREFIX || '';
+let envVars = Object.entries(dotenv.parsed).reduce((obj, [key, value]) => {
+  let match = new RegExp('^' + envPrefix, 'i');
+  if (match.test(key)) {
+    obj[key] = JSON.stringify(value);
+  }
+  return obj;
+}, {})
 
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -63,7 +73,12 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': envVars,
+    })
+  ]
   // plugins: [
   //   new ExtractTextPlugin('./client/styles/main.css', {
   //     allChunks: true
