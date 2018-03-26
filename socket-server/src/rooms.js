@@ -11,8 +11,7 @@ export default class Rooms {
     if (!room) {
       room = new Map();
       room.set("id", roomId);
-      roomId !== "home" &&
-        (room.set("board", board), room.set("waiting", true));
+      roomId !== "home" && room.set("board", board);
       this.store.set(roomId, room);
     }
     return room;

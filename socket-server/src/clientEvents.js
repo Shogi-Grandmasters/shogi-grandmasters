@@ -27,21 +27,19 @@ const { REST_SERVER_URL } = process.env;
 
 const matchQueue = new Queue();
 
-const clientPlayMatch = ({ io, client, room }, payload) => {
+const clientJoinQueue = ({ io, client, room }, { userId }) => {
   success("client play match heard");
   try {
-    matchQueue.enqueue(payload);
-    let matchid, black, white;
+    matchQueue.enqueue(userId);
     if (matchQueue.size() > 1) {
-      matchId = randomstring.generate();
-      black = matchQueue.dequeue().username;
-      white = matchQueue.dequeue().username;
+      let matchId = randomstring.generate();
+      let black = matchQueue.dequeue();
+      let white = matchQueue.dequeue();
+      serverJoinMatch({ io, client, room }, { matchId, black, white });
     }
-    clientGameReady({ io, client, room }, {matchId, black, white});
   } catch (err) {
     error("client play match error", err);
   }
-  serverJoinMatch({ io, client, room }, payload);
 };
 
 const clientUpdate = ({ io, client, room }, payload) => {
@@ -126,9 +124,9 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         hand_white: "[]",
         hand_black: "[]"
       });
+      room.set("black", result.data[1].id);
+      room.set("white", result.data[2].id);
     }
-    room.set("black", result.data[1].id);
-    room.set("white", result.data[2].id);
     serverGameReady({ io, client, room }, result.data);
   } catch (err) {
     error("error creating game. e = ", err);
@@ -184,8 +182,22 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push('Move submitted was not for the correct turn.');
     // move is valid
+<<<<<<< HEAD
     let validMove = isValidMove(before, after, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
+=======
+    let validMove = isValidMove(
+      before,
+      new GameTile(
+        boardIds[move.piece[0].toLowerCase()],
+        move.color,
+        move.from,
+        move.piece.length > 1
+      ),
+      move.to
+    );
+    if (!validMove) messages.push("Invalid move");
+>>>>>>> Refactored socket logic for joining matches.
     // board state is check or checkmate
     let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
@@ -225,7 +237,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
 };
 
 const clientEmitters = {
-  "client.playMatch": clientPlayMatch,
+  "client.joinQueue": clientJoinQueue,
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,
