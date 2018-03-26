@@ -4,6 +4,7 @@ import { signUpHelper, loginHelper, passwordHelper } from './authSQL';
 
 export const signUpQuery = async body => {
   try {
+    console.log(body)
     const queryString = signUpHelper(body);
     const data = await db.queryAsync(queryString);
     success("signUpQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));

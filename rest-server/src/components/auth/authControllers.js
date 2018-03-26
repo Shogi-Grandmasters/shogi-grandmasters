@@ -48,9 +48,12 @@ export const loginController = async (req, res) => {
 
 export const resetPasswordController = async (req, res) => {
   try {
-    const data = await resetPasswordQuery(req.params);
+    req.body.new_password = await hashPassword(req.body.new_password);
+    const login = await loginQuery(req.body);
+    const data = await resetPasswordQuery(req.body);
+    const token = await generateToken(data.rows[0].id, data.rows[0].username);
+    data.rows[0].token = token;
     success("resetPasswordController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
-    const token = await generateToken(id, username);
     return res.status(200).send(data.rows);
   } catch (err) {
     error("resetPasswordController - error= ", err);
