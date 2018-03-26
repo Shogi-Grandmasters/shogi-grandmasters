@@ -59,6 +59,10 @@ export const serverPlayerMove = ({ io, client, room }, payload) => {
   io.in(room.get("id")).emit("server.playerMove", payload);
 };
 
+export const serverConcludeMatch = ({ io, client, room }, payload) => {
+  io.in(room.get("id")).emit("server.concludeMatch", payload);
+};
+
 export const serverJoinMatch = ({ io, client, room }, payload) => {
   io.in(room.get("id")).emit("server.joinMatch", payload);
 };

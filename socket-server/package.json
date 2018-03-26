@@ -15,6 +15,7 @@
     "chalk": "^2.3.0",
     "delay": "^2.0.0",
     "dotenv": "^4.0.0",
+    "elo-rank": "^1.0.3",
     "lodash": "^4.17.4",
     "random-id": "^0.0.2",
     "randomstring": "^1.1.5",

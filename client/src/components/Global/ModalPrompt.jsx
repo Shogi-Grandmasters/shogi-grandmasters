@@ -9,7 +9,6 @@ const ModalPrompt = ({ message, choices }) => {
   return (
     <Modal>
       <div className="modal__backdrop">
-        <FadeIn>
           <div className="modal">
             <div className="modal__message">
               <div className="modal__prompt">{message}</div>
@@ -20,7 +19,6 @@ const ModalPrompt = ({ message, choices }) => {
               </div>
             </div>
           </div>
-        </FadeIn>
       </div>
     </Modal>
   )
