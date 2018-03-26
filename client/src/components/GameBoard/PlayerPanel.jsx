@@ -4,7 +4,7 @@ import './PlayerPanel.css';
 
 const PlayerPanel = ({ player }) => {
   let avatarStyles = {
-    backgroundImage: `url(${player.user.avatar})`,
+    backgroundImage: `url(${process.env.REACT_APP_AVATAR_URL}/${player.user.avatar})`,
   }
   return (
     <div className={`player__profile-${player.facing}`}>
