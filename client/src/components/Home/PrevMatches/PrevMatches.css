@@ -1,7 +1,7 @@
 .prev_matches {
   display: grid;
   grid-template-rows: 50px 10fr;
-  height: 50vh;
+  /* height: 50vh; */
   width: 100%;
   text-align: center;
 }
@@ -12,7 +12,7 @@
 }
 
 .match_items {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 600;
   display: flex;
   flex-flow: row nowrap;
