@@ -2,13 +2,25 @@ import express from "express";
 import validate from "express-validation";
 import passport from "passport";
 
-import { signUpController, loginController } from "./authControllers";
+import { signUpController, loginController, resetPasswordController } from "./authControllers";
 import formValidation from "../../middleware/validation/formValidation";
 import "../../middleware/validation/passport";
 
 const router = express.Router();
 
-router.route("/signup").post(validate(formValidation.signUp), signUpController);
+router
+  .route("/signup")
+  .post(
+    validate(formValidation.signUp), 
+    signUpController
+  );
+
+router
+  .route("/reset")
+  .put(
+    validate(formValidation.reset), 
+    resetPasswordController
+  );
 
 router
   .route("/login")

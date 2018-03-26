@@ -96,9 +96,22 @@ class Friends extends Component {
   }
 
   render() {
-    const pending = this.state.pending.length ? (
-      <div>
-        <h5>Pending Requests:</h5>
+    const awaiting = this.state.awaiting.length > 0 && (
+      <div className="awaiting-container">
+        <h3 className="friend-title">Awaiting Response</h3>
+        <div>
+        {this.state.awaiting.map((user, index) => (
+          <AwaitingList
+            key={index}
+            user={user}
+          />
+        ))}
+        </div>
+        </div>
+    )
+    const pending = this.state.pending.length > 0 && (
+      <div className="pending-container">
+        <h3 className="friend-title">Pending Requests</h3>
         <div>
         {this.state.pending.map((user, index) => (
           <PendingList
@@ -110,30 +123,18 @@ class Friends extends Component {
         ))}
         </div>
         </div>
-    ) : (
-      <div />
-    )
-    const awaiting = this.state.awaiting.length ? (
-      <div>
-        <h5>Awaiting Response:</h5>
-        <div>
-        {this.state.awaiting.map((user, index) => (
-          <AwaitingList
-            key={index}
-            user={user}
-          />
-        ))}
-        </div>
-        </div>
-    ) : (
-      <div />
-    )
+    ) 
     return (
-      <div className="friends-container"> 
-        <input name="username" type="text" placeholder="Search by username" onChange={this.handleInput} />
-        <input type="submit" onClick={() => this.addFriend()} />
-        <div>
-        <h5>Friends:</h5>
+      <div className="friend-container"> 
+        <div className="friend-top">
+          <h2 className="friend-head">Friends List</h2>
+          <form className="friend-search">
+            <input name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
+            <input type="submit" className="friend-button" onClick={() => this.addFriend()} />
+          </form>
+        </div>
+        <div className="friend-list-container">
+        <h3 className="friend-title">Current</h3>
         {this.state.friends.map((user, index) => (
           <FriendsList
             key={index}
@@ -141,9 +142,9 @@ class Friends extends Component {
             deleteFriend={this.deleteFriend.bind(this)}
           />
         ))}
-        </div>
         {pending}
         {awaiting}
+        </div>
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import db from "../../config/database/";
 import { success, error } from "../../lib/log";
-import { signUpHelper, loginHelper } from './authSQL';
+import { signUpHelper, loginHelper, passwordHelper } from './authSQL';
 
 export const signUpQuery = async body => {
   try {
@@ -22,6 +22,18 @@ export const loginQuery = async body => {
     return data;
   } catch (err) {
     error("loginQuery - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const resetPasswordQuery = async body => {
+  try {
+    const queryString = passwordHelper(body);
+    const data = await db.queryAsync(queryString);
+    success("resetPasswordQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
+    return data;
+  } catch (err) {
+    error("resetPasswordQuery - error= ", err);
     throw new Error(err);
   }
 };

@@ -1,4 +1,76 @@
-.friends-container {
+.friend-container {
   display: inline-block;
   vertical-align: top;
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
 }
+
+.friend-top > * {
+  font-family: 'Shift', sans-serif;
+}
+
+.friend-head {
+  text-align: center;
+  width: auto;
+}
+
+.friend-search {
+  float: right;
+  
+}
+
+.friend-button {
+  float: right;
+  font-family: 'Shift', sans-serif;
+  background-color: #6a6969;
+  color: #fff;
+  padding: 12px;
+  width: 80px;
+  height: 45px;
+  font-size: 16px;
+  border-radius: 3px;
+  outline: 0;
+  cursor: pointer;
+  justify-content: center;
+  align-content: right;
+}
+
+.friend-form {
+  font-family: 'Shift', sans-serif;
+  background-color: #cecece;
+  font-size: 16px;
+  height: 43px;
+  width: 200px;
+  border: 1px;
+  border-radius: 3px;
+  text-align: center;
+  display: inline-block;
+}
+.friend-title {
+  font-family: 'Shift', sans-serif;
+  font-size: 16px;
+}
+
+.current-friend-container {
+  font-family: 'Shift', sans-serif;
+  font-size: 16px;
+  justify-content: center;
+  height: 60px;
+  padding: 5px;
+  vertical-align: center;
+}
+
+.friend-username {
+  padding: 0 15px;
+  text-align: center;
+  vertical-align: center;
+}
+
+.inline-button-friend {
+  padding: 0 15px;
+  text-align: center;
+  vertical-align: center;
+  cursor: pointer;
+}
+

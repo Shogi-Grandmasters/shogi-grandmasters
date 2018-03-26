@@ -18,7 +18,8 @@ class LandingPage extends Component {
           value="Login"
           className="landing-button"
           onClick={() => this.props.history.push("/login")}
-        /><br />
+        />
+        <br />
         <input
           type="submit"
           value="Signup"

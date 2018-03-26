@@ -1,27 +1,27 @@
-.landing-page-container{
+.landing-page-container {
   display: flex;
   align-items: center;
   flex-direction: column;
+  flex: 1 auto;
+
 }
 
-.landing-page-container > * {
-  flex: 1 auto;
-}  
 
 .landing-button{
   background-color: #cecece;
   color: #6a6969;
-  padding: 16px;
-  width: 80px;
+  padding: 16px 0;
+  width: 130px;
   font-size: 14px;
-  border-radius: 3px;
+  border-radius: 5px;
   outline: 0;
   cursor: pointer;
   justify-content: center;
+  text-align: center;
 }
 
 .title{
   font-weight: bold;
-  font-family: 'Shift', sans-serif
+  font-family: 'Shift', sans-serif;
 }
 

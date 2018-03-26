@@ -32,33 +32,36 @@ class Signup extends Component {
       <div className='auth-container'>
         <br/>
         <Logo /><br />
+        <form className="auth-form-container">
         <input
-          name='email'
-          type='text'
-          className='auth-form'
-          placeholder={'enter email'}
-          onChange={this.handleInputChange}
-          />
-        <input 
-          name='username'
-          type='text'
-          className='auth-form'
-          placeholder={'enter your username'}
-          onChange={this.handleInputChange}
-          />
-        <input 
-          name='password'
-          type='password'
-          className='auth-form'
-          id='password'
-          placeholder={'enter your password'}
-          onChange={this.handleInputChange}
-          /><br />
-        <input
-          type='submit'
-          className='auth-button'
-          onClick={(e) => this.submitAuthData(e)}
-          />
+        name='email'
+        type='text'
+        className='auth-form'
+        placeholder={'enter email'}
+        autoComplete='email'
+        onChange={this.handleInputChange}
+        />
+      <input 
+        name='username'
+        type='text'
+        className='auth-form'
+        placeholder={'enter your username'}
+        onChange={this.handleInputChange}
+        />
+      <input 
+        name='password'
+        type='new-password'
+        className='auth-form'
+        id='password'
+        placeholder={'enter your password'}
+        onChange={this.handleInputChange}
+        /><br />
+      <input
+        type='submit'
+        className='auth-button'
+        onClick={(e) => this.submitAuthData(e)}
+        />
+        </form>
       </div>
     )
   }

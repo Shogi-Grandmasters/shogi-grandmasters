@@ -7,6 +7,7 @@ class Protected extends Component {
       const { exp } = jwtDecode(localStorage.token);
       if (exp < Math.floor(Date.now() / 1000)) {
         this.props.history.push('/login');
+        localStorage.clear();
       }
     } catch (e) {
       console.log('error in Protected ', e);

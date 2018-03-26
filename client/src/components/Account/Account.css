@@ -15,7 +15,6 @@
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  text-align: center;
   font-size: 16px;
   font-family: 'Shift', sans-serif;
 }
@@ -34,24 +33,81 @@ li a:hover {
   background-color: #6a6969;
 }
 
-.edit-container {
+.faq-list {
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
   display: inline-block;
   vertical-align: top;
-}
-
-.faq {
-  display: inline-block;
-  vertical-align: top;
-  width: 600px;
   font-size: 16px;
   font-family: 'Shift', sans-serif;
+}
+
+.faq-container {
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+  justify-content: center
+}
+
+.title {
+  font-family: 'Shift', sans-serif;
+  text-align: center;
 }
 
 .rankings-container {
   display: inline-block;
   vertical-align: top;
   align-content: center;
+  text-align: center;
   width: 600px;
   font-size: 16px;
   font-family: 'Shift', sans-serif;
+}
+
+.edit-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.edit-form-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.edit-form {
+  background-color: #cecece;
+  padding: 12px 0px;
+  font-size: 14px;
+  width: 200px;
+  margin: 1px;
+  border: 1px;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.edit-container {
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  font-family: 'Shift', sans-serif;
+  justify-content: center
+}
+
+.edit-avatar-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.edit-dropzone {
+  align-items: center;
 }
