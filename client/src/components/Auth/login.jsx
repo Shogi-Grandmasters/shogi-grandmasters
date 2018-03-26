@@ -58,13 +58,13 @@ class Login extends Component {
             className="auth-button"
             onClick={(e) => this.submitAuthData(e)}
             /><br />
-          <input
+        </form>
+        <input
             type="submit"
             value="Signup"
             className="auth-button"
             onClick={() => this.props.history.push("/signup")}
             />
-        </form>
       </div>
     )
   }
