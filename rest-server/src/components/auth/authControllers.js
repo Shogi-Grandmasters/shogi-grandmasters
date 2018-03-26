@@ -8,12 +8,12 @@ export const signUpController = async (req, res) => {
   try {
     req.body.password = await hashPassword(req.body.password);
     const data = await signUpQuery(req.body);
-    const { id, email } = data.rows[0];
+    const { id, username } = data.rows[0];
     success(
       "signUpController - successfully retrieved data ",
       JSON.stringify(data.rows[0])
     );
-    const token = await generateToken(id, email);
+    const token = await generateToken(id, username);
     data.rows[0].token = token;
     return res
       .status(200)
@@ -50,6 +50,7 @@ export const resetPasswordController = async (req, res) => {
   try {
     const data = await resetPasswordQuery(req.params);
     success("resetPasswordController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    const token = await generateToken(id, username);
     return res.status(200).send(data.rows);
   } catch (err) {
     error("resetPasswordController - error= ", err);
