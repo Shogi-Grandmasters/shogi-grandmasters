@@ -18,7 +18,8 @@ router
 router
   .route("/reset")
   .put(
-    validate(formValidation.reset), 
+    validate(formValidation.reset),
+    passport.authenticate("local", { session: false }), 
     resetPasswordController
   );
 
