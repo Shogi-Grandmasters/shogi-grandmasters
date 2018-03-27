@@ -28,7 +28,6 @@ class BoardIndex extends Component {
     });
 
     this.socket.on("server.joined", data => {
-      console.log(data);
       let { id, board, turn, hand_black, hand_white, event_log } = data[0];
       let black = data[1];
       let white = data[2];
@@ -62,7 +61,7 @@ class BoardIndex extends Component {
       />
     ) : (
       <div>
-        <ShogiBoard socket={this.socket} match={this.state} />
+        <ShogiBoard socket={this.socket} match={this.state} history={this.props.history} />
       </div>
     );
   }
