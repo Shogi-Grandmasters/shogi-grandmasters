@@ -158,18 +158,12 @@ const clientConcede = async ({ io, client, room }, payload) => {
     });
     // TODO:  need match type on Matches model
     // then, when match === ranked, update player ratings
-
-    // TODO: match end event type for log
     let { turn, board, hand_white, hand_black, event_log } = data[0];
-    await axios.put(`${REST_SERVER_URL}/api/matches`, {
+    await axios.post(`${REST_SERVER_URL}/api/matches/end`, {
       matchId,
       status: 2,
-      winner: winner.id,
-      turn,
-      board: JSON.stringify(board),
-      hand_white: JSON.stringify(hand_white),
-      hand_black: JSON.stringify(hand_black),
-      event_log: JSON.stringify(event_log)
+      winner: JSON.stringify(winner),
+      loser: JSON.stringify(loser)
     });
     serverConcludeMatch({ io, client, room}, { winner, loser });
   }

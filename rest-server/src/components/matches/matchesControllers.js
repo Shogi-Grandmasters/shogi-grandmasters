@@ -1,5 +1,5 @@
 import db from "../../config/database";
-import { createMatchQuery, fetchMatchQuery, updateMatchQuery } from "./matchesHelpers";
+import { createMatchQuery, fetchMatchQuery, updateMatchQuery, endMatchQuery } from "./matchesHelpers";
 import { success, error } from "../../lib/log";
 
 export const createMatchController = async (req, res) => {
@@ -44,3 +44,17 @@ export const updateMatchController = async (req, res) => {
     res.status(404).send(err);
   }
 };
+
+export const endMatchController = async (req, res) => {
+  try {
+    const data = await endMatchQuery(req.body);
+    success(
+      "endMatchController - successfully updated match and user data",
+      JSON.stringify(data)
+    );
+    return res.status(200).send(data);
+  } catch (err) {
+    error("endMatchController - error submitting match-end data = ", err);
+    res.status(500).send(err);
+  }
+}
