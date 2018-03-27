@@ -19,8 +19,7 @@ class Login extends Component {
       localStorage.setItem('token', data.token.accessToken);
       localStorage.setItem('rank', data.rating)
       if(data.avatar != null){localStorage.setItem('avi', data.avatar)}
-      //check === props on data / this.props.history.push('/login')
-      data.token ? this.props.history.push('/home') : this.props.history.push('/login');
+      data ? this.props.history.push('/home') : this.props.history.push('/login');
     } catch (err) {
       alert("Invalid login attempt")
     }
