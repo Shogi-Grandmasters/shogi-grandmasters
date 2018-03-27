@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client/dist/socket.io.js";
+import { unescape } from "lodash";
 
 class HomeChat extends Component {
   constructor(props) {
@@ -37,6 +38,7 @@ class HomeChat extends Component {
     this.state.message !== "\n" &&
       this.state.message.length &&
       this.props.socket.emit("client.homeChat", {
+        userId: localStorage.getItem("id"),
         username: localStorage.getItem("username"),
         content: this.state.message
       });
@@ -61,7 +63,7 @@ class HomeChat extends Component {
           {this.state.messages.length > 0 &&
             this.state.messages.slice(0, 20).map((message, i) => {
               return (
-                <div key={i}>{`${message.username}: ${message.content}`}</div>
+                <div key={i}>{`${message.username}: ${unescape(message.content)}`}</div>
               );
             })}
         </div>

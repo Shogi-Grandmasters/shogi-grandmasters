@@ -1,8 +1,9 @@
-export const createMessageHelper = ({ matchId, message, username }) => {
+import { escape } from "lodash";
+
+export const createMessageHelper = ({ matchId, message, userId }) => {
   return `
     INSERT INTO messages (user_id, match_id, content)
-    VALUES ((SELECT id FROM users WHERE username='${username}'),
-    '${matchId}', '${message}')
+    VALUES ('${userId}', '${matchId}', '${escape(message)}')
   `;
 };
 
