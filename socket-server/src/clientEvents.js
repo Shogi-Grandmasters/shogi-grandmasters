@@ -103,7 +103,7 @@ const clientHomeChat = async ({ io, client, room }, payload) => {
     await axios.post(`${REST_SERVER_URL}/api/messages`, {
       matchId: room.get("id"),
       message: payload.content,
-      username: payload.username
+      userId: payload.userId
     });
     serverHomeChat({ io, client, room }, payload);
   } catch (err) {
@@ -124,12 +124,7 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
   try {
     let { matchId, black, white } = payload;
-<<<<<<< HEAD
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-=======
-    console.log(matchId);
-    let result = await axios.get("http://localhost:3396/api/matches", {
->>>>>>> Refactored waiting page to send to match queue.
       params: { matchId, black, white }
     });
     if (result.data.length <  3) {
