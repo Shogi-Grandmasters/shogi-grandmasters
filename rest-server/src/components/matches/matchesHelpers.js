@@ -1,6 +1,6 @@
 import db from "../../config/database/";
 import { success, error } from "../../lib/log";
-import { createMatchHelper, fetchMatchHelper, fetchOpponentHelper, updateMatchHelper } from "./matchesSQL";
+import { createMatchHelper, fetchMatchHelper, fetchOpponentHelper, updateMatchHelper, endMatchHelper } from "./matchesSQL";
 
 export const createMatchQuery = async body => {
   try {
@@ -49,6 +49,23 @@ export const updateMatchQuery = async body => {
     return rows[0];
   } catch (err) {
     error("updateMatchQuery - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const endMatchQuery = async ({ matchId, status, winner, loser }) => {
+  try {
+    winner = JSON.parse(winner);
+    loser = JSON.parse(loser);
+    const queryString = endMatchHelper({ matchId, status, winner, loser });
+    const data = await db.query(queryString);
+    success(
+      "endMatchQuery - match data: ",
+      JSON.stringify(data)
+    );
+    return data;
+  } catch (err) {
+    error("endMatchQuery - error= ", err);
     throw new Error(err);
   }
 };

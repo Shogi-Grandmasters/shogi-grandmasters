@@ -62,3 +62,18 @@ export const updateMatchHelper = ({
     RETURNING id, board, turn, status, hand_white, hand_black
   `;
 };
+
+export const endMatchHelper = ({
+  matchId,
+  winner,
+  loser,
+  status
+}) => {
+  return `
+    BEGIN;
+    UPDATE matches SET winner='${winner.id}', status='${status}' WHERE id='${matchId}';
+    UPDATE users SET wins=wins+1, rating='${winner.rating}' WHERE id='${winner.id}';
+    UPDATE users SET losses=losses+1, rating='${loser.rating}' WHERE id='${loser.id}';
+    COMMIT;
+  `;
+};
