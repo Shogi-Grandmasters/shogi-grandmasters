@@ -13,9 +13,9 @@ export class Queue {
     }
   }
 
-  pluck(match) {
+  pluck(userId) {
     for (let i = 0; i < this.storage.length; i ++) {
-      if (match.id === this.storage[i].id) {
+      if (userId === this.storage[i]) {
         return this.storage.splice(i, 1);
       }
     }

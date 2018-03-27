@@ -5,7 +5,6 @@ import axios from "axios";
 import "./WaitingPage.css";
 
 class WaitingPage extends Component {
-
   componentWillMount() {
     this.socket = io("http://localhost:4155", {
       query: {
@@ -15,11 +14,11 @@ class WaitingPage extends Component {
       }
     });
   }
-  
+
   componentDidMount() {
     const userId = localStorage.getItem("id");
 
-    !this.props.matchId && this.socket.emit("client.joinQueue", { userId });
+    this.props.location.history && this.socket.emit("client.joinQueue", userId);
 
     this.socket.on("server.joinMatch", ({ matchId, black, white }) => {
       if (userId === black || userId === white) {
@@ -37,9 +36,10 @@ class WaitingPage extends Component {
   }
 
   async handleCancelMatchclick() {
-    let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
-      data: { matchId: this.props.match }
-    });
+    // let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
+    //   data: { matchId: this.props.match }
+    // });
+    this.socket.emit("client.leaveQueue", localStorage.getItem("id"));
     this.props.history.push("/home");
   }
 

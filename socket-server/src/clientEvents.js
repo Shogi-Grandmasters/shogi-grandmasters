@@ -27,18 +27,30 @@ const { REST_SERVER_URL } = process.env;
 
 const matchQueue = new Queue();
 
-const clientJoinQueue = ({ io, client, room }, { userId }) => {
-  success("client play match heard");
+const clientJoinQueue = async ({ io, client, room }, userId) => {
+  success("client join queue heard");
   try {
     matchQueue.enqueue(userId);
     if (matchQueue.size() > 1) {
       let matchId = randomstring.generate();
       let black = matchQueue.dequeue();
       let white = matchQueue.dequeue();
-      serverJoinMatch({ io, client, room }, { matchId, black, white });
+      if (black !== white) {
+        await clientGameReady({ io, client, room }, { matchId, black, white });
+        serverJoinMatch({ io, client, room }, { matchId, black, white });
+      }
     }
   } catch (err) {
-    error("client play match error", err);
+    error("client join queue error", err);
+  }
+};
+
+const clientLeaveQueue = ({ io, client, room }, userId) => {
+  success("client leave queue heard");
+  try {
+    matchQueue.pluck(userId);
+  } catch (err) {
+    error("client leave queue error", err);
   }
 };
 
@@ -112,7 +124,12 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
   try {
     let { matchId, black, white } = payload;
+<<<<<<< HEAD
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
+=======
+    console.log(matchId);
+    let result = await axios.get("http://localhost:3396/api/matches", {
+>>>>>>> Refactored waiting page to send to match queue.
       params: { matchId, black, white }
     });
     if (result.data.length <  3) {
@@ -182,22 +199,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push('Move submitted was not for the correct turn.');
     // move is valid
-<<<<<<< HEAD
     let validMove = isValidMove(before, after, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
-=======
-    let validMove = isValidMove(
-      before,
-      new GameTile(
-        boardIds[move.piece[0].toLowerCase()],
-        move.color,
-        move.from,
-        move.piece.length > 1
-      ),
-      move.to
-    );
-    if (!validMove) messages.push("Invalid move");
->>>>>>> Refactored socket logic for joining matches.
     // board state is check or checkmate
     let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
@@ -238,6 +241,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
 
 const clientEmitters = {
   "client.joinQueue": clientJoinQueue,
+  "client.leaveQueue": clientLeaveQueue,
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,
