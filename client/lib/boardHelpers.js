@@ -273,6 +273,31 @@ export const calcImpasse = board => {
   return { white: whiteTot, black: blackTot };
 };
 
+export const playerColorFromId = (id) => {
+  return id.charCodeAt(0) > 90 ? 'white' : 'black';
+}
+
+export const gameTileAtCoords = (board, [x, y]) => {
+  let pieceAtCoords = board[x][y];
+  if (pieceAtCoords.trim()) {
+    let isPromoted = false;
+    if (pieceAtCoords.length > 1) { isPromoted = true; pieceAtCoords = pieceAtCoords[0]; }
+    return new GameTile(boardIds[pieceAtCoords.toLowerCase()], playerColorFromId(pieceAtCoords), [x, y], isPromoted);
+  }
+  return null;
+}
+
+export const findKings = (board, playerColor) => {
+  let white, black;
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === 'k') white = playerColor === 'white' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
+      if (board[i][j] === 'K') black = playerColor === 'black' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
+    }
+  }
+  return { white, black };
+}
+
 export default {
   isValidMove,
   isCheckOrMate,
@@ -281,7 +306,10 @@ export default {
   validDropLocations,
   getCombinedMoveSet,
   includesLoc,
-  calcImpasse
+  calcImpasse,
+  playerColorFromId,
+  gameTileAtCoords,
+  findKings,
 };
 
 // TESTING
