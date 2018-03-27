@@ -18,16 +18,18 @@ class BoardIndex extends Component {
         username: localStorage.getItem("username")
       }
     });
-  }
 
-  componentDidMount() {
     let { matchId, black, white } = this.props.location.state;
+
+    //only one user should setup match
     this.socket.emit("client.gameReady", {
       matchId: this.props.location.state.matchId,
       black,
       white
     });
+  }
 
+  componentDidMount() {
     this.socket.on("server.joined", data => {
       let { id, board, turn, hand_black, hand_white, event_log } = data[0];
       let black = data[1];
@@ -45,18 +47,17 @@ class BoardIndex extends Component {
       });
     });
 
-    this.socket.on("server.reconnect", ({ matchId, black, white }) => {
-      matchId && black && white && this.socket.emit("client.gameReady", { matchId, black, white });
-    });
+    // this.socket.on("server.reconnect", ({ matchId, black, white }) => {
+    //   matchId && black && white && this.socket.emit("client.gameReady", {
+    //     matchId: this.props.location.state.matchId,
+    //     black,
+    //     white
+    //   });
+    // });
   }
 
   render() {
-    return this.state.waiting ? (
-      <WaitingPage
-        history={this.props.history}
-        matchId={this.props.location.state.matchId}
-      />
-    ) : (
+    return this.state.waiting ? null : (
       <div>
         <ShogiBoard socket={this.socket} match={this.state} history={this.props.history} />
       </div>
