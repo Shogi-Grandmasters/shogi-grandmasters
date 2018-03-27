@@ -43,9 +43,9 @@ class EditProfile extends Component {
     try {
       const { data } = await axios.put(`http://localhost:3396/api/auth/reset`, this.state);
       localStorage.setItem('token', data[0].token.accessToken);
-      data ? alert("Password reset successfully") : alert("Password reset failed!!!");
+      //broken
+      data ? alert("Password changed successfully") : alert("Password change failed!!!");
     } catch (err) {
-      alert("Password reset failed!!!")
       throw new Error(err);
     }
   }
@@ -70,7 +70,7 @@ class EditProfile extends Component {
         </div>
       </div>
         <form className="edit-form-container">
-          <h3 className="title">Reset your password:</h3>
+          <h3 className="title">Change your password:</h3>
           <input 
             name="username"
             type="text"
