@@ -71,7 +71,7 @@ class PrevMatches extends Component {
             return (
               <div onClick={e => this.handleMatchSelect(e)} id={JSON.stringify(match)} key={match.id} className="match_items">
                 {`vs. ${
-                  match.black === this.state.username
+                  match.blackName === this.state.username
                     ? match.whiteName
                     : match.blackName
                 }`}

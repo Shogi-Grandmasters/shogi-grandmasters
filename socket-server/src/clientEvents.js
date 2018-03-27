@@ -27,21 +27,31 @@ const { REST_SERVER_URL } = process.env;
 
 const matchQueue = new Queue();
 
-const clientPlayMatch = ({ io, client, room }, payload) => {
-  success("client play match heard");
+const clientJoinQueue = async ({ io, client, room }, userId) => {
+  success("client join queue heard");
   try {
-    matchQueue.enqueue(payload);
-    let matchid, black, white;
+    matchQueue.enqueue(userId);
     if (matchQueue.size() > 1) {
-      matchId = randomstring.generate();
-      black = matchQueue.dequeue().username;
-      white = matchQueue.dequeue().username;
+      let matchId = randomstring.generate();
+      let black = matchQueue.dequeue();
+      let white = matchQueue.dequeue();
+      if (black !== white) {
+        await clientGameReady({ io, client, room }, { matchId, black, white });
+        serverJoinMatch({ io, client, room }, { matchId, black, white });
+      }
     }
-    clientGameReady({ io, client, room }, {matchId, black, white});
   } catch (err) {
-    error("client play match error", err);
+    error("client join queue error", err);
   }
-  serverJoinMatch({ io, client, room }, payload);
+};
+
+const clientLeaveQueue = ({ io, client, room }, userId) => {
+  success("client leave queue heard");
+  try {
+    matchQueue.pluck(userId);
+  } catch (err) {
+    error("client leave queue error", err);
+  }
 };
 
 const clientUpdate = ({ io, client, room }, payload) => {
@@ -93,7 +103,7 @@ const clientHomeChat = async ({ io, client, room }, payload) => {
     await axios.post(`${REST_SERVER_URL}/api/messages`, {
       matchId: room.get("id"),
       message: payload.content,
-      username: payload.username
+      userId: payload.userId
     });
     serverHomeChat({ io, client, room }, payload);
   } catch (err) {
@@ -126,9 +136,9 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         hand_white: "[]",
         hand_black: "[]"
       });
+      room.set("black", result.data[1].id);
+      room.set("white", result.data[2].id);
     }
-    room.set("black", result.data[1].id);
-    room.set("white", result.data[2].id);
     serverGameReady({ io, client, room }, result.data);
   } catch (err) {
     error("error creating game. e = ", err);
@@ -225,7 +235,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
 };
 
 const clientEmitters = {
-  "client.playMatch": clientPlayMatch,
+  "client.joinQueue": clientJoinQueue,
+  "client.leaveQueue": clientLeaveQueue,
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
   // "client.run": clientRun,

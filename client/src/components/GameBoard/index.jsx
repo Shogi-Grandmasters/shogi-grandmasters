@@ -14,19 +14,22 @@ class BoardIndex extends Component {
     this.socket = io("http://localhost:4155", {
       query: {
         roomId: this.props.match.params.matchId,
+        userId: localStorage.getItem("id"),
         username: localStorage.getItem("username")
       }
     });
+
+    let { matchId, black, white } = this.props.location.state;
+
+    //only one user should setup match
+    this.socket.emit("client.gameReady", {
+      matchId: this.props.location.state.matchId,
+      black,
+      white
+    });
   }
 
-  async componentDidMount() {
-    let { matchId, black, white } = this.props.location.state;
-    this.socket.on("server.reconnect", ({ black, white }) => {
-      black &&
-        white &&
-        this.socket.emit("client.gameReady", { matchId, black, white });
-    });
-
+  componentDidMount() {
     this.socket.on("server.joined", data => {
       let { id, board, turn, hand_black, hand_white, event_log } = data[0];
       let black = data[1];
@@ -44,22 +47,17 @@ class BoardIndex extends Component {
       });
     });
 
-    if (this.state.waiting && white) {
-      this.socket.emit("client.gameReady", {
-        matchId,
-        black,
-        white
-      });
-    }
+    // this.socket.on("server.reconnect", ({ matchId, black, white }) => {
+    //   matchId && black && white && this.socket.emit("client.gameReady", {
+    //     matchId: this.props.location.state.matchId,
+    //     black,
+    //     white
+    //   });
+    // });
   }
 
   render() {
-    return this.state.waiting ? (
-      <WaitingPage
-        history={this.props.history}
-        match={this.props.location.state.matchId}
-      />
-    ) : (
+    return this.state.waiting ? null : (
       <div>
         <ShogiBoard socket={this.socket} match={this.state} history={this.props.history} />
       </div>
