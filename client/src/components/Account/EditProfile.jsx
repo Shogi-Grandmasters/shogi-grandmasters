@@ -45,10 +45,9 @@ class EditProfile extends Component {
     try {
       const { data } = await axios.put(`${REST_SERVER_URL}/api/auth/reset`, this.state);
       localStorage.setItem('token', data[0].token.accessToken);
-      //broken
       data ? alert("Password changed successfully") : alert("Password change failed!!!");
     } catch (err) {
-      throw new Error(err);
+      alert("Password change failed!!!");
     }
   }
 
