@@ -397,12 +397,9 @@ GameTile.prototype._lanceMoves = function(board, _test) {
 };
 
 GameTile.prototype._kingMoves = function(board, moveSet) {
-  let oppTeam = getCombinedMoveSet(
-    reverseBoard(board),
-    oppositeColor(this.color)
-  );
-  let kingsOpts = moveSet.map(move => reverseLoc(move));
-  return kingsOpts
+  let oppTeam = getCombinedMoveSet(board, oppositeColor(this.color));
+
+  return moveSet
     .reduce((set, move) => {
       let open = !includesLoc(oppTeam, move);
       if (open) {
