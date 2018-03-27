@@ -23,6 +23,8 @@ import {
   serverConcludeMatch
 } from "./serverEvents";
 
+const { REST_SERVER_URL } = process.env;
+
 const matchQueue = new Queue();
 
 const clientPlayMatch = ({ io, client, room }, payload) => {
@@ -76,7 +78,7 @@ const clientDisconnect = ({ io, client, room }) => {
 const clientFetchMessages = async ({ io, client, room }, payload) => {
   success("client load message request heard");
   try {
-    const { data } = await axios.get("http://localhost:3396/api/messages", {
+    const { data } = await axios.get(`${REST_SERVER_URL}/api/messages`, {
       params: { matchId: room.get("id") }
     });
     serverSendMessages({ io, client, room }, data);
@@ -88,7 +90,7 @@ const clientFetchMessages = async ({ io, client, room }, payload) => {
 const clientHomeChat = async ({ io, client, room }, payload) => {
   success("client home chat heard");
   try {
-    await axios.post("http://localhost:3396/api/messages", {
+    await axios.post(`${REST_SERVER_URL}/api/messages`, {
       matchId: room.get("id"),
       message: payload.content,
       username: payload.username
@@ -112,11 +114,11 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
   try {
     let { matchId, black, white } = payload;
-    let result = await axios.get("http://localhost:3396/api/matches", {
+    let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId, black, white }
     });
     if (result.data.length <  3) {
-      result = await axios.post("http://localhost:3396/api/matches", {
+      result = await axios.post(`${REST_SERVER_URL}/api/matches`, {
         matchId,
         board: JSON.stringify(room.get("board")),
         black,
@@ -140,7 +142,25 @@ const clientListGames = async ({ io, client, room }) => {
 
 const clientConcede = async ({ io, client, room }, payload) => {
   try {
-    let { winner, loser } = payload;
+    let { matchId, winner, loser } = payload;
+    let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
+      params: { matchId }
+    });
+    // TODO:  need match type on Matches model
+    // then, when match === ranked, update player ratings
+
+    // TODO: match end event type for log
+    let { turn, board, hand_white, hand_black, event_log } = data[0];
+    await axios.put(`${REST_SERVER_URL}/api/matches`, {
+      matchId,
+      status: 2,
+      winner: winner.id,
+      turn,
+      board: JSON.stringify(board),
+      hand_white: JSON.stringify(hand_white),
+      hand_black: JSON.stringify(hand_black),
+      event_log: JSON.stringify(event_log)
+    });
     serverConcludeMatch({ io, client, room}, { winner, loser });
   }
   catch (err) {
@@ -151,7 +171,7 @@ const clientConcede = async ({ io, client, room }, payload) => {
 const clientSubmitMove = async ({ io, client, room }, payload) => {
   try {
     let { matchId, before, after, move, previous } = payload;
-    let { data } = await axios.get("http://localhost:3396/api/matches", {
+    let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId }
     });
     // validation
@@ -162,21 +182,17 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       (data.turn === 1 && move.color === "black") ||
       (data.turn === 0 && move.color === "white");
     if (!correctTurn)
-      messages.push("Move submitted was not for the correct turn.");
+      messages.push('Move submitted was not for the correct turn.');
     // move is valid
     let validMove = isValidMove(before, after, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
     let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
-    // if (check && !checkmate) gameStatus = 1;
-    // if (check && checkmate) gameStatus = 2;
     // save new state if the move was successful
     let success = correctTurn && validMove;
-    // if (success) {
     // orient board to default
-    let savedBoard =
-      move.color === "black" ? reverseBoard(after.board) : after.board;
+    let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
     // prep event log
     let eventLog = data.event_log || [];
     let event = {
@@ -185,7 +201,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       move
     };
     eventLog.unshift(event);
-    await axios.put("http://localhost:3396/api/matches", {
+    await axios.put(`${REST_SERVER_URL}/api/matches`, {
       matchId,
       board: JSON.stringify(savedBoard),
       status: gameStatus,
@@ -194,7 +210,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       hand_black: JSON.stringify(after.black),
       event_log: JSON.stringify(eventLog)
     });
-    // }
     payload.log = eventLog;
     payload.status = {
       success,

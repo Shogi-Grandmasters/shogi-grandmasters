@@ -95,6 +95,8 @@ class ShogiBoard extends Component {
     this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
     this.promptToConcede = this.promptToConcede.bind(this);
     this.confirmConcedeChoice = this.confirmConcedeChoice.bind(this);
+    this.concludeMatch = this.concludeMatch.bind(this);
+    this.quit = this.quit.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
   }
 
@@ -239,8 +241,9 @@ class ShogiBoard extends Component {
   confirmConcedeChoice(choice) {
     if (choice) {
       this.socket.emit("client.concede", {
+        matchId: this.state.matchId,
         winner: this.state.opponent.user,
-        loser: this.state.player.user
+        loser: this.state.player.user,
       });
     }
     this.toggleModal();
@@ -353,8 +356,15 @@ class ShogiBoard extends Component {
     }));
   }
 
-  concludeMatch(payload) {
-    console.log(payload);
+  concludeMatch({ winner, loser }) {
+    let headline = winner.id === this.state.player.user.id ? 'VICTORY' : 'YOU LOSE';
+    let choices = [{
+      cta: 'EXIT',
+      action: this.quit,
+      args: [true],
+    }];
+    let content = <ModalPrompt message={headline} choices={choices} />
+    this.toggleModal(content);
   }
 
   submitMove(matchId, before, after, move) {
@@ -427,6 +437,13 @@ class ShogiBoard extends Component {
     }
   }
 
+  quit() {
+    this.props.history.push({
+      pathname: `/home`,
+      history: this.props.history
+    });
+  }
+
   render() {
     const boardStyle = {
       backgroundImage: `url(${'../textures/wood.jpg'})`
@@ -487,7 +504,7 @@ class ShogiBoard extends Component {
           <GameChat socket={this.socket} />
           <div className="match__actions">
             <button className="action" onClick={this.promptToConcede}>Concede</button>
-            <button className="action">Quit</button>
+            <button className="action" onClick={this.quit}>Quit</button>
           </div>
         </div>
         { modal }
