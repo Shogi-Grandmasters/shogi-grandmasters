@@ -22,17 +22,17 @@ class BoardIndex extends Component {
       }
     });
 
+  }
+  
+  componentDidMount() {
     let { matchId, black, white } = this.props.location.state;
-
-    //only one user should setup match
+  
     this.socket.emit("client.gameReady", {
-      matchId: this.props.location.state.matchId,
+      matchId,
       black,
       white
     });
-  }
 
-  componentDidMount() {
     this.socket.on("server.joined", data => {
       let { id, board, turn, hand_black, hand_white, event_log } = data[0];
       let black = data[1];
