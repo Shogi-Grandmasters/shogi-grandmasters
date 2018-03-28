@@ -70,3 +70,11 @@ export const serverJoinMatch = ({ io, client, room }, payload) => {
 export const serverChallengeSent = ({ io, client, room }, payload) => {
   io.in(room.get("id")).emit("server.challengeSent", payload);
 };
+
+export const serverChallengeAccepted = ({ io, client, room }, payload) => {
+  io.in(room.get("id")).emit("server.challengeAccepted", payload);
+};
+
+export const serverChallengeRejected = ({ io, client, room }, payload) => {
+  io.in(room.get("id")).emit("server.challengeRejected", payload);
+};
