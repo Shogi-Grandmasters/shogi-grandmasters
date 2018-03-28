@@ -189,6 +189,7 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
           );
         }
         if (p) {
+          //console.log(p.name, JSON.stringify(p.findMoves(board, true)));
           teamMoves = teamMoves.concat(p.findMoves(board, true));
         }
       }
@@ -298,4 +299,4 @@ export default {
 };
 
 // TESTING
- test();
+test();

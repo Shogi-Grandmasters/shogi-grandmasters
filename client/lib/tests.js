@@ -1,10 +1,10 @@
 import GameTile from "./GameTile.js";
-import {isCheckOrMate, validDropLocations} from "./boardHelpers.js";
+import { isCheckOrMate, validDropLocations } from "./boardHelpers.js";
 
 export const test = () => {
   let testBoard, testKings, testHands, testTile, result;
   const passed = () => console.log("<<<Test Passed>>>");
-  const failed = (data) => console.log("***Test Failed***", data);
+  const failed = data => console.log("***Test Failed***", data);
 
   testBoard = [
     ["L", "N", "S", "G", "K", "G", "S", "N", "L"],
@@ -17,8 +17,8 @@ export const test = () => {
     [" ", "b", " ", " ", " ", " ", " ", "r", " "],
     ["l", "n", "s", "g", "k", "g", "s", "n", "l"]
   ];
-  testKings = {white: [8, 4], black: [8, 4]};
-  testHands = {white: [], black: []};
+  testKings = { white: [8, 4], black: [8, 4] };
+  testHands = { white: [], black: [] };
   testTile = new GameTile("Pawn", "white", [6, 8]);
   result = isCheckOrMate(
     {
@@ -29,7 +29,7 @@ export const test = () => {
     },
     testTile
   );
-  console.log('should not find check or checkmate on a new board');
+  console.log("should not find check or checkmate on a new board");
   if (!result[0] && !result[1]) {
     passed();
   } else {
@@ -47,8 +47,8 @@ export const test = () => {
     [" ", "b", " ", " ", "r", " ", " ", " ", " "],
     ["l", "n", "s", "g", "k", "g", "s", "n", "l"]
   ];
-  testKings = {white: [8, 4], black: [8, 4]};
-  testHands = {white: [], black: []};
+  testKings = { white: [8, 4], black: [8, 4] };
+  testHands = { white: [], black: [] };
   testTile = new GameTile("Rook", "white", [7, 4]);
   result = isCheckOrMate(
     {
@@ -77,8 +77,8 @@ export const test = () => {
     [" ", "b", " ", " ", " ", " ", " ", "r", " "],
     ["l", "n", "s", "g", "k", "g", "s", "n", "l"]
   ];
-  testKings = {white: [8, 4], black: [8, 4]};
-  testHands = {white: [], black: []};
+  testKings = { white: [8, 4], black: [8, 4] };
+  testHands = { white: [], black: [] };
   testTile = new GameTile("Knight", "white", [2, 3]);
   result = isCheckOrMate(
     {
@@ -107,8 +107,8 @@ export const test = () => {
     [" ", " ", " ", " ", "r", " ", " ", " ", " "],
     [" ", " ", " ", " ", "k", " ", " ", " ", " "]
   ];
-  testKings = {white: [8, 4], black: [8, 4]};
-  testHands = {white: [], black: ["B"]};
+  testKings = { white: [8, 4], black: [8, 4] };
+  testHands = { white: [], black: ["B"] };
   testTile = new GameTile("Rook", "white", [7, 4]);
   result = isCheckOrMate(
     {
@@ -127,6 +127,38 @@ export const test = () => {
   }
 
   testBoard = [
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", "P", " ", "P", " ", " ", " "],
+    [" ", " ", " ", "P", "K", "P", " ", " ", " "],
+    [" ", " ", " ", "P", " ", "P", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", "r", " ", " ", " ", " "],
+    [" ", " ", " ", " ", "k", " ", " ", " ", " "]
+  ];
+  testKings = { white: [8, 4], black: [5, 4] };
+  testHands = { white: [], black: [] };
+  testTile = new GameTile("Rook", "white", [7, 4]);
+  result = isCheckOrMate(
+    {
+      board: testBoard,
+      kings: testKings,
+      white: testHands.white,
+      black: testHands.black
+    },
+    testTile
+  );
+  console.log(
+    "should know moving away from a dynamic piece will not get out of check"
+  );
+  if (result[0] && result[1]) {
+    passed();
+  } else {
+    failed(result);
+  }
+
+  testBoard = [
     [" ", " ", " ", " ", "K", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " "],
@@ -137,8 +169,8 @@ export const test = () => {
     [" ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " "]
   ];
-  testKings = {white: [8, 4], black: [8, 4]};
-  testHands = {white: [], black: []};
+  testKings = { white: [8, 4], black: [8, 4] };
+  testHands = { white: [], black: [] };
   testTile = new GameTile("Rook", "white", [5, 4]);
   result = isCheckOrMate(
     {
@@ -157,20 +189,31 @@ export const test = () => {
   }
 
   testBoard = [
-    ["L", "N", "S", " ", "K", " ", "S", "N", "L"],
-    [" ", " ", " ", " ", "g", " ", " ", "B", " "],
-    ["P", "P", "P", " ", " ", " ", "P", "P", "P"],
+    [" ", " ", " ", " ", "K", " ", " ", " ", " "],
+    [" ", " ", " ", " ", "g", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", "r", " ", " ", " ", " "],
-    ["p", "p", "p", "p", " ", "p", "p", "p", "p"],
-    [" ", "b", " ", " ", " ", " ", " ", " ", " "],
-    ["l", "n", "s", "g", "k", "g", "s", "n", "l"]];
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", " ", " ", "k", " ", " ", " ", " "]
+  ];
   testKings = { white: [8, 4], black: [8, 4] };
   testHands = { white: [], black: [] };
   testTile = new GameTile("Gold", "white", [1, 4]);
-  result = isCheckOrMate({ board: testBoard, kings: testKings, white: testHands.white, black: testHands.black }, testTile);
-  console.log("should recognize the king cannot put himself in check to get out of check");
+  result = isCheckOrMate(
+    {
+      board: testBoard,
+      kings: testKings,
+      white: testHands.white,
+      black: testHands.black
+    },
+    testTile
+  );
+  console.log(
+    "should recognize the king cannot put himself in check to get out of check"
+  );
   if (result[0] && result[1]) {
     passed();
   } else {
@@ -180,16 +223,16 @@ export const test = () => {
   testBoard = [
     ["L", "N", "S", "G", "K", "G", " ", "N", "L"],
     [" ", "R", " ", " ", " ", "S", " ", "B", " "],
-    ["P", "P", "b", "P", " ", "P", "P", "P", "P"],
+    ["P", " ", "b", "P", " ", "P", "P", "P", "P"],
     [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    ["p", "p", "p", "p", " ", "p", "p", "p", "p"],
+    [" ", "P", " ", " ", " ", " ", " ", " ", " "],
+    [" ", " ", "p", " ", " ", " ", " ", " ", " "],
+    ["p", "p", " ", "p", " ", "p", "p", "p", "p"],
     [" ", " ", " ", " ", "r", " ", " ", " ", " "],
     ["l", "n", "s", "g", "k", "g", "s", "n", "l"]
   ];
-  testKings = {white: [8, 4], black: [8, 4]};
-  testHands = {white: [], black: []};
+  testKings = { white: [8, 4], black: [8, 4] };
+  testHands = { white: [], black: [] };
   testTile = new GameTile("Bishop", "white", [2, 2]);
   result = isCheckOrMate(
     {
@@ -219,7 +262,7 @@ export const test = () => {
     [" ", " ", " ", " ", "k", " ", " ", " ", " "]
   ];
   testKings = { white: [8, 4], black: [8, 4] };
-  testHands = { white: ['p'], black: [] };
+  testHands = { white: ["p"], black: [] };
   testTile = new GameTile("Pawn", "white", [10, 10]);
   result = validDropLocations(testBoard, testKings, testTile);
   console.log("should not try to drop pawn causing checkmate");
@@ -251,7 +294,17 @@ export const test = () => {
     failed(result);
   }
 
-  testBoard = [[" ", " ", " ", " ", "K", " ", " ", " ", " "], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "k", "l", "l", "l", "l"]];
+  testBoard = [
+    [" ", " ", " ", " ", "K", " ", " ", " ", " "],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "k", "l", "l", "l", "l"]
+  ];
   testKings = { white: [8, 4], black: [8, 4] };
   testHands = { white: ["p"], black: [] };
   testTile = new GameTile("Pawn", "white", [10, 10]);
@@ -263,7 +316,17 @@ export const test = () => {
     failed(result);
   }
 
-  testBoard = [[" ", " ", " ", " ", "K", " ", " ", " ", " "], [" ", " ", " ", " ", " ", " ", " ", " ", " "], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "b", "l", "l", "l", "l"], ["l", "l", "l", "l", "k", "l", "l", "l", "l"]];
+  testBoard = [
+    [" ", " ", " ", " ", "K", " ", " ", " ", " "],
+    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "b", "l", "l", "l", "l"],
+    ["l", "l", "l", "l", "k", "l", "l", "l", "l"]
+  ];
   testKings = { white: [8, 4], black: [8, 4] };
   testHands = { white: ["n"], black: [] };
   testTile = new GameTile("Knight", "white", [10, 10]);
@@ -274,4 +337,4 @@ export const test = () => {
   } else {
     failed(result);
   }
-}
+};
