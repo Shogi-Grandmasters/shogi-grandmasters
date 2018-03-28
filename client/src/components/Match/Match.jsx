@@ -288,7 +288,10 @@ class Match extends Component {
   }
 
   receiveMove({ log, status, before, after, move }) {
-    console.log(status)
+    if (status.check) {
+      let message = move.color === this.state.localColor ? 'Your Opponent is in Check' : 'You are in Check';
+      this.announce(message);
+    }
     let { board, white, black, kings } = after;
     // boards are sent around from the perspective of each player, so
     // the board must be flipped around when the move received comes from the other player
@@ -309,6 +312,16 @@ class Match extends Component {
       selected: null,
       log
     }));
+  }
+
+  announce({ message }) {
+    let choices = [{
+      cta: 'OK',
+      action: this.toggleModal,
+      args: [null]
+    }]
+    let content = <ModalPrompt message={message} choices={choices} />;
+    this.toggleModal(content);
   }
 
   concludeMatch({ winner, loser }) {
