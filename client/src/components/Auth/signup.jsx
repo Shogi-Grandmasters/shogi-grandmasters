@@ -5,6 +5,7 @@ import Logo from '../Global/Logo/index.js'
 import './Auth.css';
 
 const {REST_SERVER_URL} = process.env;
+console.log(process.env)
 
 class Signup extends Component {
   constructor() {
