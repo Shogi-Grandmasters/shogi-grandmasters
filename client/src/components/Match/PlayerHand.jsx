@@ -1,7 +1,7 @@
 import React from 'react';
 import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
-import ShogiPiece from './ShogiPiece.jsx';
+import ShogiPiece from '../GameBoard/ShogiPiece.jsx';
 
 const PlayerHandTile = ({ player, local, piece, count, selected = null, activate }) => {
   let tile = new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10]);
@@ -31,8 +31,8 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
   )
 }
 
-const PlayerHand = ({ player, local, selected, activate }) => {
-  let hand = player.hand.reduce((counts, piece) => {
+const PlayerHand = ({ player, hand, local, selected, activate }) => {
+  hand = hand.reduce((counts, piece) => {
     counts[piece] = counts[piece] + 1 || 1;
     return counts;
   }, {})

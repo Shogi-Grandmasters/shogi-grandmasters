@@ -45,20 +45,13 @@ class WaitingPage extends Component {
 
   render() {
     return (
-      <div className="outer">
-        <div className="waiting">
+      <div className="container">
+        <div className="waiting__message">
+          <h2>Searching for an Opponent</h2>
+          <div className="lds-ripple"><div></div><div></div></div>
           <button onClick={this.handleCancelMatchclick.bind(this)}>
-            Cancel Match
+            Cancel
           </button>
-          <br />
-          {/* <img
-            src=""
-            alt="waiting"
-          /> */}
-          <p>
-            You Are Waiting. When an opponent joins you will be brought to your
-            duel.
-          </p>
         </div>
       </div>
     );

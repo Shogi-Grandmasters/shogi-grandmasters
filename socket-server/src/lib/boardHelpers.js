@@ -1,13 +1,20 @@
 import {
   boardIds,
   oppositeColor,
+  oppositeBoardSide,
   includesLoc,
   reverseLoc,
 } from "./constants.js";
-import {test} from "./tests.js"
+import { test } from "./tests.js"
 import GameTile from "./GameTile.js";
 
+export const pieceNameFromBoardId = (id) => {
+  id = id.length > 1 ? id[0].toLowerCase() : id.toLowerCase();
+  return boardIds[id];
+}
+
 export const validDropLocations = (board, kings, tile) => {
+  board = copyMatrix(board);
   let validDrops = [];
   let pawnLocs = [];
 
@@ -33,7 +40,7 @@ export const validDropLocations = (board, kings, tile) => {
         if (r > 0 || (tile.name !== "Lance" && tile.name !== "Pawn")) {
           if (r > 1 || tile.name !== "Knight") {
             if (tile.name !== "Pawn" || !pawnLocs.includes(c)) {
-              let boardCopy = board;
+              let boardCopy = copyMatrix(board);
               boardCopy[r][c] = tile.color === 'white' ? 'p' : 'P';
               let pt = new GameTile("Pawn", tile.color, [r, c]);
               if (
@@ -70,7 +77,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
     if (col !== ' ') {
       if (movedTile.color === 'white') {
         if (col.charCodeAt(0) > 90) {
-          let p = new GameTile(boardIds[col[0].toLowerCase()], 'white', [r, c], col.length > 1);
+          let p = new GameTile(pieceNameFromBoardId(col), 'white', [r, c], col.length > 1);
           let moveSet = p.findMoves(gameState.board);
           if (includesLoc(moveSet, reverseLoc(gameState.kings[oppositeColor(movedTile.color)]))) {
             threats[r * 10 + c] = {piece: p, moves: moveSet};
@@ -78,7 +85,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         }
       } else {
         if (col.charCodeAt(0) < 91) {
-          let p = new GameTile(boardIds[col[0].toLowerCase()], 'black', [r, c], col.length > 1);
+          let p = new GameTile(pieceNameFromBoardId(col), 'black', [r, c], col.length > 1);
           let moveSet = p.findMoves(gameState.board);
           if (includesLoc(moveSet, reverseLoc(gameState.kings[oppositeColor(movedTile.color)]))) {
             threats[r * 10 + c] = {piece: p, moves: moveSet};
@@ -130,10 +137,10 @@ export const isCheckOrMate = (gameState, movedTile) => {
             //   the king from the piece threatening it
             gameState[oppositeColor(movedTile.color)].forEach(p => {
               let temp = validDropLocations(
-                gameState.board,
+                copyMatrix(gameState.board),
                 gameState.kings,
                 new GameTile(
-                  boardIds[p[0].toLowerCase()],
+                  pieceNameFromBoardId(p),
                   oppositeColor(movedTile.color),
                   [10, 10]
                 )
@@ -175,14 +182,14 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
         let p;
         if (color === "white" && col.charCodeAt(0) > 90) {
           p = new GameTile(
-            boardIds[col.charAt(0).toLowerCase()],
+            pieceNameFromBoardId(col),
             color,
             [r, c],
             col.charAt(1) === "+" ? true : false
           );
         } else if (color === "black" && col.charCodeAt(0) < 91) {
           p = new GameTile(
-            boardIds[col.charAt(0).toLowerCase()],
+            pieceNameFromBoardId(col),
             color,
             [r, c],
             col.charAt(1) === "+" ? true : false
@@ -199,7 +206,7 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
 
 export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc, prevGameState) => {
   if (prevGameState) {
-    const lastPieceMoved = new GameTile(boardIds[prevGameState.move.piece[0].toLowerCase()], prevGameState.move.color, prevGameState.move.to, prevGameState.move.piece.length > 1);
+    const lastPieceMoved = new GameTile(pieceNameFromBoardId(prevGameState.move.piece), prevGameState.move.color, prevGameState.move.to, prevGameState.move.piece.length > 1);
     if (isCheckOrMate({board: reverseBoard(gameStateAfter.board), kings: gameStateBefore.kings}, lastPieceMoved)[0]) {
       return false;
     }
@@ -286,6 +293,29 @@ const findSpaceFrom = (kingLoc, tileLoc) => {
   return spaceBetween;
 }
 
+export const playerColorFromId = (id) => {
+  return id.charCodeAt(0) > 90 ? 'white' : 'black';
+}
+
+export const gameTileAtCoords = (board, [x, y]) => {
+  let pieceAtCoords = board[x][y];
+  if (pieceAtCoords.trim()) {
+    return new GameTile(pieceNameFromBoardId(pieceAtCoords), playerColorFromId(pieceAtCoords), [x, y], pieceAtCoords.length > 1);
+  }
+  return null;
+}
+
+export const findKings = (board, playerColor) => {
+  let white, black;
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] === 'k') white = playerColor === 'white' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
+      if (board[i][j] === 'K') black = playerColor === 'black' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
+    }
+  }
+  return { white, black };
+}
+
 export default {
   isValidMove,
   isCheckOrMate,
@@ -294,8 +324,12 @@ export default {
   getCombinedMoveSet,
   includesLoc,
   calcImpasse,
+  playerColorFromId,
+  pieceNameFromBoardId,
+  gameTileAtCoords,
+  findKings,
   copyMatrix
 };
 
 // TESTING
- test();
+//  test();
