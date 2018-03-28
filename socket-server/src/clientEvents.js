@@ -20,7 +20,8 @@ import {
   serverGameChat,
   serverUpdateGames,
   serverPlayerMove,
-  serverConcludeMatch
+  serverConcludeMatch,
+  serverChallengeSent,
 } from "./serverEvents";
 
 const { REST_SERVER_URL } = process.env;
@@ -230,6 +231,16 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
   }
 };
 
+const clientChallengeFriend = async ({ io, client, room }, payload) => {
+  success("client leave queue heard");
+  try {
+    const { data } = await axios.post(`${REST_SERVER_URL}/api/openMatches`, payload);
+    serverChallengeSent({ io, client, room }, data);
+  } catch (err) {
+    error("client leave queue error", err);
+  }
+};
+
 const clientEmitters = {
   "client.joinQueue": clientJoinQueue,
   "client.leaveQueue": clientLeaveQueue,
@@ -243,6 +254,7 @@ const clientEmitters = {
   "client.listOpenGames": clientListGames,
   "client.submitMove": clientSubmitMove,
   "client.concede": clientConcede,
+  "client.challengeFriend": clientChallengeFriend,
 };
 
 export default clientEmitters;
