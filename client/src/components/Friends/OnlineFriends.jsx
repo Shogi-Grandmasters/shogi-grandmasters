@@ -30,17 +30,14 @@ class OnlineFriends extends Component {
 
   render() {
     return (
-      <div className="friend-container"> 
-        <div className="friend-top">
-          <h2 className="friend-head">Friends List</h2>
-        </div>
-        <div className="friend-list-container">
-        <h3 className="friend-title">Online:</h3>
+      <div className="online-container"> 
+        <div className="online-head">Friends Online:</div>
+        <div className="online-list-container">
         {this.state.friends.map((user, index) => (
-          <div className="current-friend-container" key={index} >
+          <div className="online-friend-container" key={index} >
             <img width="50px" className="friend-avi" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${user.avatar}`} />
-            <b className="friend-username">{user.username}</b>
-            <a className="inline-button-friend" onClick={() => this.challengeFriend(user)}>Challenge</a>
+            <b className="online-username">{user.username}</b>
+            <a className="online-challenge-button" onClick={() => this.challengeFriend(user)}>Challenge</a>
             <hr />
           </div>
         ))}
