@@ -72,7 +72,7 @@ const clientDisconnect = ({ io, client, room }) => {
 //   const { text, email, challenge_id, challenge_title } = payload;
 //   const url = process.env.CODERUNNER_SERVICE_URL;
 //   const testCase = await axios.get(
-//     `http://localhost:3396/api/testCases/${challenge_id}`
+//     `${REST_SERVER_URL}/api/testCases/${challenge_id}`
 //   );
 //   const title = `const func = ${challenge_title};`;
 //   const input = text + title + testCase.data.rows[0].content;

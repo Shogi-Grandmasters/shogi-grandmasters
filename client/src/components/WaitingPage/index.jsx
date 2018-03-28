@@ -4,9 +4,11 @@ import axios from "axios";
 
 import "./WaitingPage.css";
 
+const {SOCKET_SERVER_URL} = process.env;
+
 class WaitingPage extends Component {
   componentWillMount() {
-    this.socket = io("http://localhost:4155", {
+    this.socket = io(SOCKET_SERVER_URL, {
       query: {
         roomId: "matchQueue",
         username: localStorage.getItem("username"),

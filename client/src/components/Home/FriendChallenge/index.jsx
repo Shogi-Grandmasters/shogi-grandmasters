@@ -3,6 +3,8 @@ import axios from "axios";
 
 // import "./FriendChallenge.css";
 
+const {REST_SERVER_URL} = process.env;
+
 class FriendChallenge extends Component {
   constructor(props) {
     super(props);
@@ -58,11 +60,11 @@ class FriendChallenge extends Component {
     const id = +localStorage.getItem("id");
     const flist = [];
     const { data } = await axios.get(
-      `http://localhost:3396/api/friends/fetchFriends/${id}`
+      `${REST_SERVER_URL}/api/friends/fetchFriends/${id}`
     );
     for (let friend of data) {
       const fid = friend.u_id;
-      const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
+      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
       friend.status == 1 && friend.id !== id && flist.push(friend);
     }
     this.setState({ friends: flist });

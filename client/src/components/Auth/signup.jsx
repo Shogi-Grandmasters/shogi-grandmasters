@@ -4,6 +4,8 @@ import Logo from '../Global/Logo/index.js'
 
 import './Auth.css';
 
+const {REST_SERVER_URL} = process.env;
+
 class Signup extends Component {
   constructor() {
     super();
@@ -15,7 +17,7 @@ class Signup extends Component {
     const { email, password, username } = this.state;
     const body = { email, password, username };
     try {
-      const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
+      const data = await axios.post(`${REST_SERVER_URL}/api/auth/signup`, body);
       data ? this.props.history.push('/login') : this.props.history.push('/signup');
     } catch (err) {
       throw new Error(err);
@@ -41,7 +43,7 @@ class Signup extends Component {
         autoComplete='email'
         onChange={this.handleInputChange}
         />
-      <input 
+      <input
         name='username'
         type='text'
         className='auth-form'
@@ -49,7 +51,7 @@ class Signup extends Component {
         placeholder={'enter your username'}
         onChange={this.handleInputChange}
         />
-      <input 
+      <input
         name='password'
         type='password'
         className='auth-form'

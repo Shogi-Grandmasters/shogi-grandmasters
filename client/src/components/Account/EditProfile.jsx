@@ -3,6 +3,8 @@ import axios from "axios";
 import Dropzone from "react-dropzone";
 import "./Account.css";
 
+const {REST_SERVER_URL, AVATAR_URL} = process.env;
+
 class EditProfile extends Component {
   constructor() {
     super();
@@ -22,16 +24,16 @@ class EditProfile extends Component {
       formData.append("upload_preset", "pnjjwy1j"); // preset = img styling
       formData.append("api_key", "913846924149284"); // add api key
       formData.append("timestamp", (Date.now() / 1000) | 0);
-      
-      return axios.post("https://api.cloudinary.com/v1_1/shogigrandmasters/image/upload", formData)
+
+      return axios.post(AVATAR_URL, formData)
       .then(response => {
         const data = response.data;
         const fileURL = data.secure_url // full URL
         const img = fileURL.split("upload/").slice(1)
         localStorage.setItem("avi", img);
-        axios.put(`http://localhost:3396/api/users/${localStorage.id}/${img}`)
+        axios.put(`${REST_SERVER_URL}/api/users/${localStorage.id}/${img}`)
         .then(res => this.props.history.push("/acct"))
-        
+
         //example url
         //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
       })
@@ -41,7 +43,7 @@ class EditProfile extends Component {
   submitPasswordReset = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`http://localhost:3396/api/auth/reset`, this.state);
+      const { data } = await axios.put(`${REST_SERVER_URL}/api/auth/reset`, this.state);
       localStorage.setItem('token', data[0].token.accessToken);
       data ? alert("Password reset successfully") : alert("Password reset failed!!!");
     } catch (err) {
@@ -51,7 +53,7 @@ class EditProfile extends Component {
   }
 
   render() {
-    const avi = localStorage.avi ? <img width="100px" src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${localStorage.avi}`} /> : <img width="50px" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
+    const avi = localStorage.avi ? <img width="100px" src={`${AVATAR_URL}${localStorage.avi}`} /> : <img width="50px" src={`${AVATAR_URL}v1521760976/mi69trcbxaq3ubkq4yh4.png`} />
     return (
       <div className="edit-container">
       <h2 className="title">Welcome back {localStorage.username}-san!</h2>
@@ -59,10 +61,10 @@ class EditProfile extends Component {
           <h3 className="title">Edit your Avatar:</h3>
           <div className="edit-dropzone">
           {avi}
-          <Dropzone 
-            onDrop={this.handleDrop} 
-            multiple 
-            accept="image/*" 
+          <Dropzone
+            onDrop={this.handleDrop}
+            multiple
+            accept="image/*"
             style={{"width" : "100px", "height" : "100px", "border" : "1px solid black", "borderRadius" : "5px"}}
             >
             <p style={{"textAlign" : "center"}}>Drop here</p>
@@ -71,7 +73,7 @@ class EditProfile extends Component {
       </div>
         <form className="edit-form-container">
           <h3 className="title">Reset your password:</h3>
-          <input 
+          <input
             name="username"
             type="text"
             autoComplete="username"
@@ -79,7 +81,7 @@ class EditProfile extends Component {
             placeholder={"enter your username"}
             onChange={this.handleInputChange}
             />
-          <input 
+          <input
             name="password"
             type="password"
             className="edit-form"
@@ -87,7 +89,7 @@ class EditProfile extends Component {
             placeholder={"enter your old password"}
             onChange={this.handleInputChange}
             /><br />
-          <input 
+          <input
             name="new_password"
             type="password"
             autoComplete="new-password"
