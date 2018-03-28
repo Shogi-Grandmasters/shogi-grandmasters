@@ -6,12 +6,11 @@ export default class Rooms {
     this.store = new Map();
   }
 
-  findOrCreate(roomId, board = initialBoard) {
+  findOrCreate(roomId) {
     let room = this.store.get(roomId);
     if (!room) {
       room = new Map();
       room.set("id", roomId);
-      roomId !== "home" && room.set("board", board);
       this.store.set(roomId, room);
     }
     return room;
