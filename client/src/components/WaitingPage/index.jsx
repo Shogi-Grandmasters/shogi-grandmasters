@@ -11,23 +11,21 @@ class WaitingPage extends Component {
     this.socket = io(SOCKET_SERVER_URL, {
       query: {
         roomId: "matchQueue",
-        username: localStorage.getItem("username"),
-        userId: localStorage.getItem("id")
       }
     });
   }
 
   componentDidMount() {
-    const userId = localStorage.getItem("id");
+    this.userId = localStorage.getItem("id");
 
-    this.props.location.history && this.socket.emit("client.joinQueue", userId);
+    this.props.location.history && this.socket.emit("client.joinQueue", this.userId);
 
     this.socket.on("server.joinMatch", ({ matchId, black, white }) => {
-      if (userId === black || userId === white) {
+      if (this.userId === black || this.userId === white) {
         this.props.history.push({
           pathname: `/match/${matchId}`,
           state: {
-            matchId: matchId,
+            matchId,
             black,
             white
           },
@@ -41,7 +39,7 @@ class WaitingPage extends Component {
     // let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
     //   data: { matchId: this.props.match }
     // });
-    this.socket.emit("client.leaveQueue", localStorage.getItem("id"));
+    this.socket.emit("client.leaveQueue", this.userId);
     this.props.history.push("/home");
   }
 
