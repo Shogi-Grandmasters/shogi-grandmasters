@@ -6,16 +6,16 @@ export const createOpenMatchHelper = ({ player1, player2 }) => {
   `;
 };
 
-export const fetchOpenMatchHelper = () => {
+export const fetchOpenMatchHelper = ({ id }) => {
   return `
-    SELECT * FROM open_matches
+    SELECT * FROM open_matches WHERE player1='${id}' OR player2='${id}'
   `;
 };
 
-export const deleteOpenMatchHelper = ({matchId}) => {
+export const deleteOpenMatchHelper = ({ id }) => {
   return `
     DELETE FROM open_matches
-    WHERE id='${matchId}'
+    WHERE id='${id}'
     RETURNING player1
   `;
 };
