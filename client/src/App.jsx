@@ -29,12 +29,7 @@ class App extends Component {
           <Route
             path="/acct"
             component={props => <Protected component={Account} {...props} />}
-          >
-            <Route path="/acct/edit" component={EditProfile} />
-            <Route path="/acct/friends" component={Friends} />
-            <Route path="/acct/faq" component={FrequentlyAsked} />
-            <Route path="/acct/rank" component={Rankings} />
-          </Route>
+          />
           <Route
             path="/home"
             component={props => <Protected component={Home} {...props} />}

@@ -20,7 +20,6 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
-
   addFriend = async () => {
     const id = localStorage.getItem("id");
     const { username } = this.state;
@@ -39,38 +38,38 @@ class Friends extends Component {
     this.setState({ [name]: value });
   }
 
-fetchFriends = async () => {
-  const id = localStorage.getItem("id");
-  const flist = [];
-  const pending = [];
-  const awaiting = [];
-  const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
-  for(let friend of data) {
-    if(friend.status === 0 && friend.u_id == id) awaiting.push(friend)
-    if(friend.status === 0 && friend.u_id != id) pending.push(friend)
-    if(friend.status == 1 && friend.id != id) flist.push(friend)
-    if(friend.status === 2) this.deleteFriend(friend)
+  fetchFriends = async () => {
+    const id = localStorage.getItem("id");
+    const flist = [];
+    const pending = [];
+    const awaiting = [];
+    const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
+    for(let friend of data) {
+      const fid = friend.u_id;
+      const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
+      friend.permId = user.data[0].id
+      friend.name = user.data[0].username
+      if(friend.status === 0 && friend.u_id == id) awaiting.push(friend)
+      if(friend.status === 0 && friend.u_id != id) pending.push(friend)
+      if(friend.status == 1 && friend.id != id) flist.push(friend)
+      if(friend.status === 2) this.deleteFriend(friend)
+    }
+    this.setState({ friends: flist });
+    this.setState({ pending: pending });
+    this.setState({ awaiting: awaiting });
   }
-  this.setState({ friends: flist });
-  this.setState({ pending: pending });
-  this.setState({ awaiting: awaiting });
-}
 
   deleteFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.id;
-    const { data } = await axios.delete(
-      `http://localhost:3396/api/friends/deleteFriend/${id}/${fid}`
-    );
+    const { data } = await axios.delete(`http://localhost:3396/api/friends/deleteFriend/${id}/${fid}`);
     this.fetchFriends();
   }
 
   acceptFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.permId;
-    const { data } = await axios.put(
-      `http://localhost:3396/api/friends/${id}/${fid}/1`
-    );
+    const { data } = await axios.put(`http://localhost:3396/api/friends/${id}/${fid}/1`);
     const body = {
       u_id: id,
       f_id: fid,
@@ -83,11 +82,7 @@ fetchFriends = async () => {
   rejectFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.permId;
-    console.log('inside reject', e)
-    const { data } = await axios.put(
-      `http://localhost:3396/api/friends/${id}/${fid}/2`
-    );
-    console.log('data', data)
+    const { data } = await axios.put(`http://localhost:3396/api/friends/${id}/${fid}/2`);
     this.fetchFriends();
   }
 
@@ -147,28 +142,3 @@ fetchFriends = async () => {
 }
 
 export default Friends;
-
-// fetchFriends = async () => {
-//   const id = localStorage.getItem("id");
-//   const flist = [];
-//   const pending = [];
-//   const awaiting = [];
-//   const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
-//   console.log('our fetch friends data', data)
-//   for(let friend of data) {
-//     if(friend.status === 0 && friend.u_id == id)) awaiting.push(friend)
-//     if!(friend.u_id === id)pending.push(friend)
-
-//     const fid = friend.u_id;
-//     const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
-//     friend.permId = user.data[0].id
-//     friend.name = user.data[0].username
-//     if(friend.status === 0 && friend.u_id === parseInt(localStorage.getItem("id"))) awaiting.push(friend)
-//     if(friend.status === 0 && friend.u_id !== parseInt(localStorage.getItem("id"))) pending.push(friend)
-//     if(friend.status == 1 && friend.id !== parseInt(localStorage.getItem("id"))) flist.push(friend)
-//     if(friend.status === 2) this.deleteFriend(friend)
-//   }
-//   this.setState({ friends: flist });
-//   this.setState({ pending: pending });
-//   this.setState({ awaiting: awaiting });
-// }
