@@ -3,16 +3,18 @@ import axios from "axios";
 import Logo from "../Global/Logo/index.js"
 import "./Auth.css";
 
+const {REST_SERVER_URL} = process.env;
+
 class Login extends Component {
   constructor() {
     super();
     this.state = {};
   }
-  
+
   submitAuthData = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(`http://localhost:3396/api/auth/login`, this.state);
+      const { data } = await axios.post(`${REST_SERVER_URL}/api/auth/login`, this.state);
       localStorage.setItem('email', data.email);
       localStorage.setItem('username', data.username);
       localStorage.setItem('id', data.id);
@@ -43,8 +45,8 @@ class Login extends Component {
             placeholder={"enter username"}
             className="auth-form"
             onChange={this.handleInputChange}
-            /><br />   
-          <input 
+            /><br />
+          <input
             name="password"
             type="password"
             autoComplete="current-password"

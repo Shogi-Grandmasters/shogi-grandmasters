@@ -5,13 +5,15 @@ import WaitingPage from "../WaitingPage/index.jsx";
 import ShogiBoard from "./ShogiBoard.jsx";
 import GameChat from "./GameChat/index.jsx";
 
+const {SOCKET_SERVER_URL} = process.env;
+
 class BoardIndex extends Component {
   state = {
     waiting: true
   };
 
   componentWillMount() {
-    this.socket = io("http://localhost:4155", {
+    this.socket = io(SOCKET_SERVER_URL, {
       query: {
         roomId: this.props.match.params.matchId,
         userId: localStorage.getItem("id"),

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import io from "socket.io-client/dist/socket.io.js";
 
+const {SOCKET_SERVER_URL} = process.env;
+
 class SocketTest extends Component {
   constructor() {
     super();
@@ -11,14 +13,14 @@ class SocketTest extends Component {
   }
 
   componentWillMount() {
-    this.socket = io("http://localhost:4155", {
+    this.socket = io(SOCKET_SERVER_URL, {
       query: {
         roomId: "socketTest"
       }
     });
     this.socket.emit("client.fetchMessages");
   }
-  
+
   async componentDidMount() {
     await this.socket.on("server.gameChat", messages => {
       messages.length && this.setState({ messages: messages });

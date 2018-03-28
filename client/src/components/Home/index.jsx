@@ -11,6 +11,8 @@ import Nav from "../Global/Nav/Nav.jsx";
 
 import "./Home.css";
 
+const { SOCKET_SERVER_URL } = process.env;
+
 class Home extends Component {
   constructor() {
     super();
@@ -20,7 +22,7 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this.socket = io("http://localhost:4155", {
+    this.socket = io(SOCKET_SERVER_URL, {
       query: {
         roomId: "home",
         username: localStorage.getItem("username"),
