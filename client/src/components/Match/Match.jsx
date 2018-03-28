@@ -12,13 +12,11 @@ import {
 } from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 
-import ShogiPiece from './ShogiPiece.jsx';
-import GridSpace from './ShogiGridSpace.jsx';
 import PlayerPanel from './PlayerPanel.jsx';
 import PlayerHand from './PlayerHand.jsx';
 import MatchLog from './MatchLog.jsx';
 import TurnIndicator from './TurnIndicator.jsx';
-import GameChat from './GameChat/index.jsx';
+import GameChat from './Chat/index.jsx';
 import ModalPrompt from '../Global/ModalPrompt.jsx';
 
 import './ShogiBoard.css';
@@ -92,34 +90,6 @@ class Match extends Component {
     let localUser = localStorage.getItem('username');
     let updatePlayer = { ...this.state.player };
     let updateOpponent = { ...this.state.opponent };
-
-    if (localUser === this.props.match.black.username) {
-      updatePlayer = {
-        user: this.props.match.black,
-        color: 'black',
-        facing: 'north',
-        hand: this.props.match.hand_black || [],
-      };
-      updateOpponent = {
-        user: this.props.match.white,
-        color: 'white',
-        facing: 'south',
-        hand: this.props.match.hand_white || [],
-      }
-    } else {
-      updatePlayer = {
-        user: this.props.match.white,
-        color: 'white',
-        facing: 'north',
-        hand: this.props.match.hand_white || [],
-      };
-      updateOpponent = {
-        user: this.props.match.black,
-        color: 'black',
-        facing: 'south',
-        hand: this.props.match.hand_black || [],
-      }
-    }
     let updateBoard = updatePlayer.color === 'black' ? reverseBoard(this.state.board) : copyMatrix(this.state.board);
     let kingPositions = findKings(this.state.board, updatePlayer.color);
     let isTurn = this.props.match.turn ? updatePlayer.color === 'black' : updatePlayer.color === 'white';
@@ -417,9 +387,6 @@ class Match extends Component {
   }
 
   render() {
-    const boardStyle = {
-      backgroundImage: `url(${'../textures/wood.jpg'})`
-    }
     const modal = this.state.showModal ? this.state.modalContent : null;
 
     return (
@@ -430,46 +397,10 @@ class Match extends Component {
           <TurnIndicator isTurn={this.state.isTurn} />
           <PlayerPanel player={this.state.player} />
         </div>
-        <div>
-          <div className="match__play">
-            <div className="match__hand">
-              <PlayerHand
-                id={'opponent'}
-                local={false}
-                selected={this.state.selected}
-                player={this.state.opponent}
-                turn={!this.state.isTurn}
-                activate={this.togglePiece}
-              />
-            </div>
-            <div className="match__board">
-              {this.state.board.map((row, ri) =>
-                row.map((cell, ci) =>
-                  <GridSpace
-                    key={`${ri}x${ci}`}
-                    selected={this.state.selected}
-                    hints={this.state.hints}
-                    owned={cell.trim() && this.state.player.color === playerColorFromId(cell)}
-                    coords={[ri, ci]}
-                    piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
-                    player={this.state.player}
-                    turn={this.state.isTurn}
-                    activate={this.togglePiece}
-                    movePiece={this.movePiece}
-                  />
-                ))}
-            </div>
-            <div className="match__hand">
-              <PlayerHand
-                id={'player'}
-                local={true}
-                selected={this.state.selected}
-                player={this.state.player}
-                turn={this.state.isTurn}
-                activate={this.togglePiece}
-              />
-            </div>
-          </div>
+        <div className="match__play">
+          <PlayerHand location="north" />
+          <ShogiBoard />
+          <PlayerHand location="south" />
         </div>
         <div className="match__chat">
           <div></div>
