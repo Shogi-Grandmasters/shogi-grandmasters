@@ -406,8 +406,7 @@ GameTile.prototype._kingMoves = function(board, moveSet) {
         return set.concat([move]);
       }
       return set;
-    }, [])
-    .map(move => reverseLoc(move));
+    }, []);
 };
 
 export default GameTile;
