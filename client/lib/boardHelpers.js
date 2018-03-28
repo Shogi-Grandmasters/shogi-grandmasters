@@ -14,6 +14,7 @@ export const pieceNameFromBoardId = (id) => {
 }
 
 export const validDropLocations = (board, kings, tile) => {
+  board = copyMatrix(board);
   let validDrops = [];
   let pawnLocs = [];
 
@@ -39,7 +40,7 @@ export const validDropLocations = (board, kings, tile) => {
         if (r > 0 || (tile.name !== "Lance" && tile.name !== "Pawn")) {
           if (r > 1 || tile.name !== "Knight") {
             if (tile.name !== "Pawn" || !pawnLocs.includes(c)) {
-              let boardCopy = board;
+              let boardCopy = copyMatrix(board);
               boardCopy[r][c] = tile.color === "white" ? "p" : "P";
               let pt = new GameTile("Pawn", tile.color, [r, c]);
               if (
@@ -67,6 +68,7 @@ export const validDropLocations = (board, kings, tile) => {
 };
 
 export const isCheckOrMate = (gameState, movedTile) => {
+  gameState.board = copyMatrix(gameState.board);
   let check = false;
   let checkmate = false;
 
@@ -165,7 +167,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
             //   the king from the piece threatening it
             gameState[oppositeColor(movedTile.color)].forEach(p => {
               let temp = validDropLocations(
-                gameState.board,
+                copyMatrix(gameState.board),
                 gameState.kings,
                 new GameTile(
                   pieceNameFromBoardId(p),
