@@ -8,6 +8,7 @@ import {
   reverseBoard,
   findKings,
   gameTileAtCoords,
+  playerColorFromId,
   pieceNameFromBoardId
 } from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
@@ -206,8 +207,8 @@ class Match extends Component {
     this.toggleModal();
   }
 
-  moveWillPromote(coords, pieceId) {
-    let [x, y] = coords;
+  moveWillPromote([x, y], pieceId) {
+    console.log('hey, here in move will promote');
     let willPromote = false;
     let pendingInput = false;
     if (x < 3 && pieceId.length === 1) {
@@ -219,7 +220,7 @@ class Match extends Component {
       // the prompt return functions are called
       if (!willPromote && !['King', 'Gold'].includes(pieceNameFromBoardId(pieceId))) {
         pendingInput = true;
-        this.promptForPromote(coords);
+        this.promptForPromote([x, y]);
       }
     }
     return [willPromote, pendingInput];
