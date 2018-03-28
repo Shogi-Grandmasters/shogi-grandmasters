@@ -31,8 +31,8 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
   )
 }
 
-const PlayerHand = ({ player, local, selected, activate }) => {
-  let hand = player.hand.reduce((counts, piece) => {
+const PlayerHand = ({ player, hand, local, selected, activate }) => {
+  hand = hand.reduce((counts, piece) => {
     counts[piece] = counts[piece] + 1 || 1;
     return counts;
   }, {})

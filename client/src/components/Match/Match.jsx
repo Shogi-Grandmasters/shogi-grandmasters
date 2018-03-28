@@ -7,7 +7,8 @@ import {
   copyMatrix,
   reverseBoard,
   findKings,
-  gameTileAtCoords
+  gameTileAtCoords,
+  pieceNameFromBoardId
 } from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 
@@ -21,12 +22,18 @@ import ModalPrompt from '../Global/ModalPrompt.jsx';
 
 import './Match.css';
 
+const isLocalPlayer = (player) => {
+  console.log('in fn, ', Number(localStorage.getItem('id')) === player.id);
+  return Number(localStorage.getItem('id')) === player.id;
+}
+
 class Match extends Component {
   constructor(props) {
     super(props);
+    let { match } = props;
     this.state = {
-      matchId: props.match.matchId,
-      board: props.match.board || [
+      matchId: match.matchId,
+      board: match.board || [
         ['L', 'N', 'S', 'G', 'K', 'G', 'S', 'N', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
         ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
@@ -37,18 +44,24 @@ class Match extends Component {
         [' ', 'b', ' ', ' ', ' ', ' ', ' ', 'r', ' '],
         ['l', 'n', 's', 'g', 'k', 'g', 's', 'n', 'l']
       ],
-      player: {
-        user: { name: 'Player One' },
-        color: 'white',
-        facing: 'north',
-        hand: [],
+      players: {
+        white: {
+          user: match.white,
+          facing: isLocalPlayer(match.white) ? 'north' : 'south',
+          color: 'white' //holdover, todo: remediate player.color use
+        },
+        black: {
+          user: match.black,
+          facing: isLocalPlayer(match.black) ? 'north' : 'south',
+          color: 'black'
+        }
       },
-      opponent: {
-        user: { name: 'Player Two' },
-        color: 'black',
-        facing: 'south',
-        hand: [],
+      hands: {
+        white: match.hand_white,
+        black: match.hand_black,
       },
+      localColor: isLocalPlayer(match.white) ? 'white' : 'black',
+      opponentColor: isLocalPlayer(match.white) ? 'black' : 'white',
       kings: null,
       pendingMove: null,
       pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
@@ -57,11 +70,12 @@ class Match extends Component {
       selected: null,
       hints: [],
       isTurn: true,
-      log: props.match.event_log || [],
+      log: match.event_log || [],
     }
     this.socket = props.socket;
 
     this.initializeMatch = this.initializeMatch.bind(this);
+    this.getPlayer = this.getPlayer.bind(this);
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -87,48 +101,19 @@ class Match extends Component {
   }
 
   initializeMatch() {
-    let localUser = localStorage.getItem('username');
-    let updatePlayer = { ...this.state.player };
-    let updateOpponent = { ...this.state.opponent };
-
-    if (localUser === this.props.match.black.username) {
-      updatePlayer = {
-        user: this.props.match.black,
-        color: 'black',
-        facing: 'north',
-        hand: this.props.match.hand_black || [],
-      };
-      updateOpponent = {
-        user: this.props.match.white,
-        color: 'white',
-        facing: 'south',
-        hand: this.props.match.hand_white || [],
-      }
-    } else {
-      updatePlayer = {
-        user: this.props.match.white,
-        color: 'white',
-        facing: 'north',
-        hand: this.props.match.hand_white || [],
-      };
-      updateOpponent = {
-        user: this.props.match.black,
-        color: 'black',
-        facing: 'south',
-        hand: this.props.match.hand_black || [],
-      }
-    }
-    let updateBoard = updatePlayer.color === 'black' ? reverseBoard(this.state.board) : copyMatrix(this.state.board);
-    let kingPositions = findKings(this.state.board, updatePlayer.color);
-    let isTurn = this.props.match.turn ? updatePlayer.color === 'black' : updatePlayer.color === 'white';
+    let updateBoard = this.state.localColor === 'black' ? reverseBoard(this.state.board) : copyMatrix(this.state.board);
+    let kingPositions = findKings(this.state.board, this.state.localColor);
+    let isTurn = this.props.match.turn ? this.state.localColor === 'black' : this.state.localColor === 'white';
 
     this.setState({
-      player: updatePlayer,
-      opponent: updateOpponent,
       board: updateBoard,
       kings: kingPositions,
       isTurn,
     });
+  }
+
+  getPlayer(which = 'local') {
+    return which === 'opponent' ? this.state.players[this.state.opponentColor] : this.state.players[this.state.localColor];
   }
 
   toggleModal(content = null) {
@@ -150,7 +135,7 @@ class Match extends Component {
   capture([x, y]) {
     let pieceToCapture = this.state.board[x][y];
     pieceToCapture = pieceToCapture[0];
-    return this.state.player.color === 'white' ? pieceToCapture.toLowerCase() : pieceToCapture.toUpperCase();
+    return this.state.localColor === 'white' ? pieceToCapture.toLowerCase() : pieceToCapture.toUpperCase();
   }
 
   removeFromHand(piece, hand) {
@@ -210,10 +195,12 @@ class Match extends Component {
 
   confirmConcedeChoice(choice) {
     if (choice) {
+      let winner = this.getPlayer('opponent').user;
+      let loser = this.getPlayer('local').user;
       this.socket.emit("client.concede", {
         matchId: this.state.matchId,
-        winner: this.state.opponent.user,
-        loser: this.state.player.user,
+        winner,
+        loser,
       });
     }
     this.toggleModal();
@@ -225,12 +212,12 @@ class Match extends Component {
     let pendingInput = false;
     if (x < 3 && pieceId.length === 1) {
       // if it has no available moves, it has to promote
-      let destination = new GameTile(boardIds[pieceId.toLowerCase()], playerColorFromId(pieceId), [x, y]);
+      let destination = new GameTile(pieceNameFromBoardId(pieceId), playerColorFromId(pieceId), [x, y]);
       if (!destination.findMoves(this.state.board).length) willPromote = true;
       // if it wasn't forced to promote, and it's not a King or GG, which never promote
       // prompt user for choice.  with pending input, move will not be submitted until after
       // the prompt return functions are called
-      if (!willPromote && !['King', 'Gold'].includes(boardIds[pieceId.toLowerCase()])) {
+      if (!willPromote && !['King', 'Gold'].includes(pieceNameFromBoardId(pieceId))) {
         pendingInput = true;
         this.promptForPromote(coords);
       }
@@ -245,18 +232,18 @@ class Match extends Component {
       let action = {
         before: {
           board: copyMatrix(this.state.board),
-          [this.state.player.color]: [...this.state.player.hand],
-          [this.state.opponent.color]: [...this.state.opponent.hand],
+          white: [...this.state.hands.white],
+          black: [...this.state.hands.black],
           kings: { ...this.state.kings },
         },
         after: {
           board: copyMatrix(this.state.board),
-          [this.state.player.color]: [...this.state.player.hand],
-          [this.state.opponent.color]: [...this.state.opponent.hand],
+          white: [...this.state.hands.white],
+          black: [...this.state.hands.black],
           kings: { ...this.state.kings },
         },
         move: {
-          color: this.state.player.color,
+          color: this.state.localColor,
           from: location === 'board' ? [...target] : [10, 10],
           to: [x, y],
           didCapture: false,
@@ -268,7 +255,7 @@ class Match extends Component {
         if (gameTileAtCoords(this.state.board, [x, y])) {
           action.move.didCapture = true;
           action.move.capturedPiece = gameTileAtCoords(this.state.board, [x, y]);
-          action.after[this.state.player.color].push(this.capture([x, y]));
+          action.after[this.state.localColor].push(this.capture([x, y]));
         }
         let pieceToMove = this.state.board[fromX][fromY];
         // some moves force promotion, if the piece has no valid moves remaining
@@ -280,7 +267,7 @@ class Match extends Component {
         action.move.didPromote = willPromote && !pendingChoice ? true : false;
         // when moving a king, the king's movement is reflected to the opposite-side coords to consider the opponent's moves
         // kings may not be moved into check or checkmate conditions
-        if (['k', 'K'].includes(pieceToMove)) action.after.kings[this.state.player.color] = [oppositeBoardSide(x), oppositeBoardSide(y)];
+        if (['k', 'K'].includes(pieceToMove)) action.after.kings[this.state.localColor] = [oppositeBoardSide(x), oppositeBoardSide(y)];
         action.after.board[fromX][fromY] = ' ';
         action.after.board[x][y] = willPromote && !pendingChoice ? pieceToMove + '+' : pieceToMove;
       } else {
@@ -290,7 +277,7 @@ class Match extends Component {
         action.move.piece = pieceToDrop;
         action.move.isPending = false;
         action.after.board[x][y] = pieceToDrop;
-        action.after[this.state.player.color] = this.removeFromHand(pieceToDrop, action.after[this.state.player.color]);
+        action.after[this.state.localColor] = this.removeFromHand(pieceToDrop, action.after[this.state.localColor]);
       }
 
       this.setState({
@@ -304,18 +291,17 @@ class Match extends Component {
     console.log(status)
 
     let { board, white, black, kings } = after;
-    let updatePlayer = { ...this.state.player };
-    updatePlayer.hand = updatePlayer.color === 'white' ? [...white] : [...black];
-    let updateOpponent = { ...this.state.opponent };
-    updateOpponent.hand = updateOpponent.color === 'white' ? [...white] : [...black];
     // boards are sent around from the perspective of each player, so
     // the board must be flipped around when the move received comes from the other player
-    board = move.color === this.state.player.color ? board : reverseBoard(board);
+    board = move.color === this.state.localColor ? board : reverseBoard(board);
+    let hands = {
+      white,
+      black
+    }
 
     this.setState(prevState => ({
       board,
-      player: updatePlayer,
-      opponent: updateOpponent,
+      hands,
       kings,
       isTurn: !prevState.isTurn,
       hints: [],
@@ -327,7 +313,7 @@ class Match extends Component {
   }
 
   concludeMatch({ winner, loser }) {
-    let headline = winner.id === this.state.player.user.id ? 'VICTORY' : 'YOU LOSE';
+    let headline = winner.id === this.getPlayer('local').user.id ? 'VICTORY' : 'YOU LOSE';
     let choices = [{
       cta: 'EXIT',
       action: this.quit,
@@ -372,7 +358,7 @@ class Match extends Component {
       // clicks on hand sends {color}:{piece} as ref, like 'white:b'
     } else {
       let [playerColor, selectedPiece] = target.split(':');
-      let piece = new GameTile(boardIds[selectedPiece], playerColor, [10, 10], false);
+      let piece = new GameTile(pieceNameFromBoardId(selectedPiece), playerColor, [10, 10], false);
       if (current && current.location === location) {
         updateSelected = target === current.target ? null : { location, target, piece };
       } else {
@@ -394,7 +380,7 @@ class Match extends Component {
         });
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
-        let gameTile = new GameTile(boardIds[piece.toLowerCase()], playerColor, [10, 10]);
+        let gameTile = new GameTile(pieceNameFromBoardId(piece), playerColor, [10, 10]);
         let validLocations = validDropLocations(this.state.board, this.state.kings, gameTile);
         this.setState({
           hints: validLocations,
@@ -421,9 +407,9 @@ class Match extends Component {
       <div className="match">
         <MatchLog events={this.state.log} />
         <div className="match__turn">
-          <PlayerPanel player={this.state.opponent} />
+          <PlayerPanel player={this.getPlayer('opponent')} />
           <TurnIndicator isTurn={this.state.isTurn} />
-          <PlayerPanel player={this.state.player} />
+          <PlayerPanel player={this.getPlayer('local')} />
         </div>
         <div>
           <div className="match__play">
@@ -432,7 +418,8 @@ class Match extends Component {
                 id={'opponent'}
                 local={false}
                 selected={this.state.selected}
-                player={this.state.opponent}
+                player={this.getPlayer('opponent')}
+                hand={this.state.hands[this.state.opponentColor]}
                 turn={!this.state.isTurn}
                 activate={this.togglePiece}
               />
@@ -441,7 +428,7 @@ class Match extends Component {
               board={this.state.board}
               selected={this.state.selected}
               hints={this.state.hints}
-              player={this.state.player}
+              player={this.getPlayer('local')}
               isTurn={this.state.isTurn}
               togglePiece={this.togglePiece}
               movePiece={this.movePiece}
@@ -451,7 +438,8 @@ class Match extends Component {
                 id={'player'}
                 local={true}
                 selected={this.state.selected}
-                player={this.state.player}
+                player={this.getPlayer('local')}
+                hand={this.state.hands[this.state.localColor]}
                 turn={this.state.isTurn}
                 activate={this.togglePiece}
               />
