@@ -1,5 +1,9 @@
 import React from 'react';
-import { boardIds, playerColorFromId } from '../../../lib/boardHelpers';
+import {
+  boardIds,
+  playerColorFromId,
+  pieceNameFromBoardId
+} from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 import GridSpace from './GridSpace.jsx';
 
@@ -15,7 +19,7 @@ const ShogiBoard = ({ board, selected, hints, player, isTurn, togglePiece, moveP
           hints={hints}
           owned={cell.trim() && player.color === playerColorFromId(cell)}
           coords={[ri, ci]}
-          piece={cell.trim() ? new GameTile(boardIds[cell[0].toLowerCase()], playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
+          piece={cell.trim() ? new GameTile(pieceNameFromBoardId(cell), playerColorFromId(cell), [ri, ci], cell.length > 1) : null}
           player={player}
           turn={isTurn}
           activate={togglePiece}

@@ -437,17 +437,15 @@ class Match extends Component {
                 activate={this.togglePiece}
               />
             </div>
-            <div className="match__board">
-              <ShogiBoard
-                board={this.state.board}
-                selected={this.state.selected}
-                hints={this.state.hints}
-                player={this.state.player}
-                isTurn={this.state.isTurn}
-                togglePiece={this.togglePiece}
-                movePiece={this.movePiece}
-              />
-            </div>
+            <ShogiBoard
+              board={this.state.board}
+              selected={this.state.selected}
+              hints={this.state.hints}
+              player={this.state.player}
+              isTurn={this.state.isTurn}
+              togglePiece={this.togglePiece}
+              movePiece={this.movePiece}
+            />
             <div className="match__hand">
               <PlayerHand
                 id={'player'}

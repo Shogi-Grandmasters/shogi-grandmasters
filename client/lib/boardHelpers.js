@@ -1,11 +1,17 @@
 import {
   boardIds,
   oppositeColor,
+  oppositeBoardSide,
   includesLoc,
   reverseLoc
 } from "./constants.js";
 import { test } from "./tests.js";
 import GameTile from "./GameTile.js";
+
+export const pieceNameFromBoardId = (id) => {
+  id = id.length > 1 ? id[0].toLowerCase() : id.toLowerCase();
+  return boardIds[id];
+}
 
 export const validDropLocations = (board, kings, tile) => {
   let validDrops = [];
@@ -72,7 +78,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         if (movedTile.color === "white") {
           if (col.charCodeAt(0) > 90) {
             let p = new GameTile(
-              boardIds[col[0].toLowerCase()],
+              pieceNameFromBoardId(col),
               "white",
               [r, c],
               col.length > 1
@@ -90,7 +96,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         } else {
           if (col.charCodeAt(0) < 91) {
             let p = new GameTile(
-              boardIds[col[0].toLowerCase()],
+              pieceNameFromBoardId(col),
               "black",
               [r, c],
               col.length > 1
@@ -162,7 +168,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
                 gameState.board,
                 gameState.kings,
                 new GameTile(
-                  boardIds[p[0].toLowerCase()],
+                  pieceNameFromBoardId(p),
                   oppositeColor(movedTile.color),
                   [10, 10]
                 )
@@ -204,14 +210,14 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
         let p;
         if (color === "white" && col.charCodeAt(0) > 90) {
           p = new GameTile(
-            boardIds[col.charAt(0).toLowerCase()],
+            pieceNameFromBoardId(col),
             color,
             [r, c],
             col.charAt(1) === "+" ? true : false
           );
         } else if (color === "black" && col.charCodeAt(0) < 91) {
           p = new GameTile(
-            boardIds[col.charAt(0).toLowerCase()],
+            pieceNameFromBoardId(col),
             color,
             [r, c],
             col.charAt(1) === "+" ? true : false
@@ -235,7 +241,7 @@ export const isValidMove = (
 ) => {
   if (prevGameState) {
     const lastPieceMoved = new GameTile(
-      boardIds[prevGameState.move.piece[0].toLowerCase()],
+      pieceNameFromBoardId(prevGameState.move.piece),
       prevGameState.move.color,
       prevGameState.move.to,
       prevGameState.move.piece.length > 1
@@ -317,6 +323,7 @@ const findSpaceFrom = (kingLoc, tileLoc) => {
   }
   return spaceBetween;
 };
+
 export const playerColorFromId = (id) => {
   return id.charCodeAt(0) > 90 ? 'white' : 'black';
 }
@@ -324,9 +331,7 @@ export const playerColorFromId = (id) => {
 export const gameTileAtCoords = (board, [x, y]) => {
   let pieceAtCoords = board[x][y];
   if (pieceAtCoords.trim()) {
-    let isPromoted = false;
-    if (pieceAtCoords.length > 1) { isPromoted = true; pieceAtCoords = pieceAtCoords[0]; }
-    return new GameTile(boardIds[pieceAtCoords.toLowerCase()], playerColorFromId(pieceAtCoords), [x, y], isPromoted);
+    return new GameTile(pieceNameFromBoardId(pieceAtCoords), playerColorFromId(pieceAtCoords), [x, y], pieceAtCoords.length > 1);
   }
   return null;
 }
@@ -351,6 +356,7 @@ export default {
   includesLoc,
   calcImpasse,
   playerColorFromId,
+  pieceNameFromBoardId,
   gameTileAtCoords,
   findKings,
   copyMatrix
