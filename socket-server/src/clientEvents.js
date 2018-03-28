@@ -2,7 +2,7 @@ import axios from "axios";
 import randomstring from "randomstring";
 
 import { boardIds } from "./lib/constants";
-import { isValidMove, isCheckOrMate, reverseBoard } from "./lib/boardHelpers";
+import { isValidMove, isCheckOrMate, reverseBoard, pieceNameFromBoardId } from "./lib/boardHelpers";
 import { endMatch } from './lib/ratingHelpers';
 import { moveToString } from "./lib/matchLog";
 import GameTile from "./lib/GameTile";
@@ -188,10 +188,10 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push('Move submitted was not for the correct turn.');
     // move is valid
-    let validMove = isValidMove(before, after, new GameTile(boardIds[move.piece[0].toLowerCase()], move.color, move.from, move.piece.length > 1), move.to, previous);
+    let validMove = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
     // board state is check or checkmate
-    let [check, checkmate] = isCheckOrMate(after, new GameTile(boardIds[move.piece.toLowerCase()], move.color, move.to, move.piece.length > 1));
+    let [check, checkmate] = isCheckOrMate(after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
     // save new state if the move was successful
     let success = correctTurn && validMove;
@@ -202,7 +202,9 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let event = {
       moveNumber: eventLog.length + 1,
       notation: moveToString(move),
-      move
+      move,
+      check,
+      checkmate
     };
     eventLog.unshift(event);
     await axios.put(`${REST_SERVER_URL}/api/matches`, {

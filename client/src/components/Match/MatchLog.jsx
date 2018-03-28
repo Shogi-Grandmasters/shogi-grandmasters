@@ -7,6 +7,15 @@ import { FadeInGroup } from '../Global/Animation/TransitionGroups.jsx';
 
 import './MatchLog.css';
 
+const LogCheck = ({ color, check, checkmate }) => (
+  <div className={`match__log-item ${checkmate ? 'alert' : 'warning'}`}>
+    <div className={`match__log-color ${color}`}></div>
+    <div className="match__log-event">
+      <h3>{checkmate ? 'CHECKMATE' : 'CHECK'}</h3>
+    </div>
+  </div>
+);
+
 const LogCapture = ({ color, capturedPiece }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
@@ -66,8 +75,9 @@ const MatchLog = ({ events }) => {
             {events.map((event, ei) => {
               let moveType = event.notation.indexOf('*') >= 0 ? 'Drop' : event.notation.indexOf('x') >= 0 ? 'Capture' : 'Move';
               let eventBreakout = [];
+              (event.check || event.checkmate) && eventBreakout.push(<LogCheck key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} check={event.check} checkmate={event.checkmate} />);
               event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} />);
-              moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`}color={event.move.color} capturedPiece={event.move.capturedPiece} />)
+              moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`} color={event.move.color} capturedPiece={event.move.capturedPiece} />)
               eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} />);
               return [...eventBreakout];
             })}
