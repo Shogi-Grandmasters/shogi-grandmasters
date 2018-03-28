@@ -66,3 +66,7 @@ export const serverConcludeMatch = ({ io, client, room }, payload) => {
 export const serverJoinMatch = ({ io, client, room }, payload) => {
   io.in(room.get("id")).emit("server.joinMatch", payload);
 };
+
+export const serverChallengeSent = ({ io, client, room }, payload) => {
+  io.in(room.get("id")).emit("server.challengeSent", payload);
+};

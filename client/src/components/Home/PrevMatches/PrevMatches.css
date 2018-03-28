@@ -1,7 +1,7 @@
 .prev_matches {
   display: grid;
   grid-template-rows: 50px 10fr;
-  /* height: 50vh; */
+  height: 100%;
   width: 100%;
   text-align: center;
 }

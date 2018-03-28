@@ -1,0 +1,21 @@
+.friend-challenge {
+  /* display: grid; */
+  /* grid-template-columns: 8fr 1fr 1fr; */
+  width: 100%;
+}
+
+.challenge_items {
+  font-size: 15px;
+  font-weight: 600;
+  display: grid;
+  grid-template-columns: 10fr 50px 50px;
+  height: 45px;
+  padding: 4px;
+  background: linear-gradient(#eee, #ddd);
+  border-bottom: solid 1px #ccc;
+}
+
+.challenge_button {
+  cursor: pointer;
+  width: 100%;
+}
