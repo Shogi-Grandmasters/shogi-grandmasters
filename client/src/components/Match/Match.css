@@ -31,15 +31,11 @@ button {
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
-}
-
-.action {
-  background-color: #333;
   text-shadow: 1px 1px 0px #14151b;
   transition: background-color 0.4s ease;
 }
 
-.action:hover {
+button:hover {
   cursor: pointer;
   background-color: #f15a4a;
 }

@@ -462,8 +462,8 @@ class Match extends Component {
           <div></div>
           <GameChat socket={this.socket} />
           <div className="match__actions">
-            <button className="action" onClick={this.promptToConcede}>Concede</button>
-            <button className="action" onClick={this.quit}>Quit</button>
+            <button onClick={this.promptToConcede}>Concede</button>
+            <button onClick={this.quit}>Quit</button>
           </div>
         </div>
         {modal}
