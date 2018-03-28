@@ -1,7 +1,7 @@
 import React from 'react';
 import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
-import ShogiPiece from './ShogiPiece.jsx';
+import ShogiPiece from '../GameBoard/ShogiPiece.jsx';
 
 const PlayerHandTile = ({ player, local, piece, count, selected = null, activate }) => {
   let tile = new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10]);

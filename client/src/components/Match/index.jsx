@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import io from "socket.io-client/dist/socket.io.js";
 
 import WaitingPage from "../WaitingPage/index.jsx";
-import ShogiBoard from "./ShogiBoard.jsx";
-import GameChat from "./GameChat/index.jsx";
+import Match from "./Match.jsx";
 
 class BoardIndex extends Component {
   state = {
@@ -59,7 +58,7 @@ class BoardIndex extends Component {
   render() {
     return this.state.waiting ? null : (
       <div>
-        <ShogiBoard socket={this.socket} match={this.state} history={this.props.history} />
+        <Match socket={this.socket} match={this.state} history={this.props.history} />
       </div>
     );
   }

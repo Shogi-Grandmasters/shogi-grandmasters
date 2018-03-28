@@ -1,5 +1,5 @@
 import React from 'react';
-import ShogiPiece from './ShogiPiece.jsx';
+import ShogiPiece from '../GameBoard/ShogiPiece.jsx';
 import { boardIds } from '../../../lib/constants';
 import GameTile from '../../../lib/GameTile';
 import { FadeInGroup } from '../Global/Animation/TransitionGroups.jsx';
