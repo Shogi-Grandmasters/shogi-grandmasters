@@ -24,7 +24,6 @@ import ModalPrompt from '../Global/ModalPrompt.jsx';
 import './Match.css';
 
 const isLocalPlayer = (player) => {
-  console.log('in fn, ', Number(localStorage.getItem('id')) === player.id);
   return Number(localStorage.getItem('id')) === player.id;
 }
 
@@ -290,7 +289,6 @@ class Match extends Component {
 
   receiveMove({ log, status, before, after, move }) {
     console.log(status)
-
     let { board, white, black, kings } = after;
     // boards are sent around from the perspective of each player, so
     // the board must be flipped around when the move received comes from the other player
