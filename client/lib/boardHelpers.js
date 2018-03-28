@@ -185,7 +185,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
   return [check, checkmate];
 };
 
-const copyMatrix = matrix => {
+export const copyMatrix = matrix => {
   return matrix.slice().map(row => row.slice());
 };
 
@@ -325,7 +325,8 @@ export default {
   validDropLocations,
   getCombinedMoveSet,
   includesLoc,
-  calcImpasse
+  calcImpasse,
+  copyMatrix
 };
 
 // TESTING
