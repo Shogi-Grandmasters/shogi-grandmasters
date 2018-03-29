@@ -6,8 +6,6 @@ import Match from "./Match.jsx";
 
 const {SOCKET_SERVER_URL} = process.env;
 
-const {SOCKET_SERVER_URL} = process.env;
-
 class BoardIndex extends Component {
   state = {
     waiting: true
