@@ -18,8 +18,10 @@ class GameTile {
 
     if (name === "Rook" || name === "Bishop") {
       this.promotedMoves = moveSets[name];
-    } else if (this.name !== "Lance") {
+    } else {
+      if (this.name !== "Lance") {
       this.moves = moveSets[name];
+      }
       if (name !== "King" && name !== "Gold") {
         this.promotedMoves = moveSets.Gold;
       }
@@ -28,7 +30,6 @@ class GameTile {
 
   findMoves(board, _test = false) {
     let moveSet = this.isPromoted ? this.promotedMoves : this.moves || [];
-
     if (_test) {
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];

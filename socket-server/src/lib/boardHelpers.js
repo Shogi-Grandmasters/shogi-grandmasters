@@ -108,7 +108,6 @@ export const isCheckOrMate = (gameState, movedTile) => {
       reverseLoc(gameState.kings[oppositeColor(movedTile.color)])
     );
     let kingsMoves = king.findMoves(gameState.board);
-
     // if king has no available moves continue looking for paths out
     if (kingsMoves.length === 0) {
       // if there is two or more threatening pieces it is checkmate
@@ -185,18 +184,18 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
             pieceNameFromBoardId(col),
             color,
             [r, c],
-            col.charAt(1) === "+" ? true : false
+            col.length > 1 ? true : false
           );
         } else if (color === "black" && col.charCodeAt(0) < 91) {
           p = new GameTile(
             pieceNameFromBoardId(col),
             color,
             [r, c],
-            col.charAt(1) === "+" ? true : false
+            col.length > 1 ? true : false
           );
         }
         if (p) {
-          //console.log(p.name, JSON.stringify(p.findMoves(board, true)));
+          //console.log(p.color, p.name, JSON.stringify(p.findMoves(board, true)));
           teamMoves = teamMoves.concat(p.findMoves(board, true));
         }
       }
