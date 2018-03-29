@@ -288,6 +288,7 @@ class Match extends Component {
   }
 
   receiveMove({ log, status, before, after, move }) {
+    console.log(status);
     if (status.check) {
       let message = move.color === this.state.localColor ? 'Your Opponent is in Check' : 'You are in Check';
       this.announce(message);
@@ -314,7 +315,7 @@ class Match extends Component {
     }));
   }
 
-  announce({ message }) {
+  announce(message) {
     let choices = [{
       cta: 'OK',
       action: this.toggleModal,
