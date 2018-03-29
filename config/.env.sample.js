@@ -32,9 +32,7 @@ const envBuild = {
       "ENVPREFIX=REACT_APP_",
       "REST_SERVER_URL=http://localhost:3996",
       "SOCKET_SERVER_URL=http://localhost:4155",
-      "REACT_APP_SOCKET_SERVER_URL=http://localhost:4155",
-      "REACT_APP_REST_SERVER_URL=http://localhost:3996",
-      "REACT_APP_AVATAR_URL=https://res.cloudinary.com/shogigrandmasters/image/upload/"
+      "AVATAR_URL=https://res.cloudinary.com/shogigrandmasters/image/upload/"
     ],
     "services/boardsolver": [
       "NODE_ENV=PRODUCTION",
@@ -78,9 +76,7 @@ const envBuild = {
       "ENVPREFIX=REACT_APP_",
       "REST_SERVER_URL=http://localhost:3396",
       "SOCKET_SERVER_URL=http://localhost:4155",
-      "REACT_APP_SOCKET_SERVER_URL=http://localhost:4155",
-      "REACT_APP_REST_SERVER_URL=http://localhost:3396",
-      "REACT_APP_AVATAR_URL=https://res.cloudinary.com/shogigrandmasters/image/upload/"
+      "AVATAR_URL=https://res.cloudinary.com/shogigrandmasters/image/upload/"
     ],
     "services/boardsolver": [
       "NODE_ENV=DEVELOPMENT",
