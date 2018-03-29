@@ -166,8 +166,7 @@ const clientEndGame = async ({ io, client, room }, payload) => {
       loser: JSON.stringify(loser)
     });
     serverConcludeMatch({ io, client, room}, { winner, loser, status });
-  }
-  catch (err) {
+  } catch (err) {
     error('issue ending match, e = ', err);
   }
 };
