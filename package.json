@@ -9,21 +9,20 @@
     "start:client-server": "cd client/server && yarn start",
     "start:boardsolver-server": "cd services/boardsolver && yarn start",
     "build": "cd client && yarn build",
-    "start":
-      "npm-run-all -p start:rest-server start:socket-server start:client-server",
+    "start": "npm-run-all -p start:rest-server start:socket-server start:client-server",
     "setup:rest-server": "cd rest-server && yarn",
     "setup:socket-server": "cd socket-server && yarn",
     "setup:client-server": "cd client/server && yarn",
     "setup:boardsolver-server": "cd services/boardsolver && yarn",
     "setup:client": "cd client && yarn",
-    "db:setup:rest-server":
-      "cd rest-server && babel-node src/config/database/setup.js",
+    "db:setup:rest-server": "cd rest-server && babel-node src/config/database/setup.js",
     "buildEnv": "node bin/buildEnv.js"
   },
   "repository": "https://github.com/Shogi-Grandmasters/shogi-grandmasters.git",
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "yarn": "^1.5.1"
   }
