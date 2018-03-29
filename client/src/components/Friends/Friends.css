@@ -87,3 +87,12 @@
   text-align: center;
   width: auto;
 }
+
+.online-head-right {
+  float: right;
+}
+
+.online-challenge-icon {
+  width: 50px;
+  float: right;
+}
