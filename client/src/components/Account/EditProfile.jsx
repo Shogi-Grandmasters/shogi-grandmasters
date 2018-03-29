@@ -25,13 +25,17 @@ class EditProfile extends Component {
       formData.append("api_key", "913846924149284"); // add api key
       formData.append("timestamp", (Date.now() / 1000) | 0);
 
-      return axios.post(AVATAR_URL, formData)
+      return axios.post(AVATAR_URL, formData, {
+        headers: { 'Content-Type': 'application/json' }
+      })
       .then(response => {
         const data = response.data;
         const fileURL = data.secure_url // full URL
         const img = fileURL.split("upload/").slice(1)
         localStorage.setItem("avi", img);
-        axios.put(`${REST_SERVER_URL}/api/users/${localStorage.id}/${img}`)
+        axios.put(`${REST_SERVER_URL}/api/users/${localStorage.id}/${img}`, {
+        headers: { 'Content-Type': 'application/json' }
+      })
         .then(res => this.props.history.push("/acct"))
 
         //example url
@@ -43,7 +47,9 @@ class EditProfile extends Component {
   submitPasswordReset = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`${REST_SERVER_URL}/api/auth/reset`, this.state);
+      const { data } = await axios.put(`${REST_SERVER_URL}/api/auth/reset`, this.state, {
+        headers: { 'Content-Type': 'application/json' }
+      });
       localStorage.setItem('token', data[0].token.accessToken);
       data ? alert("Password changed successfully") : alert("Password change failed!!!");
     } catch (err) {

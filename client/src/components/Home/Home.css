@@ -38,10 +38,6 @@ button {
   grid-template-rows: 10fr;
 }
 
-.friend-challenge {
-  width: 200px;
-}
-
 .chat {
   display: grid;
   grid-template-rows: 1fr 9fr 1fr;

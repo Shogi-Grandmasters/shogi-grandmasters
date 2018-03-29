@@ -36,13 +36,21 @@
   justify-content: center;
 }
 .modal__message > * {
-  margin: 4px;
+  margin: 2px;
 }
 
-.modal__prompt {
+.modal__headline {
   font-family: 'Oswald';
   font-size: 36px;
   font-style: italic;
+  color: #d0c7af;
+  text-align: center;
+  text-shadow: 1px 1px 2px #14151b;
+}
+.modal__subheadline {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-weight: 400;
   color: #d0c7af;
   text-align: center;
   text-shadow: 1px 1px 2px #14151b;
