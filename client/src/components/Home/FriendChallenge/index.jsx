@@ -6,7 +6,7 @@ import randomstring from "randomstring";
 import "./FriendChallenge.css";
 import duel from "../../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png";
 
-const { REST_SERVER_URL } = process.env;
+const { REST_SERVER_URL, AVATAR_URL } = process.env;
 
 class FriendChallenge extends Component {
   constructor(props) {
@@ -81,8 +81,11 @@ class FriendChallenge extends Component {
   };
 
   fetchOpenChallenges = async (friends = this.state.friends) => {
-    let { data } = await axios.get(`http://localhost:3396/api/openMatches`, {
+    let { data } = await axios.get(`${REST_SERVER_URL}/api/openMatches`, {
       params: { id: this.id }
+    },
+    {
+        headers: { 'Content-Type': 'application/json' }
     });
     data.forEach(challenge => {
       for (let friend of friends) {
@@ -120,8 +123,11 @@ class FriendChallenge extends Component {
   async handleAcceptChallengeClick(e) {
     const matchId = randomstring.generate();
     const { id, player1, player2 } = JSON.parse(e.target.value);
-    await axios.delete("http://localhost:3396/api/openmatches", {
+    await axios.delete(`${REST_SERVER_URL}/api/openmatches`, {
       data: { id }
+    },
+    {
+        headers: { 'Content-Type': 'application/json' }
     });
     this.props.socket.emit("client.acceptChallenge", {
       matchId,
@@ -132,8 +138,11 @@ class FriendChallenge extends Component {
 
   async handleRejectChallengeClick(e) {
     const { id, player1, player2 } = JSON.parse(e.target.value);
-    await axios.delete("http://localhost:3396/api/openmatches", {
+    await axios.delete(`${REST_SERVER_URL}/api/openmatches`, {
       data: { id }
+    },
+    {
+        headers: { 'Content-Type': 'application/json' }
     });
     this.props.socket.emit("client.rejectChallenge", { player1, player2 });
   }
@@ -230,7 +239,7 @@ class FriendChallenge extends Component {
               <img
                 width="50px"
                 className="friend-avi"
-                src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${
+                src={`${AVATAR_URL}/${
                   user.avatar
                 }`}
               />
