@@ -17,9 +17,9 @@ export const createOpenMatchQuery = async body => {
   }
 };
 
-export const fetchOpenMatchQuery = async () => {
+export const fetchOpenMatchQuery = async (query) => {
   try {
-    const queryString = fetchOpenMatchHelper();
+    const queryString = fetchOpenMatchHelper(query);
     const { rows } = await db.query(queryString);
     success(
       "fetchOpenMatchQuery - successfully fetched open match",

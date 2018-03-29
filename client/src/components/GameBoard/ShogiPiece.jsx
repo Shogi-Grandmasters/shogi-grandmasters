@@ -6,9 +6,9 @@ const getTokenImage = (tile, facing) => {
   return '../tokens/' + prefix + tile.name + suffix + '.svg';
 }
 
-const ShogiPiece = ({ inPlay = true, tile, player = null, location = null, target = null, activate }) => {
+const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location = null, target = null, activate }) => {
   let tileFaces = inPlay ? tile.color === player.color ? player.facing : 'south' : 'north';
-  let canActivate = player && player.color === tile.color && location && target;
+  let canActivate = local && player && player.color === tile.color && location && target;
   let tileStyle = {
     backgroundImage: `url(${getTokenImage(tile, tileFaces)})`,
   };

@@ -47,12 +47,7 @@ class Home extends Component {
               <OpenMatches history={this.props.history} socket={this.socket} />
               <PrevMatches history={this.props.history} socket={this.socket} />
           </div>
-          <div className="friend-challenge">
-            <FriendChallenge
-              history={this.props.history}
-              socket={this.socket}
-            />
-          </div>
+            <FriendChallenge history={this.props.history} socket={this.socket} />
           <div className="chat">
             <HomeChat socket={this.socket} />
           </div>
