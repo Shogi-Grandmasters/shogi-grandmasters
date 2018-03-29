@@ -26,7 +26,10 @@ class PrevMatches extends Component {
   async fetchPrevMatches() {
     let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { userId: this.state.userId }
-    });
+    },
+    {
+        headers: { 'Content-Type': 'application/json' }
+      });
     const opponents = {};
     data.opponents &&
       data.opponents.forEach(
