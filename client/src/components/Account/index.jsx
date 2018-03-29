@@ -32,7 +32,7 @@ class Account extends Component {
           <Route path="/acct/edit" component={EditProfile} />
           <Route path="/acct/faq" component={FrequentlyAsked} />
           <Route path="/acct/rank" component={Rankings} />
-          <Redirect from="/acct/" to="/acct/edit" />
+          <Redirect from="/acct/" to="/acct/friends" />
         </Switch> 
       </div>
     )

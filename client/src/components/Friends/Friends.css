@@ -74,3 +74,25 @@
   cursor: pointer;
 }
 
+.online-container {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
+}
+
+.online-top {
+  font-family: 'Shift', sans-serif;
+  text-align: center;
+  width: auto;
+}
+
+.online-head-right {
+  float: right;
+}
+
+.online-challenge-icon {
+  width: 50px;
+  float: right;
+}
