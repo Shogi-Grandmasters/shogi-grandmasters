@@ -72,7 +72,10 @@ class FriendChallenge extends Component {
 
   fetchFriends = async () => {
     const { data } = await axios.get(
-      `${REST_SERVER_URL}/api/friends/fetchFriends/${this.id}`
+      `${REST_SERVER_URL}/api/friends/fetchFriends/${this.id}`,
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
     this.setState({ friends: data.filter(friend => friend.id !== this.id) });
   };
