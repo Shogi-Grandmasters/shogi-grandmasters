@@ -73,18 +73,6 @@ class Friends extends Component {
             this.fetchFriends();
           })
           .catch(err => {
-    const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username }, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    const fid = data.id + "";
-    const body = {
-      u_id: id,
-      f_id: fid,
-    }
-    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    this.fetchFriends();
             console.log('2nd promise error', err);
           });
       })
