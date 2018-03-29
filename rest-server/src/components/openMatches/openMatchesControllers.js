@@ -22,7 +22,7 @@ export const createOpenMatchController = async (req, res) => {
 
 export const fetchOpenMatchController = async (req, res) => {
   try {
-    const data = await fetchOpenMatchQuery();
+    const data = await fetchOpenMatchQuery(req.query);
     success(
       "fetchOpenMatchController - successfully fetched open match data",
       JSON.stringify(data)

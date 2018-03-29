@@ -1,22 +1,21 @@
-export const createOpenMatchHelper = ({ matchId, player1 }) => {
+export const createOpenMatchHelper = ({ player1, player2 }) => {
   return `
-    INSERT INTO open_matches
-    VALUES ('${matchId}', '${player1}')
-    RETURNING id, player1
+    INSERT INTO open_matches (player1, player2)
+    VALUES ('${player1}', '${player2}')
+    RETURNING id, player1, player2, status
   `;
 };
 
-export const fetchOpenMatchHelper = () => {
+export const fetchOpenMatchHelper = ({ id }) => {
   return `
-    SELECT m.id, m.player1, u.username FROM open_matches AS m, users AS u
-    WHERE m.player1=u.id
+    SELECT * FROM open_matches WHERE player1='${id}' OR player2='${id}'
   `;
 };
 
-export const deleteOpenMatchHelper = ({matchId}) => {
+export const deleteOpenMatchHelper = ({ id }) => {
   return `
     DELETE FROM open_matches
-    WHERE id='${matchId}'
+    WHERE id='${id}'
     RETURNING player1
   `;
 };
