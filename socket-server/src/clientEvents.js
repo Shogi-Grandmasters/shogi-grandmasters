@@ -142,9 +142,9 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId, black, white }
     },
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
     );
     if (result.data.length < 3) {
       result = await axios.post(`${REST_SERVER_URL}/api/matches`, {
@@ -156,9 +156,9 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         hand_black: "[]",
         type
       },
-        {
-          headers: { 'Content-Type': 'application/json' }
-        });
+      {
+        headers: { 'Content-Type': 'application/json' }
+      });
       room.set("black", result.data[1].id);
       room.set("white", result.data[2].id);
     }
