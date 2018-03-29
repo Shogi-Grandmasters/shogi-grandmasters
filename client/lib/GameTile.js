@@ -18,8 +18,10 @@ class GameTile {
 
     if (name === "Rook" || name === "Bishop") {
       this.promotedMoves = moveSets[name];
-    } else if (this.name !== "Lance") {
-      this.moves = moveSets[name];
+    } else {
+      if (this.name !== "Lance") {
+        this.moves = moveSets[name];
+      }
       if (name !== "King" && name !== "Gold") {
         this.promotedMoves = moveSets.Gold;
       }
