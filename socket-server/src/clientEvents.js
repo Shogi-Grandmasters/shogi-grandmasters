@@ -89,8 +89,12 @@ const clientFetchMessages = async ({ io, client, room }, payload) => {
   success("client load message request heard");
   try {
     const { data } = await axios.get(`${REST_SERVER_URL}/api/messages`, {
-      params: { matchId: room.get("id") }
-    });
+        params: { matchId: room.get("id") }
+      },
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
     serverSendMessages({ io, client, room }, data);
   } catch (err) {
     error("error fetching messages from database. e = ", err);
@@ -104,7 +108,11 @@ const clientHomeChat = async ({ io, client, room }, payload) => {
       matchId: room.get("id"),
       message: payload.content,
       userId: payload.userId
-    });
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+    );
     serverHomeChat({ io, client, room }, payload);
   } catch (err) {
     error("client home chat error: ", err);
@@ -125,8 +133,12 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   try {
     let { matchId, black, white } = payload;
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-      params: { matchId, black, white }
-    });
+        params: { matchId, black, white }
+      },
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
     if (result.data.length <  3) {
       result = await axios.post(`${REST_SERVER_URL}/api/matches`, {
         matchId,
@@ -135,6 +147,9 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         white,
         hand_white: "[]",
         hand_black: "[]"
+      },
+      {
+        headers: { 'Content-Type': 'application/json' }
       });
       room.set("black", result.data[1].id);
       room.set("white", result.data[2].id);
@@ -155,6 +170,9 @@ const clientConcede = async ({ io, client, room }, payload) => {
     let { matchId, winner, loser } = payload;
     let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId }
+    },
+    {
+        headers: { 'Content-Type': 'application/json' }
     });
     // TODO:  need match type on Matches model
     // then, when match === ranked, update player ratings
@@ -164,6 +182,9 @@ const clientConcede = async ({ io, client, room }, payload) => {
       status: 2,
       winner: JSON.stringify(winner),
       loser: JSON.stringify(loser)
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
     });
     serverConcludeMatch({ io, client, room}, { winner, loser });
   }
@@ -177,6 +198,9 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let { matchId, before, after, move, previous } = payload;
     let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId }
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
     });
     // validation
     data = data[0];
@@ -215,6 +239,9 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       hand_white: JSON.stringify(after.white),
       hand_black: JSON.stringify(after.black),
       event_log: JSON.stringify(eventLog)
+    },
+    {
+      headers: { 'Content-Type': 'application/json' }
     });
     payload.log = eventLog;
     payload.status = {
