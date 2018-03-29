@@ -208,7 +208,7 @@ export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc, prevGame
   if (prevGameState) {
     const lastPieceMoved = new GameTile(pieceNameFromBoardId(prevGameState.move.piece), prevGameState.move.color, prevGameState.move.to, prevGameState.move.piece.length > 1);
     if (isCheckOrMate({board: reverseBoard(gameStateAfter.board), kings: gameStateBefore.kings}, lastPieceMoved)[0]) {
-      return false;
+      return [false, 'Move would put you in Check'];
     }
   }
   let moveSet;
@@ -221,7 +221,8 @@ export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc, prevGame
   } else {
     moveSet = tile.findMoves(gameStateBefore.board);
   }
-  return includesLoc(moveSet, loc);
+  let canMoveThere = includesLoc(moveSet, loc);
+  return [canMoveThere, 'Invalid destination.  Piece cannot move there'];
 };
 
 export const calcImpasse = board => {

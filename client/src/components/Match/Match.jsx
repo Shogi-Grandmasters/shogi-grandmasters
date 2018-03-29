@@ -157,7 +157,7 @@ class Match extends Component {
         args: [false],
       }
     ];
-    let content = <ModalPrompt message="Promote?" choices={choices} />;
+    let content = <ModalPrompt headline="Promote?" choices={choices} />;
     this.toggleModal(content);
   }
 
@@ -189,7 +189,7 @@ class Match extends Component {
         args: [false],
       }
     ];
-    let content = <ModalPrompt message="Are you sure you want to concede?" choices={choices} />;
+    let content = <ModalPrompt headline="Are you sure you want to concede?" choices={choices} />;
     this.toggleModal(content);
   }
 
@@ -197,17 +197,17 @@ class Match extends Component {
     if (choice) {
       let winner = this.getPlayer('opponent').user;
       let loser = this.getPlayer('local').user;
-      this.socket.emit("client.concede", {
+      this.socket.emit("client.endGame", {
         matchId: this.state.matchId,
         winner,
         loser,
+        status: 2
       });
     }
     this.toggleModal();
   }
 
   moveWillPromote([x, y], pieceId) {
-    console.log('hey, here in move will promote');
     let willPromote = false;
     let pendingInput = false;
     if (x < 3 && pieceId.length === 1) {
@@ -288,7 +288,18 @@ class Match extends Component {
   }
 
   receiveMove({ log, status, before, after, move }) {
-    if (status.check) {
+    if (status.checkmate) {
+      let winner = move.color === this.state.localColor ? this.getPlayer('local').user : this.getPlayer('opponent').user;
+      let loser = move.color === this.state.localColor ?  this.getPlayer('local').user : this.getPlayer('opponent').user;
+      if (winner.id === this.getPlayer('local').user.id) {
+        this.socket.emit("client.endGame", {
+          matchId: this.state.matchId,
+          winner,
+          loser,
+          status: 1,
+        });
+      }
+    } else if (status.check) {
       let message = move.color === this.state.localColor ? 'Your Opponent is in Check' : 'You are in Check';
       this.announce(message);
     }
@@ -314,24 +325,25 @@ class Match extends Component {
     }));
   }
 
-  announce({ message }) {
+  announce(message) {
     let choices = [{
       cta: 'OK',
       action: this.toggleModal,
       args: [null]
     }]
-    let content = <ModalPrompt message={message} choices={choices} />;
+    let content = <ModalPrompt headline={message} choices={choices} />;
     this.toggleModal(content);
   }
 
-  concludeMatch({ winner, loser }) {
-    let headline = winner.id === this.getPlayer('local').user.id ? 'VICTORY' : 'YOU LOSE';
+  concludeMatch({ winner, loser, status }) {
+    let headline = winner.id === this.getPlayer('local').user.id ? 'YOU WIN' : 'YOU LOSE';
+    let subheadline = status === 1 ? 'Checkmate' : winner.id === this.getPlayer('local').user.id ? 'Your opponent conceded the match' : 'You gave up. Quitter.';
     let choices = [{
       cta: 'EXIT',
       action: this.quit,
       args: [true],
     }];
-    let content = <ModalPrompt message={headline} choices={choices} />
+    let content = <ModalPrompt headline={headline} subheadline={subheadline} choices={choices} />
     this.toggleModal(content);
   }
 
