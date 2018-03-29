@@ -3,6 +3,8 @@ import axios from "axios";
 
 import "./PrevMatches.css";
 
+const {REST_SERVER_URL} = process.env;
+
 class PrevMatches extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class PrevMatches extends Component {
   }
 
   async fetchPrevMatches() {
-    let { data } = await axios.get("http://localhost:3396/api/matches", {
+    let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { userId: this.state.userId }
     });
     const opponents = {};

@@ -6,6 +6,8 @@ import { AwaitingList } from "./AwaitingList.jsx";
 
 import "./Friends.css";
 
+const {REST_SERVER_URL} = process.env;
+
 class Friends extends Component {
   constructor() {
     super();
@@ -24,13 +26,13 @@ class Friends extends Component {
   addFriend = async () => {
     const id = localStorage.getItem("id");
     const { username } = this.state;
-    const { data } = await axios.post(`http://localhost:3396/api/users/`, { username });
+    const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username });
     const fid = data.id + "";
     const body = {
       u_id: id,
       f_id: fid,
     }
-    const added = await axios.post(`http://localhost:3396/api/friends/add`, body);
+    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
     this.fetchFriends();
   }
 
@@ -44,10 +46,10 @@ class Friends extends Component {
     const flist = [];
     const pending = [];
     const awaiting = [];
-    const {data} = await axios.get(`http://localhost:3396/api/friends/fetchFriends/${id}`);
+    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`);
     for(let friend of data) {
       const fid = friend.u_id;
-      const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
+      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
       if(friend.status === 0 && friend.u_id === parseInt(localStorage.getItem("id"))) awaiting.push(friend)
@@ -64,7 +66,7 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.id;
     const { data } = await axios.delete(
-      `http://localhost:3396/api/friends/deleteFriend/${id}/${fid}`
+      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`
     );
     this.fetchFriends();
   }
@@ -73,14 +75,14 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `http://localhost:3396/api/friends/${id}/${fid}/1`
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`
     );
     const body = {
       u_id: id,
       f_id: fid,
       status: 1
     }
-    const added = await axios.post(`http://localhost:3396/api/friends/add`, body);
+    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
     this.fetchFriends();
   }
 
@@ -89,7 +91,7 @@ class Friends extends Component {
     const fid = e.permId;
     console.log('inside reject', e)
     const { data } = await axios.put(
-      `http://localhost:3396/api/friends/${id}/${fid}/2`
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`
     );
     console.log('data', data)
     this.fetchFriends();
@@ -123,9 +125,9 @@ class Friends extends Component {
         ))}
         </div>
         </div>
-    ) 
+    )
     return (
-      <div className="friend-container"> 
+      <div className="friend-container">
         <div className="friend-top">
           <h2 className="friend-head">Friends List</h2>
           <form className="friend-search">
