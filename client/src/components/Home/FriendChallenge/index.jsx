@@ -60,11 +60,18 @@ class FriendChallenge extends Component {
     const id = +localStorage.getItem("id");
     const flist = [];
     const { data } = await axios.get(
-      `${REST_SERVER_URL}/api/friends/fetchFriends/${id}`
+      `${REST_SERVER_URL}/api/friends/fetchFriends/${id}`,
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
     for (let friend of data) {
       const fid = friend.u_id;
-      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
+      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`,
+        {
+        headers: { 'Content-Type': 'application/json' }
+        }
+      );
       friend.status == 1 && friend.id !== id && flist.push(friend);
     }
     this.setState({ friends: flist });
