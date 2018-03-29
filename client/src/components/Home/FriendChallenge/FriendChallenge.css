@@ -1,0 +1,67 @@
+.friend-challenge {
+  /* display: grid; */
+  /* grid-template-columns: 8fr 1fr 1fr; */
+  width: 100%;
+}
+
+.challenge_items {
+  font-size: 15px;
+  font-weight: 600;
+  display: grid;
+  grid-template-columns: 10fr 50px 50px;
+  height: 45px;
+  padding: 4px;
+  background: linear-gradient(#eee, #ddd);
+  border-bottom: solid 1px #ccc;
+}
+
+.challenge_button {
+  cursor: pointer;
+  width: 100%;
+}
+
+.online-container {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 500px;
+  width: 100%;
+  max-width: 740px;
+}
+
+.online-top {
+  font-family: 'Shift', sans-serif;
+  text-align: center;
+  width: auto;
+}
+
+.online-head-right {
+  float: right;
+}
+
+.online-challenge-icon {
+  width: 50px;
+  float: right;
+}
+
+.online-challenge-text {
+  width: 100px;
+  float: right;
+}
+
+.online-friend-container {
+  position: relative;
+}
+
+.online-challenge-button1 {
+  position: absolute;
+  width: 50px;
+  right: 50px;
+  bottom: 10px;
+}
+
+.online-challenge-button2 {
+  position: absolute;
+  width: 50px;
+  right: 0px;
+  bottom: 10px;
+}

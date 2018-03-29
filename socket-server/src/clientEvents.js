@@ -8,6 +8,7 @@ import { moveToString } from "./lib/matchLog";
 import GameTile from "./lib/GameTile";
 import { success, log, error } from "./lib/log";
 import { Queue } from "./lib/matchHelpers";
+import { initialBoard } from "./lib/constants";
 import {
   serverJoinMatch,
   serverChanged,
@@ -20,7 +21,10 @@ import {
   serverGameChat,
   serverUpdateGames,
   serverPlayerMove,
-  serverConcludeMatch
+  serverConcludeMatch,
+  serverChallengeSent,
+  serverChallengeAccepted,
+  serverChallengeRejected,
 } from "./serverEvents";
 
 const { REST_SERVER_URL } = process.env;
@@ -127,10 +131,10 @@ const clientGameReady = async ({ io, client, room }, payload) => {
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId, black, white }
     });
-    if (result.data.length <  3) {
+    if (result.data.length < 3) {
       result = await axios.post(`${REST_SERVER_URL}/api/matches`, {
         matchId,
-        board: JSON.stringify(room.get("board")),
+        board: JSON.stringify(initialBoard),
         black,
         white,
         hand_white: "[]",
@@ -165,12 +169,11 @@ const clientConcede = async ({ io, client, room }, payload) => {
       winner: JSON.stringify(winner),
       loser: JSON.stringify(loser)
     });
-    serverConcludeMatch({ io, client, room}, { winner, loser });
+    serverConcludeMatch({ io, client, room }, { winner, loser });
+  } catch (err) {
+    error("issue conceding match, e = ", err);
   }
-  catch (err) {
-    error('issue conceding match, e = ', err);
-  }
-}
+};
 
 const clientSubmitMove = async ({ io, client, room }, payload) => {
   try {
@@ -186,7 +189,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       (data.turn === 1 && move.color === "black") ||
       (data.turn === 0 && move.color === "white");
     if (!correctTurn)
-      messages.push('Move submitted was not for the correct turn.');
+      messages.push("Move submitted was not for the correct turn.");
     // move is valid
     let validMove = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push('Invalid move');
@@ -196,7 +199,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     // save new state if the move was successful
     let success = correctTurn && validMove;
     // orient board to default
-    let savedBoard = move.color === 'black' ? reverseBoard(after.board) : after.board;
+    let savedBoard =
+      move.color === "black" ? reverseBoard(after.board) : after.board;
     // prep event log
     let eventLog = data.event_log || [];
     let event = {
@@ -230,6 +234,39 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
   }
 };
 
+const clientChallengeFriend = async ({ io, client, room }, payload) => {
+  success("client challenge friend heard");
+  try {
+    const { data } = await axios.post(
+      `${REST_SERVER_URL}/api/openMatches`,
+      payload
+    );
+    payload.id = data.id;
+    serverChallengeSent({ io, client, room }, payload);
+  } catch (err) {
+    error("client leave queue error", err);
+  }
+};
+
+const clientAcceptChallenge = async ({ io, client, room }, payload) => {
+  success("client accept challenge heard");
+  try {
+    await clientGameReady({ io, client, room }, payload);
+    serverChallengeAccepted({ io, client, room }, payload);
+  } catch (err) {
+    error("client accept challenge error", err);
+  }
+};
+
+const clientRejectChallenge = async ({ io, client, room }, payload) => {
+  success("client reject challenge heard");
+  try {
+    serverChallengeRejected({ io, client, room }, payload);
+  } catch (err) {
+    error("client reject challenge error", err);
+  }
+};
+
 const clientEmitters = {
   "client.joinQueue": clientJoinQueue,
   "client.leaveQueue": clientLeaveQueue,
@@ -243,6 +280,9 @@ const clientEmitters = {
   "client.listOpenGames": clientListGames,
   "client.submitMove": clientSubmitMove,
   "client.concede": clientConcede,
+  "client.challengeFriend": clientChallengeFriend,
+  "client.acceptChallenge": clientAcceptChallenge,
+  "client.rejectChallenge": clientRejectChallenge,
 };
 
 export default clientEmitters;

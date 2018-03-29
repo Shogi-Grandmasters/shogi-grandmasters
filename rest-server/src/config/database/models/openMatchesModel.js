@@ -7,12 +7,16 @@ export const createOpenMatchesTable = async () => {
       `
       CREATE TABLE IF NOT EXISTS open_matches
       (
-        id TEXT NOT NULL,
+        id SERIAL,
         player1 INT NOT NULL,
+        player2 INT NOT NULL,
+        status BOOL,
         CONSTRAINT open_matches_pk
           PRIMARY KEY(id),
         CONSTRAINT fk_open_matches_player1
-          FOREIGN KEY(player1) REFERENCES users(id)
+          FOREIGN KEY(player1) REFERENCES users(id),
+        CONSTRAINT fk_open_matches_player2
+          FOREIGN KEY(player2) REFERENCES users(id)
       )
       `
     );
