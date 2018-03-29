@@ -140,35 +140,25 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   try {
     let { matchId, black, white, type } = payload;
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-<<<<<<< HEAD
       params: { matchId, black, white }
-    });
-    if (result.data.length < 3) {
-=======
-        params: { matchId, black, white }
-      },
+    },
       {
         headers: { 'Content-Type': 'application/json' }
       }
     );
-    if (result.data.length <  3) {
->>>>>>> socket server push
+    if (result.data.length < 3) {
       result = await axios.post(`${REST_SERVER_URL}/api/matches`, {
         matchId,
         board: JSON.stringify(initialBoard),
         black,
         white,
         hand_white: "[]",
-<<<<<<< HEAD
         hand_black: "[]",
         type
-=======
-        hand_black: "[]"
       },
-      {
-        headers: { 'Content-Type': 'application/json' }
->>>>>>> socket server push
-      });
+        {
+          headers: { 'Content-Type': 'application/json' }
+        });
       room.set("black", result.data[1].id);
       room.set("white", result.data[2].id);
     }
