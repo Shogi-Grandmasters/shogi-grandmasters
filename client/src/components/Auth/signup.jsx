@@ -18,7 +18,7 @@ class Signup extends Component {
       const data = await axios.post(`http://localhost:3396/api/auth/signup`, body);
       data ? this.props.history.push('/login') : this.props.history.push('/signup');
     } catch (err) {
-      throw new Error(err);
+      alert("Invalid account info, username already exists")
     }
   }
 

@@ -20,7 +20,6 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
-
   addFriend = async () => {
     const id = localStorage.getItem("id");
     const { username } = this.state;
@@ -50,9 +49,9 @@ class Friends extends Component {
       const user = await axios.get(`http://localhost:3396/api/users/${fid}`);
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
-      if(friend.status === 0 && friend.u_id === parseInt(localStorage.getItem("id"))) awaiting.push(friend)
-      if(friend.status === 0 && friend.u_id !== parseInt(localStorage.getItem("id"))) pending.push(friend)
-      if(friend.status == 1 && friend.id !== parseInt(localStorage.getItem("id"))) flist.push(friend)
+      if(friend.status === 0 && friend.u_id == id) awaiting.push(friend)
+      if(friend.status === 0 && friend.u_id != id) pending.push(friend)
+      if(friend.status == 1 && friend.id != id) flist.push(friend)
       if(friend.status === 2) this.deleteFriend(friend)
     }
     this.setState({ friends: flist });
@@ -63,18 +62,14 @@ class Friends extends Component {
   deleteFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.id;
-    const { data } = await axios.delete(
-      `http://localhost:3396/api/friends/deleteFriend/${id}/${fid}`
-    );
+    const { data } = await axios.delete(`http://localhost:3396/api/friends/deleteFriend/${id}/${fid}`);
     this.fetchFriends();
   }
 
   acceptFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.permId;
-    const { data } = await axios.put(
-      `http://localhost:3396/api/friends/${id}/${fid}/1`
-    );
+    const { data } = await axios.put(`http://localhost:3396/api/friends/${id}/${fid}/1`);
     const body = {
       u_id: id,
       f_id: fid,
@@ -87,11 +82,7 @@ class Friends extends Component {
   rejectFriend = async (e) => {
     const id = localStorage.getItem("id");
     const fid = e.permId;
-    console.log('inside reject', e)
-    const { data } = await axios.put(
-      `http://localhost:3396/api/friends/${id}/${fid}/2`
-    );
-    console.log('data', data)
+    const { data } = await axios.put(`http://localhost:3396/api/friends/${id}/${fid}/2`);
     this.fetchFriends();
   }
 

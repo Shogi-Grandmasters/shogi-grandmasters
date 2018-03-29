@@ -21,7 +21,7 @@ class Login extends Component {
       if(data.avatar != null){localStorage.setItem('avi', data.avatar)}
       data ? this.props.history.push('/home') : this.props.history.push('/login');
     } catch (err) {
-      throw new Error(err);
+      alert("Invalid login attempt")
     }
   }
 

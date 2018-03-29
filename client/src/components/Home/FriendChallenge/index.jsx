@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-
+import OnlineFriends from "../../Friends/OnlineFriends.jsx"
 // import "./FriendChallenge.css";
 
 class FriendChallenge extends Component {
@@ -69,15 +69,15 @@ class FriendChallenge extends Component {
   };
 
   renderLoggedOnFriends() {
-    return this.state.friends.map(friend => {
-      if (this.state.friends.length && this.state.users[friend.id].loggedOn) {
-        return (
-          <option key={friend.id} value={JSON.stringify(friend)}>
-            {friend.username}
-          </option>
-        )
-      }
-    });
+    // return this.state.friends.map(friend => {
+    //   if (this.state.friends.length && this.state.users[friend.id].loggedOn) {
+    //     return (
+    //       <option key={friend.id} value={JSON.stringify(friend)}>
+    //         {friend.username}
+    //       </option>
+    //     )
+    //   }
+    // });
   }
 
   render() {
@@ -93,6 +93,7 @@ class FriendChallenge extends Component {
         <button onClick={() => this.handleJoinMatchClick()}>
           Challenge Friend
         </button>
+        <OnlineFriends />
       </div>
     );
   }
