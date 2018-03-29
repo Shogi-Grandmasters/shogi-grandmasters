@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
-import OnlineFriends from "../../Friends/OnlineFriends.jsx"
-// import "./FriendChallenge.css";
+import OnlineFriends from "../../Friends/OnlineFriends.jsx";
+import randomstring from "randomstring";
 
-const {REST_SERVER_URL} = process.env;
+import "./FriendChallenge.css";
+import duel from "../../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png";
+
+const { REST_SERVER_URL } = process.env;
 
 class FriendChallenge extends Component {
   constructor(props) {
@@ -34,14 +37,13 @@ class FriendChallenge extends Component {
     //   users[user.userId] = user;
     //   this.setState({ users });
     // });
-    
 
     await this.fetchFriends();
     await this.fetchOpenChallenges();
 
     this.props.socket.on("server.challengeSent", data => {
       (this.id === data.player1 || this.id === data.player2) &&
-        this.setState({ openChallenges: [...this.state.openChallenges, data] });
+        this.fetchOpenChallenges();
     });
 
     this.props.socket.on(
@@ -57,7 +59,14 @@ class FriendChallenge extends Component {
     );
 
     this.props.socket.on("server.challengeRejected", ({ player1, player2 }) => {
-      (this.id === player1 || this.id === player2) && this.fetchOpenChallenges();
+      if (this.id === player1 || this.id === player2) {
+        const friends = this.state.friends;
+        for (let friend of friends) {
+          (friend.id === player1 || friend.id === player2) &&
+            (friend.challenge = null);
+        }
+        this.fetchOpenChallenges(friends);
+      }
     });
   }
 
@@ -68,39 +77,40 @@ class FriendChallenge extends Component {
     this.setState({ friends: data.filter(friend => friend.id !== this.id) });
   };
 
-  fetchOpenChallenges = async () => {
-    let { data } = await axios.get(`http://localhost:3396/api/openMatches`, { params: { id: this.id } });
-    data.forEach(match => {
-      for (let friend of this.state.friends) {
-        match.player1Name =
-          match.player1 === friend.id
-            ? friend.username
-            : this.username;
-        match.player2Name =
-          match.player2 === friend.id
-            ? friend.username
-            : this.username;
+  fetchOpenChallenges = async (friends = this.state.friends) => {
+    let { data } = await axios.get(`http://localhost:3396/api/openMatches`, {
+      params: { id: this.id }
+    });
+    data.forEach(challenge => {
+      for (let friend of friends) {
+        (challenge.player1 === friend.id || challenge.player2 === friend.id) &&
+          (friend.challenge = challenge);
       }
     });
-    this.setState({ openChallenges: data });
+    this.setState({ openChallenges: data, friends });
   };
 
-  async handleFriendSelect(e) {
-    await this.setState({ selectedFriend: JSON.parse(e.target.value) });
+  async handleFriendSelect(user) {
+    await this.setState({ selectedFriend: user });
   }
 
-  async handleChallengeFriendClick() {
+  async handleChallengeFriendClick(user) {
+    await this.setState({ selectedFriend: user });
     if (this.state.selectedFriend) {
       const player1 = this.id;
       const player2 = this.state.selectedFriend.id;
       const player1Name = this.username;
       const player2Name = this.state.selectedFriend.username;
-      this.props.socket.emit("client.challengeFriend", {
-        player1,
-        player2,
-        player1Name,
-        player2Name
-      });
+      const alreadyChallenged = this.state.friends.filter(
+        friend => friend.id === player2 && friend.challenge
+      );
+      !alreadyChallenged.length &&
+        this.props.socket.emit("client.challengeFriend", {
+          player1,
+          player2,
+          player1Name,
+          player2Name
+        });
     }
   }
 
@@ -144,17 +154,15 @@ class FriendChallenge extends Component {
           <div>from: {challenge.player1Name}</div>
           <button
             value={JSON.stringify(challenge)}
-            onClick={e => this.handleAcceptChallengeClick(e)}
-            className="challenge_button"
+            onClick={e => this.handleRejectChallengeClick(e)}
           >
-            &#10004;
+            X
           </button>
           <button
             value={JSON.stringify(challenge)}
-            onClick={e => this.handleRejectChallengeClick(e)}
-            className="challenge_button"
+            onClick={e => this.handleAcceptChallengeClick(e)}
           >
-            X
+            &#10004;
           </button>
         </div>
       ) : (
@@ -169,10 +177,75 @@ class FriendChallenge extends Component {
     });
   }
 
+  renderChallengeButton(user) {
+    if (user.challenge) {
+      if (user.challenge.player1 === this.id) {
+        return (
+          <div className="online-challenge-text">Waiting for response</div>
+        );
+      } else {
+        return (
+          <div>
+            <button
+              value={JSON.stringify(user.challenge)}
+              onClick={e => this.handleAcceptChallengeClick(e)}
+              className="online-challenge-button1"
+            >
+              &#10004;
+            </button>
+            <button
+              value={JSON.stringify(user.challenge)}
+              onClick={e => this.handleRejectChallengeClick(e)}
+              className="online-challenge-button2"
+            >
+              X
+            </button>
+          </div>
+        );
+      }
+    } else {
+      return (
+        <img
+          className="online-challenge-icon"
+          src={duel}
+          onClick={() => this.handleChallengeFriendClick(user)}
+        />
+      );
+    }
+  }
+
   render() {
     return (
-      <div className="friend-challenge">
-        <div>
+      <div className="online-container">
+        <div className="online-head">
+          Friends Online:
+          <div className="online-head-right">Challenge</div>
+        </div>
+        <div className="online-list-container">
+          {this.state.friends.map((user, index) => (
+            <div className="online-friend-container" key={index}>
+              <img
+                width="50px"
+                className="friend-avi"
+                src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${
+                  user.avatar
+                }`}
+              />
+              <b className="online-username">{user.username}</b>
+              <a>{this.renderChallengeButton(user)}</a>
+              <hr />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default FriendChallenge;
+
+{
+  /* <div>
           <button onClick={() => this.handleChallengeFriendClick()}>
             Challenge Friend
           </button>
@@ -181,10 +254,6 @@ class FriendChallenge extends Component {
             {this.renderLoggedOnFriends()}
           </select>
         </div>
-        {!!this.state.openChallenges.length && this.renderOpenChallenges()}
-      </div>
-    );
-  }
+        <OnlineFriends />
+        {!!this.state.openChallenges.length && this.renderOpenChallenges()} */
 }
-
-export default FriendChallenge;
