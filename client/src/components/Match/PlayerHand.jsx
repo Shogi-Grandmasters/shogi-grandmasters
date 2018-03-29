@@ -1,10 +1,11 @@
 import React from 'react';
 import { boardIds } from '../../../lib/constants';
+import { pieceNameFromBoardId } from '../../../lib/boardHelpers';
 import GameTile from '../../../lib/GameTile';
 import ShogiPiece from '../GameBoard/ShogiPiece.jsx';
 
 const PlayerHandTile = ({ player, local, piece, count, selected = null, activate }) => {
-  let tile = new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10]);
+  let tile = new GameTile(pieceNameFromBoardId(piece), player.color, [10, 10]);
   // set active hover for owned pieces
   let tileStyles = ['player__hand-tile', player.facing];
   local && tileStyles.push('active');
@@ -12,7 +13,7 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
   // determine if it's selected
   if (selected && selected.location === 'hand') {
     let [playerColor, selectedPiece] = selected.target.split(':');
-    boardIds[selectedPiece] === tile.name && playerColor === tile.color && tileStyles.push('selected');
+    pieceNameFromBoardId(selectedPiece) === tile.name && playerColor === tile.color && tileStyles.push('selected');
   }
 
   return (
@@ -21,7 +22,7 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
         key={`${piece}x${count}`}
         location="hand"
         target={`${player.color}:${piece}`}
-        tile={new GameTile(boardIds[piece.toLowerCase()], player.color, [10, 10])}
+        tile={new GameTile(pieceNameFromBoardId(piece), player.color, [10, 10])}
         player={player}
         local={local}
         activate={activate}
