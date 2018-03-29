@@ -150,25 +150,21 @@ const clientListGames = async ({ io, client, room }) => {
   serverUpdateGames({ io, client, room });
 };
 
-const clientConcede = async ({ io, client, room }, payload) => {
+const clientEndGame = async ({ io, client, room }, payload) => {
   try {
-    let { matchId, winner, loser } = payload;
-    let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-      params: { matchId }
-    });
+    let { matchId, winner, loser, status } = payload;
     // TODO:  need match type on Matches model
     // then, when match === ranked, update player ratings
-    let { turn, board, hand_white, hand_black, event_log } = data[0];
     await axios.post(`${REST_SERVER_URL}/api/matches/end`, {
       matchId,
-      status: 2,
+      status,
       winner: JSON.stringify(winner),
       loser: JSON.stringify(loser)
     });
-    serverConcludeMatch({ io, client, room}, { winner, loser });
+    serverConcludeMatch({ io, client, room}, { winner, loser, status });
   }
   catch (err) {
-    error('issue conceding match, e = ', err);
+    error('issue ending match, e = ', err);
   }
 }
 
@@ -188,8 +184,8 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push('Move submitted was not for the correct turn.');
     // move is valid
-    let validMove = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to, previous);
-    if (!validMove) messages.push('Invalid move');
+    let [validMove, moveError] = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to, previous);
+    if (!validMove) messages.push(moveError);
     // board state is check or checkmate
     let [check, checkmate] = isCheckOrMate(after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.to, move.piece.length > 1));
     let gameStatus = data.status || 0;
@@ -242,7 +238,7 @@ const clientEmitters = {
   "client.gameChat": clientGameChat,
   "client.listOpenGames": clientListGames,
   "client.submitMove": clientSubmitMove,
-  "client.concede": clientConcede,
+  "client.endGame": clientEndGame,
 };
 
 export default clientEmitters;
