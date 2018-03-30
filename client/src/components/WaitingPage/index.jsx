@@ -16,9 +16,13 @@ class WaitingPage extends Component {
   }
 
   componentDidMount() {
-    this.userId = localStorage.getItem("id");
+    this.userId = +localStorage.getItem("id");
+    this.rank = +localStorage.getItem("rank");
 
-    this.props.location.history && this.socket.emit("client.joinQueue", this.userId);
+    if (this.props.location.history) {
+      const event = this.props.location.state.ranked ? "client.joinRankedQueue" : "client.joinQueue";
+      this.socket.emit(`${event}`, {userId: this.userId, rank: this.rank });
+    } 
 
     this.socket.on("server.joinMatch", ({ matchId, black, white }) => {
       if (this.userId === black || this.userId === white) {
@@ -36,10 +40,8 @@ class WaitingPage extends Component {
   }
 
   async handleCancelMatchclick() {
-    // let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
-    //   data: { matchId: this.props.match }
-    // });
-    this.socket.emit("client.leaveQueue", this.userId);
+    const event = this.props.location.state.ranked ? "client.leaveRankedQueue" : "client.leaveQueue";
+    this.socket.emit(`${event}`, this.userId);
     this.props.history.push("/home");
   }
 
