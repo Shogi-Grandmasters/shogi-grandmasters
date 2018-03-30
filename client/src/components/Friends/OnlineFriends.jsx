@@ -4,8 +4,6 @@ import duel from "../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png"
 
 import "./Friends.css";
 
-const Loader = () => <div>Loading..</div> 
-
 class OnlineFriends extends Component {
   constructor() {
     super();
@@ -54,7 +52,3 @@ class OnlineFriends extends Component {
 }
 
 export default OnlineFriends;
-
-//            {challenge}
-
-//            <img className="online-challenge-svg" src={challenge} />
