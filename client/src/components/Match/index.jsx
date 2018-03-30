@@ -32,7 +32,7 @@ class BoardIndex extends Component {
     });
 
     this.socket.on("server.joined", data => {
-      let { id, board, turn, hand_black, hand_white, event_log } = data[0];
+      let { id, board, turn, hand_black, hand_white, event_log, type } = data[0];
       console.log(data[0]);
       let black = data[1];
       let white = data[2];
@@ -45,7 +45,8 @@ class BoardIndex extends Component {
         board,
         hand_black,
         hand_white,
-        event_log
+        event_log,
+        type
       });
     });
 
