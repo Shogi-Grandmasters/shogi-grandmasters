@@ -1,10 +1,15 @@
 .shogi__board {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
+<<<<<<< HEAD
   width: 100vw;
   height: 100vw;
   grid-auto-columns: 1fr;
   grid-auto-rows: 1fr;
+=======
+  grid-auto-columns: 44px;
+  grid-auto-rows: 44px;
+>>>>>>> slide-in menus
   border-collapse: collapse;
   border: solid 1px rgba(255,255,255,0.6);
   box-shadow: 0px 0px 6px 2px rgba(20, 21, 27, 0.8);
@@ -15,8 +20,8 @@
   display: block;
   text-indent: -999px;
   overflow: hidden;
-  width: 80%;
-  height: 90%;
+  width: 30px;
+  height: 35px;
   margin: 0 auto;
   background-repeat: no-repeat;
   background-size: contain;
@@ -36,6 +41,7 @@
 }
 
 @media screen and (min-device-width: 740px) {
+<<<<<<< HEAD
   .shogi__board {
     width: 80vw;
     height: 80vw;
@@ -51,6 +57,12 @@
     height: 80vh;
     grid-auto-columns: 1fr;
     grid-auto-rows: 1fr;
+=======
+
+  .shogi__board {
+    grid-auto-columns: minmax(60px, 70px);
+    grid-auto-rows: minmax(60px, 70px);
+>>>>>>> slide-in menus
     margin: 4px;
   }
 
