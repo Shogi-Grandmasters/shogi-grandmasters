@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import "./Account.css";
+import React, { Component } from 'react';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import './Account.css';
 
 const {REST_SERVER_URL, AVATAR_URL, AVATAR_UPLOAD_URL, AVATAR_API} = process.env;
 
@@ -20,20 +20,20 @@ class EditProfile extends Component {
   handleDrop = (files) => {
     const uploaders = files.map(file => {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "pnjjwy1j"); // preset = img styling
-      formData.append("api_key", AVATAR_API); // add api key
-      formData.append("timestamp", (Date.now() / 1000) | 0);
+      formData.append('file', file);
+      formData.append('upload_preset', 'pnjjwy1j'); // preset = img styling
+      formData.append('api_key', AVATAR_API); // add api key
+      formData.append('timestamp', (Date.now() / 1000) | 0);
       return axios.post(`${AVATAR_UPLOAD_URL}`, formData, {
-         headers: { "X-Requested-With": "XMLHttpRequest" },
+         headers: { 'X-Requested-With': 'XMLHttpRequest' },
        })
       .then(response => {
         const data = response.data;
         const fileURL = data.secure_url // full URL
-        const img = fileURL.split("upload/").slice(1)
-        localStorage.setItem("avi", img);
+        const img = fileURL.split('upload/').slice(1)
+        localStorage.setItem('avi', img);
         axios.put(`${REST_SERVER_URL}/api/users/${localStorage.id}/${img}`)
-          .then(res => this.props.history.push("/acct/edit"))
+          .then(res => this.props.history.push('/acct/edit'))
           .catch(err => console.error(err));
       })
       .catch(err => console.error(err));
@@ -45,9 +45,9 @@ class EditProfile extends Component {
     try {
       const { data } = await axios.put(`${REST_SERVER_URL}/api/auth/reset`, this.state);
       localStorage.setItem('token', data[0].token.accessToken);
-      data ? alert("Password changed successfully") : alert("Password change failed!!!");
+      data ? alert('Password changed successfully') : alert('Password change failed!!!');
     } catch (err) {
-      alert("Password change failed!!!");
+      alert('Password change failed!!!');
     }
   }
 
