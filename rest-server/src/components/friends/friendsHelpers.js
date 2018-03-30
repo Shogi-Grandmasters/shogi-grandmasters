@@ -6,7 +6,7 @@ export const addFriendQuery = async body => {
   try {
     const queryString = await addFriendHelper(body);
     const data = await db.queryAsync(queryString);
-    success("friendsQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
+    success("addfriendsQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
     return data;
   } catch (err) {
     error("friendsQuery - error= ", err);
@@ -18,7 +18,7 @@ export const fetchFriendQuery = async body => {
   try {
     const queryString = await fetchAllFriendsHelper(body);
     const data = await db.queryAsync(queryString);
-    success("friendsQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
+    success("fetchfriendsQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
     return data;
   } catch (err) {
     error("friendsQuery - error= ", err);
