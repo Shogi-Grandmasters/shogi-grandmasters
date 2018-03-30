@@ -25,7 +25,6 @@ class Friends extends Component {
   addFriend = (e) => {
     e.preventDefault();
     const { username } = this.state;
-<<<<<<< HEAD
     const id = localStorage.getItem("id")
     axios.post(`${REST_SERVER_URL}/api/users/`, {username}, {
       headers: { 'Content-Type': 'application/json' }
@@ -50,7 +49,6 @@ class Friends extends Component {
       .catch(err => {
         console.log('1st promise error', err);
       });
-=======
     const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username }, {
         headers: { 'Content-Type': 'application/json' }
       });
@@ -63,7 +61,12 @@ class Friends extends Component {
         headers: { 'Content-Type': 'application/json' }
       });
     this.fetchFriends();
->>>>>>> client commit
+            console.log('2nd promise error', err);
+          });
+      })
+      .catch(err => {
+        console.log('1st promise error', err);
+      });
   }
 
   handleInput = (event) => {
