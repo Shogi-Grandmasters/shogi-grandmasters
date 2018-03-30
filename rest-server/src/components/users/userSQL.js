@@ -1,5 +1,5 @@
 export const findUserHelper = ({ username }) => {
-   return `
+  return `
     SELECT id, email, username, wins, losses
     FROM users
     WHERE username='${username}'
@@ -8,7 +8,7 @@ export const findUserHelper = ({ username }) => {
 
 export const fetchUserHelper = ({ userId }) => {
   return `
-    SELECT id, username, email, rating FROM users
+    SELECT id, username, email, rating_unranked, rating_ranked FROM users
     WHERE id='${userId}'
   `;
 };
@@ -21,20 +21,21 @@ export const deleteUserHelper = ({ userId }) => {
   `;
 };
 
-export const updateUserHelper = ({ userId, rating }) => {
+export const updateUserHelper = ({ userId, rating, ranked }) => {
+  let ratingType = ranked ? 'rating_ranked' : 'rating_unranked';
   return `
     UPDATE users
-    SET rating = '${rating}'
+    SET '${ratingType}' = '${rating}'
     WHERE id = '${userId}'
-    RETURNING id, username, rating
+    RETURNING id, username, '${ratingType}'
   `;
 };
 
 export const updateUserAviHelper = ({ id, avi, url }) => {
   return `
     UPDATE users
-    SET avatar = '${avi + '/' + url}'
+    SET avatar = '${avi + "/" + url}'
     WHERE id = '${id}'
-    RETURNING id, username, rating, avatar
+    RETURNING id, username, rating_unranked, rating_ranked, avatar
   `;
 };
