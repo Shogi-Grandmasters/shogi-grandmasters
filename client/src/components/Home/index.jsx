@@ -26,7 +26,7 @@ class Home extends Component {
       query: {
         roomId: "home",
         username: localStorage.getItem("username"),
-        userId: localStorage.getItem("id")
+        userId: +localStorage.getItem("id")
       }
     });
   }

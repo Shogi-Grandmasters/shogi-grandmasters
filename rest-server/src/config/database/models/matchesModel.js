@@ -52,6 +52,7 @@ export const createMatchesTable = async () => {
         hand_white JSON NOT NULL,
         winner INT,
         event_log JSON,
+        type INT DEFAULT 0,
         created TIMESTAMP WITH TIME ZONE DEFAULT now(),
         modified TIMESTAMP WITH TIME ZONE DEFAULT now(),
         CONSTRAINT matches_pk

@@ -4,14 +4,14 @@ export const createMatchHelper = ({
   black,
   white,
   hand_black,
-  hand_white
+  hand_white,
+  type
 }) => {
   return `
     BEGIN;
-    INSERT INTO matches
-    VALUES ('${matchId}', '${board}', 0, 0,
-    '${black}', '${white}', '${hand_black}', '${hand_white}')
-    RETURNING id, board, turn, black, white, hand_black, hand_white, event_log;
+    INSERT INTO matches (id, board, black, white, hand_black, hand_white, type) 
+    VALUES ('${matchId}', '${board}', '${black}', '${white}', '${hand_black}', '${hand_white}', '${type || 0}')
+    RETURNING id, board, turn, black, white, hand_black, hand_white, event_log, type;
     SELECT id,username,avatar,rating,wins,losses FROM users WHERE id='${black}';
     SELECT id,username,avatar,rating,wins,losses FROM users WHERE id='${white}';
     COMMIT;
