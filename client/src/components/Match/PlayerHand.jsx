@@ -32,25 +32,33 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
   )
 }
 
-const PlayerHand = ({ player, hand, local, selected, activate }) => {
+const PlayerHand = ({ player, hand, local, selected, activate, visibility, toggle }) => {
   hand = hand.reduce((counts, piece) => {
     counts[piece] = counts[piece] + 1 || 1;
     return counts;
   }, {})
 
+  let playerHandStyles = ['player__hand-selection'];
+  visibility ? playerHandStyles.push('shown') : playerHandStyles.push('hidden');
+
   return (
-    <div className="player__hand">
-      {Object.entries(hand).map(([piece, count]) =>
-        <PlayerHandTile
-          key={`${player.color}:hand:${piece}`}
-          local={local}
-          player={player}
-          piece={piece}
-          count={count}
-          selected={selected}
-          activate={activate}
-        />
-      )}
+    <div className={`player__hand ${local ? 'south' : 'north'}`}>
+      <div className="player__hand-menu">
+        <a onClick={() => toggle(player.color)} className={`button__tab ${local ? 'south' : 'north' }`}>{local ? 'Your Hand' : 'Opponent\'s Hand'}</a>
+      </div>
+      <div className={playerHandStyles.join(' ')}>
+        {Object.entries(hand).map(([piece, count]) =>
+          <PlayerHandTile
+            key={`${player.color}:hand:${piece}`}
+            local={local}
+            player={player}
+            piece={piece}
+            count={count}
+            selected={selected}
+            activate={activate}
+          />
+        )}
+      </div>
     </div>
   )
 }

@@ -4,11 +4,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  margin-top: 40px;
 }
 
 .turn__indicator > * {
-  flex: 1;
-  margin-top: 32px 4px 4px 4px;
+  margin: 8px;
 }
 
 .turn__indicator-north {
@@ -33,7 +33,7 @@
   border-top-style: solid;
   border-top-width: 30px;
   border-top-color: rgba(44, 52, 63, 0);
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
 }
 
 .south__active {

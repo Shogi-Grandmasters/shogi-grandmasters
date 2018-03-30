@@ -66,10 +66,11 @@ const LogMove = ({ color, moveType, notation }) => (
   </div>
 );
 
-const MatchLog = ({ events }) => {
+const MatchLog = ({ events, visibility, toggle }) => {
+  let logStyles = ['match__log'];
+  visibility ? logStyles.push('shown') : logStyles.push('hidden');
   return (
-    <div className="match__log">
-      <div></div>
+    <div className={logStyles.join(' ')}>
       <div className="match__log-list">
         <div className="match__log-list-inner">
             {events.map((event, ei) => {
@@ -83,7 +84,7 @@ const MatchLog = ({ events }) => {
             })}
         </div>
       </div>
-      <div></div>
+      <div className="match__log-actions"><button className="match__log-control" onClick={() => toggle('log')}>Close</button></div>
     </div>
   );
 }
