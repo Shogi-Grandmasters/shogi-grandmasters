@@ -96,3 +96,10 @@
   width: 50px;
   float: right;
 }
+
+.online-challenge-svg {
+  width: 50px;
+  float: right;
+  color: #f15a4a;
+  fill: #f15a4a;
+}
