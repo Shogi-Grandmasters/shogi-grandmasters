@@ -22,21 +22,29 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
-  addFriend = async () => {
-    const id = localStorage.getItem("id");
+  addFriend = (e) => {
+    e.preventDefault();
     const { username } = this.state;
-    const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username }, {
-        headers: { 'Content-Type': 'application/json' }
+    const id = localStorage.getItem("id")
+    axios.post(`${REST_SERVER_URL}/api/users/`, {username})
+      .then(res => {
+        console.log('1st promise data', res.data)
+        const body = {
+          u_id: id,
+          f_id: res.data.id.toString(),
+        }
+        axios.post(`${REST_SERVER_URL}/api/friends/add`, body)
+          .then(data => {
+            console.log('2nd promise data', data.data)
+            this.fetchFriends();
+          })
+          .catch(err => {
+            console.log('2nd promise error', err);
+          });
+      })
+      .catch(err => {
+        console.log('1st promise error', err);
       });
-    const fid = data.id + "";
-    const body = {
-      u_id: id,
-      f_id: fid,
-    }
-    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    this.fetchFriends();
   }
 
   handleInput = (event) => {
