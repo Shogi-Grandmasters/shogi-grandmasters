@@ -1,13 +1,14 @@
+
 .turn__indicator {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: space-around;
 }
 
 .turn__indicator > * {
   flex: 1;
-  margin: 4px;
+  margin-top: 32px 4px 4px 4px;
 }
 
 .turn__indicator-north {
@@ -18,8 +19,8 @@
   border-bottom-style: solid;
   border-bottom-width: 30px;
   border-bottom-color: rgba(44, 52, 63, 0);
+  transform: rotate(-90deg);
 }
-
 .north__active {
   border-bottom-color: #d0c7af;
 }
@@ -32,6 +33,7 @@
   border-top-style: solid;
   border-top-width: 30px;
   border-top-color: rgba(44, 52, 63, 0);
+  transform: rotate(90deg);
 }
 
 .south__active {
@@ -39,7 +41,27 @@
 }
 
 .turn__timer {
+  font-family: 'Oswald';
+  font-style: italic;
   font-size: 24px;
-  font-weight: 800;
-  color: #2c343f;
+  color: #d0c7af;
+  text-shadow:
+    1px 1px 2px #14151b,
+    2px 2px 2px #f15a4a;
+}
+
+@media screen and (min-device-width: 740px) {
+
+  .turn__indicator {
+    flex-direction: column;
+  }
+
+  .turn__indicator-north {
+    transform: rotate(0deg);
+  }
+
+  .turn__indicator-south {
+    transform: rotate(0deg);
+  }
+
 }
