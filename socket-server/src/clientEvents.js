@@ -36,48 +36,35 @@ const { REST_SERVER_URL } = process.env;
 const matchQueue = new Queue();
 const rankedQueue = new Queue();
 
-const clientJoinQueue = async ({ io, client, room }, { userId }) => {
+const clientJoinQueue = async ({ io, client, room }, { userId, rating, ranked }) => {
   success("client join queue heard");
   try {
-    matchQueue.enqueue([userId]);
-    if (matchQueue.size() > 1) {
-      let matchId = randomstring.generate();
-      let black = matchQueue.dequeue()[0];
-      let white = matchQueue.dequeue()[0];
-      await clientGameReady({ io, client, room }, { matchId, black, white });
-      serverJoinMatch({ io, client, room }, { matchId, black, white });
+    const queue = ranked ? rankedQueue : matchQueue;
+    queue.enqueue([+userId, rating]);
+    if (queue.size() > 1) {
+      const matchedOpponents = findRankedOpponents(queue);
+      const type = ranked ? 1 : 0;
+      if (matchedOpponents) {
+        const matchId = randomstring.generate();
+        let { player1, player2 } = matchedOpponents;
+        let black, white;
+        player1 = queue.pluck(player1[0]);
+        player2 = queue.pluck(player2[0]);
+        player1[1] >= player2[1] ? (black = player1[0], white = player2[0]) : (black = player2[0], white = player1[0]);
+        await clientGameReady({ io, client, room }, { matchId, black, white, type });
+        serverJoinMatch({ io, client, room }, { matchId, black, white });
+      }
     }
   } catch (err) {
     error("client join queue error", err);
   }
 };
 
-const clientJoinRankedQueue = async ({ io, client, room }, {userId, rank}) => {
-  success("client join ranked queue heard");
-  try {
-    rankedQueue.enqueue([+userId, rank]);
-    if (rankedQueue.size() > 1) {
-      const matchedOpponents = findRankedOpponents(rankedQueue);
-      if (matchedOpponents) {
-        const matchId = randomstring.generate();
-        let { player1, player2 } = matchedOpponents;
-        let black, white;
-        player1 = rankedQueue.pluck(player1[0]);
-        player2 = rankedQueue.pluck(player2[0]);
-        player1[1] >= player2[1] ? (black = player1[0], white = player2[0]) : (black = player2[0], white = player1[0]);
-        await clientGameReady({ io, client, room }, { matchId, black, white, type: 1 });
-        serverJoinMatch({ io, client, room }, { matchId, black, white });
-      }
-    }
-  } catch (err) {
-    error("client join ranked queue error", err);
-  }
-};
-
-const clientLeaveQueue = ({ io, client, room }, userId) => {
+const clientLeaveQueue = ({ io, client, room }, { userId, ranked }) => {
   success("client leave queue heard");
   try {
-    matchQueue.pluck(+userId);
+    const queue = ranked ? rankedQueue : matchQueue;
+    queue.pluck(+userId);
   } catch (err) {
     error("client leave queue error", err);
   }
@@ -318,8 +305,6 @@ const clientEmitters = {
   "client.challengeFriend": clientChallengeFriend,
   "client.acceptChallenge": clientAcceptChallenge,
   "client.rejectChallenge": clientRejectChallenge,
-  "client.joinRankedQueue": clientJoinRankedQueue,
-  "client.leaveRankedQueue": clientLeaveRankedQueue
 };
 
 export default clientEmitters;

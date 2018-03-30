@@ -42,10 +42,6 @@ io.on("connection", client => {
     users && (users[userId].loggedOn = false, room.set("users", users));
     userId && username && io.in(roomId).emit("server.userDisconnected", {userId, username, loggedOn: false});
   });
-
-  //removing user from queue on browser back event
-  roomId === "home" && clientEvents["client.leaveQueue"]({ io, client, room }, userId);
-  roomId === "home" && clientEvents["client.leaveRankedQueue"]({ io, client, room }, userId);
 });
 
 const PORT = process.env.PORT || 4155;
