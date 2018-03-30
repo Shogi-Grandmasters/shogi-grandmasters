@@ -21,6 +21,7 @@ router.route("/:id/:avi/:url")
 router
   .route("/")
   .post(validate(formValidation.findUser), findUserController)
+  .get(validate(formValidation.findUser), findUserController)
   .delete(deleteUserController)
   .put(updateUserController);
 
