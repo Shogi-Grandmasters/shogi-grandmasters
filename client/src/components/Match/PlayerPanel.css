@@ -1,25 +1,9 @@
-.player__profile-north {
-  width: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.player__profile-south {
-  width: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column-reverse;
-}
-
 .player__avatar {
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
   background: #666;
-  margin: 16px;
+  margin: 8px;
   background-size: cover;
 }
 
@@ -38,24 +22,42 @@
     0px 0px 1px 7px #fff,
     0px 0px 0px 10px #14151b;
 }
+
+.player__profile-north, .player__profile-south {
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .player__name {
   font-family: 'Oswald';
   margin: 4px;
-  font-size: 24px;
+  font-size: 18px;
   text-transform: uppercase;
 }
 
-.player__color {
-  width: 20px;
-  height: 20px;
-  margin: 8px;
-  border-radius: 10px;
-  border: solid 1px #ececec;
-}
 
-.white {
-  background-color: #fff;
-}
-.black {
-  background-color: #000;
+@media screen and (min-device-width: 740px) {
+
+  .player__profile-north {
+    width: 140px;
+  }
+
+  .player__profile-south {
+    width: 140px;
+    flex-direction: column-reverse;
+  }
+
+  .player__avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    margin: 16px;
+  }
+
+  .player__name {
+    font-size: 24px;
+  }
 }
