@@ -51,11 +51,10 @@ class Friends extends Component {
   //   }
   //   console.log('supah fail')
   // }
-  
+
   addFriend = (e) => {
     e.preventDefault();
     const { username } = this.state;
-<<<<<<< HEAD
     const id = localStorage.getItem("id")
     axios.post(`${REST_SERVER_URL}/api/users/`, {username})
       .then(res => {
@@ -70,13 +69,6 @@ class Friends extends Component {
             this.fetchFriends();
           })
           .catch(err => {
-            console.log('2nd promise error');
-          });
-      })
-      .catch(err => {
-        console.log('1st promise error');
-      });
-=======
     const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username }, {
         headers: { 'Content-Type': 'application/json' }
       });
@@ -89,7 +81,12 @@ class Friends extends Component {
         headers: { 'Content-Type': 'application/json' }
       });
     this.fetchFriends();
->>>>>>> client commit
+            console.log('2nd promise error', err);
+          });
+      })
+      .catch(err => {
+        console.log('1st promise error', err);
+      });
   }
 
   handleInput = (event) => {

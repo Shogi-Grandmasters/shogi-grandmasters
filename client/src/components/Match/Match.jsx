@@ -293,7 +293,7 @@ class Match extends Component {
   receiveMove({ log, status, before, after, move }) {
     if (status.checkmate) {
       let winner = move.color === this.state.localColor ? this.getPlayer('local').user : this.getPlayer('opponent').user;
-      let loser = move.color === this.state.localColor ?  this.getPlayer('local').user : this.getPlayer('opponent').user;
+      let loser = move.color === this.state.localColor ?  this.getPlayer('opponent').user : this.getPlayer('local').user;
       if (winner.id === this.getPlayer('local').user.id) {
         this.socket.emit("client.endGame", {
           matchId: this.state.matchId,
