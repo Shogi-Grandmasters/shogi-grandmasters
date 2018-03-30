@@ -22,36 +22,6 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
-  // searchUser = async () => {
-  //   const id = localStorage.getItem("id");
-  //   const { username } = this.state;
-  //   const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username });
-  //   const fid = data.id + "";
-  //   await this.addFriend(fid);
-  // }
-
-  // addFriend = async () => {
-  //   try{
-  //     const { username } = this.state;
-  //     const id = localStorage.getItem("id")
-  //     console.log(username)
-  //     const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, {username})
-  //     const fid = await data.id
-  //     console.log('1st post data', data)
-  //     const body = {
-  //       u_id: id,
-  //       f_id: data.id,
-  //     }
-  //     console.log('our body', body)
-  //     const user = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
-  //     console.log('2nd post data', user)
-  //   } catch(err){
-  //     console.log(err)
-  //     console.log('inside our catch')
-  //   }
-  //   console.log('supah fail')
-  // }
-
   addFriend = (e) => {
     e.preventDefault();
     const { username } = this.state;
