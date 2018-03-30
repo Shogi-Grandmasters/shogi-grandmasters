@@ -11,6 +11,7 @@ class GameChat extends Component {
       messages: [],
       message: ""
     };
+    this.toggle = props.toggle;
   }
 
   componentWillMount() {
@@ -53,24 +54,32 @@ class GameChat extends Component {
   }
 
   render() {
+    let chatStyles = ['match__chat'];
+    this.props.visibility ? chatStyles.push('shown') : chatStyles.push('hidden');
+
     return (
-      <div className="home-chat-container">
-        <div className="chatbox">
-          {this.state.messages.length > 0 &&
-            this.state.messages.slice(0, 20).map((message, i) => {
-              return (
-                <div className="chat__message" key={i}><strong>{message.username}</strong> {unescape(message.content)}</div>
-              );
-            })}
-        </div>
-        <form onSubmit={e => this.resetInput(e)}>
-          <div className="chat__input">
-            <input onKeyUp={e => this.handleChat(e)} />
-            <button type="submit" onClick={() => this.handleSubmit()}>
-              &gt;
-            </button>
+      <div className={chatStyles.join(' ')}>
+        <div className="match__chat-container">
+          <div className="chatbox">
+            {this.state.messages.length > 0 &&
+              this.state.messages.slice(0, 20).map((message, i) => {
+                return (
+                  <div className="chat__message" key={i}><strong>{message.username}</strong> {unescape(message.content)}</div>
+                );
+              })}
           </div>
-        </form>
+          <form onSubmit={e => this.resetInput(e)}>
+            <div className="chat__input">
+              <input onKeyUp={e => this.handleChat(e)} />
+              <button type="submit" onClick={() => this.handleSubmit()}>
+                &gt;
+              </button>
+            </div>
+          </form>
+        </div>
+        <div className="match__chat-actions">
+          <button className="chat__close" onClick={() => this.toggle('chat')}>Close</button>
+        </div>
       </div>
     );
   }
