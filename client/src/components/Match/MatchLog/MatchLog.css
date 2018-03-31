@@ -18,10 +18,10 @@ dark blue: 14151b
   transition: all 0.4s ease;
 }
 .match__log.hidden {
-  margin-left: -80vw;
+  left: -80vw;
 }
 .match__log.shown {
-  margin-left: 0vw;
+  left: 0vw;
 }
 
 .match__log-list {
