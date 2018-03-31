@@ -1,6 +1,6 @@
 export const findUserHelper = ({ username }) => {
   return `
-    SELECT id, email, username, wins, losses
+    SELECT id, email, username, wins, losses, avatar
     FROM users
     WHERE username='${username}'
   `;
@@ -8,7 +8,7 @@ export const findUserHelper = ({ username }) => {
 
 export const fetchUserHelper = ({ userId }) => {
   return `
-    SELECT id, username, email, rating_unranked, rating_ranked FROM users
+    SELECT id, username, email, rating_unranked, rating_ranked, avatar FROM users
     WHERE id='${userId}'
   `;
 };

@@ -1,9 +1,13 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Dropzone from "react-dropzone";
-import "./Account.css";
+import React, { Component } from 'react';
+import axios from 'axios';
+import Dropzone from 'react-dropzone';
+import './Account.css';
 
-const {REST_SERVER_URL, AVATAR_URL} = process.env;
+<<<<<<< HEAD
+const {REST_SERVER_URL, AVATAR_URL, AVATAR_UPLOAD_URL, AVATAR_API} = process.env;
+=======
+const {REST_SERVER_URL, AVATAR_UPLOAD_URL, AVATAR_URL, AVATAR_API} = process.env;
+>>>>>>> 535eea63e5a428fe97adc1c1b8fbade3a8366680
 
 class EditProfile extends Component {
   constructor() {
@@ -20,27 +24,23 @@ class EditProfile extends Component {
   handleDrop = (files) => {
     const uploaders = files.map(file => {
       const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "pnjjwy1j"); // preset = img styling
-      formData.append("api_key", "913846924149284"); // add api key
-      formData.append("timestamp", (Date.now() / 1000) | 0);
-
-      return axios.post(AVATAR_URL, formData, {
-        headers: { 'Content-Type': 'application/json' }
-      })
+      formData.append('file', file);
+      formData.append('upload_preset', 'pnjjwy1j'); // preset = img styling
+      formData.append('api_key', AVATAR_API); // add api key
+      formData.append('timestamp', (Date.now() / 1000) | 0);
+      return axios.post(`${AVATAR_UPLOAD_URL}`, formData, {
+         headers: { 'X-Requested-With': 'XMLHttpRequest' },
+       })
       .then(response => {
         const data = response.data;
         const fileURL = data.secure_url // full URL
-        const img = fileURL.split("upload/").slice(1)
-        localStorage.setItem("avi", img);
-        axios.put(`${REST_SERVER_URL}/api/users/${localStorage.id}/${img}`, {
-        headers: { 'Content-Type': 'application/json' }
+        const img = fileURL.split('upload/').slice(1)
+        localStorage.setItem('avi', img);
+        axios.put(`${REST_SERVER_URL}/api/users/${localStorage.id}/${img}`)
+          .then(res => this.props.history.push('/acct/edit'))
+          .catch(err => console.error(err));
       })
-        .then(res => this.props.history.push("/acct"))
-
-        //example url
-        //https://res.cloudinary.com/shogigrandmasters/image/upload/v1521764336/t8e4tdezb32n1rq3il9h.png
-      })
+      .catch(err => console.error(err));
     });
   }
 
@@ -51,9 +51,9 @@ class EditProfile extends Component {
         headers: { 'Content-Type': 'application/json' }
       });
       localStorage.setItem('token', data[0].token.accessToken);
-      data ? alert("Password changed successfully") : alert("Password change failed!!!");
+      data ? alert('Password changed successfully') : alert('Password change failed!!!');
     } catch (err) {
-      alert("Password change failed!!!");
+      alert('Password change failed!!!');
     }
   }
 
@@ -78,7 +78,7 @@ class EditProfile extends Component {
       </div>
         <form className="edit-form-container">
           <h3 className="title">Change your password:</h3>
-          <input 
+          <input
             name="username"
             type="text"
             autoComplete="username"

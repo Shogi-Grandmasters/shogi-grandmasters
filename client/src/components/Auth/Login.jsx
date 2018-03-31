@@ -24,7 +24,7 @@ class Login extends Component {
       localStorage.setItem('unrankedRating', data.rating_unranked);
       localStorage.setItem('rankedRating', data.rating_ranked);
       if(data.avatar != null){localStorage.setItem('avi', data.avatar)}
-      data ? this.props.history.push('/home') : this.props.history.push('/login');
+      data.email ? this.props.history.push('/home') : this.props.history.push('/login');
     } catch (err) {
       alert("Invalid login attempt")
     }

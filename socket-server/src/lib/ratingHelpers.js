@@ -10,31 +10,31 @@ const { REST_SERVER_URL } = process.env;
 // players above 2500 have K-factor of 16
 
 export const endMatch = ([winnerRating, loserRating], draw = false) => {
-  let elo;
-  if (winnerRating <= 2000) {
-    elo = new eloRank(32);
-  } else if (winnerRating <= 2500) {
-    elo = new eloRank(24);
-  } else {
-    elo = new eloRank(16);
+  const k = (rating) => {
+    if (rating <= 1200) {
+      return 40;
+    } else if (rating <= 2000) {
+      return 32;
+    } else if (rating <= 2500) {
+      return 24;
+    } else {
+      return 16;
+    }
   }
+    let elo;
+
+  elo = new eloRank(k(winnerRating));
   let winnerExpected = elo.getExpected(winnerRating, loserRating);
   let winnerUpdated = elo.updateRating(winnerExpected, draw ? 0.5 : 1, winnerRating);
 
-  if (loserRating <= 2000) {
-    elo = new eloRank(32);
-  } else if (loserRating <= 2500) {
-    elo = new eloRank(24);
-  } else {
-    elo = new eloRank(16);
-  }
+  elo = new eloRank(k(loserRating));
   let loserExpected = elo.getExpected(loserRating, winnerRating);
   let loserUpdated = elo.updateRating(loserExpected, draw ? 0.5 : 0, loserRating);
 
   winnerRating = winnerUpdated > 99 ? winnerUpdated : 100;
   loserRating = loserUpdated > 99 ? loserUpdated : 100;
 
-  return [winnerRating, loserRating]
+  return [winnerRating, loserRating];
 }
 
 // TODO:  this needs updating

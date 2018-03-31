@@ -180,7 +180,6 @@ const clientEndGame = async ({ io, client, room }, payload) => {
     if (ratingType === 'unranked') [winner.rating_unranked, loser.rating_unranked] = endMatch([winner.rating_unranked, loser.rating_unranked]);
     if (ratingType === 'ranked') [winner.rating_ranked, loser.rating_ranked] = endMatch([winner.rating_ranked, loser.rating_ranked]);
     // todo:  update leaderboards
-
     await axios.post(`${REST_SERVER_URL}/api/matches/end`, {
       matchId,
       status,
@@ -316,7 +315,7 @@ const clientEmitters = {
   "client.challengeFriend": clientChallengeFriend,
   "client.acceptChallenge": clientAcceptChallenge,
   "client.rejectChallenge": clientRejectChallenge,
-  "client.endGame": clientEndGame,
+  "client.endGame": clientEndGame
 };
 
 export default clientEmitters;

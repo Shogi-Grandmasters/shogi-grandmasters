@@ -4,7 +4,7 @@ import OnlineFriends from "../../Friends/OnlineFriends.jsx";
 import randomstring from "randomstring";
 
 import "./FriendChallenge.css";
-import duel from "../../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png";
+import duel from "../../../../5fb83b603cb5c95c8cbdffb9cb379888.png";
 
 const { REST_SERVER_URL, AVATAR_URL } = process.env;
 
