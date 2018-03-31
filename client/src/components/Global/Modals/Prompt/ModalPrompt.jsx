@@ -1,6 +1,5 @@
 import React from 'react';
-import Modal from './Modal.jsx';
-import { FadeIn } from './Animation/Transitions.jsx';
+import Modal from '../Modal.jsx';
 
 import './ModalPrompt.css'
 
