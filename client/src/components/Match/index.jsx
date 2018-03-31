@@ -48,14 +48,11 @@ class BoardIndex extends Component {
         type
       });
     });
-
-    // this.socket.on("server.reconnect", ({ matchId, black, white }) => {
-    //   matchId && black && white && this.socket.emit("client.gameReady", {
-    //     matchId: this.props.location.state.matchId,
-    //     black,
-    //     white
-    //   });
-    // });
+    window.onpopstate = () => {
+      this.socket.close();
+      window.history.forward();
+      window.location.reload();
+    }
   }
 
   render() {

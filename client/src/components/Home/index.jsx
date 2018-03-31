@@ -36,6 +36,7 @@ class Home extends Component {
 
   logout = () => {
     window.localStorage.clear();
+    this.socket.close();
     this.props.history.push("/login");
   };
 
