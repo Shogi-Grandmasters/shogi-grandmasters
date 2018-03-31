@@ -10,6 +10,7 @@
 }
 
 .shogi__token {
+  display: block;
   text-indent: -999px;
   overflow: hidden;
   width: 30px;
