@@ -12,7 +12,7 @@ export const fetchAllFriendsHelper = ({ u_id }) => {
     FROM users AS u
       INNER JOIN friends AS f
       ON (u.id=f.f_id)
-      WHERE (f.u_id=${u_id} OR u.id=${u_id})
+      WHERE ((f.u_id=${u_id} AND f.status=1) OR (u.id=${u_id} AND f.status=0))
   `;
 };
 
