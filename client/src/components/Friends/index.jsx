@@ -30,7 +30,7 @@ class Friends extends Component {
       headers: { 'Content-Type': 'application/json' }
       })
       .then(res => {
-        console.log('1st promise data', res.data)
+        //console.log('1st promise data', res.data)
         const body = {
           u_id: id,
           f_id: res.data.id.toString(),
@@ -39,7 +39,7 @@ class Friends extends Component {
           headers: { 'Content-Type': 'application/json' }
           })
           .then(data => {
-            console.log('2nd promise data', data.data)
+            //console.log('2nd promise data', data.data)
             this.fetchFriends();
           })
           .catch(err => {
@@ -69,6 +69,9 @@ class Friends extends Component {
       const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`, {
         headers: { 'Content-Type': 'application/json' }
       });
+      if (id == friend.id) {
+        friend.avatar = user.data[0].avatar;
+      }
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
       if(friend.status == 0 && friend.u_id == id) awaiting.push(friend)
