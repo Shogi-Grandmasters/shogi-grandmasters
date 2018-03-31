@@ -3,7 +3,11 @@ import axios from 'axios';
 import Dropzone from 'react-dropzone';
 import './Account.css';
 
+<<<<<<< HEAD
 const {REST_SERVER_URL, AVATAR_URL, AVATAR_UPLOAD_URL, AVATAR_API} = process.env;
+=======
+const {REST_SERVER_URL, AVATAR_UPLOAD_URL, AVATAR_URL, AVATAR_API} = process.env;
+>>>>>>> 535eea63e5a428fe97adc1c1b8fbade3a8366680
 
 class EditProfile extends Component {
   constructor() {
