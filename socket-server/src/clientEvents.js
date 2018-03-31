@@ -160,9 +160,11 @@ const clientListGames = async ({ io, client, room }) => {
 
 const clientEndGame = async ({ io, client, room }, payload) => {
   try {
-    let { matchId, winner, loser, status } = payload;
-    // TODO:  need match type on Matches model
-    // then, when match === ranked, update player ratings
+    let { matchId, winner, loser, status, type } = payload;
+    let ratingType = type === 0 ? 'unranked' : type === 1 ? 'ranked' : 'friendly';
+    if (ratingType === 'unranked') [winner.rating_unranked, loser.rating_unranked] = endMatch([winner.rating_unranked, loser.rating_unranked]);
+    if (ratingType === 'ranked') [winner.rating_ranked, loser.rating_ranked] = endMatch([winner.rating_ranked, loser.rating_ranked]);
+    // todo:  update leaderboards
     await axios.post(`${REST_SERVER_URL}/api/matches/end`, {
       matchId,
       status,
