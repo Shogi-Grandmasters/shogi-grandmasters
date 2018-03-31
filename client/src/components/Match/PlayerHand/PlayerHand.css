@@ -1,0 +1,134 @@
+/*
+pale red: f15a4a
+light tan: d0c7af
+mid tan: b0a091
+dark tan: 4d443b
+light blue: 485562
+mid blue: 2c343f
+dark blue: 14151b
+*/
+
+
+.match__hand {
+  height: 60px;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.match__hand.north {
+  justify-content: flex-end;
+}
+
+.match__hand.south {
+  justify-content: flex-start;
+}
+
+.player__hand {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+.player__hand.south {
+  flex-flow: column-reverse nowrap;
+}
+
+.player__hand-menu {
+  display: block;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.player__hand-selection {
+  background-color: #485562;
+  width: 95vw;
+  height: 100px;
+  transition: all 0.3s ease;
+}
+.player__hand-selection.north {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 8px;
+}
+.player__hand-selection.south {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 8px;
+}
+
+.player__hand-selection.hidden {
+  display: none;
+  width: 100%;
+  height: 80px;
+}
+.player__hand-selection.shown {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-auto-rows: minmax(80px, 80px);
+}
+
+.button__tab {
+  color: #d0c7af;
+  background-color: #485562;
+  text-shadow: 1px 1px 2px #14151b;
+  text-decoration: none;
+  height: 18px;
+  width: 140px;
+  padding: 8px 8px;
+  text-align: center;
+  line-height: 18px;
+}
+.button__tab.north {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  box-shadow:
+    0px -1px 10px 1px #14151b;
+}
+.button__tab.south {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-shadow:
+    0px 3px 10px 1px #14151b;
+}
+
+@media screen and (min-device-width: 740px) {
+
+  .player__hand {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-auto-rows: minmax(60px, auto);
+  }
+  .north{
+    flex-direction: column-reverse;
+    align-content: flex-end;
+    align-items: flex-end;
+  }
+  .south{
+    align-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .player__hand-tile {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .player__hand-tile.north {
+    margin-top: 4px;
+    flex-direction: column;
+  }
+  .player__hand-tile.south {
+    margin-bottom: 4px;
+    flex-direction: column-reverse;
+  }
+
+  .player__hand-count {
+    text-align: center;
+  }
+
+}

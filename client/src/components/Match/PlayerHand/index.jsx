@@ -1,8 +1,10 @@
 import React from 'react';
-import { boardIds } from '../../../lib/constants';
-import { pieceNameFromBoardId } from '../../../lib/boardHelpers';
-import GameTile from '../../../lib/GameTile';
-import ShogiPiece from '../GameBoard/ShogiPiece.jsx';
+import { boardIds } from '../../../../lib/constants';
+import { pieceNameFromBoardId } from '../../../../lib/boardHelpers';
+import GameTile from '../../../../lib/GameTile';
+import ShogiPiece from '../../GameBoard/ShogiPiece.jsx';
+
+import './PlayerHand.css';
 
 const PlayerHandTile = ({ player, local, piece, count, selected = null, activate }) => {
   let tile = new GameTile(pieceNameFromBoardId(piece), player.color, [10, 10]);
@@ -40,6 +42,7 @@ const PlayerHand = ({ player, hand, local, selected, activate, visibility, toggl
 
   let playerHandStyles = ['player__hand-selection'];
   visibility ? playerHandStyles.push('shown') : playerHandStyles.push('hidden');
+  local ? playerHandStyles.push('south') : playerHandStyles.push('north');
 
   return (
     <div className={`player__hand ${local ? 'south' : 'north'}`}>

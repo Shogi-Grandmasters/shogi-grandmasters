@@ -1,9 +1,9 @@
 import React from 'react';
-import ShogiPiece from '../GameBoard/ShogiPiece.jsx';
-import { boardIds } from '../../../lib/constants';
-import { pieceNameFromBoardId } from '../../../lib/boardHelpers';
-import GameTile from '../../../lib/GameTile';
-import { FadeInGroup } from '../Global/Animation/TransitionGroups.jsx';
+import ShogiPiece from '../../GameBoard/ShogiPiece.jsx';
+import { boardIds } from '../../../../lib/constants';
+import { pieceNameFromBoardId } from '../../../../lib/boardHelpers';
+import GameTile from '../../../../lib/GameTile';
+import { FadeInGroup } from '../../Global/Animation/TransitionGroups.jsx';
 
 import './MatchLog.css';
 

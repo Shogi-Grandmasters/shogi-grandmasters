@@ -14,9 +14,9 @@ import {
 import GameTile from '../../../lib/GameTile';
 
 import ShogiBoard from '../GameBoard/ShogiBoard.jsx';
-import PlayerPanel from './PlayerPanel.jsx';
-import PlayerHand from './PlayerHand.jsx';
-import MatchLog from './MatchLog.jsx';
+import PlayerPanel from './PlayerPanel/index.jsx';
+import PlayerHand from './PlayerHand/index.jsx';
+import MatchLog from './MatchLog/index.jsx';
 import TurnIndicator from './TurnIndicator.jsx';
 import GameChat from './Chat/index.jsx';
 import ModalPrompt from '../Global/ModalPrompt.jsx';
@@ -448,6 +448,7 @@ class Match extends Component {
   }
 
   quit() {
+    this.socket.close();
     this.props.history.push({
       pathname: `/home`,
       history: this.props.history
@@ -460,6 +461,7 @@ class Match extends Component {
     return (
       <div className="match">
         <MatchLog events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
+        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         <div className="match__play">
           <div className="match__turn">
             <PlayerPanel player={this.getPlayer('opponent')} />
@@ -509,7 +511,6 @@ class Match extends Component {
             <a className="match__action-right" onClick={() => this.toggleMobile('chat')}>Chat</a>
           </div>
         </div>
-        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         {modal}
       </div>
     )
