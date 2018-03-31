@@ -139,6 +139,13 @@ button:hover {
   background-image: radial-gradient(#fff, #fff);
 }
 
+.match__actions > .mobile {
+  display: block;
+}
+.match__actions > .desktop {
+  display: none;
+}
+
 @media screen and (min-device-width: 740px) {
 
   .match__turn {
@@ -167,11 +174,38 @@ button:hover {
 
 @media screen and (min-device-width: 1025px) {
   .match {
-    grid-template-columns: 1fr 1fr 6fr 2fr;
+    grid-template-columns: 2fr 6fr 2fr;
   }
   .match__play {
-    grid-template-rows: 1fr 9fr 1fr;
-    min-width: 540px;
-    max-width: 630px;
+    width: 70vw;
+    grid-template-columns: 2fr 8fr 3fr;
   }
+
+  .match__turn {
+    margin-top: 10vh;
+    height: 80vh;
+    min-width: 120px;
+    flex-direction: column;
+  }
+  .match__board {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .match__actions {
+    height: 100vh;
+    flex-flow: column nowrap;
+    justify-content: center;
+  }
+  .match__actions > * {
+    margin: 16px;
+  }
+  .match__actions > .mobile {
+    display: none;
+  }
+  .match__actions > .desktop {
+    display: block;
+  }
+
 }

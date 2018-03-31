@@ -141,3 +141,17 @@ dark blue: 14151b
     line-height: 18px;
   }
 }
+
+@media screen and (min-device-width: 1025px) {
+  .match__hand {
+    height: 80px;
+  }
+  .player__hand-menu {
+    display: none;
+  }
+  .player__hand-selection, .player__hand-selection.hidden {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+  }
+}

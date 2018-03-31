@@ -44,7 +44,7 @@
 
 @media screen and (min-device-width: 1025px) {
 
-  .player__profile-north {
+  /* .player__profile-north {
     width: 140px;
   }
 
@@ -62,6 +62,6 @@
 
   .player__name {
     font-size: 24px;
-  }
+  } */
 
 }

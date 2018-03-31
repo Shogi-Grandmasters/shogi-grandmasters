@@ -100,9 +100,17 @@
 }
 
 @media screen and (min-device-width: 1025px) {
-  .match__chat {
-    display: grid;
-    grid-template-rows: 1fr 8fr 1fr;
+  .match__chat, .match__chat.hidden {
+    position: relative;
+    height: 100vh;
+    left: 0px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-content: center;
+    justify-content: flex-end;
+  }
+  .match__chat-actions {
+    display: none;
   }
   .chat__close {
     display: none;

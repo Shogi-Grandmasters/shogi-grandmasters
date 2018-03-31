@@ -114,11 +114,15 @@ dark blue: 14151b
 
 @media screen and (min-device-width: 1025px) {
 
-  .match__log {
+  .match__log, .match__log.hidden {
+    left: 0px;
     position: relative;
     width: 200px;
     display: grid;
     grid-template-rows: 1fr 8fr 1fr;
+  }
+  .match__log-list {
+    height: 100vh;
   }
   .match__log-control {
     display: none;
@@ -126,12 +130,10 @@ dark blue: 14151b
   .match__log-item {
     height: 45px;
   }
-
   .match__log-event h3 {
     font-size: 12px;
     line-height: 18px;
   }
-
   .match__log-event span {
     font-size: 10px;
   }
@@ -139,5 +141,7 @@ dark blue: 14151b
     width: 50px;
     height: 50px;
   }
-
+  .match__log-actions {
+    display: none;
+  }
 }
