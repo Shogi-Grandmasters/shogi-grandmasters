@@ -1,6 +1,6 @@
 import db from "../../config/database/";
 import { success, error } from "../../lib/log";
-import { createMatchHelper, fetchMatchHelper, fetchOpponentHelper, updateMatchHelper, endMatchHelper } from "./matchesSQL";
+import { createMatchHelper, fetchMatchHelper, fetchOpponentHelper, updateMatchHelper, endMatchHelper, historyMatchHelper } from "./matchesSQL";
 
 export const createMatchQuery = async body => {
   try {
@@ -66,6 +66,21 @@ export const endMatchQuery = async ({ matchId, status, winner, loser }) => {
     return data;
   } catch (err) {
     error("endMatchQuery - error= ", err);
+    throw new Error(err);
+  }
+};
+
+export const historyMatchQuery = async body => {
+  try {
+    const queryString = historyMatchHelper(body);
+    const { rows } = await db.query(queryString);
+    success(
+      "historyMatchQuery - successfully grabbed match history",
+      JSON.stringify(rows)
+    );
+    return rows;
+  } catch (err) {
+    error("historyMatchQuery - error= ", err);
     throw new Error(err);
   }
 };

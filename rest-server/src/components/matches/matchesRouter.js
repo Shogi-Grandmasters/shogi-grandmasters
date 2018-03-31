@@ -4,10 +4,15 @@ import {
   createMatchController,
   fetchMatchController,
   updateMatchController,
-  endMatchController
+  endMatchController,
+  historyMatchController
 } from "./matchesControllers";
 
 const router = express.Router();
+
+router
+  .route("/history")
+  .get(historyMatchController);
 
 router
   .route("/")
