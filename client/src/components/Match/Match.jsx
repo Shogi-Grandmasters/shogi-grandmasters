@@ -17,9 +17,10 @@ import ShogiBoard from '../GameBoard/ShogiBoard.jsx';
 import PlayerPanel from './PlayerPanel/index.jsx';
 import PlayerHand from './PlayerHand/index.jsx';
 import MatchLog from './MatchLog/index.jsx';
-import TurnIndicator from './TurnIndicator.jsx';
+import TurnIndicator from './TurnIndicator/index.jsx';
 import GameChat from './Chat/index.jsx';
-import ModalPrompt from '../Global/ModalPrompt.jsx';
+import ModalPrompt from '../Global/Modals/Prompt/ModalPrompt.jsx';
+import ModalMenu from '../Global/Modals/Menu/ModalMenu.jsx';
 
 import './Match.css';
 
@@ -122,10 +123,27 @@ class Match extends Component {
     return which === 'opponent' ? this.state.players[this.state.opponentColor] : this.state.players[this.state.localColor];
   }
 
+  toggleMenu() {
+    let choices = [
+      {
+        cta: 'Concede',
+        action: this.promptToConcede,
+        args: [],
+      },
+      {
+        cta: 'Quit Match',
+        action: this.quit,
+        args: [],
+      }
+    ];
+    let content = <ModalMenu headline="Game Menu" choices={choices} close={this.toggleModal} />;
+    this.toggleModal(content)
+  }
+
   toggleModal(content = null) {
     this.setState(prevState => ({
-      pendingDecision: !prevState.pendingDecision,
-      showModal: !prevState.showModal,
+      pendingDecision: content ? prevState.pendingDecision : false,
+      showModal: content ? true : false,
       modalContent: content,
     }))
   }
@@ -506,7 +524,7 @@ class Match extends Component {
           </div>
           <div className="match__actions">
             <a className="match__action-left"onClick={() => this.toggleMobile('log')}>Log</a>
-            <a className="match__action-menu" onClick={() => console.log('menu click')}>Menu</a>
+            <a className="match__action-menu" onClick={() => this.toggleMenu()}>Menu</a>
             <a className="match__action-right" onClick={() => this.toggleMobile('chat')}>Chat</a>
           </div>
         </div>
