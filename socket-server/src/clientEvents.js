@@ -292,8 +292,6 @@ const clientEmitters = {
   "client.acceptChallenge": clientAcceptChallenge,
   "client.rejectChallenge": clientRejectChallenge,
   "client.endGame": clientEndGame,
-  "client.joinRankedQueue": clientJoinRankedQueue,
-  "client.leaveRankedQueue": clientLeaveRankedQueue
 };
 
 export default clientEmitters;
