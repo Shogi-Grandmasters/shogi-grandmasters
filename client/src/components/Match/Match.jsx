@@ -33,6 +33,7 @@ class Match extends Component {
     let { match } = props;
     this.state = {
       matchId: match.matchId,
+      matchType: match.type,
       board: match.board || [
         ['L', 'N', 'S', 'G', 'K', 'G', 'S', 'N', 'L'],
         [' ', 'R', ' ', ' ', ' ', ' ', ' ', 'B', ' '],
@@ -201,7 +202,8 @@ class Match extends Component {
         matchId: this.state.matchId,
         winner,
         loser,
-        status: 2
+        status: 2,
+        type: this.state.matchType,
       });
     }
     this.toggleModal();
@@ -297,6 +299,7 @@ class Match extends Component {
           winner,
           loser,
           status: 1,
+          type: this.state.matchType,
         });
       }
     } else if (status.check) {

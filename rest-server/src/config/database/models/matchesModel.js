@@ -36,6 +36,17 @@ export const createModifiedDateTrigger = async (table) => {
   }
 }
 
+// Match Status Values
+// 0 - Open
+// 1 - Ended, Checkmate
+// 2 - Ended, Conceded
+// 3 - Ended, Impasse (TBD)
+
+// Match Types
+// 0 - Unranked
+// 1 - Ranked
+// 2 - Friendly (TBD)
+
 export const createMatchesTable = async () => {
   try {
     await db.queryAsync(
