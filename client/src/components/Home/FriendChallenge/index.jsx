@@ -132,7 +132,8 @@ class FriendChallenge extends Component {
     this.props.socket.emit("client.acceptChallenge", {
       matchId,
       black: player1,
-      white: player2
+      white: player2,
+      type: 2,
     });
   }
 
