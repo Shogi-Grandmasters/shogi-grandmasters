@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import duel from "../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png"
+
 import "./Friends.css";
 
 class OnlineFriends extends Component {
