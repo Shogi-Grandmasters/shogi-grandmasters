@@ -315,7 +315,7 @@ const clientEmitters = {
   "client.challengeFriend": clientChallengeFriend,
   "client.acceptChallenge": clientAcceptChallenge,
   "client.rejectChallenge": clientRejectChallenge,
-  "client.endGame": clientEndGame,
+  "client.endGame": clientEndGame
 };
 
 export default clientEmitters;
