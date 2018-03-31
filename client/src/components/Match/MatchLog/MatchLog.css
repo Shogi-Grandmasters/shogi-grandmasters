@@ -105,6 +105,14 @@ dark blue: 14151b
 }
 
 @media screen and (min-device-width: 740px) {
+  .match__log {
+    position: absolute;
+    height: 100vh;
+    width: 30vw;
+  }
+}
+
+@media screen and (min-device-width: 1025px) {
 
   .match__log {
     position: relative;
