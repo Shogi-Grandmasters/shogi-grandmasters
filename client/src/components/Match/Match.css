@@ -75,11 +75,6 @@ button:hover {
   padding: 8px;
 }
 
-.player__hand-tile > .shogi__token {
-  width: 55%;
-  height: 60%;
-}
-
 .space {
   border: solid 1px rgba(255,255,255,0.3);
   background: #d0c7af;
@@ -136,6 +131,30 @@ button:hover {
   text-align: right;
 }
 
+.active {
+  cursor: pointer;
+  transition: box-shadow 0.4s ease;
+  box-shadow: inset 0px 0px 0px 0px rgba(241, 90, 74, 0.0);
+}
+
+.active:hover {
+  box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
+}
+
+.selected {
+  box-shadow: inset 0px 0px 0px 4px rgba(0,0,0,0.1);
+  background-image: radial-gradient(#ec796c, #f15a4a);
+}
+
+.hinted {
+  box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
+  background-image: radial-gradient(#fff, #d0c7af);
+}
+.hinted:hover {
+  cursor: pointer;
+  box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
+  background-image: radial-gradient(#fff, #fff);
+}
 
 @media screen and (min-device-width: 740px) {
   .match {
@@ -175,30 +194,5 @@ button:hover {
 
   .space {
     padding: 8px 8px;
-  }
-
-  .active {
-    cursor: pointer;
-    transition: box-shadow 0.4s ease;
-    box-shadow: inset 0px 0px 0px 0px rgba(241, 90, 74, 0.0);
-  }
-
-  .active:hover {
-    box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
-  }
-
-  .selected {
-    box-shadow: inset 0px 0px 0px 4px rgba(0,0,0,0.1);
-    background-image: radial-gradient(#ec796c, #f15a4a);
-  }
-
-  .hinted {
-    box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
-    background-image: radial-gradient(#fff, #d0c7af);
-  }
-  .hinted:hover {
-    cursor: pointer;
-    box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
-    background-image: radial-gradient(#fff, #fff);
   }
 }
