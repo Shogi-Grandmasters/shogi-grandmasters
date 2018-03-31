@@ -21,7 +21,8 @@ class Login extends Component {
       localStorage.setItem('username', data.username);
       localStorage.setItem('id', data.id);
       localStorage.setItem('token', data.token.accessToken);
-      localStorage.setItem('rank', data.rating)
+      localStorage.setItem('unrankedRating', data.rating_unranked);
+      localStorage.setItem('rankedRating', data.rating_ranked);
       if(data.avatar != null){localStorage.setItem('avi', data.avatar)}
       data ? this.props.history.push('/home') : this.props.history.push('/login');
     } catch (err) {

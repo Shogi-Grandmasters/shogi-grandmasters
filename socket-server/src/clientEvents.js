@@ -2,18 +2,22 @@ import axios from "axios";
 import randomstring from "randomstring";
 
 import { boardIds } from "./lib/constants";
-import { isValidMove, isCheckOrMate, reverseBoard, pieceNameFromBoardId } from "./lib/boardHelpers";
-import { endMatch } from './lib/ratingHelpers';
+import {
+  isValidMove,
+  isCheckOrMate,
+  reverseBoard,
+  pieceNameFromBoardId
+} from "./lib/boardHelpers";
+import { endMatch } from "./lib/ratingHelpers";
 import { moveToString } from "./lib/matchLog";
 import GameTile from "./lib/GameTile";
 import { success, log, error } from "./lib/log";
-import { Queue } from "./lib/matchHelpers";
+import { Queue, findRankedOpponents } from "./lib/matchHelpers";
 import { initialBoard } from "./lib/constants";
 import {
   serverJoinMatch,
   serverChanged,
   serverLeave,
-  serverRun,
   serverLoadMessages,
   serverGameReady,
   serverSendMessages,
@@ -24,23 +28,30 @@ import {
   serverConcludeMatch,
   serverChallengeSent,
   serverChallengeAccepted,
-  serverChallengeRejected,
+  serverChallengeRejected
 } from "./serverEvents";
 
 const { REST_SERVER_URL } = process.env;
 
 const matchQueue = new Queue();
+const rankedQueue = new Queue();
 
-const clientJoinQueue = async ({ io, client, room }, userId) => {
+const clientJoinQueue = async ({ io, client, room }, { userId, rating, ranked }) => {
   success("client join queue heard");
   try {
-    matchQueue.enqueue(userId);
-    if (matchQueue.size() > 1) {
-      let matchId = randomstring.generate();
-      let black = matchQueue.dequeue();
-      let white = matchQueue.dequeue();
-      if (black !== white) {
-        await clientGameReady({ io, client, room }, { matchId, black, white });
+    const queue = ranked ? rankedQueue : matchQueue;
+    queue.enqueue([+userId, rating]);
+    if (queue.size() > 1) {
+      const matchedOpponents = findRankedOpponents(queue);
+      const type = ranked ? 1 : 0;
+      if (matchedOpponents) {
+        const matchId = randomstring.generate();
+        let { player1, player2 } = matchedOpponents;
+        let black, white;
+        player1 = queue.pluck(player1[0]);
+        player2 = queue.pluck(player2[0]);
+        player1[1] >= player2[1] ? (black = player1[0], white = player2[0]) : (black = player2[0], white = player1[0]);
+        await clientGameReady({ io, client, room }, { matchId, black, white, type });
         serverJoinMatch({ io, client, room }, { matchId, black, white });
       }
     }
@@ -49,12 +60,22 @@ const clientJoinQueue = async ({ io, client, room }, userId) => {
   }
 };
 
-const clientLeaveQueue = ({ io, client, room }, userId) => {
+const clientLeaveQueue = ({ io, client, room }, { userId, ranked }) => {
   success("client leave queue heard");
   try {
-    matchQueue.pluck(userId);
+    const queue = ranked ? rankedQueue : matchQueue;
+    queue.pluck(+userId);
   } catch (err) {
     error("client leave queue error", err);
+  }
+};
+
+const clientLeaveRankedQueue = ({ io, client, room }, userId) => {
+  success("client leave ranked queue heard");
+  try {
+    rankedQueue.pluck(+userId);
+  } catch (err) {
+    error("client leave ranked queue error", err);
   }
 };
 
@@ -70,24 +91,6 @@ const clientDisconnect = ({ io, client, room }) => {
   success("client disconnected");
   serverLeave({ io, client, room });
 };
-
-// const clientRun = async ({ io, client, room }, payload) => {
-//   success('running code from client. room.get("text") = ', room.get("text"));
-//   const { text, email, challenge_id, challenge_title } = payload;
-//   const url = process.env.CODERUNNER_SERVICE_URL;
-//   const testCase = await axios.get(
-//     `${REST_SERVER_URL}/api/testCases/${challenge_id}`
-//   );
-//   const title = `const func = ${challenge_title};`;
-//   const input = text + title + testCase.data.rows[0].content;
-//   try {
-//     const { data } = await axios.post(`${url}/submit-code`, { code: input });
-//     const stdout = data;
-//     serverRun({ io, client, room }, { stdout, email });
-//   } catch (e) {
-//     success("error posting to coderunner service from socket server. e = ", e);
-//   }
-// };
 
 const clientFetchMessages = async ({ io, client, room }, payload) => {
   success("client load message request heard");
@@ -135,7 +138,7 @@ const clientGameChat = async ({ io, client, room }, payload) => {
 const clientGameReady = async ({ io, client, room }, payload) => {
   success("client opponent joined");
   try {
-    let { matchId, black, white } = payload;
+    let { matchId, black, white, type } = payload;
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
         params: { matchId, black, white }
       },
@@ -150,7 +153,8 @@ const clientGameReady = async ({ io, client, room }, payload) => {
         black,
         white,
         hand_white: "[]",
-        hand_black: "[]"
+        hand_black: "[]",
+        type
       },
       {
         headers: { 'Content-Type': 'application/json' }
@@ -171,15 +175,12 @@ const clientListGames = async ({ io, client, room }) => {
 
 const clientEndGame = async ({ io, client, room }, payload) => {
   try {
-    let { matchId, winner, loser, status } = payload;
-    let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-      params: { matchId }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
-    // TODO:  need match type on Matches model
-    // then, when match === ranked, update player ratings
+    let { matchId, winner, loser, status, type } = payload;
+    let ratingType = type === 0 ? 'unranked' : type === 1 ? 'ranked' : 'friendly';
+    if (ratingType === 'unranked') [winner.rating_unranked, loser.rating_unranked] = endMatch([winner.rating_unranked, loser.rating_unranked]);
+    if (ratingType === 'ranked') [winner.rating_ranked, loser.rating_ranked] = endMatch([winner.rating_ranked, loser.rating_ranked]);
+    // todo:  update leaderboards
+
     await axios.post(`${REST_SERVER_URL}/api/matches/end`, {
       matchId,
       status,
@@ -217,7 +218,15 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let [validMove, moveError] = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to, previous);
     if (!validMove) messages.push(moveError);
     // board state is check or checkmate
-    let [check, checkmate] = isCheckOrMate(after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.to, move.piece.length > 1));
+    let [check, checkmate] = isCheckOrMate(
+      after,
+      new GameTile(
+        pieceNameFromBoardId(move.piece),
+        move.color,
+        move.to,
+        move.piece.length > 1
+      )
+    );
     let gameStatus = data.status || 0;
     // save new state if the move was successful
     let success = correctTurn && validMove;
@@ -298,7 +307,6 @@ const clientEmitters = {
   "client.leaveQueue": clientLeaveQueue,
   "client.update": clientUpdate,
   "client.disconnect": clientDisconnect,
-  // "client.run": clientRun,
   "client.fetchMessages": clientFetchMessages,
   "client.gameReady": clientGameReady,
   "client.homeChat": clientHomeChat,

@@ -9,33 +9,35 @@ const { REST_SERVER_URL } = process.env;
 // players between 2000 and 2500 have K-factor of 24
 // players above 2500 have K-factor of 16
 
-export const endMatch = ([winner, loser], draw = false) => {
+export const endMatch = ([winnerRating, loserRating], draw = false) => {
   let elo;
-  if (winner.rating <= 2000) {
+  if (winnerRating <= 2000) {
     elo = new eloRank(32);
-  } else if (winner.rating <= 2500) {
+  } else if (winnerRating <= 2500) {
     elo = new eloRank(24);
   } else {
     elo = new eloRank(16);
   }
-  let winnerExpected = elo.getExpected(winner.rating, loser.rating);
-  let winnerUpdated = elo.updateRating(winnerExpected, draw ? 0.5 : 1, winner.rating);
-  winner.rating = winnerUpdated > 99 ? winnerUpdated : 100;
+  let winnerExpected = elo.getExpected(winnerRating, loserRating);
+  let winnerUpdated = elo.updateRating(winnerExpected, draw ? 0.5 : 1, winnerRating);
 
-  if (loser.rating <= 2000) {
+  if (loserRating <= 2000) {
     elo = new eloRank(32);
-  } else if (loser.rating <= 2500) {
+  } else if (loserRating <= 2500) {
     elo = new eloRank(24);
   } else {
     elo = new eloRank(16);
   }
-  let loserExpected = elo.getExpected(loser.rating, winner.rating);
-  let loserUpdated = elo.updateRating(loserExpected, draw ? 0.5 : 1, loser.rating);
-  loser.rating = loserUpdated > 99 ? loserUpdated : 100;
+  let loserExpected = elo.getExpected(loserRating, winnerRating);
+  let loserUpdated = elo.updateRating(loserExpected, draw ? 0.5 : 0, loserRating);
 
-  return [winner, loser]
+  winnerRating = winnerUpdated > 99 ? winnerUpdated : 100;
+  loserRating = loserUpdated > 99 ? loserUpdated : 100;
+
+  return [winnerRating, loserRating]
 }
 
+// TODO:  this needs updating
 export const updateRating = async ({ id, rating }) => {
   try {
     const { rows } = await axios.put(`${REST_SERVER_URL}/api/users`, {

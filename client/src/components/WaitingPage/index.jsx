@@ -4,21 +4,30 @@ import axios from "axios";
 
 import "./WaitingPage.css";
 
-const {SOCKET_SERVER_URL} = process.env;
+const { REST_SERVER_URL, SOCKET_SERVER_URL } = process.env;
 
 class WaitingPage extends Component {
   componentWillMount() {
     this.socket = io(SOCKET_SERVER_URL, {
       query: {
-        roomId: "matchQueue",
+        roomId: "matchQueue"
       }
     });
   }
 
-  componentDidMount() {
-    this.userId = localStorage.getItem("id");
+  async componentDidMount() {
+    this.userId = +localStorage.getItem("id");
+    
+    const { data } = await axios.get(`${REST_SERVER_URL}/api/users/${this.userId}`);
+    this.ranked = this.props.location.state.ranked;
+    this.rating = this.ranked ? data[0].rating_ranked : data[0].rating_unranked;
 
-    this.props.location.history && this.socket.emit("client.joinQueue", this.userId);
+    if (this.props.location.history) { //prevents rejoining queue on refresh
+      // const rating = this.ranked
+      //   ? +localStorage.getItem("rankedRating")
+      //   : +localStorage.getItem("unrankedRating");
+      this.socket.emit("client.joinQueue", { userId: this.userId, rating: this.rating, ranked: this.ranked });
+    }
 
     this.socket.on("server.joinMatch", ({ matchId, black, white }) => {
       if (this.userId === black || this.userId === white) {
@@ -33,13 +42,14 @@ class WaitingPage extends Component {
         });
       }
     });
+    
+    window.onpopstate = (e) => {
+      this.handleCancelMatchclick();
+    }
   }
 
   async handleCancelMatchclick() {
-    // let { data } = await axios.delete("http://localhost:3396/api/openmatches", {
-    //   data: { matchId: this.props.match }
-    // });
-    this.socket.emit("client.leaveQueue", this.userId);
+    this.socket.emit("client.leaveQueue", { userId: this.userId, ranked: this.ranked });
     this.props.history.push("/home");
   }
 
@@ -48,7 +58,10 @@ class WaitingPage extends Component {
       <div className="container">
         <div className="waiting__message">
           <h2>Searching for an Opponent</h2>
-          <div className="lds-ripple"><div></div><div></div></div>
+          <div className="lds-ripple">
+            <div />
+            <div />
+          </div>
           <button onClick={this.handleCancelMatchclick.bind(this)}>
             Cancel
           </button>

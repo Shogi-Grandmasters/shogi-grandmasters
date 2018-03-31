@@ -13,7 +13,8 @@ export const createUsersTable = async () => {
       password TEXT NOT NULL,
       wins INT DEFAULT 0,
       losses INT DEFAULT 0,
-      rating INT,
+      rating_unranked INT DEFAULT 1000,
+      rating_ranked INT DEFAULT 1000,
       avatar TEXT,
       CONSTRAINT users_pk
         PRIMARY KEY(id)
