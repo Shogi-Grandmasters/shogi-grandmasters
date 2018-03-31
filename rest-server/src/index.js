@@ -1,4 +1,5 @@
 import http from "http";
+import cors from 'cors';
 
 import App from "./config/express";
 import { success } from "./lib/log";
@@ -6,6 +7,8 @@ import "./config/database";
 //import './config/database/setup';  //-- this resets the databases
 
 const app = App.express;
+
+app.use(cors());
 
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3996;
