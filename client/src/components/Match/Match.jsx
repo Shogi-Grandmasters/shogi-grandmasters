@@ -209,19 +209,20 @@ class Match extends Component {
     this.toggleModal();
   }
 
-  moveWillPromote([x, y], pieceId) {
+  moveWillPromote([fromX, fromY], [toX, toY], pieceId) {
     let willPromote = false;
     let pendingInput = false;
-    if (x < 3 && pieceId.length === 1) {
+    // if moving to the promotion zone, or moving from the promotion zone
+    if (toX < 3 && pieceId.length === 1 || fromX < 3 && pieceId.length === 1) {
       // if it has no available moves, it has to promote
-      let destination = new GameTile(pieceNameFromBoardId(pieceId), playerColorFromId(pieceId), [x, y]);
+      let destination = new GameTile(pieceNameFromBoardId(pieceId), playerColorFromId(pieceId), [toX, toY]);
       if (!destination.findMoves(this.state.board).length) willPromote = true;
       // if it wasn't forced to promote, and it's not a King or GG, which never promote
       // prompt user for choice.  with pending input, move will not be submitted until after
       // the prompt return functions are called
       if (!willPromote && !['King', 'Gold'].includes(pieceNameFromBoardId(pieceId))) {
         pendingInput = true;
-        this.promptForPromote([x, y]);
+        this.promptForPromote([toX, toY]);
       }
     }
     return [willPromote, pendingInput];
@@ -263,7 +264,7 @@ class Match extends Component {
         // some moves force promotion, if the piece has no valid moves remaining
         // the user is prompted if they have the choice, which sets a Pending state until that choice is made
         // the move is not submitted to the server until Pending is resolved
-        let [willPromote, pendingChoice] = this.moveWillPromote([x, y], pieceToMove);
+        let [willPromote, pendingChoice] = this.moveWillPromote([fromX, fromY], [x, y], pieceToMove);
         action.move.isPending = pendingChoice;
         action.move.piece = pieceToMove;
         action.move.didPromote = willPromote && !pendingChoice ? true : false;
