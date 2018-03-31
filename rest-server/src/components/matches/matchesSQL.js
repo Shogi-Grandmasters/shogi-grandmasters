@@ -77,3 +77,12 @@ export const endMatchHelper = ({
     COMMIT;
   `;
 };
+
+export const historyMatchHelper = ({ id }) => {
+  console.log(id)
+  return `
+    SELECT * FROM matches
+    WHERE (black=${id} OR white=${id})
+  `;
+};
+

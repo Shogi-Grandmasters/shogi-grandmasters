@@ -1,5 +1,5 @@
 import db from "../../config/database";
-import { createMatchQuery, fetchMatchQuery, updateMatchQuery, endMatchQuery } from "./matchesHelpers";
+import { createMatchQuery, fetchMatchQuery, updateMatchQuery, endMatchQuery, historyMatchQuery } from "./matchesHelpers";
 import { success, error } from "../../lib/log";
 
 export const createMatchController = async (req, res) => {
@@ -59,3 +59,18 @@ export const endMatchController = async (req, res) => {
     res.status(500).send(err);
   }
 }
+
+export const historyMatchController = async (req, res) => {
+  try {
+    console.log(req.query)
+    const data = await historyMatchQuery(req.query);
+    success(
+      "historyMatchController - successfully fetched match history data",
+      JSON.stringify(data)
+    );
+    return res.status(200).send(data);
+  } catch (err) {
+    error("historyMatchController - error= ", err);
+    res.status(404).send(err);
+  }
+};
