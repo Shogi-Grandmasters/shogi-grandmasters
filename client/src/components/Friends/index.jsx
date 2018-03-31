@@ -56,14 +56,18 @@ class Friends extends Component {
     e.preventDefault();
     const { username } = this.state;
     const id = localStorage.getItem("id")
-    axios.post(`${REST_SERVER_URL}/api/users/`, {username})
+    axios.post(`${REST_SERVER_URL}/api/users/`, {username}, {
+      headers: { 'Content-Type': 'application/json' }
+      })
       .then(res => {
         console.log('1st promise data', res.data)
         const body = {
           u_id: id,
           f_id: res.data.id.toString(),
         }
-        axios.post(`${REST_SERVER_URL}/api/friends/add`, body)
+        axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
+          headers: { 'Content-Type': 'application/json' }
+          })
           .then(data => {
             console.log('2nd promise data', data.data)
             this.fetchFriends();
