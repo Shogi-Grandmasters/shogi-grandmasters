@@ -1,8 +1,8 @@
 .shogi__board {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  grid-auto-columns: 44px;
-  grid-auto-rows: 44px;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
   border-collapse: collapse;
   border: solid 1px rgba(255,255,255,0.6);
   box-shadow: 0px 0px 6px 2px rgba(20, 21, 27, 0.8);
@@ -13,8 +13,8 @@
   display: block;
   text-indent: -999px;
   overflow: hidden;
-  width: 30px;
-  height: 35px;
+  width: 80%;
+  height: 90%;
   margin: 0 auto;
   background-repeat: no-repeat;
   background-size: contain;
@@ -34,10 +34,21 @@
 }
 
 @media screen and (min-device-width: 740px) {
+  .shogi__board {
+    width: 80vw;
+    height: 80vw;
+    grid-auto-rows: 1fr;
+    grid-auto-columns: 1fr;
+  }
+}
+
+@media screen and (min-device-width: 1025px) {
 
   .shogi__board {
-    grid-auto-columns: minmax(60px, 70px);
-    grid-auto-rows: minmax(60px, 70px);
+    width: 80vw;
+    height: 80vw;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
     margin: 4px;
   }
 

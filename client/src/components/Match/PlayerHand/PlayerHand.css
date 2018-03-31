@@ -43,7 +43,6 @@ dark blue: 14151b
   justify-content: baseline;
 }
 
-
 .player__hand-selection {
   background-color: #485562;
   width: 95vw;
@@ -67,7 +66,7 @@ dark blue: 14151b
 .player__hand-selection.shown {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  grid-auto-rows: minmax(45px, 45px);
+  grid-auto-rows: 1fr;
 }
 
 .button__tab {
@@ -99,7 +98,7 @@ dark blue: 14151b
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-end;
 }
 .player__hand-tile.north {
   margin-top: 4px;
@@ -121,24 +120,24 @@ dark blue: 14151b
 }
 
 @media screen and (min-device-width: 740px) {
-
-  .player__hand {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    grid-auto-rows: minmax(60px, auto);
+  .match__hand {
+    height: 80px;
   }
-  .north{
-    flex-direction: column-reverse;
-    align-content: flex-end;
-    align-items: flex-end;
-  }
-  .south{
-    align-content: flex-start;
-    align-items: flex-start;
-  }
-
   .player__hand-tile {
-    width: 100%;
-    height: 100%;
+    width: 70px;
+    height: 70px;
+  }
+  .player__hand-selection {
+    width: 80vw;
+    height: 80px;
+  }
+  .player__hand-tile > .shogi__token {
+    width: 40px;
+    height: 50px;
+    margin-bottom: 0px;
+  }
+  .player__hand-count {
+    font-size: 12px;
+    line-height: 18px;
   }
 }

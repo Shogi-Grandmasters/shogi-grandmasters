@@ -50,7 +50,7 @@
     2px 2px 2px #f15a4a;
 }
 
-@media screen and (min-device-width: 740px) {
+@media screen and (min-device-width: 1025px) {
 
   .turn__indicator {
     flex-direction: column;
