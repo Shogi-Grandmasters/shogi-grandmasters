@@ -14,15 +14,13 @@ let clientCache;
 io.on("connection", client => {
   success("client connected");
   const { roomId, userId, username } = client.handshake.query;
+  console.log('connect', roomId, username);
   const room = rooms.findOrCreate(roomId || "default");
   client.join(room.get("id"));
 
   each(clientEvents, (handler, event) => {
     client.on(event, handler.bind(null, { io, client, room }));
   });
-
-  //reconnecting players to match
-  client.emit("server.reconnect", {matchId: room.get("id"), black: room.get("black"), white: room.get("white")});
   
   //add user to home and set loggedOn status to true
   const users = room.get("users");
@@ -39,6 +37,7 @@ io.on("connection", client => {
 
   //set user loggedOn status to false
   client.on("disconnect", () => {
+    console.log('disconnect', roomId, username);
     users && (users[userId].loggedOn = false, room.set("users", users));
     userId && username && io.in(roomId).emit("server.userDisconnected", {userId, username, loggedOn: false});
   });

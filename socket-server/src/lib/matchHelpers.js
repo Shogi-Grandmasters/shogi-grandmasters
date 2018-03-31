@@ -14,7 +14,7 @@ export class Queue {
   }
 
   pluck(userId) {
-    for (let i = 0; i < this.storage.length; i ++) {
+    for (let i = 0; i < this.storage.length; i++) {
       if (userId === this.storage[i][0]) {
         return this.storage.splice(i, 1)[0];
       }
@@ -33,23 +33,21 @@ export class Queue {
 
 export const findMatch = (openMatches, challenger) => {
   let bestFit = [0, Infinity];
-  openMatches.forEach((match) => {
+  openMatches.forEach(match => {
     let spread = Math.abs(match.player1.rating - challenger.rating);
     if (spread < bestFit[1]) {
       bestFit = [match.id, spread];
     }
   });
   return bestFit[0];
-}
+};
 
-export const findRankedOpponents = (queue) => {
+export const findOpponent = (queue, player2) => {
   const players = queue.list();
   for (let player1 of players) {
-    for (let player2 of players) {
-      let spread = Math.abs(player1[1] - player2[1]);
-      if (player1[0] !== player2[0] && spread <= 500) {
-        return { player1, player2 };
-      }
+    let spread = Math.abs(player1[1] - player2[1]);
+    if (spread <= 500) {
+      return player1;
     }
   }
-}
+};
