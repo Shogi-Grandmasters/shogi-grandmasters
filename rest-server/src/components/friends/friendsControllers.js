@@ -16,7 +16,7 @@ export const addFriendController = async (req, res) => {
 export const fetchFriendController = async (req, res) => {
   try {
     const data = await fetchFriendQuery(req.params);
-    success("fetchFriendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
+    success("fetchFriendController - sucessfully retrieved data ", JSON.stringify(data.rows));
     return res.status(200).send(data.rows);
   } catch (err) {
     error("fetchFriendController - error= ", err);
