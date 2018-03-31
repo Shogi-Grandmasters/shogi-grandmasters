@@ -13,13 +13,13 @@ const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location
     backgroundImage: `url(${getTokenImage(tile, tileFaces)})`,
   };
   return (
-    <div
+    <a
       className="shogi__token"
       style={tileStyle}
       onClick={() => canActivate && activate(location, target)}
     >
       {tile.name}
-    </div>
+    </a>
   )
 }
 
