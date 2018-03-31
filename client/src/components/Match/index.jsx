@@ -48,10 +48,9 @@ class BoardIndex extends Component {
         type
       });
     });
+    // console.log(window.history);
     window.onpopstate = () => {
       this.socket.close();
-      window.history.forward();
-      window.location.reload();
     }
   }
 
