@@ -70,13 +70,12 @@ class OpenMatches extends Component {
   //   }
   // }
 
-  async handlePlayMatchClick() {
-    let player1 = localStorage.getItem("username");
+  async handlePlayMatchClick(ranked) {
     this.props.history.push({
-      pathname: '/match/queue',
+      pathname: `/match/queue`,
       state: {
-        userId: localStorage.getItem("id"),
-        opponent: false,
+        userId: +localStorage.getItem("id"),
+        ranked
       },
       history: this.props.history
     });
@@ -86,7 +85,8 @@ class OpenMatches extends Component {
     return (
       <div className="open_matches">
         <div className="match_actions">
-          <button onClick={() => this.handlePlayMatchClick()}>Play Now</button>
+          <button onClick={() => this.handlePlayMatchClick(false)}>Play Now</button>
+          <button onClick={() => this.handlePlayMatchClick(true)}>Play Ranked</button>
         </div>
       </div>
     );

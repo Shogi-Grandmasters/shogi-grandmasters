@@ -36,6 +36,17 @@ export const createModifiedDateTrigger = async (table) => {
   }
 }
 
+// Match Status Values
+// 0 - Open
+// 1 - Ended, Checkmate
+// 2 - Ended, Conceded
+// 3 - Ended, Impasse (TBD)
+
+// Match Types
+// 0 - Unranked
+// 1 - Ranked
+// 2 - Friendly (TBD)
+
 export const createMatchesTable = async () => {
   try {
     await db.queryAsync(
@@ -52,6 +63,7 @@ export const createMatchesTable = async () => {
         hand_white JSON NOT NULL,
         winner INT,
         event_log JSON,
+        type INT DEFAULT 0,
         created TIMESTAMP WITH TIME ZONE DEFAULT now(),
         modified TIMESTAMP WITH TIME ZONE DEFAULT now(),
         CONSTRAINT matches_pk
