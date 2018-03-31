@@ -479,7 +479,6 @@ class Match extends Component {
     return (
       <div className="match">
         <MatchLog events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
-        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         <div className="match__play">
           <div className="match__turn">
             <PlayerPanel player={this.getPlayer('opponent')} />
@@ -524,11 +523,14 @@ class Match extends Component {
             </div>
           </div>
           <div className="match__actions">
-            <a className="match__action-left"onClick={() => this.toggleMobile('log')}>Log</a>
-            <a className="match__action-menu" onClick={() => this.toggleMenu()}>Menu</a>
-            <a className="match__action-right" onClick={() => this.toggleMobile('chat')}>Chat</a>
+            <a className="match__action-left mobile"onClick={() => this.toggleMobile('log')}>Log</a>
+            <a className="match__action-menu mobile" onClick={() => this.toggleMenu()}>Menu</a>
+            <a className="match__action-right mobile" onClick={() => this.toggleMobile('chat')}>Chat</a>
+            <a className="match__action-menu desktop" onClick={() => this.promptToConcede()}>Concede</a>
+            <a className="match__action-menu desktop" onClick={() => this.quit()}>Quit</a>
           </div>
         </div>
+        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         {modal}
       </div>
     )
