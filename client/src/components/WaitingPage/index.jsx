@@ -30,7 +30,7 @@ class WaitingPage extends Component {
     this.socket.on("server.joinMatch", ({ matchId, black, white }) => {
       if (this.userId === black || this.userId === white) {
         this.socket.close();
-        this.props.history.push({
+        this.props.history.replace({
           pathname: `/match/${matchId}`,
           state: {
             matchId,
@@ -41,7 +41,7 @@ class WaitingPage extends Component {
         });
       }
     });
-    
+
     window.onpopstate = (e) => {
       this.handleCancelMatchclick();
     }
@@ -50,7 +50,7 @@ class WaitingPage extends Component {
   async handleCancelMatchclick() {
     this.socket.emit("client.leaveQueue", { userId: this.userId, ranked: this.ranked });
     this.socket.close();
-    this.props.history.push("/home");
+    this.props.history.replace("/home");
   }
 
   render() {
