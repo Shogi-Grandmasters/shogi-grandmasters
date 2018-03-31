@@ -529,7 +529,6 @@ class Match extends Component {
             <a className="match__action-right" onClick={() => this.toggleMobile('chat')}>Chat</a>
           </div>
         </div>
-        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         {modal}
       </div>
     )
