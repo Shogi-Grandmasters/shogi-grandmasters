@@ -479,10 +479,7 @@ class Match extends Component {
     return (
       <div className="match">
         <MatchLog events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
-<<<<<<< HEAD
         <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
-=======
->>>>>>> slide-in menus
         <div className="match__play">
           <div className="match__turn">
             <PlayerPanel player={this.getPlayer('opponent')} />
@@ -528,15 +525,10 @@ class Match extends Component {
           </div>
           <div className="match__actions">
             <a className="match__action-left"onClick={() => this.toggleMobile('log')}>Log</a>
-<<<<<<< HEAD
             <a className="match__action-menu" onClick={() => this.toggleMenu()}>Menu</a>
-=======
-            <a className="match__action-menu" onClick={() => console.log('menu click')}>Menu</a>
->>>>>>> slide-in menus
             <a className="match__action-right" onClick={() => this.toggleMobile('chat')}>Chat</a>
           </div>
         </div>
-        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         {modal}
       </div>
     )
