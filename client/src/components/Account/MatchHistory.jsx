@@ -28,9 +28,9 @@ class MatchHistory extends Component {
       const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
       match.opponentId = user.data[0].id
       match.outcome = match.winner == id ? 'Win' : 'Loss'
+      match.ladder = match.type == 1 ? 'Ranked' : 'Quickplay';
       match.opponentName = user.data[0].username
       match.opponentAvi = user.data[0].avatar
-      match.opponentRank = user.data[0].rating_ranked
       match.status != 0 && history.push(match);
     }
     this.setState({history: history});
@@ -46,15 +46,16 @@ class MatchHistory extends Component {
           {this.state.history.map((match, index) => (
             <div className="history-item" key={index} >
               <div className="history-user-container">
-              <img width="50px" className="friend-avi" src={`${AVATAR_URL}${localStorage.avi}`} />
               {localStorage.username}
+              <img className="history-avi" src={`${AVATAR_URL}${localStorage.avi}`} />
               </div>
-              <div classname="history-outcome-container" >
-              <h1>{match.outcome}</h1>
+              <div className="history-outcome-container" >
+              {match.outcome}
+              <div className="history-ladder">{match.ladder}</div>
               </div>
               <div className="history-opponent-container">
-              <img width="50px" className="friend-avi" src={`${AVATAR_URL}${match.opponentAvi}`} />
               {match.opponentName}
+              <img className="history-avi" src={`${AVATAR_URL}${match.opponentAvi}`} />
               </div>
             </div>
           ))}
