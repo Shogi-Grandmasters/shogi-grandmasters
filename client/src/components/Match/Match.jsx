@@ -467,7 +467,7 @@ class Match extends Component {
 
   quit() {
     this.socket.close();
-    this.props.history.push({
+    this.props.history.replace({
       pathname: `/home`,
       history: this.props.history
     });
