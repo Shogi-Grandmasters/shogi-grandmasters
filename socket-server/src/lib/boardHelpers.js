@@ -70,6 +70,7 @@ export const validDropLocations = (board, kings, tile) => {
 export const isCheckOrMate = (gameState, movedTile) => {
   let check = false;
   let checkmate = false;
+  let lock = false;
 
   // find and collect pieces threatening the king along with their movesets
   const threats = {};
@@ -96,12 +97,25 @@ export const isCheckOrMate = (gameState, movedTile) => {
   }));
   const threatCount = Object.keys(threats).length;
 
+  // find opponent's team's moveSet
+  const boardCopy = reverseBoard(gameState.board);
+  let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true);
+
+  // add all valid drop locations for pieces in that player's hand
+  gameState[oppositeColor(movedTile.color)].forEach(p => {
+    let temp = validDropLocations(copyMatrix(gameState.board), gameState.kings, new GameTile(
+        pieceNameFromBoardId(p),
+        oppositeColor(movedTile.color),
+        [10, 10]
+      ));
+    teamMoves = teamMoves.concat(temp);
+  });
+
   // if a threat is found 'check'
   if (threatCount  > 0) {
     check = true;
 
     // get available moves for king that is now in check
-    const boardCopy = reverseBoard(gameState.board);
     let king = new GameTile(
       "King",
       oppositeColor(movedTile.color),
@@ -116,39 +130,21 @@ export const isCheckOrMate = (gameState, movedTile) => {
       } else {
         const tile = Object.entries(threats)[0][1];
 
-        // find king's team's moveSet
-         let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(tile.piece.color), true);
-
         // check if the tile that put the king in check can be captured by
         //   another of the king's pieces
+        // otherwise check to see if a piece can be placed blocking the king from
+        //   the tile that put him in check
         if (!includesLoc(teamMoves, reverseLoc(tile.piece.loc))) {
-          // otherwise check to see if a piece can be placed blocking the king from
-          //   the tile that put him in check
           // the Knight jumps and therefore cannot be blocked
           if (tile.piece.name === "Knight") {
             checkmate = true;
           } else {
             // find spaces between king and threat
-            tile.spaceBetween = findSpaceFrom(gameState.kings[oppositeColor(movedTile.color)], reverseLoc(tile.piece.loc));
-
-            // add all valid drop locations for pieces in checked player's
-            //   hand to adjustedMoves to see if they can be dropped blocking
-            //   the king from the piece threatening it
-            gameState[oppositeColor(movedTile.color)].forEach(p => {
-              let temp = validDropLocations(
-                copyMatrix(gameState.board),
-                gameState.kings,
-                new GameTile(
-                  pieceNameFromBoardId(p),
-                  oppositeColor(movedTile.color),
-                  [10, 10]
-                )
-              );
-              teamMoves = teamMoves.concat(temp);
-            });
-
-            // reverse squares locations
-            tile.spaceBetween = tile.spaceBetween.map(move => reverseLoc(move));
+            tile.spaceBetween = findSpaceFrom(
+              gameState.kings[oppositeColor(movedTile.color)],
+              reverseLoc(tile.piece.loc)).map(
+                move => reverseLoc(move)
+            );
 
             // check combined moves for any squares that could protect the king
             if (!tile.spaceBetween.some(move => includesLoc(teamMoves, move))) {
@@ -159,7 +155,10 @@ export const isCheckOrMate = (gameState, movedTile) => {
       }
     }
   }
-  return [check, checkmate];
+  if (!checkmate && teamMoves.length === 0) {
+    lock = true;
+  }
+  return [check, checkmate, lock];
 };
 
 export const copyMatrix = matrix => {

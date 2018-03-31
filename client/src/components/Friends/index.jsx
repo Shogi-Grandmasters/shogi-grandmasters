@@ -22,58 +22,32 @@ class Friends extends Component {
     this.fetchFriends();
   }
 
-  // searchUser = async () => {
-  //   const id = localStorage.getItem("id");
-  //   const { username } = this.state;
-  //   const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, { username });
-  //   const fid = data.id + "";
-  //   await this.addFriend(fid);
-  // }
-
-  // addFriend = async () => {
-  //   try{
-  //     const { username } = this.state;
-  //     const id = localStorage.getItem("id")
-  //     console.log(username)
-  //     const { data } = await axios.post(`${REST_SERVER_URL}/api/users/`, {username})
-  //     const fid = await data.id
-  //     console.log('1st post data', data)
-  //     const body = {
-  //       u_id: id,
-  //       f_id: data.id,
-  //     }
-  //     console.log('our body', body)
-  //     const user = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
-  //     console.log('2nd post data', user)
-  //   } catch(err){
-  //     console.log(err)
-  //     console.log('inside our catch')
-  //   }
-  //   console.log('supah fail')
-  // }
-  
   addFriend = (e) => {
     e.preventDefault();
     const { username } = this.state;
     const id = localStorage.getItem("id")
-    axios.post(`${REST_SERVER_URL}/api/users/`, {username})
+    axios.post(`${REST_SERVER_URL}/api/users/`, {username}, {
+      headers: { 'Content-Type': 'application/json' }
+      })
       .then(res => {
-        console.log('1st promise data', res.data)
+        //console.log('1st promise data', res.data)
         const body = {
           u_id: id,
           f_id: res.data.id.toString(),
         }
-        axios.post(`${REST_SERVER_URL}/api/friends/add`, body)
+        axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
+          headers: { 'Content-Type': 'application/json' }
+          })
           .then(data => {
-            console.log('2nd promise data', data.data)
+            //console.log('2nd promise data', data.data)
             this.fetchFriends();
           })
           .catch(err => {
-            console.log('2nd promise error');
+            console.log('2nd promise error', err);
           });
       })
       .catch(err => {
-        console.log('1st promise error');
+        console.log('1st promise error', err);
       });
   }
 
@@ -87,10 +61,17 @@ class Friends extends Component {
     const flist = [];
     const pending = [];
     const awaiting = [];
-    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`);
+    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`, {
+        headers: { 'Content-Type': 'application/json' }
+      });
     for(let friend of data) {
       const fid = friend.u_id;
-      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
+      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (id == friend.id) {
+        friend.avatar = user.data[0].avatar;
+      }
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
       if(friend.status == 0 && friend.u_id == id) awaiting.push(friend)
@@ -107,7 +88,10 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.id;
     const { data } = await axios.delete(
-      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`
+      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`,
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
     this.fetchFriends();
   }
@@ -116,14 +100,19 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`,
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
     const body = {
       u_id: id,
       f_id: fid,
       status: 1
     }
-    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
+    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
+        headers: { 'Content-Type': 'application/json' }
+      });
     this.fetchFriends();
   }
 
@@ -131,7 +120,10 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`,
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
     this.fetchFriends();
   }
