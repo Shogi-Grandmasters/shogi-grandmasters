@@ -20,9 +20,6 @@ io.on("connection", client => {
   each(clientEvents, (handler, event) => {
     client.on(event, handler.bind(null, { io, client, room }));
   });
-
-  //reconnecting players to match
-  client.emit("server.reconnect", {matchId: room.get("id"), black: room.get("black"), white: room.get("white")});
   
   //add user to home and set loggedOn status to true
   const users = room.get("users");

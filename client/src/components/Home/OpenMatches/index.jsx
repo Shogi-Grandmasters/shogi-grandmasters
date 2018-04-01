@@ -71,6 +71,7 @@ class OpenMatches extends Component {
   // }
 
   async handlePlayMatchClick(ranked) {
+    this.props.socket.close();
     this.props.history.push({
       pathname: `/match/queue`,
       state: {

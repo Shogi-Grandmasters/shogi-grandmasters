@@ -8,30 +8,29 @@ const { REST_SERVER_URL, SOCKET_SERVER_URL } = process.env;
 
 class WaitingPage extends Component {
   componentWillMount() {
+    this.userId = +localStorage.getItem("id");
     this.socket = io(SOCKET_SERVER_URL, {
       query: {
-        roomId: "matchQueue"
+        roomId: "matchQueue",
+        userId: this.userId,
+        username: localStorage.getItem("username"),
       }
     });
   }
 
   async componentDidMount() {
-    this.userId = +localStorage.getItem("id");
-    
     const { data } = await axios.get(`${REST_SERVER_URL}/api/users/${this.userId}`);
     this.ranked = this.props.location.state.ranked;
     this.rating = this.ranked ? data[0].rating_ranked : data[0].rating_unranked;
 
     if (this.props.location.history) { //prevents rejoining queue on refresh
-      // const rating = this.ranked
-      //   ? +localStorage.getItem("rankedRating")
-      //   : +localStorage.getItem("unrankedRating");
       this.socket.emit("client.joinQueue", { userId: this.userId, rating: this.rating, ranked: this.ranked });
     }
 
     this.socket.on("server.joinMatch", ({ matchId, black, white }) => {
       if (this.userId === black || this.userId === white) {
-        this.props.history.push({
+        this.socket.close();
+        this.props.history.replace({
           pathname: `/match/${matchId}`,
           state: {
             matchId,
@@ -42,7 +41,7 @@ class WaitingPage extends Component {
         });
       }
     });
-    
+
     window.onpopstate = (e) => {
       this.handleCancelMatchclick();
     }
@@ -50,7 +49,8 @@ class WaitingPage extends Component {
 
   async handleCancelMatchclick() {
     this.socket.emit("client.leaveQueue", { userId: this.userId, ranked: this.ranked });
-    this.props.history.push("/home");
+    this.socket.close();
+    this.props.history.replace("/home");
   }
 
   render() {

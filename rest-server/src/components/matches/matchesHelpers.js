@@ -1,4 +1,4 @@
-import db from "../../config/database/";
+import { db } from "../../config/database/";
 import { success, error } from "../../lib/log";
 import { createMatchHelper, fetchMatchHelper, fetchOpponentHelper, updateMatchHelper, endMatchHelper, historyMatchHelper } from "./matchesSQL";
 
@@ -21,7 +21,7 @@ export const fetchMatchQuery = async query => {
   try {
     const queryString = fetchMatchHelper(query);
     const data = await db.queryAsync(queryString);
-    success("fetchMatchQuery - successfully fetched match ", data);
+    success("fetchMatchQuery - successfully fetched match ");
     if (query.userId) {
       let opponents = data.rows.map(match => {
         return match.black !== +query.userId ? match.black : match.white;

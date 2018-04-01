@@ -50,6 +50,7 @@ class FriendChallenge extends Component {
       "server.challengeAccepted",
       ({ matchId, black, white }) => {
         (this.id === black || this.id === white) &&
+          this.props.socket.close();
           this.props.history.push({
             pathname: `/match/${matchId}`,
             state: { matchId, black, white },
@@ -77,7 +78,7 @@ class FriendChallenge extends Component {
         headers: { 'Content-Type': 'application/json' }
       }
     );
-    this.setState({ friends: data.filter(friend => friend.id !== this.id) });
+    this.setState({ friends: data.filter(friend => friend.id !== this.id && friend.status === 1) });
   };
 
   fetchOpenChallenges = async (friends = this.state.friends) => {
@@ -132,7 +133,8 @@ class FriendChallenge extends Component {
     this.props.socket.emit("client.acceptChallenge", {
       matchId,
       black: player1,
-      white: player2
+      white: player2,
+      type: 2,
     });
   }
 
@@ -230,7 +232,7 @@ class FriendChallenge extends Component {
     return (
       <div className="online-container">
         <div className="online-head">
-          Friends Online:
+          Friends
           <div className="online-head-right">Challenge</div>
         </div>
         <div className="online-list-container">
@@ -255,17 +257,3 @@ class FriendChallenge extends Component {
 }
 
 export default FriendChallenge;
-
-{
-  /* <div>
-          <button onClick={() => this.handleChallengeFriendClick()}>
-            Challenge Friend
-          </button>
-          <select onChange={e => this.handleFriendSelect(e)}>
-            <option hidden>Challenge A Friend!</option>
-            {this.renderLoggedOnFriends()}
-          </select>
-        </div>
-        <OnlineFriends />
-        {!!this.state.openChallenges.length && this.renderOpenChallenges()} */
-}

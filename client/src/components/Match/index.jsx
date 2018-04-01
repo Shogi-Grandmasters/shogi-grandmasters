@@ -33,7 +33,6 @@ class BoardIndex extends Component {
 
     this.socket.on("server.joined", data => {
       let { id, board, turn, hand_black, hand_white, event_log, type } = data[0];
-      console.log(data[0]);
       let black = data[1];
       let white = data[2];
       this.setState({
@@ -49,14 +48,10 @@ class BoardIndex extends Component {
         type
       });
     });
-
-    // this.socket.on("server.reconnect", ({ matchId, black, white }) => {
-    //   matchId && black && white && this.socket.emit("client.gameReady", {
-    //     matchId: this.props.location.state.matchId,
-    //     black,
-    //     white
-    //   });
-    // });
+    // console.log(window.history);
+    window.onpopstate = () => {
+      this.socket.close();
+    }
   }
 
   render() {

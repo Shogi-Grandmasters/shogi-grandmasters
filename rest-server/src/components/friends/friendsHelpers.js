@@ -1,4 +1,4 @@
-import db from "../../config/database/";
+import { db } from "../../config/database/";
 import { success, error } from "../../lib/log";
 import { addFriendHelper, fetchAllFriendsHelper, delFriendHelper, updateFriendHelper } from './friendsSQL';
 
