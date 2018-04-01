@@ -134,13 +134,13 @@ const clientGameReady = async ({ io, client, room }, payload) => {
   try {
     let { matchId, black, white, type } = payload;
     let result = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-      params: { matchId, black, white }
-    },
-    {
-      headers: { 'Content-Type': 'application/json' }
-    }
+        params: { matchId, black, white }
+      },
+      {
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
-    if (result.data.length < 3) {
+    if (result.data.length <  3) {
       result = await axios.post(`${REST_SERVER_URL}/api/matches`, {
         matchId,
         board: JSON.stringify(initialBoard),
