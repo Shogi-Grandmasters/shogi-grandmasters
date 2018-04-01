@@ -1,4 +1,3 @@
-import db from "../../config/database";
 import {
   fetchLeaderboardQuery,
   fetchUserLeaderboardQuery,
@@ -12,11 +11,9 @@ export const fetchLeaderboardController = async (req, res) => {
   try {
     const data = await fetchLeaderboardQuery();
     success(
-      `fetchLeaderboardController - sucessfully retrieved data ${JSON.stringify(
-        data.rows
-      )}`
+      `fetchLeaderboardController - sucessfully retrieved leaderboard`
     );
-    return res.status(200).send(data.rows);
+    return res.status(200).send(data);
   } catch (err) {
     error(`fetchLeaderboardController - error= ${err}`);
     return res.status(400).send(err);

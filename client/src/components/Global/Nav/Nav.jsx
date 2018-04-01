@@ -16,6 +16,7 @@ class Nav extends Component {
 
   logout = () => {
     localStorage.clear();
+    this.props.socket.close();
   }
 
   render() {
@@ -25,7 +26,7 @@ class Nav extends Component {
         <li className="logo"><Logo /></li>
         <li className="nav"><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
         <li className="nav"><Link to="/home">Challenge</Link></li>
-        <li className="nav"><Link to="/acct">{localStorage.username}</Link></li>
+        <li className="nav"><Link to="/acct" onClick={()=>this.props.socket.close()}>{localStorage.username}</Link></li>
         {avi}
       </ul>
     )

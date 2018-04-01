@@ -7,6 +7,7 @@ import HomeChat from "./Chat/index.jsx";
 import OpenMatches from "./OpenMatches/index.jsx";
 import PrevMatches from "./PrevMatches/index.jsx";
 import FriendChallenge from "./FriendChallenge/index.jsx";
+import Leaderboard from "./Leaderboard/index.jsx";
 import Nav from "../Global/Nav/Nav.jsx";
 
 import "./Home.css";
@@ -31,8 +32,7 @@ class Home extends Component {
     });
   }
 
-  async componentDidMount() {
-  }
+  async componentDidMount() {}
 
   logout = () => {
     window.localStorage.clear();
@@ -43,13 +43,16 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Nav />
+        <Nav socket={this.socket} />
         <div className="home">
           <div className="match_lists">
-              <OpenMatches history={this.props.history} socket={this.socket} />
-              <PrevMatches history={this.props.history} socket={this.socket} />
+            <OpenMatches history={this.props.history} socket={this.socket} />
+            <PrevMatches history={this.props.history} socket={this.socket} />
           </div>
+          <div>
             <FriendChallenge history={this.props.history} socket={this.socket} />
+            <Leaderboard history={this.props.history} socket={this.socket} />
+          </div>
           <div className="chat">
             <HomeChat socket={this.socket} />
           </div>
