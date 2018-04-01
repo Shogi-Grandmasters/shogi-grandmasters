@@ -1,4 +1,3 @@
-import db from "../../config/database";
 import { signUpQuery, loginQuery, resetPasswordQuery } from "./authHelpers";
 import { success, error } from "../../lib/log";
 import { generateToken } from "../../middleware/auth/jwt";

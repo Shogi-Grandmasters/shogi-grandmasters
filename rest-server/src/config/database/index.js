@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import Promise from "bluebird";
+import redis from "redis";
 
 import { success, error } from "../../lib/log";
 
@@ -39,6 +40,12 @@ db.on("error", err => {
 
 db.connect();
 
-Promise.promisifyAll(db);
 
-export default db;
+Promise.promisifyAll(db);
+Promise.promisifyAll(redis.RedisClient.prototype);
+Promise.promisifyAll(redis.Multi.prototype);
+
+const redisCache = redis.createClient();
+redisCache.on("connect", () => success("redis cache connected"));
+
+export { db, redisCache };

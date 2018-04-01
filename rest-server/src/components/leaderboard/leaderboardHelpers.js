@@ -1,4 +1,6 @@
-import db from "../../config/database/";
+import redis from "redis";
+
+import { db, redisCache } from "../../config/database/";
 import { success, error } from "../../lib/log";
 import {
   fetchLeaderboardHelper,
@@ -10,13 +12,12 @@ import {
 
 export const fetchLeaderboardQuery = async () => {
   try {
-    const queryString = fetchLeaderboardHelper();
-    const { rows } = await db.queryAsync(queryString);
+    const unrankedLeaderboard = await redisCache.getAsync('unrankedLeaderboard');
+    const rankedLeaderboard = await redisCache.getAsync('rankedLeaderboard');
     success(
-      "fetchLeaderboardQuery - successfully retrieved data ",
-      JSON.stringify(data.rows)
-    );
-    return rows;
+      "fetchLeaderboardQuery - successfully retrieved leaderboards ",
+      );
+    return { unrankedLeaderboard, rankedLeaderboard };
   } catch (err) {
     error("fetchLeaderboardQuery - error= ", err);
     throw new Error(err);
