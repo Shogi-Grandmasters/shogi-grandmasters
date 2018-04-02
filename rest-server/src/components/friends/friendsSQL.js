@@ -7,12 +7,13 @@ export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
 };
 
 export const fetchAllFriendsHelper = ({ u_id }) => {
+  console.log('our user id on query string', u_id)
   return `
     SELECT u.id, u.email, u.username, u.wins, u.losses, u.avatar, f.status, f.u_id
     FROM users AS u
       INNER JOIN friends AS f
       ON (u.id=f.f_id)
-      WHERE ((f.u_id=${u_id} AND f.status=1) OR (u.id=${u_id} AND f.status=0))
+      WHERE (f.u_id=${u_id} OR (u.id=${u_id} AND f.status=0))
   `;
 };
 
@@ -34,3 +35,8 @@ export const updateFriendHelper = ({ u_id, f_id, status }) => {
     RETURNING u_id, f_id, status
   `;
 }
+//ocheyos
+//WHERE ((f.u_id=${u_id} AND f.status=1) OR (u.id=${u_id} AND f.status=0))
+
+//raymonds
+//WHERE (f.u_id=${u_id} OR u.id=${u_id})

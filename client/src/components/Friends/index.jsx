@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { FriendsList } from "./FriendsList.jsx";
-import { PendingList } from "./PendingList.jsx";
-import { AwaitingList } from "./AwaitingList.jsx";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { FriendsList } from './FriendsList.jsx';
+import { PendingList } from './PendingList.jsx';
+import { AwaitingList } from './AwaitingList.jsx';
 
-import "./Friends.css";
+import './Friends.css';
 
 const {REST_SERVER_URL} = process.env;
 
@@ -21,33 +21,27 @@ class Friends extends Component {
   componentDidMount() {
     this.fetchFriends();
   }
-
+  
   addFriend = (e) => {
     e.preventDefault();
     const { username } = this.state;
-    const id = localStorage.getItem("id")
-    axios.post(`${REST_SERVER_URL}/api/users/`, {username}, {
-      headers: { 'Content-Type': 'application/json' }
-      })
+    const id = localStorage.getItem('id')
+    axios.post(`${REST_SERVER_URL}/api/users/`, {username})
       .then(res => {
-        //console.log('1st promise data', res.data)
         const body = {
           u_id: id,
           f_id: res.data.id.toString(),
         }
-        axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
-          headers: { 'Content-Type': 'application/json' }
-          })
+        axios.post(`${REST_SERVER_URL}/api/friends/add`, body)
           .then(data => {
-            //console.log('2nd promise data', data.data)
             this.fetchFriends();
           })
           .catch(err => {
-            console.log('2nd promise error', err);
+            console.log('2nd promise error');
           });
       })
       .catch(err => {
-        console.log('1st promise error', err);
+        console.log('1st promise error');
       });
   }
 
@@ -61,16 +55,12 @@ class Friends extends Component {
     const flist = [];
     const pending = [];
     const awaiting = [];
-    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`);
     for(let friend of data) {
       const fid = friend.u_id;
-      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-      if (id == friend.id) {
-        friend.avatar = user.data[0].avatar;
+      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
+      if(id == friend.id) {
+        friend.avatar = user.data[0].avatar
       }
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
@@ -88,10 +78,7 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.id;
     const { data } = await axios.delete(
-      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`,
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`
     );
     this.fetchFriends();
   }
@@ -100,19 +87,14 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`,
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`
     );
     const body = {
       u_id: id,
       f_id: fid,
       status: 1
     }
-    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
     this.fetchFriends();
   }
 
@@ -120,10 +102,7 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`,
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`
     );
     this.fetchFriends();
   }

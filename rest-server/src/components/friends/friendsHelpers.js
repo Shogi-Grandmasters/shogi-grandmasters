@@ -18,6 +18,7 @@ export const fetchFriendQuery = async body => {
   try {
     const queryString = await fetchAllFriendsHelper(body);
     const data = await db.queryAsync(queryString);
+    console.log('our query data', data)
     success("fetchfriendsQuery - successfully retrieved data ", JSON.stringify(data.rows[0]));
     return data;
   } catch (err) {
