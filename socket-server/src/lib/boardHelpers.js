@@ -15,6 +15,7 @@ export const pieceNameFromBoardId = (id) => {
 
 export const validDropLocations = (board, kings, tile) => {
   board = copyMatrix(board);
+  kings = findKings(board);
   let validDrops = [];
   let pawnLocs = [];
 
@@ -72,6 +73,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
   let checkmate = false;
   let lock = false;
 
+  gameState.kings = findKings(gameState.board);
   // find and collect pieces threatening the king along with their movesets
   const threats = {};
   gameState.board.forEach((row, r) => row.forEach((col, c) => {
@@ -102,6 +104,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
   let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true);
 
   // add all valid drop locations for pieces in that player's hand
+  gameState[oppositeColor(movedTile.color)] &&
   gameState[oppositeColor(movedTile.color)].forEach(p => {
     let temp = validDropLocations(copyMatrix(gameState.board), gameState.kings, new GameTile(
         pieceNameFromBoardId(p),
@@ -203,12 +206,12 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
   return teamMoves;
 };
 
-export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc, prevGameState) => {
-  if (prevGameState) {
-    const lastPieceMoved = new GameTile(pieceNameFromBoardId(prevGameState.move.piece), prevGameState.move.color, prevGameState.move.to, prevGameState.move.piece.length > 1);
-    if (isCheckOrMate({board: reverseBoard(gameStateAfter.board), kings: gameStateBefore.kings}, lastPieceMoved)[0]) {
-      return [false, 'Move would put you in Check'];
-    }
+export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc) => {
+  gameStateBefore.kings = findKings(gameStateBefore.board);
+  gameStateAfter.kings = findKings(gameStateAfter.board);
+  console.log ('before state ===== \n', gameStateBefore, '\n', 'after state ===== \n', gameStateAfter, '\n', 'tile =====', tile, ' \n location =====', loc);
+  if (isCheckOrMate({board: reverseBoard(gameStateAfter.board), kings: gameStateAfter.kings}, tile)[0]) {
+    return [false, 'Move would put you in Check'];
   }
   let moveSet;
   if (includesLoc([tile.loc], [10, 10])) {
