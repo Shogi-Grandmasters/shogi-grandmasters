@@ -47,8 +47,8 @@ const clientJoinQueue = async ({ io, client, room }, { userId, rating, ranked })
         const type = ranked ? 1 : 0;
         let black, white;
         queue.pluck(matchedOpponent[0]);
-        matchedOpponent[1] >= rating 
-          ? (black = matchedOpponent[0], white = userId) 
+        matchedOpponent[1] >= rating
+          ? (black = matchedOpponent[0], white = userId)
           : (black = userId, white = matchedOpponent[0]);
         await clientGameReady({ io, client, room }, { matchId, black, white, type });
         serverJoinMatch({ io, client, room }, { matchId, black, white });
