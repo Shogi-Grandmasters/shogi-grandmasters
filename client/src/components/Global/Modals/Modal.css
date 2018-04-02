@@ -41,7 +41,7 @@
 
 .modal__headline {
   font-family: 'Oswald';
-  font-size: 36px;
+  font-size: 24px;
   font-style: italic;
   color: #d0c7af;
   text-align: center;
@@ -49,23 +49,17 @@
 }
 .modal__subheadline {
   font-family: 'Open Sans';
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   color: #d0c7af;
   text-align: center;
   text-shadow: 1px 1px 2px #14151b;
 }
 
-.modal__option-list {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
-}
-
 .modal__option {
   cursor: pointer;
   color: #d0c7af;
-  font-size: 22px;
+  font-size: 18px;
   margin: 0px 16px -4px 16px;
   padding: 6px 4px 4px 4px;
   text-shadow: 1px 1px 2px #14151b;
@@ -73,8 +67,23 @@
   border-bottom-style: solid;
   border-bottom-color: transparent;
   align-self: center;
+  margin: 4px;
 }
 .modal__option:hover {
   color: #f15a4a;
   border-bottom-color: #f15a4a;
+}
+
+@media screen and (min-device-width: 740px) {
+  .modal__headline {
+    font-size: 36px;
+  }
+  .modal__subheadline {
+    font-size: 14px;
+  }
+  .modal__option {
+    font-size: 22px;
+    margin: 0px 16px -4px 16px;
+    padding: 6px 4px 4px 4px;
+  }
 }

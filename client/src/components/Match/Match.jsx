@@ -14,12 +14,13 @@ import {
 import GameTile from '../../../lib/GameTile';
 
 import ShogiBoard from '../GameBoard/ShogiBoard.jsx';
-import PlayerPanel from './PlayerPanel.jsx';
-import PlayerHand from './PlayerHand.jsx';
-import MatchLog from './MatchLog.jsx';
-import TurnIndicator from './TurnIndicator.jsx';
+import PlayerPanel from './PlayerPanel/index.jsx';
+import PlayerHand from './PlayerHand/index.jsx';
+import MatchLog from './MatchLog/index.jsx';
+import TurnIndicator from './TurnIndicator/index.jsx';
 import GameChat from './Chat/index.jsx';
-import ModalPrompt from '../Global/ModalPrompt.jsx';
+import ModalPrompt from '../Global/Modals/Prompt/ModalPrompt.jsx';
+import ModalMenu from '../Global/Modals/Menu/ModalMenu.jsx';
 
 import './Match.css';
 
@@ -72,6 +73,9 @@ class Match extends Component {
       hints: [],
       isTurn: true,
       log: match.event_log || [],
+      showMobileSidebar: null,
+      showHandWhite: false,
+      showHandBlack: false,
     }
     this.socket = props.socket;
 
@@ -80,6 +84,8 @@ class Match extends Component {
     this.togglePiece = this.togglePiece.bind(this);
     this.toggleHints = this.toggleHints.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.toggleMobile = this.toggleMobile.bind(this);
+    this.toggleHand = this.toggleHand.bind(this);
     this.movePiece = this.movePiece.bind(this);
     this.commitMove = this.commitMove.bind(this);
     this.submitMove = this.submitMove.bind(this);
@@ -117,10 +123,27 @@ class Match extends Component {
     return which === 'opponent' ? this.state.players[this.state.opponentColor] : this.state.players[this.state.localColor];
   }
 
+  toggleMenu() {
+    let choices = [
+      {
+        cta: 'Concede',
+        action: this.promptToConcede,
+        args: [],
+      },
+      {
+        cta: 'Quit Match',
+        action: this.quit,
+        args: [],
+      }
+    ];
+    let content = <ModalMenu headline="Game Menu" choices={choices} close={this.toggleModal} />;
+    this.toggleModal(content)
+  }
+
   toggleModal(content = null) {
     this.setState(prevState => ({
-      pendingDecision: !prevState.pendingDecision,
-      showModal: !prevState.showModal,
+      pendingDecision: content ? prevState.pendingDecision : false,
+      showModal: content ? true : false,
       modalContent: content,
     }))
   }
@@ -421,8 +444,30 @@ class Match extends Component {
     }
   }
 
+  toggleMobile(target) {
+    let updateVisible = target === this.state.showMobileSidebar ? null : target;
+    this.setState({
+      showMobileSidebar: updateVisible,
+    })
+  }
+
+  toggleHand(color) {
+    if (color === 'white') {
+      let updateHandVisiblity = !this.state.showHandWhite;
+      this.setState({
+        showHandWhite: updateHandVisiblity,
+      })
+    } else if (color === 'black') {
+      let updateHandVisiblity = !this.state.showHandBlack;
+      this.setState({
+        showHandBlack: updateHandVisiblity,
+      })
+    }
+  }
+
   quit() {
-    this.props.history.push({
+    this.socket.close();
+    this.props.history.replace({
       pathname: `/home`,
       history: this.props.history
     });
@@ -433,15 +478,15 @@ class Match extends Component {
 
     return (
       <div className="match">
-        <MatchLog events={this.state.log} />
-        <div className="match__turn">
-          <PlayerPanel player={this.getPlayer('opponent')} />
-          <TurnIndicator isTurn={this.state.isTurn} />
-          <PlayerPanel player={this.getPlayer('local')} />
-        </div>
-        <div>
-          <div className="match__play">
-            <div className="match__hand">
+        <MatchLog events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
+        <div className="match__play">
+          <div className="match__turn">
+            <PlayerPanel player={this.getPlayer('opponent')} />
+            <TurnIndicator isTurn={this.state.isTurn} />
+            <PlayerPanel player={this.getPlayer('local')} />
+          </div>
+          <div className="match__board">
+            <div className="match__hand north">
               <PlayerHand
                 id={'opponent'}
                 local={false}
@@ -450,6 +495,8 @@ class Match extends Component {
                 hand={this.state.hands[this.state.opponentColor]}
                 turn={!this.state.isTurn}
                 activate={this.togglePiece}
+                visibility={this.getPlayer('opponent').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
+                toggle={this.toggleHand}
               />
             </div>
             <ShogiBoard
@@ -461,7 +508,7 @@ class Match extends Component {
               togglePiece={this.togglePiece}
               movePiece={this.movePiece}
             />
-            <div className="match__hand">
+            <div className="match__hand south">
               <PlayerHand
                 id={'player'}
                 local={true}
@@ -470,18 +517,20 @@ class Match extends Component {
                 hand={this.state.hands[this.state.localColor]}
                 turn={this.state.isTurn}
                 activate={this.togglePiece}
+                visibility={this.getPlayer('local').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
+                toggle={this.toggleHand}
               />
             </div>
           </div>
-        </div>
-        <div className="match__chat">
-          <div></div>
-          <GameChat socket={this.socket} />
           <div className="match__actions">
-            <button onClick={this.promptToConcede}>Concede</button>
-            <button onClick={this.quit}>Quit</button>
+            <a className="match__action-left mobile"onClick={() => this.toggleMobile('log')}>Log</a>
+            <a className="match__action-menu mobile" onClick={() => this.toggleMenu()}>Menu</a>
+            <a className="match__action-right mobile" onClick={() => this.toggleMobile('chat')}>Chat</a>
+            <a className="match__action-menu desktop" onClick={() => this.promptToConcede()}>Concede</a>
+            <a className="match__action-menu desktop" onClick={() => this.quit()}>Quit</a>
           </div>
         </div>
+        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} />
         {modal}
       </div>
     )
