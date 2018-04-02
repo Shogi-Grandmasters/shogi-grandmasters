@@ -26,11 +26,11 @@ class MatchHistory extends Component {
     for (let match of data) {
       const fid = match.black == id ? match.white : match.black;
       const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
-      match.opponentId = user.data[0].id
-      match.outcome = match.winner == id ? 'Win' : 'Loss'
+      match.opponentId = user.data[0].id;
+      match.outcome = match.winner == id ? 'Win' : 'Loss';
       match.ladder = match.type == 1 ? 'Ranked' : 'Quickplay';
-      match.opponentName = user.data[0].username
-      match.opponentAvi = user.data[0].avatar
+      match.opponentName = user.data[0].username;
+      match.opponentAvi = user.data[0].avatar;
       match.status != 0 && history.push(match);
     }
     this.setState({history: history});
