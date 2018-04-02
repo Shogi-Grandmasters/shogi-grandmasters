@@ -1,4 +1,4 @@
-import db from "../index";
+import {db} from "../index";
 import { success, error } from "../../../lib/log";
 
 export const createModifiedDateFunction = async () => {

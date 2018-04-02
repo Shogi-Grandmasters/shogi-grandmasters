@@ -1,4 +1,4 @@
-import db from "../index";
+import {db} from "../index";
 import { success, error } from "../../../lib/log";
 
 export const createFriendsTable = async () => {
@@ -10,6 +10,7 @@ export const createFriendsTable = async () => {
         u_id INT NOT NULL,
         f_id INT NOT NULL,
         status INT NOT NULL,
+        friend_key INT UNIQUE,
         CONSTRAINT fk_friends_u_id
           FOREIGN KEY(u_id) REFERENCES users(id),
         CONSTRAINT fk_friends_f_id

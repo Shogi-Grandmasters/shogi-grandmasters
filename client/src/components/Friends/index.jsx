@@ -23,7 +23,7 @@ class Friends extends Component {
   }
   
   addFriend = (e) => {
-    e.preventDefault();
+    e.preventDefault(); //Without this line 2nd axios call breaks
     const { username } = this.state;
     const id = localStorage.getItem('id')
     axios.post(`${REST_SERVER_URL}/api/users/`, {username})
@@ -34,6 +34,7 @@ class Friends extends Component {
         }
         axios.post(`${REST_SERVER_URL}/api/friends/add`, body)
           .then(data => {
+            this.refs.search.value = '';
             this.fetchFriends();
           })
           .catch(err => {
@@ -59,9 +60,7 @@ class Friends extends Component {
     for(let friend of data) {
       const fid = friend.u_id;
       const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
-      if(id == friend.id) {
-        friend.avatar = user.data[0].avatar
-      }
+      if(id == friend.id) friend.avatar = user.data[0].avatar
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
       if(friend.status == 0 && friend.u_id == id) awaiting.push(friend)
@@ -141,7 +140,7 @@ class Friends extends Component {
         <div className="friend-top">
           <h2 className="friend-head">Friends List</h2>
           <form className="friend-search">
-            <input name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
+            <input ref="search" name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
             <input type="submit" className="friend-button" onClick={(e) => this.addFriend(e)} />
           </form>
         </div>

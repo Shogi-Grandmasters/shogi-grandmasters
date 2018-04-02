@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import "./Leaderboard.css";
-import duel from "../../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png";
+import "./Leaderboards.css";
 
 const { REST_SERVER_URL } = process.env;
 
@@ -38,7 +37,7 @@ class Leaderboard extends Component {
                 }`}
               />
               <b className="leader-username">{leader.username}</b>
-              <a><div className="leader-rating">{leader.rating_ranked}</div></a>
+              <div className="leader-rating">{leader.rating_ranked}</div>
               <hr />
             </div>
           ))}
