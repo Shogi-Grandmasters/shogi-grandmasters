@@ -1,0 +1,7 @@
+.leaderboard-container {
+  min-width: 250px;
+  width: 100%;
+  max-width: 740px;
+  display: inline-block;
+  vertical-align: top;
+}

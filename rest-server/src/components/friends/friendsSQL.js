@@ -1,13 +1,13 @@
 export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
+  const friend_key = u_id + f_id;
   return `
-    INSERT INTO friends (u_id, f_id, status)
-    VALUES (${u_id}, ${f_id}, ${status})
-    RETURNING u_id, f_id, status
+    INSERT INTO friends (u_id, f_id, status, friend_key)
+    VALUES (${u_id}, ${f_id}, ${status}, ${friend_key})
+    RETURNING u_id, f_id, status, friend_key
   `;
 };
 
 export const fetchAllFriendsHelper = ({ u_id }) => {
-  console.log('our user id on query string', u_id)
   return `
     SELECT u.id, u.email, u.username, u.wins, u.losses, u.avatar, f.status, f.u_id
     FROM users AS u
