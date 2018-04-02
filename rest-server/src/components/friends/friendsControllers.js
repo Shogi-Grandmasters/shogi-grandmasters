@@ -2,7 +2,7 @@ import { addFriendQuery, fetchFriendQuery, delFriendQuery, updateFriendQuery } f
 import { success, error } from "../../lib/log";
 
 export const addFriendController = async (req, res) => {
-  console.log(req.body);
+  console.log('add friend controller req.body', req.body);
   try {
     const data = await addFriendQuery(req.body);
     success("addFriendController - sucessfully retrieved data ", JSON.stringify(data.rows[0]));
