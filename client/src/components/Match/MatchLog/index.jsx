@@ -11,7 +11,7 @@ const LogCheck = ({ color, check, checkmate }) => (
   <div className={`match__log-item ${checkmate ? 'alert' : 'warning'}`}>
     <div className={`match__log-color ${color}`}></div>
     <div className="match__log-event">
-      <h3>{checkmate ? 'CHECKMATE' : 'CHECK'}</h3>
+      <h3>{checkmate ? 'CHECKMATE' : `${color === 'white' ? 'BLACK' : 'WHITE'} IS IN CHECK`}</h3>
     </div>
   </div>
 );
@@ -19,14 +19,15 @@ const LogCheck = ({ color, check, checkmate }) => (
 const LogCapture = ({ color, capturedPiece }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
-    <div className="match__log-event">
-      <h3>Captured</h3>
-    </div>
     <div className="match__log-piece">
       <ShogiPiece
         inPlay={false}
         tile={capturedPiece}
       />
+    </div>
+    <div className="match__log-event">
+      <h3>Captured</h3>
+      <span>{capturedPiece.isPromoted ? capturedPiece.name + '+' : capturedPiece.name}</span>
     </div>
   </div>
 );
@@ -40,25 +41,26 @@ const LogPromote = ({ color, piece }) => {
       <div className="match__log-piece">
         <ShogiPiece
           inPlay={false}
-          tile={before}
+          tile={after}
         />
       </div>
       <div className="match__log-event">
-        <span>to</span>
-      </div>
-      <div className="match__log-piece">
-        <ShogiPiece
-          inPlay={false}
-          tile={after}
-        />
+        <h3>Promoted</h3>
+        <span>{pieceNameFromBoardId(piece)}</span>
       </div>
     </div>
   );
 }
 
-const LogMove = ({ color, moveType, notation }) => (
+const LogMove = ({ color, piece, moveType, notation }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
+    <div className="match__log-piece">
+      <ShogiPiece
+        inPlay={false}
+        tile={new GameTile(pieceNameFromBoardId(piece), color, [10, 10], piece.length > 1)}
+      />
+    </div>
     <div className="match__log-event">
       <h3>{moveType}</h3>
       <span>{notation}</span>
@@ -79,7 +81,7 @@ const MatchLog = ({ events, visibility, toggle }) => {
               (event.check || event.checkmate) && eventBreakout.push(<LogCheck key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} check={event.check} checkmate={event.checkmate} />);
               event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} />);
               moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`} color={event.move.color} capturedPiece={event.move.capturedPiece} />)
-              eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} />);
+            eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} piece={event.move.piece} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} />);
               return [...eventBreakout];
             })}
         </div>

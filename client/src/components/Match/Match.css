@@ -61,6 +61,7 @@ button:hover {
   color: #d0c7af;
   width: 100vw;
   height: 100vh;
+  min-height: 730px;
   overflow: hidden;
   display: grid;
   margin: 0 auto;
