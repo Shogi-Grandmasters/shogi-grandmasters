@@ -23,9 +23,9 @@ class Account extends Component {
       <div className="acct-container">
         <Nav />
         <ul className="vert-container">
+          <li className="vert-nav"><Link to="/acct/edit">Account</Link></li>
           <li className="vert-nav"><Link to="/acct/friends">Friends</Link></li>
           <li className="vert-nav"><Link to="/acct/history">History</Link></li>
-          <li className="vert-nav"><Link to="/acct/edit">Account</Link></li>
           <li className="vert-nav"><Link to="/acct/rank">Rank</Link></li>
           <li className="vert-nav"><Link to="/acct/faq">FAQ</Link></li>
           <li className="vert-bar" />  

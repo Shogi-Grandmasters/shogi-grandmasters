@@ -64,6 +64,7 @@ li a:hover {
 }
 
 .faq-container {
+  padding-left: 10px;
   min-width: 500px;
   width: 100%;
   max-width: 650px;
@@ -74,10 +75,24 @@ li a:hover {
   justify-content: center
 }
 
-.title {
-  padding: 25px 25px 0 25px;
-  text-align: center;
+.title-faq {
+  padding: none;
+  text-transform: uppercase;
+  max-width: 650px;
+  color: #000;
   font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
+}
+
+.title {
+  text-align: center;
+  text-transform: uppercase;
+  max-width: 650px;
+  color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
 }
 
 .rankings-container {
@@ -113,7 +128,7 @@ li a:hover {
 }
 
 .edit-container {
-  min-width: 500px;
+  min-width: 250px;
   width: 100%;
   max-width: 650px;
   display: inline-block;
@@ -145,6 +160,7 @@ li a:hover {
 .history-list-container {
   display: grid;
   grid-template-rows: 1fr 8fr 1fr;
+  padding-left: 10px;
 }
 
 .history-list {
@@ -163,7 +179,6 @@ li a:hover {
 .history-item{
   overflow: hidden;
   list-style-type: none;
-  padding: 25px;
   color: #d0c7af;
   font-size: 10px;
   font-weight: 600;
@@ -172,7 +187,6 @@ li a:hover {
   justify-content: space-between;
   align-items: center;
   height: 100px;
-  padding: 4px;
   background: linear-gradient(#2c343f, #485562);
   border-top: solid 1px rgba(255,255,255, 0.4);
   border-right: solid 1px rgba(255,255,255, 0.2);
@@ -223,7 +237,11 @@ li a:hover {
 }
 
 .history-head {
-  padding: 25px 0 0 25px;
+  padding: none;
   text-transform: uppercase;
+  max-width: 650px;
   color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
 }

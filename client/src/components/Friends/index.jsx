@@ -109,7 +109,7 @@ class Friends extends Component {
   render() {
     const awaiting = this.state.awaiting.length > 0 && (
       <div className="awaiting-container">
-        <h3 className="friend-title">Awaiting Response</h3>
+        <div className="friend-title">Awaiting Response</div>
         <div>
         {this.state.awaiting.map((user, index) => (
           <AwaitingList
@@ -122,7 +122,7 @@ class Friends extends Component {
     )
     const pending = this.state.pending.length > 0 && (
       <div className="pending-container">
-        <h3 className="friend-title">Pending Requests</h3>
+        <div className="friend-title">Pending Requests</div>
         <div>
         {this.state.pending.map((user, index) => (
           <PendingList
@@ -138,14 +138,14 @@ class Friends extends Component {
     return (
       <div className="friend-container">
         <div className="friend-top">
-          <h2 className="friend-head">Friends List</h2>
+          <div className="friend-head">Friends List</div>
           <form className="friend-search">
             <input ref="search" name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
             <input type="submit" className="friend-button" onClick={(e) => this.addFriend(e)} />
           </form>
         </div>
         <div className="friend-list-container">
-        <h3 className="friend-title">Current</h3>
+        <div className="friend-title">Current</div>
         {this.state.friends.map((user, index) => (
           <FriendsList
             key={index}
