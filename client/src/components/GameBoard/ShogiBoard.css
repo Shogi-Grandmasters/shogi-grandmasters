@@ -13,13 +13,14 @@
 
 .shogi__token {
   display: block;
-  text-indent: -999px;
   overflow: hidden;
-  width: 80%;
-  height: 90%;
   margin: 0 auto;
-  background-repeat: no-repeat;
-  background-size: contain;
+  height: 95%;
+  width: 80%;
+}
+
+.facing-south {
+  transform: rotate(180deg);
 }
 
 .lower-border {
@@ -54,8 +55,4 @@
     margin: 4px;
   }
 
-  .shogi__token {
-    width: 80%;
-    height: 90%;
-  }
 }
