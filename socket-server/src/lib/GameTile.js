@@ -30,7 +30,9 @@ class GameTile {
 
   findMoves(board, _test = false) {
     let moveSet = this.isPromoted ? this.promotedMoves : this.moves || [];
+    //if (this.name === 'King') console.log(moveSet)
     if (_test) {
+      //console.log('test  is true')
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
         if (
@@ -44,21 +46,10 @@ class GameTile {
         return set;
       }, []);
     } else {
+      //console.log('test is false')
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
-        if (
-          position[0] < boardSize &&
-          position[0] >= 0 &&
-          position[1] < boardSize &&
-          position[1] >= 0 &&
-          !(
-            (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-              this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black" &&
-              board[position[0]][position[1]] !== " ")
-          )
-        ) {
+        if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 && !((board[position[0]][position[1]].charCodeAt(0) > 90 && this.color === "white") || (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black" && board[position[0]][position[1]] !== ' '))) {
           return set.concat([move]);
         }
         return set;
@@ -77,9 +68,9 @@ class GameTile {
       this.loc[0] + move[0],
       this.loc[1] + move[1]
     ]);
-
+    //if (this.name === "King") console.log(this.color, 'kings moves from findMoves', JSON.stringify(moveSet))
     if (this.name === "King" && !_test) {
-      moveSet = this._kingMoves(board, moveSet);
+      moveSet = this._kingMoves(reverseBoard(board), moveSet);
     }
 
     return moveSet;
@@ -446,11 +437,13 @@ GameTile.prototype._kingMoves = function(board, moveSet) {
   let oppTeam = getCombinedMoveSet(
     board,
     oppositeColor(this.color)
-  );
-
+  ).map(move => reverseLoc(move));
+  //console.log('move set in kingMoves', this.color,  JSON.stringify(moveSet));
+  //console.log(oppositeColor(this.color), 'Opponents moves >>>>>>>>>>>>', JSON.stringify(oppTeam));
   return moveSet
     .reduce((set, move) => {
       let open = !includesLoc(oppTeam, move);
+      //console.log(open, move);
       if (open) {
         return set.concat([move]);
       }
