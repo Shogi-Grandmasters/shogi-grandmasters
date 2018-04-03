@@ -43,11 +43,6 @@ export const includesLoc = (set, loc) =>
 
 export const reverseLoc = loc => [oppositeBoardSide(loc[0]), oppositeBoardSide(loc[1])];
 
-export const onBoard = ([r, c]) => position[0] < boardSize &&
-  position[0] >= 0 &&
-  position[1] < boardSize &&
-  position[1] >= 0;
-
 export default {
   initialBoard,
   moveSets,
