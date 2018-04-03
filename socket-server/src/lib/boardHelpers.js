@@ -105,7 +105,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
   let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true).map(move => reverseLoc(move));
 
   // add all valid drop locations for pieces in that player's hand
-  //gameState[oppositeColor(movedTile.color)] &&
+  gameState[oppositeColor(movedTile.color)] &&
   gameState[oppositeColor(movedTile.color)].forEach(p => {
     let temp = validDropLocations(copyMatrix(gameState.board), gameState.kings, new GameTile(
         pieceNameFromBoardId(p),
