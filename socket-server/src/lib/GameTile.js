@@ -102,6 +102,7 @@ GameTile.prototype._rookMoves = function (board, _test) {
   let up, down, left, right;
   up = down = left = right = true;
 
+
   for (let i = 1; i < boardSize; i++) {
     [upLoc, downLoc, leftLoc, rightLoc] = [
       [this.loc[0] - i, this.loc[1]],
@@ -129,7 +130,7 @@ GameTile.prototype._rookMoves = function (board, _test) {
 GameTile.prototype._bishopMoves = function (board, _test) {
   let result = [];
   let upLoc, downLoc, leftLoc, rightLoc;
-  let up, down, left, right;
+  let up , down, left, right;
   up = down = left = right = true;
 
   for (let i = 1; i < boardSize; i++) {
@@ -164,8 +165,8 @@ GameTile.prototype._lanceMoves = function (board, _test) {
   for (let i = 1; i < boardSize; i++) {
     loc = [this.loc[0] - i, this.loc[1]];
     if (clear && !onBoard(loc) || (squareContains(board, loc) !== " " && this._hitFriendly(board, loc, _test))) clear = false;
-    if (up) result.push([-i, 0]);
-    if (up && squareContains(board, loc) !== " " && this._hitEnemy(board, loc, _test)) up = false;
+    if (clear) result.push([-i, 0]);
+    if (clear && squareContains(board, loc) !== " " && this._hitEnemy(board, loc, _test)) clear = false;
   }
   return result;
 };
