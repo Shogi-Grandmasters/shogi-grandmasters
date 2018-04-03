@@ -3,9 +3,15 @@ import {
   boardSize,
   oppositeColor,
   includesLoc,
-  reverseLoc
+  reverseLoc,
 } from "./constants.js";
-import { reverseBoard, getCombinedMoveSet } from "./boardHelpers.js";
+import {
+  reverseBoard,
+  getCombinedMoveSet,
+  onBoard,
+  hitFriendly,
+  hitEnemy,
+} from "./boardHelpers.js";
 
 class GameTile {
   constructor(name, color, loc, isPromoted = false) {
@@ -35,12 +41,7 @@ class GameTile {
       //console.log('test  is true')
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
-        if (
-          position[0] < boardSize &&
-          position[0] >= 0 &&
-          position[1] < boardSize &&
-          position[1] >= 0
-        ) {
+        if (onBoard(position)) {
           return set.concat([move]);
         }
         return set;
@@ -49,8 +50,10 @@ class GameTile {
       //console.log('test is false')
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
-        if (position[0] < boardSize && position[0] >= 0 && position[1] < boardSize && position[1] >= 0 && !((board[position[0]][position[1]].charCodeAt(0) > 90 && this.color === "white") || (board[position[0]][position[1]].charCodeAt(0) < 91 && this.color === "black" && board[position[0]][position[1]] !== ' '))) {
-          return set.concat([move]);
+        if (onBoard(position)) {
+          if (board[r][c] === ' ' || !hitFriendly(board, position, _test)) {
+            return set.concat([move]);
+          }
         }
         return set;
       }, []);
@@ -98,32 +101,13 @@ GameTile.prototype._rookMoves = function(board, _test) {
   let result = [];
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] - i, this.loc[1]];
-    if (position[0] < 0 || position[0] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K")) ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([-i, 0]);
           break;
         }
@@ -134,32 +118,13 @@ GameTile.prototype._rookMoves = function(board, _test) {
   }
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] + i, this.loc[1]];
-    if (position[0] < 0 || position[0] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K")) ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([i, 0]);
           break;
         }
@@ -170,32 +135,13 @@ GameTile.prototype._rookMoves = function(board, _test) {
   }
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0], this.loc[1] - i];
-    if (position[1] < 0 || position[1] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K")) ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([0, -i]);
           break;
         }
@@ -206,32 +152,13 @@ GameTile.prototype._rookMoves = function(board, _test) {
   }
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0], this.loc[1] + i];
-    if (position[1] < 0 || position[1] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K")) ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([0, i]);
           break;
         }
@@ -247,32 +174,13 @@ GameTile.prototype._bishopMoves = function(board, _test) {
   let result = [];
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] - i, this.loc[1] - i];
-    if (position[0] < 0 || position[1] < 0) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K"))  ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([-i, -i]);
           break;
         }
@@ -283,32 +191,13 @@ GameTile.prototype._bishopMoves = function(board, _test) {
   }
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] + i, this.loc[1] + i];
-    if (position[0] === boardSize || position[1] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K"))  ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([i, i]);
           break;
         }
@@ -319,32 +208,13 @@ GameTile.prototype._bishopMoves = function(board, _test) {
   }
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] - i, this.loc[1] + i];
-    if (position[0] < 0 || position[1] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K"))  ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([-i, i]);
           break;
         }
@@ -355,32 +225,13 @@ GameTile.prototype._bishopMoves = function(board, _test) {
   }
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] + i, this.loc[1] - i];
-    if (position[0] === boardSize || position[1] < 0) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K"))  ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([i, -i]);
           break;
         }
@@ -396,32 +247,13 @@ GameTile.prototype._lanceMoves = function(board, _test) {
   let result = [];
   for (let i = 1; i < boardSize; i++) {
     let position = [this.loc[0] - i, this.loc[1]];
-    if (position[0] < 0 || position[0] === boardSize) {
+    if (!onBoard(position)) {
       break;
     } else {
       if (board[position[0]][position[1]] !== " ") {
-        if (
-          !_test &&
-          ((board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "white") ||
-            (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-              this.color === "black"))
-        ) {
+        if (hitFriendly(board, position, _test)) {
           break;
-        } else if (
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === "black" &&
-            !(_test && board[position[0]][position[1]] === "k")) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === "white" &&
-            !(_test && board[position[0]][position[1]] === "K"))  ||
-          (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-            this.color === 'white' &&
-            _test) ||
-          (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-            this.color === 'black' &&
-            _test)
-        ) {
+        } else if (hitEnemy(board, position, _test)) {
           result.push([-i, 0]);
           break;
         }
