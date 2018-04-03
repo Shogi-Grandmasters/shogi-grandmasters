@@ -128,12 +128,12 @@ button:hover {
 
 .hinted {
   box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
-  background-image: radial-gradient(rgba(255,255,255,0.4), #485562);
+  background-image: radial-gradient(rgba(255,255,255,0.4), rgba(255,255,255,0.0));
 }
 .hinted:hover {
   cursor: pointer;
   box-shadow: inset 0px 0px 0px 4px rgba(241, 90, 74, 0.8);
-  background-image: radial-gradient(rgba(255,255,255,0.7), #485562);
+  background-image: radial-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.0));
 }
 
 .match__actions > .mobile {
