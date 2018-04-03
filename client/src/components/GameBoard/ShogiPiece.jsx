@@ -1,4 +1,5 @@
 import React from 'react';
+import Piece from './Pieces/Piece.jsx';
 
 const getTokenImage = (tile, facing) => {
   const prefix = facing === 'north' ? 'N-' : 'S-';
@@ -15,10 +16,9 @@ const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location
   return (
     <a
       className="shogi__token"
-      style={tileStyle}
       onClick={() => canActivate && activate(location, target)}
     >
-      {tile.name}
+      <Piece piece={tile.name} facing={tileFaces} color={tile.color} promoted={tile.isPromoted} />
     </a>
   )
 }
