@@ -32,8 +32,6 @@ class Home extends Component {
     });
   }
 
-  async componentDidMount() {}
-
   render() {
     return (
       <div>

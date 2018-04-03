@@ -19,17 +19,23 @@ strong { font-weight: 700; }
 }
 
 .friend-title {
-  padding: 25px 25px 0 25px;
+  padding-left: 10px;
+  padding-top: 5px;
   font-family: 'Oswald';
   text-transform: uppercase;
+  font-weight: 400;
   color: #000;
 }
 
 .friend-head {
-  padding: 25px 25px 0 25px;
-  font-family: 'Oswald';
+  padding: none;
+  padding-left: 10px;
   text-transform: uppercase;
+  max-width: 650px;
   color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
 }
 
 .friend-search {
@@ -38,7 +44,7 @@ strong { font-weight: 700; }
 
 .friend-button {
   float: right;
-  font-family: 'Shift', sans-serif;
+  font-family: 'Oswald';
   background-color: #6a6969;
   color: #fff;
   padding: 12px;
@@ -53,7 +59,7 @@ strong { font-weight: 700; }
 }
 
 .friend-form {
-  font-family: 'Shift', sans-serif;
+  font-family: 'Oswald';
   background-color: #cecece;
   font-size: 16px;
   height: 43px;
@@ -63,13 +69,9 @@ strong { font-weight: 700; }
   text-align: center;
   display: inline-block;
 }
-.friend-title {
-  font-family: 'Shift', sans-serif;
-  font-size: 16px;
-}
 
 .current-friend-container {
-  font-family: 'Shift', sans-serif;
+  font-family: 'Oswald';
   font-size: 16px;
   justify-content: center;
   height: 60px;
@@ -78,14 +80,21 @@ strong { font-weight: 700; }
 }
 
 .friend-username {
-  padding: 0 15px;
-  text-align: center;
-  vertical-align: center;
+  padding-left: 25px;
+  width: auto;
+  font-family: 'Oswald';
+  text-transform: uppercase;
+  font-size: 20px;
 }
 
 .inline-button-friend {
-  padding: 0 15px;
+  padding-left: 25px;
   text-align: center;
   vertical-align: center;
   cursor: pointer;
+}
+
+.friend-avi {
+  padding-left: 20px;
+  width: 50px;
 }
