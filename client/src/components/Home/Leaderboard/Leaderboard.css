@@ -21,10 +21,10 @@ strong { font-weight: 700; }
 .leaderboard-head {
   padding: none;
   padding-left: 10px;
-  text-transform: uppercase;
   max-width: 650px;
   color: #000;
   font-family: 'Oswald';
+  text-transform: uppercase;
   font-weight: 400;
   font-size: 25px;
 }
