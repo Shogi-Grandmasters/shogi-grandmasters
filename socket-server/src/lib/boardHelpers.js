@@ -1,4 +1,5 @@
 import {
+  boardSize,
   boardIds,
   oppositeColor,
   oppositeBoardSide,
@@ -320,20 +321,7 @@ export const findKings = (board) => {
 
 export const onBoard = ([r, c]) => r < boardSize && r >= 0 && c < boardSize && c >= 0;
 
-export const hitFriendly = (board, [r, c], _test) => !_test && (board[r][c].charCodeAt(0) > 90 && this.color === "white") || (board[r][c].charCodeAt(0) < 91);
-
-export const hitEnemy = (board, [r, c], _test) => (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-  this.color === "black" &&
-  !(_test && board[position[0]][position[1]] === "k")) ||
-  (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-    this.color === "white" &&
-    !(_test && board[position[0]][position[1]] === "K")) ||
-  (board[position[0]][position[1]].charCodeAt(0) > 90 &&
-    this.color === 'white' &&
-    _test) ||
-  (board[position[0]][position[1]].charCodeAt(0) < 91 &&
-    this.color === 'black' &&
-    _test);
+export const squareContains = (board, [r, c]) => board[r][c];
 
 export default {
   isValidMove,
@@ -349,7 +337,7 @@ export default {
   findKings,
   copyMatrix,
   onBoard,
-  hitFriendly,
+  squareContains
 };
 
 // TESTING
