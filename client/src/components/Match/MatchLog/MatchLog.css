@@ -59,10 +59,6 @@ dark blue: 14151b
   margin-left: 16px;
   margin-right: 16px;
 }
-.match__log-piece > .shogi__token {
-  width: 50px;
-  height: 60px;
-}
 
 .match__log-item.warning {
   color: #f15a4a;
@@ -138,8 +134,8 @@ dark blue: 14151b
     font-size: 10px;
   }
   .match__log-piece {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
   .match__log-actions {
     display: none;

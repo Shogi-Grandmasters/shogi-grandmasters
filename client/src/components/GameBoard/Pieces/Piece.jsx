@@ -1,18 +1,18 @@
 import React from 'react';
 import Sets from './sets';
 
-const Piece = ({ setId = 'Traditional', piece, facing = 'north', color = 'white', promoted = false }) => {
+const Piece = ({ setId = 'Symbols', piece, facing = 'north', color = 'white', promoted = false }) => {
   let colorThemes = {
     white: {
-      fill: '#FFF',
+      fill: '#eee',
       stroke: '#DDD',
       strokeWidth: '2px',
       text: '#000',
       promoted: '#FF0000',
     },
     black: {
-      fill: '#444',
-      stroke: '#333333',
+      fill: '#333',
+      stroke: '#111',
       strokeWidth: '2px',
       text: '#eee',
       promoted: '#FF0000',
