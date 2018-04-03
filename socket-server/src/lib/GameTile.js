@@ -35,9 +35,7 @@ class GameTile {
 
   findMoves(board, _test = false) {
     let moveSet = this.isPromoted ? this.promotedMoves : this.moves || [];
-    //if (this.name === 'King') console.log(moveSet)
     if (_test) {
-      //console.log('test  is true')
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
         if (onBoard(position)) {
@@ -46,7 +44,6 @@ class GameTile {
         return set;
       }, []);
     } else {
-      //console.log('test is false')
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
         if (onBoard(position)) {
@@ -70,7 +67,7 @@ class GameTile {
       this.loc[0] + move[0],
       this.loc[1] + move[1]
     ]);
-    //if (this.name === "King") console.log(this.color, 'kings moves from findMoves', JSON.stringify(moveSet))
+
     if (this.name === "King" && !_test) {
       moveSet = this._kingMoves(reverseBoard(board), moveSet);
     }
@@ -161,10 +158,9 @@ GameTile.prototype._lanceMoves = function (board, _test) {
   let result = [];
   let clear = true;
   let loc;
-
   for (let i = 1; i < boardSize; i++) {
     loc = [this.loc[0] - i, this.loc[1]];
-    if (clear && !onBoard(loc) || (squareContains(board, loc) !== " " && this._hitFriendly(board, loc, _test))) clear = false;
+    if (clear && (!onBoard(loc) || (squareContains(board, loc) !== " " && this._hitFriendly(board, loc, _test)))) clear = false;
     if (clear) result.push([-i, 0]);
     if (clear && squareContains(board, loc) !== " " && this._hitEnemy(board, loc, _test)) clear = false;
   }
@@ -176,12 +172,9 @@ GameTile.prototype._kingMoves = function(board, moveSet) {
     board,
     oppositeColor(this.color)
   ).map(move => reverseLoc(move));
-  //console.log('move set in kingMoves', this.color,  JSON.stringify(moveSet));
-  //console.log(oppositeColor(this.color), 'Opponents moves >>>>>>>>>>>>', JSON.stringify(oppTeam));
   return moveSet
     .reduce((set, move) => {
       let open = !includesLoc(oppTeam, move);
-      //console.log(open, move);
       if (open) {
         return set.concat([move]);
       }
