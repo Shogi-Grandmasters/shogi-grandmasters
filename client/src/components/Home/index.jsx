@@ -34,12 +34,6 @@ class Home extends Component {
 
   async componentDidMount() {}
 
-  logout = () => {
-    window.localStorage.clear();
-    this.socket.close();
-    this.props.history.push("/login");
-  };
-
   render() {
     return (
       <div>
@@ -49,7 +43,7 @@ class Home extends Component {
             <OpenMatches history={this.props.history} socket={this.socket} />
             <PrevMatches history={this.props.history} socket={this.socket} />
           </div>
-          <div>
+          <div className="match_leaders">
             <FriendChallenge history={this.props.history} socket={this.socket} />
             <Leaderboard history={this.props.history} socket={this.socket} />
           </div>

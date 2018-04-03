@@ -8,7 +8,7 @@ import EditProfile from './EditProfile.jsx';
 import Rankings from './Rankings.jsx';
 import FrequentlyAsked from './FrequentlyAsked.jsx';
 import MatchHistory from './MatchHistory.jsx';
-import Leaderboard from '../home/Leaderboard/index.jsx';
+import Leaderboard from '../Home/Leaderboard/index.jsx';
 
 import './Account.css';
 

@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
+body {
+  font-size: 14px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  margin: 0px;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Oswald' }
+strong { font-weight: 700; }
+
 .friend-container {
   display: inline-block;
   vertical-align: top;
@@ -6,18 +18,22 @@
   max-width: 650px;
 }
 
-.friend-top > * {
-  font-family: 'Shift', sans-serif;
+.friend-title {
+  padding: 25px 25px 0 25px;
+  font-family: 'Oswald';
+  text-transform: uppercase;
+  color: #000;
 }
 
 .friend-head {
-  text-align: center;
-  width: auto;
+  padding: 25px 25px 0 25px;
+  font-family: 'Oswald';
+  text-transform: uppercase;
+  color: #000;
 }
 
 .friend-search {
-  float: right;
-  
+  float: right; 
 }
 
 .friend-button {
@@ -72,34 +88,4 @@
   text-align: center;
   vertical-align: center;
   cursor: pointer;
-}
-
-.online-container {
-  display: inline-block;
-  vertical-align: top;
-  min-width: 500px;
-  width: 100%;
-  max-width: 740px;
-}
-
-.online-top {
-  font-family: 'Shift', sans-serif;
-  text-align: center;
-  width: auto;
-}
-
-.online-head-right {
-  float: right;
-}
-
-.online-challenge-icon {
-  width: 50px;
-  float: right;
-}
-
-.online-challenge-svg {
-  width: 50px;
-  float: right;
-  color: #f15a4a;
-  fill: #f15a4a;
 }

@@ -1,11 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
+body {
+  font-size: 14px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  margin: 0px;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Oswald' }
+strong { font-weight: 700; }
+
+.acct-container {
+  background: radial-gradient(#fff, #d0c7af);
+}
+/* radial-gradient(#fff, #eee); */
+
 .vert-container {
   list-style-type: none;
   margin: 0;
   padding: 0;
   width: 100px;
-  background-color: #cecece;
-  height: 100%;
+  height: auto;
+  max-height: 100%;
   display: inline-block;
+  background: #485562;
+  overflow: auto;
 }
 
 .vert-nav a {
@@ -16,11 +35,12 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 16px;
-  font-family: 'Shift', sans-serif;
+  font-weight: 400;
+  font-family: Oswald;
 }
 
 .vert-bar {
-  background-color: #cecece;
+  background: linear-gradient(#485562, #2c343f);
   width: 100px;
   height: 100vh;
 }
@@ -36,7 +56,7 @@ li a:hover {
 .faq-list {
   min-width: 500px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
   display: inline-block;
   vertical-align: top;
   font-size: 16px;
@@ -46,7 +66,7 @@ li a:hover {
 .faq-container {
   min-width: 500px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
   display: inline-block;
   vertical-align: top;
   font-size: 16px;
@@ -55,8 +75,9 @@ li a:hover {
 }
 
 .title {
-  font-family: 'Shift', sans-serif;
+  padding: 25px 25px 0 25px;
   text-align: center;
+  font-family: 'Oswald';
 }
 
 .rankings-container {
@@ -94,7 +115,7 @@ li a:hover {
 .edit-container {
   min-width: 500px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
   display: inline-block;
   vertical-align: top;
   font-size: 16px;
@@ -142,6 +163,7 @@ li a:hover {
 .history-item{
   overflow: hidden;
   list-style-type: none;
+  padding: 25px;
   color: #d0c7af;
   font-size: 10px;
   font-weight: 600;
@@ -201,7 +223,7 @@ li a:hover {
 }
 
 .history-head {
-  padding: 25px 25px 0 25px;
+  padding: 25px 0 0 25px;
   text-transform: uppercase;
   color: #000;
 }
