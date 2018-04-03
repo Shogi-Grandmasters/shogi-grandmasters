@@ -45,7 +45,7 @@ class Login extends Component {
             name="username"
             type="text"
             autoComplete="username"
-            placeholder={"enter username"}
+            placeholder={"ENTER YOUR USERNAME"}
             className="auth-form"
             onChange={this.handleInputChange}
             /><br />
@@ -53,7 +53,7 @@ class Login extends Component {
             name="password"
             type="password"
             autoComplete="current-password"
-            placeholder={"enter your password"}
+            placeholder={"ENTER YOUR PASSWORD"}
             className="auth-form"
             onChange={this.handleInputChange}
             /><br />

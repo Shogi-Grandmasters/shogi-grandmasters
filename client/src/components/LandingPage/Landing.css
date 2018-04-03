@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
 .landing-page-container {
   padding: 50px;
   display: flex;
@@ -21,6 +23,7 @@
   cursor: pointer;
   justify-content: center;
   text-align: center;
+  font-family: 'Oswald';
 }
 
 .landing-title{

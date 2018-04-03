@@ -42,7 +42,7 @@ class Signup extends Component {
         name='email'
         type='text'
         className='auth-form'
-        placeholder={'enter email'}
+        placeholder={'ENTER YOUR EMAIL'}
         autoComplete='email'
         onChange={this.handleInputChange}
         />
@@ -51,7 +51,7 @@ class Signup extends Component {
         type='text'
         className='auth-form'
         autoComplete="username"
-        placeholder={'enter your username'}
+        placeholder={'ENTER YOUR USERNAME'}
         onChange={this.handleInputChange}
         />
       <input
@@ -59,7 +59,7 @@ class Signup extends Component {
         type='password'
         className='auth-form'
         autoComplete="new-password"
-        placeholder={'enter your password'}
+        placeholder={'ENTER YOUR PASSWORD'}
         onChange={this.handleInputChange}
         /><br />
       <input

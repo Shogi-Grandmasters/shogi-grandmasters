@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
+
 .auth-button {
   background-color: #cecece;
   color: #6a6969;
@@ -8,16 +11,20 @@
   outline: 0;
   cursor: pointer;
   justify-content: center;
+  font-family: 'Oswald';
 }
 
 .auth-form {
   background-color: #cecece;
-  padding: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   font-size: 16px;
   margin: 1px;
   border: 1px;
   border-radius: 2px;
   text-align: center;
+  font-family: 'Oswald';
+  width: 200px;
 }
 
 .auth-container {
