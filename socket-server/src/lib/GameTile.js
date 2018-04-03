@@ -50,7 +50,7 @@ class GameTile {
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
         if (onBoard(position)) {
-          if (squareContains(position) === ' ' || !this._hitFriendly(board, position, _test)) {
+          if (squareContains(board, position) === ' ' || !this._hitFriendly(board, position, _test)) {
             return set.concat([move]);
           }
         }
@@ -162,6 +162,7 @@ GameTile.prototype._lanceMoves = function (board, _test) {
   let loc;
 
   for (let i = 1; i < boardSize; i++) {
+    loc = [this.loc[0] - i, this.loc[1]];
     if (clear && !onBoard(loc) || (squareContains(board, loc) !== " " && this._hitFriendly(board, loc, _test))) clear = false;
     if (up) result.push([-i, 0]);
     if (up && squareContains(board, loc) !== " " && this._hitEnemy(board, loc, _test)) up = false;
