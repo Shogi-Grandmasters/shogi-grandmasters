@@ -30,7 +30,7 @@ button {
   height: 100vh;
   align-items: center;
   /* justify-content: space-around; */
-  background: #eee;
+  background: radial-gradient(#fff, #eee);
 }
 
 .match_new, .match_rejoin {
@@ -41,5 +41,9 @@ button {
 .chat {
   display: grid;
   grid-template-rows: 1fr 9fr 1fr;
-  background: #eee;
+  background: radial-gradient(#fff, #eee);
+}
+
+.match_leaders {
+  background: radial-gradient(#eee,#fff);
 }

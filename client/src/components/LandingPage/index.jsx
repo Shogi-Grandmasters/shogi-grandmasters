@@ -12,7 +12,7 @@ class LandingPage extends Component {
       <div className="landing-page-container">
         <br/>
         <Logo />
-        <h1 className="title">Shogi Grandmasters</h1>
+        <h1 className="landing-title">Shogi Grandmasters</h1>
         <input
           type="submit"
           value="Login"

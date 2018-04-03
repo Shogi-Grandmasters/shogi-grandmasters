@@ -24,10 +24,9 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-}
-
-.auth-container > * {
-  flex: 1 auto;
+  background: radial-gradient(#485562, #14151b);
+  height: 100vh;
+  max-height: 100vh;
 }  
 
 .sg-logo {

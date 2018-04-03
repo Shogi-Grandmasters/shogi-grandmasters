@@ -40,7 +40,7 @@ class MatchHistory extends Component {
     return (
       <div className="history-container">
       <div className="history-list-container"> 
-        <div className="history-head">Match History:</div>
+        <h2 className="history-head">Match History</h2>
         <div className="history-list">
           <div className="history-list-inner">
           {this.state.history.map((match, index) => (

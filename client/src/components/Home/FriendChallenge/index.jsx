@@ -235,18 +235,20 @@ class FriendChallenge extends Component {
           Friends
           <div className="online-head-right">Challenge</div>
         </div>
+        <hr />
         <div className="online-list-container">
           {this.state.friends.map((user, index) => (
             <div className="online-friend-container" key={index}>
+              <div className="online-friend-wrapper">
               <img
-                width="50px"
-                className="friend-avi"
+                className="online-friend-avi"
                 src={`${AVATAR_URL}/${
                   user.avatar
                 }`}
               />
               <b className="online-username">{user.username}</b>
               <a>{this.renderChallengeButton(user)}</a>
+              </div>
               <hr />
             </div>
           ))}

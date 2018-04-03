@@ -1,9 +1,12 @@
 .landing-page-container {
+  padding: 50px;
   display: flex;
   align-items: center;
   flex-direction: column;
   flex: 1 auto;
-
+  background: radial-gradient(#485562, #14151b);
+  height: 100vh;
+  max-height: 100vh;
 }
 
 
@@ -20,8 +23,8 @@
   text-align: center;
 }
 
-.title{
+.landing-title{
   font-weight: bold;
-  font-family: 'Shift', sans-serif;
+  color: #fff;
 }
 

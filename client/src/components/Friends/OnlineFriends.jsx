@@ -44,7 +44,7 @@ class OnlineFriends extends Component {
         {this.state.friends.map((user, index) => (
           <div className="online-friend-container" key={index} >
             <img width="50px" className="friend-avi" src={`${AVATAR_URL}${user.avatar}`} />
-            <b className="online-username">{user.username}</b>
+            <div className="online-username">{user.username}</div>
             <a onClick={() => this.challengeFriend(user)}><img className="online-challenge-icon" src={duel} /></a>
             <hr />
           </div>
