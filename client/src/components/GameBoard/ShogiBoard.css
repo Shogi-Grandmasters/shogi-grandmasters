@@ -21,8 +21,8 @@ dark tan: 4d443b
   display: block;
   overflow: hidden;
   margin: 0 auto;
-  height: 95%;
-  width: 80%;
+  height: 86%;
+  width: 73%;
 }
 
 .facing-south {
@@ -38,11 +38,9 @@ dark tan: 4d443b
   border-bottom-color: rgba(255,255,255,0.2);
   border-left-color: rgba(255,255,255,0.2);
 
-  /* background-color: #b0a091; */
-  background: rgba(208, 199, 175, 0.5);
-  /* background-image: radial-gradient(#b0a091 5%, #d0c7af); */
+  background-color: rgba(208, 199, 175, 0.5);
   margin: 0px;
-  padding: 0px;
+  padding: 4px;
 }
 
 .lower-border {
