@@ -104,7 +104,6 @@ export const isCheckOrMate = (gameState, movedTile) => {
   // find opponent's team's moveSet
   const boardCopy = reverseBoard(gameState.board);
   let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true).map(move => reverseLoc(move));
-
   // add all valid drop locations for pieces in that player's hand
   gameState[oppositeColor(movedTile.color)] &&
   gameState[oppositeColor(movedTile.color)].forEach(p => {
@@ -213,6 +212,7 @@ export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc) => {
   if (isCheckOrMate({board: gameStateAfter.board, kings: gameStateAfter.kings}, tile)[0]) {
     return [false, 'Move would put you in Check'];
   }
+
   let moveSet;
   if (includesLoc([tile.loc], [10, 10])) {
     moveSet = validDropLocations(
@@ -223,6 +223,7 @@ export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc) => {
   } else {
     moveSet = tile.findMoves(gameStateBefore.board);
   }
+
   let canMoveThere = includesLoc(moveSet, loc);
   return [canMoveThere, 'Invalid destination.  Piece cannot move there'];
 };
