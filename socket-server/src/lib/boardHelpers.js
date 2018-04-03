@@ -74,6 +74,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
   let lock = false;
 
   gameState.kings = findKings(gameState.board);
+
   // find and collect pieces threatening the king along with their movesets
   const threats = {};
   gameState.board.forEach((row, r) => row.forEach((col, c) => {
@@ -82,7 +83,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         if (col.charCodeAt(0) > 90) {
           let p = new GameTile(pieceNameFromBoardId(col), 'white', [r, c], col.length > 1);
           let moveSet = p.findMoves(gameState.board);
-          if (includesLoc(moveSet, reverseLoc(gameState.kings[oppositeColor(movedTile.color)]))) {
+          if (includesLoc(moveSet, gameState.kings[oppositeColor(movedTile.color)])) {
             threats[r * 10 + c] = {piece: p, moves: moveSet};
           }
         }
@@ -90,7 +91,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         if (col.charCodeAt(0) < 91) {
           let p = new GameTile(pieceNameFromBoardId(col), 'black', [r, c], col.length > 1);
           let moveSet = p.findMoves(gameState.board);
-          if (includesLoc(moveSet, reverseLoc(gameState.kings[oppositeColor(movedTile.color)]))) {
+          if (includesLoc(moveSet, gameState.kings[oppositeColor(movedTile.color)])) {
             threats[r * 10 + c] = {piece: p, moves: moveSet};
           }
          }
@@ -101,10 +102,10 @@ export const isCheckOrMate = (gameState, movedTile) => {
 
   // find opponent's team's moveSet
   const boardCopy = reverseBoard(gameState.board);
-  let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true);
+  let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true).map(move => reverseLoc(move));
 
   // add all valid drop locations for pieces in that player's hand
-  gameState[oppositeColor(movedTile.color)] &&
+  //gameState[oppositeColor(movedTile.color)] &&
   gameState[oppositeColor(movedTile.color)].forEach(p => {
     let temp = validDropLocations(copyMatrix(gameState.board), gameState.kings, new GameTile(
         pieceNameFromBoardId(p),
@@ -114,6 +115,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
     teamMoves = teamMoves.concat(temp);
   });
 
+  let kingsMoves = [];
   // if a threat is found 'check'
   if (threatCount  > 0) {
     check = true;
@@ -124,7 +126,8 @@ export const isCheckOrMate = (gameState, movedTile) => {
       oppositeColor(movedTile.color),
       reverseLoc(gameState.kings[oppositeColor(movedTile.color)])
     );
-    let kingsMoves = king.findMoves(gameState.board);
+    kingsMoves = king.findMoves(reverseBoard(gameState.board))//.map(move => reverseLoc(move));
+
     // if king has no available moves continue looking for paths out
     if (kingsMoves.length === 0) {
       // if there is two or more threatening pieces it is checkmate
@@ -137,7 +140,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         //   another of the king's pieces
         // otherwise check to see if a piece can be placed blocking the king from
         //   the tile that put him in check
-        if (!includesLoc(teamMoves, reverseLoc(tile.piece.loc))) {
+        if (!includesLoc(teamMoves, tile.piece.loc)) {
           // the Knight jumps and therefore cannot be blocked
           if (tile.piece.name === "Knight") {
             checkmate = true;
@@ -145,9 +148,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
             // find spaces between king and threat
             tile.spaceBetween = findSpaceFrom(
               gameState.kings[oppositeColor(movedTile.color)],
-              reverseLoc(tile.piece.loc)).map(
-                move => reverseLoc(move)
-            );
+              tile.piece.loc);
 
             // check combined moves for any squares that could protect the king
             if (!tile.spaceBetween.some(move => includesLoc(teamMoves, move))) {
@@ -158,7 +159,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
       }
     }
   }
-  if (!checkmate && teamMoves.length === 0) {
+  if (!checkmate && teamMoves.length === 0 && kingsMoves.length === 0) {
     lock = true;
   }
   return [check, checkmate, lock];
@@ -197,7 +198,6 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
           );
         }
         if (p) {
-          //console.log(p.color, p.name, JSON.stringify(p.findMoves(board, true)));
           teamMoves = teamMoves.concat(p.findMoves(board, true));
         }
       }
@@ -209,8 +209,7 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
 export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc) => {
   gameStateBefore.kings = findKings(gameStateBefore.board);
   gameStateAfter.kings = findKings(gameStateAfter.board);
-  console.log ('before state ===== \n', gameStateBefore, '\n', 'after state ===== \n', gameStateAfter, '\n', 'tile =====', tile, ' \n location =====', loc);
-  if (isCheckOrMate({board: reverseBoard(gameStateAfter.board), kings: gameStateAfter.kings}, tile)[0]) {
+  if (isCheckOrMate({board: gameStateAfter.board, kings: gameStateAfter.kings}, tile)[0]) {
     return [false, 'Move would put you in Check'];
   }
   let moveSet;
@@ -259,7 +258,7 @@ const findSpaceFrom = (kingLoc, tileLoc) => {
       kingLoc[1] - tileLoc[1]
     )
   ];
-  //   determine direction
+  // determine direction
   const horizontalDirection =
     kingLoc[1] < tileLoc[1]
       ? -1
@@ -268,7 +267,7 @@ const findSpaceFrom = (kingLoc, tileLoc) => {
     kingLoc[0] < tileLoc[0]
       ? -1
       : 1;
-  //   iterate saving each square from tile to king
+  // iterate saving each square from tile to king
   if (difference[0] > 0) {
     if (difference[1] > 0) {
       for (let i = 1; i < difference[1]; i++) {
@@ -308,12 +307,12 @@ export const gameTileAtCoords = (board, [x, y]) => {
   return null;
 }
 
-export const findKings = (board, playerColor) => {
+export const findKings = (board) => {
   let white, black;
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      if (board[i][j] === 'k') white = playerColor === 'white' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
-      if (board[i][j] === 'K') black = playerColor === 'black' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
+      if (board[i][j] === 'k') white = [i, j];
+      if (board[i][j] === 'K') black = [i, j];
     }
   }
   return { white, black };
@@ -335,4 +334,4 @@ export default {
 };
 
 // TESTING
-//  test();
+// test();
