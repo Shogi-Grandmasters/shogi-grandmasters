@@ -50,7 +50,7 @@ class GameTile {
       moveSet = moveSet.reduce((set, move) => {
         let position = [this.loc[0] + move[0], this.loc[1] + move[1]];
         if (onBoard(position)) {
-          if (board[r][c] === ' ' || !this._hitFriendly(board, position, _test)) {
+          if (squareContains(position) === ' ' || !this._hitFriendly(board, position, _test)) {
             return set.concat([move]);
           }
         }
