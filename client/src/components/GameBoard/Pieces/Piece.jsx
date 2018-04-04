@@ -1,5 +1,5 @@
 import React from 'react';
-import Sets from './sets';
+import Sets from './Sets';
 
 const Piece = ({ setId, piece, facing = 'north', color = 'white', promoted = false }) => {
   let colorThemes = {

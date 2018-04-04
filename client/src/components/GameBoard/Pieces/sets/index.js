@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Traditional from './traditional';
-import Symbols from './symbols';
+import Traditional from './Traditional';
+import Symbols from './Symbols';
 
 export default {
   Traditional,
