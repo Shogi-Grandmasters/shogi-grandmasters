@@ -56,12 +56,8 @@ dark blue: 14151b
 .match__log-piece {
   width: 60px;
   height: 60px;
-  margin-left: 16px;
-  margin-right: 16px;
-}
-.match__log-piece > .shogi__token {
-  width: 50px;
-  height: 60px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .match__log-item.warning {
@@ -117,7 +113,8 @@ dark blue: 14151b
   .match__log, .match__log.hidden {
     left: 0px;
     position: relative;
-    width: 200px;
+    width: 170px;
+    margin-right: 32px;
     display: grid;
     grid-template-rows: 1fr 8fr 1fr;
   }
@@ -138,8 +135,8 @@ dark blue: 14151b
     font-size: 10px;
   }
   .match__log-piece {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
   .match__log-actions {
     display: none;

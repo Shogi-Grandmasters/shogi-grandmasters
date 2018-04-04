@@ -1,4 +1,5 @@
 import React from 'react';
+import Piece from './Pieces/Piece.jsx';
 
 const getTokenImage = (tile, facing) => {
   const prefix = facing === 'north' ? 'N-' : 'S-';
@@ -6,7 +7,7 @@ const getTokenImage = (tile, facing) => {
   return '../tokens/' + prefix + tile.name + suffix + '.svg';
 }
 
-const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location = null, target = null, activate }) => {
+const ShogiPiece = ({ inPlay = true, tile, set, player = null, local = true, location = null, target = null, activate }) => {
   let tileFaces = inPlay ? tile.color === player.color ? player.facing : 'south' : 'north';
   let canActivate = local && player && player.color === tile.color && location && target;
   let tileStyle = {
@@ -15,10 +16,9 @@ const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location
   return (
     <a
       className="shogi__token"
-      style={tileStyle}
       onClick={() => canActivate && activate(location, target)}
     >
-      {tile.name}
+      <Piece setId={set} piece={tile.name} facing={tileFaces} color={tile.color} promoted={tile.isPromoted} />
     </a>
   )
 }

@@ -21,6 +21,7 @@ import TurnIndicator from './TurnIndicator/index.jsx';
 import GameChat from './Chat/index.jsx';
 import ModalPrompt from '../Global/Modals/Prompt/ModalPrompt.jsx';
 import ModalMenu from '../Global/Modals/Menu/ModalMenu.jsx';
+import GlyphChoiceMenu from './GlyphChoice/GlyphChoice.jsx';
 
 import './Match.css';
 
@@ -76,6 +77,7 @@ class Match extends Component {
       showMobileSidebar: null,
       showHandWhite: false,
       showHandBlack: false,
+      shogiSet: localStorage.getItem('shogiSet') || 'Traditional',
     }
     this.socket = props.socket;
 
@@ -96,6 +98,8 @@ class Match extends Component {
     this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
     this.promptToConcede = this.promptToConcede.bind(this);
     this.confirmConcedeChoice = this.confirmConcedeChoice.bind(this);
+    this.toggleOptions = this.toggleOptions.bind(this);
+    this.confirmOptionsChange = this.confirmOptionsChange.bind(this);
     this.concludeMatch = this.concludeMatch.bind(this);
     this.quit = this.quit.bind(this);
     this.removeFromHand = this.removeFromHand.bind(this);
@@ -126,6 +130,11 @@ class Match extends Component {
   toggleMenu() {
     let choices = [
       {
+        cta: 'Options',
+        action: this.toggleOptions,
+        args: [],
+      },
+      {
         cta: 'Concede',
         action: this.promptToConcede,
         args: [],
@@ -146,6 +155,18 @@ class Match extends Component {
       showModal: content ? true : false,
       modalContent: content,
     }))
+  }
+
+  toggleOptions() {
+    let content = <GlyphChoiceMenu callback={this.confirmOptionsChange} />;
+    this.toggleModal(content);
+  }
+
+  confirmOptionsChange(set) {
+    this.setState({
+      shogiSet: set,
+    })
+    this.toggleModal();
   }
 
   updateKings(color, coords) {
@@ -478,7 +499,7 @@ class Match extends Component {
 
     return (
       <div className="match">
-        <MatchLog events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
+        <MatchLog set={this.state.shogiSet} events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
         <div className="match__play">
           <div className="match__turn">
             <PlayerPanel player={this.getPlayer('opponent')} />
@@ -497,6 +518,7 @@ class Match extends Component {
                 activate={this.togglePiece}
                 visibility={this.getPlayer('opponent').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
                 toggle={this.toggleHand}
+                set={this.state.shogiSet}
               />
             </div>
             <ShogiBoard
@@ -507,6 +529,7 @@ class Match extends Component {
               isTurn={this.state.isTurn}
               togglePiece={this.togglePiece}
               movePiece={this.movePiece}
+              set={this.state.shogiSet}
             />
             <div className="match__hand south">
               <PlayerHand
@@ -519,6 +542,7 @@ class Match extends Component {
                 activate={this.togglePiece}
                 visibility={this.getPlayer('local').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
                 toggle={this.toggleHand}
+                set={this.state.shogiSet}
               />
             </div>
           </div>
@@ -526,6 +550,7 @@ class Match extends Component {
             <a className="match__action-left mobile"onClick={() => this.toggleMobile('log')}>Log</a>
             <a className="match__action-menu mobile" onClick={() => this.toggleMenu()}>Menu</a>
             <a className="match__action-right mobile" onClick={() => this.toggleMobile('chat')}>Chat</a>
+            <a className="match__action-menu desktop" onClick={() => this.toggleOptions()}>Options</a>
             <a className="match__action-menu desktop" onClick={() => this.promptToConcede()}>Concede</a>
             <a className="match__action-menu desktop" onClick={() => this.quit()}>Quit</a>
           </div>

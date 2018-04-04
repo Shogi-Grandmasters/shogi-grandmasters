@@ -1,3 +1,9 @@
+/*
+light tan: d0c7af
+mid tan: b0a091
+dark tan: 4d443b
+*/
+
 .shogi__board {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
@@ -13,26 +19,41 @@
 
 .shogi__token {
   display: block;
-  text-indent: -999px;
   overflow: hidden;
-  width: 80%;
-  height: 90%;
   margin: 0 auto;
-  background-repeat: no-repeat;
-  background-size: contain;
+  height: 86%;
+  width: 73%;
+}
+
+.facing-south {
+  transform: rotate(180deg);
+}
+
+.space {
+  border-width: 1px;
+  border-style: solid;
+
+  border-top-color: rgba(255,255,255,0.2);
+  border-right-color:rgba(255,255,255,0.2);
+  border-bottom-color: rgba(255,255,255,0.2);
+  border-left-color: rgba(255,255,255,0.2);
+
+  background-color: rgba(208, 199, 175, 0.5);
+  margin: 0px;
+  padding: 4px;
 }
 
 .lower-border {
-  border-bottom-color: rgba(0,0,0,0.6);
+  border-bottom-color: rgba(255,255,255,1);
 }
 .upper-border {
-  border-top-color: rgba(0,0,0,0.6);
+  border-top-color: rgba(255,255,255,1);
 }
 .right-border {
-  border-right-color: rgba(0,0,0,0.6);
+  border-right-color: rgba(255,255,255,1);
 }
 .left-border {
-  border-left-color: rgba(0,0,0,0.6);
+  border-left-color: rgba(255,255,255,1);
 }
 
 @media screen and (min-device-width: 740px) {
@@ -41,6 +62,9 @@
     height: 80vw;
     grid-auto-rows: 1fr;
     grid-auto-columns: 1fr;
+  }
+  .space {
+    padding: 8px 8px;
   }
 }
 
@@ -54,8 +78,4 @@
     margin: 4px;
   }
 
-  .shogi__token {
-    width: 80%;
-    height: 90%;
-  }
 }
