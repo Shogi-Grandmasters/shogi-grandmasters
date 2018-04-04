@@ -41,7 +41,7 @@ export const oppositeColor = color => (color === "white" ? "black" : "white");
 export const includesLoc = (set, loc) =>
   set.some(tuple => tuple[0] === loc[0] && tuple[1] === loc[1]);
 
-export const reverseLoc = loc => [oppositeBoardSide(loc[0]), oppositeBoardSide(loc[1])]
+export const reverseLoc = loc => [oppositeBoardSide(loc[0]), oppositeBoardSide(loc[1])];
 
 export default {
   initialBoard,

@@ -1,11 +1,12 @@
 import {
+  boardSize,
   boardIds,
   oppositeColor,
   oppositeBoardSide,
   includesLoc,
-  reverseLoc
+  reverseLoc,
 } from "./constants.js";
-import { test } from "./tests.js";
+import { test } from "./tests.js"
 import GameTile from "./GameTile.js";
 
 export const pieceNameFromBoardId = (id) => {
@@ -15,6 +16,7 @@ export const pieceNameFromBoardId = (id) => {
 
 export const validDropLocations = (board, kings, tile) => {
   board = copyMatrix(board);
+  kings = findKings(board);
   let validDrops = [];
   let pawnLocs = [];
 
@@ -41,7 +43,7 @@ export const validDropLocations = (board, kings, tile) => {
           if (r > 1 || tile.name !== "Knight") {
             if (tile.name !== "Pawn" || !pawnLocs.includes(c)) {
               let boardCopy = copyMatrix(board);
-              boardCopy[r][c] = tile.color === "white" ? "p" : "P";
+              boardCopy[r][c] = tile.color === 'white' ? 'p' : 'P';
               let pt = new GameTile("Pawn", tile.color, [r, c]);
               if (
                 tile.name !== "Pawn" ||
@@ -68,69 +70,64 @@ export const validDropLocations = (board, kings, tile) => {
 };
 
 export const isCheckOrMate = (gameState, movedTile) => {
-  gameState.board = copyMatrix(gameState.board);
   let check = false;
   let checkmate = false;
+  let lock = false;
+
+  gameState.kings = findKings(gameState.board);
 
   // find and collect pieces threatening the king along with their movesets
   const threats = {};
-  gameState.board.forEach((row, r) =>
-    row.forEach((col, c) => {
-      if (col !== " ") {
-        if (movedTile.color === "white") {
-          if (col.charCodeAt(0) > 90) {
-            let p = new GameTile(
-              pieceNameFromBoardId(col),
-              "white",
-              [r, c],
-              col.length > 1
-            );
-            let moveSet = p.findMoves(gameState.board);
-            if (
-              includesLoc(
-                moveSet,
-                reverseLoc(gameState.kings[oppositeColor(movedTile.color)])
-              )
-            ) {
-              threats[r * 10 + c] = { piece: p, moves: moveSet };
-            }
+  gameState.board.forEach((row, r) => row.forEach((col, c) => {
+    if (col !== ' ') {
+      if (movedTile.color === 'white') {
+        if (col.charCodeAt(0) > 90) {
+          let p = new GameTile(pieceNameFromBoardId(col), 'white', [r, c], col.length > 1);
+          let moveSet = p.findMoves(gameState.board);
+          if (includesLoc(moveSet, gameState.kings[oppositeColor(movedTile.color)])) {
+            threats[r * 10 + c] = { piece: p, moves: moveSet };
           }
-        } else {
-          if (col.charCodeAt(0) < 91) {
-            let p = new GameTile(
-              pieceNameFromBoardId(col),
-              "black",
-              [r, c],
-              col.length > 1
-            );
-            let moveSet = p.findMoves(gameState.board);
-            if (
-              includesLoc(
-                moveSet,
-                reverseLoc(gameState.kings[oppositeColor(movedTile.color)])
-              )
-            ) {
-              threats[r * 10 + c] = { piece: p, moves: moveSet };
-            }
+        }
+      } else {
+        if (col.charCodeAt(0) < 91) {
+          let p = new GameTile(pieceNameFromBoardId(col), 'black', [r, c], col.length > 1);
+          let moveSet = p.findMoves(gameState.board);
+          if (includesLoc(moveSet, gameState.kings[oppositeColor(movedTile.color)])) {
+            threats[r * 10 + c] = { piece: p, moves: moveSet };
           }
         }
       }
-    })
-  );
+    }
+  }));
   const threatCount = Object.keys(threats).length;
 
+  // find opponent's team's moveSet
+  const boardCopy = reverseBoard(gameState.board);
+  let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true).map(move => reverseLoc(move));
+
+  // add all valid drop locations for pieces in that player's hand
+  gameState[oppositeColor(movedTile.color)] &&
+    gameState[oppositeColor(movedTile.color)].forEach(p => {
+      let temp = validDropLocations(copyMatrix(gameState.board), gameState.kings, new GameTile(
+        pieceNameFromBoardId(p),
+        oppositeColor(movedTile.color),
+        [10, 10]
+      ));
+      teamMoves = teamMoves.concat(temp);
+    });
+
+  let kingsMoves = [];
   // if a threat is found 'check'
   if (threatCount > 0) {
     check = true;
 
     // get available moves for king that is now in check
-    const boardCopy = reverseBoard(gameState.board);
     let king = new GameTile(
       "King",
       oppositeColor(movedTile.color),
       reverseLoc(gameState.kings[oppositeColor(movedTile.color)])
     );
-    let kingsMoves = king.findMoves(gameState.board);
+    kingsMoves = king.findMoves(reverseBoard(gameState.board))//.map(move => reverseLoc(move));
 
     // if king has no available moves continue looking for paths out
     if (kingsMoves.length === 0) {
@@ -140,18 +137,11 @@ export const isCheckOrMate = (gameState, movedTile) => {
       } else {
         const tile = Object.entries(threats)[0][1];
 
-        // find king's team's moveSet
-        let teamMoves = getCombinedMoveSet(
-          boardCopy,
-          oppositeColor(tile.piece.color),
-          true
-        );
-
         // check if the tile that put the king in check can be captured by
         //   another of the king's pieces
-        if (!includesLoc(teamMoves, reverseLoc(tile.piece.loc))) {
-          // otherwise check to see if a piece can be placed blocking the king from
-          //   the tile that put him in check
+        // otherwise check to see if a piece can be placed blocking the king from
+        //   the tile that put him in check
+        if (!includesLoc(teamMoves, tile.piece.loc)) {
           // the Knight jumps and therefore cannot be blocked
           if (tile.piece.name === "Knight") {
             checkmate = true;
@@ -159,27 +149,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
             // find spaces between king and threat
             tile.spaceBetween = findSpaceFrom(
               gameState.kings[oppositeColor(movedTile.color)],
-              reverseLoc(tile.piece.loc)
-            );
-
-            // add all valid drop locations for pieces in checked player's
-            //   hand to adjustedMoves to see if they can be dropped blocking
-            //   the king from the piece threatening it
-            gameState[oppositeColor(movedTile.color)].forEach(p => {
-              let temp = validDropLocations(
-                copyMatrix(gameState.board),
-                gameState.kings,
-                new GameTile(
-                  pieceNameFromBoardId(p),
-                  oppositeColor(movedTile.color),
-                  [10, 10]
-                )
-              );
-              teamMoves = teamMoves.concat(temp);
-            });
-
-            // reverse squares locations
-            tile.spaceBetween = tile.spaceBetween.map(move => reverseLoc(move));
+              tile.piece.loc);
 
             // check combined moves for any squares that could protect the king
             if (!tile.spaceBetween.some(move => includesLoc(teamMoves, move))) {
@@ -190,7 +160,10 @@ export const isCheckOrMate = (gameState, movedTile) => {
       }
     }
   }
-  return [check, checkmate];
+  if (!checkmate && teamMoves.length === 0 && kingsMoves.length === 0) {
+    lock = true;
+  }
+  return [check, checkmate, lock];
 };
 
 export const copyMatrix = matrix => {
@@ -208,21 +181,21 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
   let teamMoves = [];
   board.forEach((row, r) =>
     row.forEach((col, c) => {
-      if (col !== " " && !(col.toLowerCase() === "k" && _test)) {
+      if (col !== " " && !(col.toLowerCase() === 'k' && _test)) {
         let p;
         if (color === "white" && col.charCodeAt(0) > 90) {
           p = new GameTile(
             pieceNameFromBoardId(col),
             color,
             [r, c],
-            col.charAt(1) === "+" ? true : false
+            col.length > 1 ? true : false
           );
         } else if (color === "black" && col.charCodeAt(0) < 91) {
           p = new GameTile(
             pieceNameFromBoardId(col),
             color,
             [r, c],
-            col.charAt(1) === "+" ? true : false
+            col.length > 1 ? true : false
           );
         }
         if (p) {
@@ -234,31 +207,11 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
   return teamMoves;
 };
 
-export const isValidMove = (
-  gameStateBefore,
-  gameStateAfter,
-  tile,
-  loc,
-  prevGameState
-) => {
-  if (prevGameState) {
-    const lastPieceMoved = new GameTile(
-      pieceNameFromBoardId(prevGameState.move.piece),
-      prevGameState.move.color,
-      prevGameState.move.to,
-      prevGameState.move.piece.length > 1
-    );
-    if (
-      isCheckOrMate(
-        {
-          board: reverseBoard(gameStateAfter.board),
-          kings: gameStateBefore.kings
-        },
-        lastPieceMoved
-      )[0]
-    ) {
-      return false;
-    }
+export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc) => {
+  gameStateBefore.kings = findKings(gameStateBefore.board);
+  gameStateAfter.kings = findKings(gameStateAfter.board);
+  if (isCheckOrMate({ board: gameStateAfter.board, kings: gameStateAfter.kings }, tile)[0]) {
+    return [false, 'Move would put you in Check'];
   }
   let moveSet;
   if (includesLoc([tile.loc], [10, 10])) {
@@ -270,7 +223,8 @@ export const isValidMove = (
   } else {
     moveSet = tile.findMoves(gameStateBefore.board);
   }
-  return includesLoc(moveSet, loc);
+  let canMoveThere = includesLoc(moveSet, loc);
+  return [canMoveThere, 'Invalid destination.  Piece cannot move there'];
 };
 
 export const calcImpasse = board => {
@@ -298,13 +252,23 @@ export const calcImpasse = board => {
 const findSpaceFrom = (kingLoc, tileLoc) => {
   let spaceBetween = [];
   const difference = [
-    Math.abs(kingLoc[0] - tileLoc[0]),
-    Math.abs(kingLoc[1] - tileLoc[1])
+    Math.abs(
+      kingLoc[0] - tileLoc[0]
+    ),
+    Math.abs(
+      kingLoc[1] - tileLoc[1]
+    )
   ];
-  //   determine direction
-  const horizontalDirection = kingLoc[1] < tileLoc[1] ? -1 : 1;
-  const verticalDirection = kingLoc[0] < tileLoc[0] ? -1 : 1;
-  //   iterate saving each square from tile to king
+  // determine direction
+  const horizontalDirection =
+    kingLoc[1] < tileLoc[1]
+      ? -1
+      : 1;
+  const verticalDirection =
+    kingLoc[0] < tileLoc[0]
+      ? -1
+      : 1;
+  // iterate saving each square from tile to king
   if (difference[0] > 0) {
     if (difference[1] > 0) {
       for (let i = 1; i < difference[1]; i++) {
@@ -315,16 +279,22 @@ const findSpaceFrom = (kingLoc, tileLoc) => {
       }
     } else {
       for (let i = 1; i < difference[0]; i++) {
-        spaceBetween.push([tileLoc[0] + i * verticalDirection, tileLoc[1]]);
+        spaceBetween.push([
+          tileLoc[0] + i * verticalDirection,
+          tileLoc[1]
+        ]);
       }
     }
   } else {
     for (let i = 1; i < difference[1]; i++) {
-      spaceBetween.push([tileLoc[0], tileLoc[1] + i * horizontalDirection]);
+      spaceBetween.push([
+        tileLoc[0],
+        tileLoc[1] + i * horizontalDirection
+      ]);
     }
   }
   return spaceBetween;
-};
+}
 
 export const playerColorFromId = (id) => {
   return id.charCodeAt(0) > 90 ? 'white' : 'black';
@@ -338,16 +308,20 @@ export const gameTileAtCoords = (board, [x, y]) => {
   return null;
 }
 
-export const findKings = (board, playerColor) => {
+export const findKings = (board) => {
   let white, black;
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      if (board[i][j] === 'k') white = playerColor === 'white' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
-      if (board[i][j] === 'K') black = playerColor === 'black' ? [i, j] : [oppositeBoardSide(i), oppositeBoardSide(j)];
+      if (board[i][j] === 'k') white = [i, j];
+      if (board[i][j] === 'K') black = [i, j];
     }
   }
   return { white, black };
 }
+
+export const onBoard = ([r, c]) => r < boardSize && r >= 0 && c < boardSize && c >= 0;
+
+export const squareContains = (board, [r, c]) => board[r][c];
 
 export default {
   isValidMove,
@@ -361,7 +335,9 @@ export default {
   pieceNameFromBoardId,
   gameTileAtCoords,
   findKings,
-  copyMatrix
+  copyMatrix,
+  onBoard,
+  squareContains
 };
 
 // TESTING
