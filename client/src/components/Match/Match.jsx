@@ -6,7 +6,6 @@ import {
   validDropLocations,
   copyMatrix,
   reverseBoard,
-  findKings,
   gameTileAtCoords,
   playerColorFromId,
   pieceNameFromBoardId
@@ -65,7 +64,6 @@ class Match extends Component {
       },
       localColor: isLocalPlayer(match.white) ? 'white' : 'black',
       opponentColor: isLocalPlayer(match.white) ? 'black' : 'white',
-      kings: null,
       pendingMove: null,
       pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
       showModal: false,
@@ -92,7 +90,6 @@ class Match extends Component {
     this.commitMove = this.commitMove.bind(this);
     this.submitMove = this.submitMove.bind(this);
     this.receiveMove = this.receiveMove.bind(this);
-    this.updateKings = this.updateKings.bind(this);
     this.moveWillPromote = this.moveWillPromote.bind(this);
     this.promptForPromote = this.promptForPromote.bind(this);
     this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
@@ -113,12 +110,10 @@ class Match extends Component {
 
   initializeMatch() {
     let updateBoard = this.state.localColor === 'black' ? reverseBoard(this.state.board) : copyMatrix(this.state.board);
-    let kingPositions = findKings(this.state.board, this.state.localColor);
     let isTurn = this.props.match.turn ? this.state.localColor === 'black' : this.state.localColor === 'white';
 
     this.setState({
       board: updateBoard,
-      kings: kingPositions,
       isTurn,
     });
   }
@@ -167,14 +162,6 @@ class Match extends Component {
       shogiSet: set,
     })
     this.toggleModal();
-  }
-
-  updateKings(color, coords) {
-    let updateKings = { ...this.state.kings };
-    updateKings[color] = coords;
-    this.setState({
-      kings: updateKings,
-    })
   }
 
   capture([x, y]) {
@@ -281,13 +268,11 @@ class Match extends Component {
           board: copyMatrix(this.state.board),
           white: [...this.state.hands.white],
           black: [...this.state.hands.black],
-          kings: { ...this.state.kings },
         },
         after: {
           board: copyMatrix(this.state.board),
           white: [...this.state.hands.white],
           black: [...this.state.hands.black],
-          kings: { ...this.state.kings },
         },
         move: {
           color: this.state.localColor,
@@ -312,9 +297,6 @@ class Match extends Component {
         action.move.isPending = pendingChoice;
         action.move.piece = pieceToMove;
         action.move.didPromote = willPromote && !pendingChoice ? true : false;
-        // when moving a king, the king's movement is reflected to the opposite-side coords to consider the opponent's moves
-        // kings may not be moved into check or checkmate conditions
-        if (['k', 'K'].includes(pieceToMove)) action.after.kings[this.state.localColor] = [oppositeBoardSide(x), oppositeBoardSide(y)];
         action.after.board[fromX][fromY] = ' ';
         action.after.board[x][y] = willPromote && !pendingChoice ? pieceToMove + '+' : pieceToMove;
       } else {
@@ -351,7 +333,7 @@ class Match extends Component {
       let message = move.color === this.state.localColor ? 'Your Opponent is in Check' : 'You are in Check';
       this.announce(message);
     }
-    let { board, white, black, kings } = after;
+    let { board, white, black } = after;
     // boards are sent around from the perspective of each player, so
     // the board must be flipped around when the move received comes from the other player
     board = move.color === this.state.localColor ? board : reverseBoard(board);
@@ -363,7 +345,6 @@ class Match extends Component {
     this.setState(prevState => ({
       board,
       hands,
-      kings,
       isTurn: !prevState.isTurn,
       hints: [],
       pendingMove: false,
@@ -400,9 +381,8 @@ class Match extends Component {
       matchId,
       before,
       after,
-      move,
-      previous: this.state.log[this.state.log.length - 1]
-    })
+      move
+    });
   }
 
   commitMove() {
@@ -453,7 +433,7 @@ class Match extends Component {
       } else {
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(pieceNameFromBoardId(piece), playerColor, [10, 10]);
-        let validLocations = validDropLocations(this.state.board, this.state.kings, gameTile);
+        let validLocations = validDropLocations(this.state.board, gameTile);
         this.setState({
           hints: validLocations,
         });

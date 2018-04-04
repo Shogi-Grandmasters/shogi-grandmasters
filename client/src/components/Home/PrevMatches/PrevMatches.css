@@ -1,5 +1,5 @@
 .prev_matches {
-  padding-top: 50px;
+  /*padding-top: 50px;*/
   display: grid;
   grid-template-rows: 50px 10fr;
   height: 100%;
