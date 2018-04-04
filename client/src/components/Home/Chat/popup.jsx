@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { unescape } from "lodash";
 
 import "./popup.css";
 
@@ -16,12 +17,15 @@ class ChatPopup extends Component {
   }
 
   async componentDidMount() {
-    this.props.socket.emit("client.fetchMessages");
+    this.id = +localStorage.getItem("id");
+    this.username = localStorage.getItem("username");
 
-    await this.props.socket.on("server.homeChat", message => {
+    this.props.socket.emit("client.fetchMessages", { userId: this.id });
+
+    await this.props.socket.on("server.popupChat", message => {
       this.setState({ messages: [message, ...this.state.messages] });
     });
-    await this.props.socket.on("server.sendMessages", messages => {
+    await this.props.socket.on(`server.sendPopupMessages${this.id}`, messages => {
       this.setState({ messages });
     });
   }
@@ -32,7 +36,8 @@ class ChatPopup extends Component {
 
   async handleChat(e) {
     e.persist();
-    await this.setState({ message: e.target.value });
+    const { id, value } = e.target;
+    await this.setState({ message: { id, value } });
     if (e.keyCode === 13 && !e.shiftKey) {
       e.preventDefault();
       this.handleSubmit();
@@ -41,18 +46,17 @@ class ChatPopup extends Component {
   }
 
   handleSubmit() {
-    this.state.message !== "\n" &&
-      this.state.message.length &&
-      this.props.socket.emit("client.homeChat", {
-        userId: localStorage.getItem("id"),
-        username: localStorage.getItem("username"),
-        content: this.state.message
+    this.state.message.value !== "\n" &&
+      this.state.message.value.length &&
+      this.props.socket.emit("client.popupChat", {
+        user_id: this.id,
+        username: this.username,
+        content: this.state.message.value,
+        friend_id: +this.state.message.id
       });
-    console.log(this.state);
   }
 
   resetInput(e) {
-    e.preventDefault();
     e.target.reset();
     this.setState({ message: "" });
   }
@@ -65,7 +69,6 @@ class ChatPopup extends Component {
           <div
             className={friend.minimized ? "popup-box-min" : "popup-box"}
             key={i}
-            id={friend.id}
             style={{ right: `${right}px` }}
             {...(right += 300)}
           >
@@ -93,21 +96,30 @@ class ChatPopup extends Component {
               }
             >
               {this.state.messages.length > 0 &&
-                this.state.messages.slice(0, 10).map((message, i) => {
-                  return (
-                    <div className="" key={i}>
-                      <strong>{message.username}</strong>{" "}
-                      {unescape(message.content)}
-                    </div>
-                  );
-                })}
+                this.state.messages
+                  .filter(
+                    message =>
+                      (message.friend_id === friend.id ||
+                        message.user_id === friend.id) &&
+                      (message.friend_id === this.id ||
+                        message.user_id === this.id)
+                  )
+                  .reverse()
+                  .map((message, i) => {
+                    return (
+                      <div className="" key={i}>
+                        <strong>{message.username}</strong>{" "}
+                        {unescape(message.content)}
+                      </div>
+                    );
+                  })}
             </div>
-            <form onSubmit={e => this.resetInput(e)}>
+            <form onSubmit={e => e.preventDefault()}>
               <div className="">
-                <input onKeyUp={e => this.handleChat(e)} />
-                <button type="submit" onClick={() => this.handleSubmit()}>
+                <input id={friend.id} onKeyUp={e => this.handleChat(e)} />
+                {/* <button type="submit" onClick={() => this.handleSubmit()}>
                   &gt;
-                </button>
+                </button> */}
               </div>
             </form>
           </div>

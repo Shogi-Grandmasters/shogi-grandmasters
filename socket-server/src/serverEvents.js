@@ -40,15 +40,21 @@ export const serverGameReady = ({ io, client, room }, payload) => {
 };
 
 export const serverSendMessages = ({ io, client, room }, payload) => {
+  console.log("messages: ", payload);
   io.in(room.get("id")).emit("server.sendMessages", payload);
+};
+
+export const serverSendPopupMessages = ({ io, client, room }, payload) => {
+  const { userId } = client.handshake.query;
+  io.in(room.get("id")).emit(`server.sendPopupMessages${userId}`, payload);
 };
 
 export const serverHomeChat = ({ io, room }, messages) => {
   io.in(room.get("id")).emit("server.homeChat", messages);
 };
 
-export const serverGameChat = ({ io, room }, messages) => {
-  io.in(room.get("id")).emit("server.gameChat", messages);
+export const serverPopupChat = ({ io, room }, messages) => {
+  io.in(room.get("id")).emit("server.popupChat", messages);
 };
 
 export const serverUpdateGames = ({ io, room }) => {
