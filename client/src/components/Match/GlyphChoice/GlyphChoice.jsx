@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Modal from '../../Global/Modals/Modal.jsx';
 import Piece from '../../GameBoard/Pieces/Piece.jsx';
-import Sets from '../../Gameboard/Pieces/sets/index';
+import Sets from '../../GameBoard/Pieces/sets/index';
 
 import './GlyphChoice.css'
 
