@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import OnlineFriends from "../../Friends/OnlineFriends.jsx";
+import ChatPopup from "../Chat/popup.jsx";
 import randomstring from "randomstring";
 
 import "./FriendChallenge.css";
@@ -15,7 +16,8 @@ class FriendChallenge extends Component {
       users: {},
       friends: [],
       selectedFriend: "",
-      openChallenges: []
+      openChallenges: [],
+      activePopups: []
     };
   }
 
@@ -50,7 +52,6 @@ class FriendChallenge extends Component {
       "server.challengeAccepted",
       ({ matchId, black, white }) => {
         (this.id === black || this.id === white) &&
-          this.props.socket.close();
           this.props.history.push({
             pathname: `/match/${matchId}`,
             state: { matchId, black, white },
@@ -71,23 +72,34 @@ class FriendChallenge extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.socket.close();
+  }
+
   fetchFriends = async () => {
     const { data } = await axios.get(
       `${REST_SERVER_URL}/api/friends/fetchFriends/${this.id}`,
       {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" }
       }
     );
-    this.setState({ friends: data.filter(friend => friend.id !== this.id && friend.status === 1) });
+    this.setState({
+      friends: data.filter(
+        friend => friend.id !== this.id && friend.status === 1
+      )
+    });
   };
 
   fetchOpenChallenges = async (friends = this.state.friends) => {
-    let { data } = await axios.get(`${REST_SERVER_URL}/api/openMatches`, {
-      params: { id: this.id }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    let { data } = await axios.get(
+      `${REST_SERVER_URL}/api/openMatches`,
+      {
+        params: { id: this.id }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     data.forEach(challenge => {
       for (let friend of friends) {
         (challenge.player1 === friend.id || challenge.player2 === friend.id) &&
@@ -98,7 +110,11 @@ class FriendChallenge extends Component {
   };
 
   async handleFriendSelect(user) {
-    await this.setState({ selectedFriend: user });
+    !this.state.activePopups.filter(friend => friend.id === user.id).length &&
+    await this.setState({
+      selectedFriend: user,
+      activePopups: [...this.state.activePopups, user]
+    });
   }
 
   async handleChallengeFriendClick(user) {
@@ -124,28 +140,34 @@ class FriendChallenge extends Component {
   async handleAcceptChallengeClick(e) {
     const matchId = randomstring.generate();
     const { id, player1, player2 } = JSON.parse(e.target.value);
-    await axios.delete(`${REST_SERVER_URL}/api/openmatches`, {
-      data: { id }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    await axios.delete(
+      `${REST_SERVER_URL}/api/openmatches`,
+      {
+        data: { id }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     this.props.socket.emit("client.acceptChallenge", {
       matchId,
       black: player1,
       white: player2,
-      type: 2,
+      type: 2
     });
   }
 
   async handleRejectChallengeClick(e) {
     const { id, player1, player2 } = JSON.parse(e.target.value);
-    await axios.delete(`${REST_SERVER_URL}/api/openmatches`, {
-      data: { id }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    await axios.delete(
+      `${REST_SERVER_URL}/api/openmatches`,
+      {
+        data: { id }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     this.props.socket.emit("client.rejectChallenge", { player1, player2 });
   }
 
@@ -247,12 +269,14 @@ class FriendChallenge extends Component {
                 }`}
               />
               <b className="online-username">{user.username}</b>
+              <div onClick={() => this.props.showActivePopups(user)}>Message</div>
               <a>{this.renderChallengeButton(user)}</a>
               </div>
               <hr />
             </div>
           ))}
         </div>
+        {/* <ChatPopup activePopups={this.state.activePopups} /> */}
       </div>
     );
   }

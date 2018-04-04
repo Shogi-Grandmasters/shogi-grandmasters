@@ -22,6 +22,10 @@ class Leaderboard extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.socket.close();
+  }
+
   render() {
     return (
       <div className="leaderboard-container">
