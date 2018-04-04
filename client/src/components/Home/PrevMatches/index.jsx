@@ -117,7 +117,7 @@ class PrevMatches extends Component {
           {this.state.prevMatches.map(match => {
             return (
               <div onClick={e => this.handleMatchSelect(e)} id={JSON.stringify(match)} key={match.id} className={`prev_match_items  ${match.turn === "YOUR MOVE" ? "prev_match_move" : "awaiting"}`}>
-              Opponent: 
+              <div className="prev_match_vs">Opponent: </div>
                 <div className="prev_match_opponent">
                 {`${
                   match.blackName === this.state.username

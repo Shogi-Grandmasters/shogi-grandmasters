@@ -82,6 +82,7 @@ strong { font-weight: 700; }
 .prev_match_opponent {
   text-transform: uppercase;
   font-size: 21px;
+  padding-bottom: 15px;
 }
 
 .prev_match_turn {
@@ -91,11 +92,12 @@ strong { font-weight: 700; }
 .prev_match_time {
   float: right;
   font-size: 16px;
+  padding-top: 5px;
   padding-right: 10px;
 }
 
 .prev_match_move {
   /* font-style: italic; */
-  box-shadow: inset 4px 2px 8px 4px #f15a4a;
+  box-shadow: inset 1px 1px 8px 8px #f15a4a;
   /* text-shadow: 1px 1px 2px #f15a4a; */
 }
