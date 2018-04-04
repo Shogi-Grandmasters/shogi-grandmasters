@@ -20,6 +20,10 @@ class OpenMatches extends Component {
     // });
   }
 
+  componentWillUnmount() {
+    this.props.socket.close();
+  }
+
   // async fetchOpenMatches() {
   //   let { data } = await axios.get("http://localhost:3396/api/openmatches");
   //   this.setState({ openMatches: data });
@@ -71,7 +75,6 @@ class OpenMatches extends Component {
   // }
 
   async handlePlayMatchClick(ranked) {
-    this.props.socket.close();
     this.props.history.push({
       pathname: `/match/queue`,
       state: {
