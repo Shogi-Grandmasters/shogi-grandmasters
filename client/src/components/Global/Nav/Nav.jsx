@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import './Nav.css'
 
 const {AVATAR_URL} = process.env;
-
 class Nav extends Component {
   constructor() {
     super();
@@ -25,8 +24,8 @@ class Nav extends Component {
       <ul className="topnav">
         <li className="logo"><Logo /></li>
         <li className="nav"><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
-        <li className="nav"><Link to="/home">Challenge</Link></li>
-        <li className="nav"><Link to="/acct" onClick={()=>this.props.socket && this.props.socket.close()}>{localStorage.username}</Link></li>
+        <li className="nav"><Link to="/acct/history">Match History</Link></li>
+        <li className="nav"><Link to="/acct" onClick={()=>this.props.socket.close()}>{localStorage.username}</Link></li>
         {avi}
       </ul>
     )
