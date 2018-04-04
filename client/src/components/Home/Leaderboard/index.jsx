@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import axios from "axios";
 
 import "./Leaderboard.css";
-import duel from "../../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png";
 
 const { REST_SERVER_URL } = process.env;
 
@@ -26,19 +25,17 @@ class Leaderboard extends Component {
   render() {
     return (
       <div className="leaderboard-container">
-        <div className="leaderboard-head">Grandmaster</div>
+        <div className="leaderboard-head">Leaderboards</div><hr />
         <div className="leaderboard-list-container">
           {this.state.rankedLeaderboard.map((leader, index) => (
             <div className="leader-container" key={index}>
               <img
-                width="50px"
                 className="leader-avi"
-                src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${
-                  leader.avatar
-                }`}
+                src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${leader.avatar}`}
               />
+              <b className="leader-rank">#{index + 1}</b>
               <b className="leader-username">{leader.username}</b>
-              <a><div className="leader-rating">{leader.rating_ranked}</div></a>
+              <b className="leader-rating">Rating: {leader.rating_ranked}</b>
               <hr />
             </div>
           ))}

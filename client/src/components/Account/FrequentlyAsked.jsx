@@ -4,7 +4,7 @@ import './Account.css';
 const FrequentlyAsked = (props) => {
   return (
     <div className="faq-container">
-      <h3 className="title">FAQ</h3>
+      <div className="title-faq">FAQ</div>
       <b>Piece Movement:</b><br />
       <div className="faq-list">
         <div>

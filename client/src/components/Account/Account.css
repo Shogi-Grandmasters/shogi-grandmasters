@@ -1,11 +1,34 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
+body {
+  font-size: 14px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  margin: 0px;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Oswald' }
+strong { font-weight: 700; }
+
+.acct-container {
+  background: linear-gradient( #eee, #fff);
+}
+/* 
+  radial-gradient(#fff, #eee); 
+  radial-gradient(#d0c7af, #fff);
+  radial-gradient(#fff, #d0c7af);
+*/
+
 .vert-container {
   list-style-type: none;
   margin: 0;
   padding: 0;
   width: 100px;
-  background-color: #cecece;
-  height: 100%;
+  height: auto;
+  max-height: 100%;
   display: inline-block;
+  background: #485562;
+  overflow: auto;
 }
 
 .vert-nav a {
@@ -16,11 +39,12 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 16px;
-  font-family: 'Shift', sans-serif;
+  font-weight: 400;
+  font-family: Oswald;
 }
 
 .vert-bar {
-  background-color: #cecece;
+  background: linear-gradient(#485562, #2c343f);
   width: 100px;
   height: 100vh;
 }
@@ -36,7 +60,7 @@ li a:hover {
 .faq-list {
   min-width: 500px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
   display: inline-block;
   vertical-align: top;
   font-size: 16px;
@@ -44,9 +68,10 @@ li a:hover {
 }
 
 .faq-container {
+  padding-left: 10px;
   min-width: 500px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
   display: inline-block;
   vertical-align: top;
   font-size: 16px;
@@ -54,9 +79,24 @@ li a:hover {
   justify-content: center
 }
 
+.title-faq {
+  padding: none;
+  text-transform: uppercase;
+  max-width: 650px;
+  color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
+}
+
 .title {
-  font-family: 'Shift', sans-serif;
   text-align: center;
+  text-transform: uppercase;
+  max-width: 650px;
+  color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
 }
 
 .rankings-container {
@@ -65,8 +105,6 @@ li a:hover {
   align-content: center;
   text-align: center;
   width: 600px;
-  font-size: 16px;
-  font-family: 'Shift', sans-serif;
 }
 
 .edit-container {
@@ -89,16 +127,17 @@ li a:hover {
   border: 1px;
   border-radius: 2px;
   text-align: center;
+  font-family: 'Oswald';
+  text-transform: uppercase;
 }
 
 .edit-container {
-  min-width: 500px;
+  min-width: 250px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
   display: inline-block;
   vertical-align: top;
   font-size: 16px;
-  font-family: 'Shift', sans-serif;
   justify-content: center
 }
 
@@ -110,4 +149,102 @@ li a:hover {
 
 .edit-dropzone {
   align-items: center;
+}
+
+.history-container {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 250px;
+  width: 100%;
+  max-width: 650px;
+  height: 100vh;
+}
+
+.history-list-container {
+  display: grid;
+  grid-template-rows: 1fr 8fr 1fr;
+  padding-left: 10px;
+}
+
+.history-list {
+  overflow: hidden;
+  max-height: 80vh;
+}
+
+.history-list-inner {
+  overflow: auto;
+  width: 100%;
+  max-width: 800px;
+  height: 99%;
+  padding-right: 15px;
+}
+
+.history-item{
+  overflow: hidden;
+  list-style-type: none;
+  color: #d0c7af;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  vertical-align: center;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  background: linear-gradient(#2c343f, #485562);
+  border-top: solid 1px rgba(255,255,255, 0.4);
+  border-right: solid 1px rgba(255,255,255, 0.2);
+  border-bottom: solid 1px #14151b;
+  border-left: solid 1px #14151b;
+}
+
+.history-outcome-container {
+  font-size: 40px;
+  font-style: italic;
+  text-transform: uppercase;
+  text-align: center;
+  color: #d0c7af;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.history-user-container {
+  float: left;
+  padding: 0 25px 0 25px;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #d0c7af;
+  text-shadow: 1px 1px 2px #000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.history-opponent-container {
+  align-content: right;
+  padding: 0 25px 0 25px;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #d0c7af;
+  text-shadow: 1px 1px 2px #000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  float: right;
+}
+
+.history-avi {
+  width: 50px;
+}
+
+.history-ladder {
+  font-size: 15px;
+}
+
+.history-head {
+  padding: none;
+  text-transform: uppercase;
+  max-width: 650px;
+  color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
 }

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { FriendsList } from "./FriendsList.jsx";
-import { PendingList } from "./PendingList.jsx";
-import { AwaitingList } from "./AwaitingList.jsx";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { FriendsList } from './FriendsList.jsx';
+import { PendingList } from './PendingList.jsx';
+import { AwaitingList } from './AwaitingList.jsx';
 
-import "./Friends.css";
+import './Friends.css';
 
 const {REST_SERVER_URL} = process.env;
 
@@ -21,33 +21,28 @@ class Friends extends Component {
   componentDidMount() {
     this.fetchFriends();
   }
-
+  
   addFriend = (e) => {
-    e.preventDefault();
+    e.preventDefault(); //Without this line 2nd axios call breaks
     const { username } = this.state;
-    const id = localStorage.getItem("id")
-    axios.post(`${REST_SERVER_URL}/api/users/`, {username}, {
-      headers: { 'Content-Type': 'application/json' }
-      })
+    const id = localStorage.getItem('id')
+    axios.post(`${REST_SERVER_URL}/api/users/`, {username})
       .then(res => {
-        //console.log('1st promise data', res.data)
         const body = {
           u_id: id,
           f_id: res.data.id.toString(),
         }
-        axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
-          headers: { 'Content-Type': 'application/json' }
-          })
+        axios.post(`${REST_SERVER_URL}/api/friends/add`, body)
           .then(data => {
-            //console.log('2nd promise data', data.data)
+            this.refs.search.value = '';
             this.fetchFriends();
           })
           .catch(err => {
-            console.log('2nd promise error', err);
+            console.log('2nd promise error');
           });
       })
       .catch(err => {
-        console.log('1st promise error', err);
+        console.log('1st promise error');
       });
   }
 
@@ -61,17 +56,11 @@ class Friends extends Component {
     const flist = [];
     const pending = [];
     const awaiting = [];
-    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    const {data} = await axios.get(`${REST_SERVER_URL}/api/friends/fetchFriends/${id}`);
     for(let friend of data) {
       const fid = friend.u_id;
-      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-      if (id == friend.id) {
-        friend.avatar = user.data[0].avatar;
-      }
+      const user = await axios.get(`${REST_SERVER_URL}/api/users/${fid}`);
+      if(id == friend.id) friend.avatar = user.data[0].avatar
       friend.permId = user.data[0].id
       friend.name = user.data[0].username
       if(friend.status == 0 && friend.u_id == id) awaiting.push(friend)
@@ -88,10 +77,7 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.id;
     const { data } = await axios.delete(
-      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`,
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      `${REST_SERVER_URL}/api/friends/deleteFriend/${id}/${fid}`
     );
     this.fetchFriends();
   }
@@ -100,19 +86,14 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`,
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/1`
     );
     const body = {
       u_id: id,
       f_id: fid,
       status: 1
     }
-    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    const added = await axios.post(`${REST_SERVER_URL}/api/friends/add`, body);
     this.fetchFriends();
   }
 
@@ -120,10 +101,7 @@ class Friends extends Component {
     const id = localStorage.getItem("id");
     const fid = e.permId;
     const { data } = await axios.put(
-      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`,
-      {
-        headers: { 'Content-Type': 'application/json' }
-      }
+      `${REST_SERVER_URL}/api/friends/${id}/${fid}/2`
     );
     this.fetchFriends();
   }
@@ -131,7 +109,7 @@ class Friends extends Component {
   render() {
     const awaiting = this.state.awaiting.length > 0 && (
       <div className="awaiting-container">
-        <h3 className="friend-title">Awaiting Response</h3>
+        <div className="friend-title">Awaiting Response</div>
         <div>
         {this.state.awaiting.map((user, index) => (
           <AwaitingList
@@ -144,7 +122,7 @@ class Friends extends Component {
     )
     const pending = this.state.pending.length > 0 && (
       <div className="pending-container">
-        <h3 className="friend-title">Pending Requests</h3>
+        <div className="friend-title">Pending Requests</div>
         <div>
         {this.state.pending.map((user, index) => (
           <PendingList
@@ -160,14 +138,14 @@ class Friends extends Component {
     return (
       <div className="friend-container">
         <div className="friend-top">
-          <h2 className="friend-head">Friends List</h2>
+          <div className="friend-head">Friends List</div>
           <form className="friend-search">
-            <input name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
+            <input ref="search" name="username" type="text" placeholder="Search by username" className="friend-form" onChange={this.handleInput} />
             <input type="submit" className="friend-button" onClick={(e) => this.addFriend(e)} />
           </form>
         </div>
         <div className="friend-list-container">
-        <h3 className="friend-title">Current</h3>
+        <div className="friend-title">Current</div>
         {this.state.friends.map((user, index) => (
           <FriendsList
             key={index}

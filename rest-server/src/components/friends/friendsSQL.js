@@ -1,8 +1,9 @@
 export const addFriendHelper = ({ u_id, f_id, status = 0}) => {
+  const friend_key = u_id + f_id;
   return `
-    INSERT INTO friends (u_id, f_id, status)
-    VALUES (${u_id}, ${f_id}, ${status})
-    RETURNING u_id, f_id, status
+    INSERT INTO friends (u_id, f_id, status, friend_key)
+    VALUES (${u_id}, ${f_id}, ${status}, ${friend_key})
+    RETURNING u_id, f_id, status, friend_key
   `;
 };
 
@@ -12,7 +13,7 @@ export const fetchAllFriendsHelper = ({ u_id }) => {
     FROM users AS u
       INNER JOIN friends AS f
       ON (u.id=f.f_id)
-      WHERE ((f.u_id=${u_id} AND f.status=1) OR (u.id=${u_id} AND f.status=0))
+      WHERE (f.u_id=${u_id} OR (u.id=${u_id} AND f.status=0))
   `;
 };
 
@@ -34,3 +35,8 @@ export const updateFriendHelper = ({ u_id, f_id, status }) => {
     RETURNING u_id, f_id, status
   `;
 }
+//ocheyos
+//WHERE ((f.u_id=${u_id} AND f.status=1) OR (u.id=${u_id} AND f.status=0))
+
+//raymonds
+//WHERE (f.u_id=${u_id} OR u.id=${u_id})

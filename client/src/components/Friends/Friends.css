@@ -1,28 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
+body {
+  font-size: 14px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  margin: 0px;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Oswald' }
+strong { font-weight: 700; }
+
 .friend-container {
   display: inline-block;
   vertical-align: top;
   min-width: 500px;
   width: 100%;
-  max-width: 740px;
+  max-width: 650px;
 }
 
-.friend-top > * {
-  font-family: 'Shift', sans-serif;
+.friend-title {
+  padding-left: 10px;
+  padding-top: 5px;
+  font-family: 'Oswald';
+  text-transform: uppercase;
+  font-weight: 400;
+  color: #000;
 }
 
 .friend-head {
-  text-align: center;
-  width: auto;
+  padding: none;
+  padding-left: 10px;
+  text-transform: uppercase;
+  max-width: 650px;
+  color: #000;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
 }
 
 .friend-search {
-  float: right;
-  
+  float: right; 
 }
 
 .friend-button {
   float: right;
-  font-family: 'Shift', sans-serif;
+  font-family: 'Oswald';
   background-color: #6a6969;
   color: #fff;
   padding: 12px;
@@ -37,7 +59,7 @@
 }
 
 .friend-form {
-  font-family: 'Shift', sans-serif;
+  font-family: 'Oswald';
   background-color: #cecece;
   font-size: 16px;
   height: 43px;
@@ -47,13 +69,9 @@
   text-align: center;
   display: inline-block;
 }
-.friend-title {
-  font-family: 'Shift', sans-serif;
-  font-size: 16px;
-}
 
 .current-friend-container {
-  font-family: 'Shift', sans-serif;
+  font-family: 'Oswald';
   font-size: 16px;
   justify-content: center;
   height: 60px;
@@ -62,44 +80,21 @@
 }
 
 .friend-username {
-  padding: 0 15px;
-  text-align: center;
-  vertical-align: center;
+  padding-left: 25px;
+  width: auto;
+  font-family: 'Oswald';
+  text-transform: uppercase;
+  font-size: 20px;
 }
 
 .inline-button-friend {
-  padding: 0 15px;
+  padding-left: 25px;
   text-align: center;
   vertical-align: center;
   cursor: pointer;
 }
 
-.online-container {
-  display: inline-block;
-  vertical-align: top;
-  min-width: 500px;
-  width: 100%;
-  max-width: 740px;
-}
-
-.online-top {
-  font-family: 'Shift', sans-serif;
-  text-align: center;
-  width: auto;
-}
-
-.online-head-right {
-  float: right;
-}
-
-.online-challenge-icon {
+.friend-avi {
+  padding-left: 20px;
   width: 50px;
-  float: right;
-}
-
-.online-challenge-svg {
-  width: 50px;
-  float: right;
-  color: #f15a4a;
-  fill: #f15a4a;
 }

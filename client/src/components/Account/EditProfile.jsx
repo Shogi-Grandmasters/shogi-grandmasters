@@ -57,7 +57,7 @@ class EditProfile extends Component {
     const avi = localStorage.avi ? <img width="100px" src={`${AVATAR_URL}${localStorage.avi}`} /> : <img width="50px" src={`${AVATAR_URL}v1521760976/mi69trcbxaq3ubkq4yh4.png`} />
     return (
       <div className="edit-container">
-      <h2 className="title">Welcome back {localStorage.username}-san!</h2>
+      <div className="title">Welcome back {localStorage.username}-san!</div>
         <div className="edit-avatar-container">
           <h3 className="title">Edit your Avatar:</h3>
           <div className="edit-dropzone">
