@@ -50,6 +50,8 @@
 .online-challenge-text {
   width: 100px;
   float: right;
+  text-align: center;
+  padding-top: 10px;
 }
 
 .online-friend-container {
@@ -65,14 +67,14 @@
   position: absolute;
   width: 50px;
   right: 50px;
-  bottom: 10px;
+  bottom: 15px;
 }
 
 .online-challenge-button2 {
   position: absolute;
   width: 50px;
   right: 0px;
-  bottom: 10px;
+  bottom: 15px;
 }
 
 .online-challenge-svg {
