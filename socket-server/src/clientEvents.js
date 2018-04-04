@@ -191,7 +191,7 @@ const clientEndGame = async ({ io, client, room }, payload) => {
 
 const clientSubmitMove = async ({ io, client, room }, payload) => {
   try {
-    let { matchId, before, after, move, previous } = payload;
+    let { matchId, before, after, move } = payload;
     let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { matchId }
     },
@@ -208,19 +208,11 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     if (!correctTurn)
       messages.push("Move submitted was not for the correct turn.");
     // move is valid
-    let [validMove, moveError] = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to, previous);
+    let [validMove, moveError] = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to);
     if (!validMove) messages.push(moveError);
     // board state is check or checkmate
     console.log(after);
-    let [check, checkmate] = isCheckOrMate(
-      after,
-      new GameTile(
-        pieceNameFromBoardId(move.piece),
-        move.color,
-        move.to,
-        move.piece.length > 1
-      )
-    );
+    let [check, checkmate] = isCheckOrMate(after, move.color);
     let gameStatus = data.status || 0;
     // save new state if the move was successful
     let success = correctTurn && validMove;
@@ -236,6 +228,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       check,
       checkmate
     };
+    console.log(event);
     eventLog.unshift(event);
     await axios.put(`${REST_SERVER_URL}/api/matches`, {
       matchId,
@@ -256,6 +249,7 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       checkmate,
       messages
     };
+    console.log(payload.status)
     // broadcast move
     serverPlayerMove({ io, client, room }, payload);
   } catch (err) {
