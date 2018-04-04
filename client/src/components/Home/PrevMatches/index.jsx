@@ -46,9 +46,22 @@ class PrevMatches extends Component {
       match.whiteName = opponents[match.white]
         ? opponents[match.white]
         : this.state.username;
+      match.modified = new Date(match.modified);
       return match;
     });
-    this.setState({ prevMatches });
+    prevMatches.sort((a, b) => a.modified - b.modified);
+    const sortedMatches = []; 
+    prevMatches.forEach(match => {
+      if(match.blackName === this.state.username && match.turn === 1 ){
+        match.turn = 'YOUR MOVE'
+        sortedMatches.unshift(match)
+      } else {
+        match.turn = 'OPPONENTS MOVE'
+        sortedMatches.push(match)
+      }
+    })
+    console.log('our sorted array', sortedMatches)
+    this.setState({ prevMatches: sortedMatches });
   }
 
   async handleMatchSelect(e) {
@@ -78,7 +91,7 @@ class PrevMatches extends Component {
         <div className="match_select">
           {this.state.prevMatches.map(match => {
             return (
-              <div onClick={e => this.handleMatchSelect(e)} id={JSON.stringify(match)} key={match.id} className="match_items">
+              <div onClick={e => this.handleMatchSelect(e)} id={JSON.stringify(match.id)} key={match.id} className="match_items">
                 {`vs. ${
                   match.blackName === this.state.username
                     ? match.whiteName
