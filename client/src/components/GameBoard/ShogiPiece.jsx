@@ -7,7 +7,7 @@ const getTokenImage = (tile, facing) => {
   return '../tokens/' + prefix + tile.name + suffix + '.svg';
 }
 
-const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location = null, target = null, activate }) => {
+const ShogiPiece = ({ inPlay = true, tile, set, player = null, local = true, location = null, target = null, activate }) => {
   let tileFaces = inPlay ? tile.color === player.color ? player.facing : 'south' : 'north';
   let canActivate = local && player && player.color === tile.color && location && target;
   let tileStyle = {
@@ -18,7 +18,7 @@ const ShogiPiece = ({ inPlay = true, tile, player = null, local = true, location
       className="shogi__token"
       onClick={() => canActivate && activate(location, target)}
     >
-      <Piece piece={tile.name} facing={tileFaces} color={tile.color} promoted={tile.isPromoted} />
+      <Piece setId={set} piece={tile.name} facing={tileFaces} color={tile.color} promoted={tile.isPromoted} />
     </a>
   )
 }

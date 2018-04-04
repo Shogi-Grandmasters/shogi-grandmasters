@@ -9,7 +9,7 @@ import GridSpace from './GridSpace.jsx';
 
 import './ShogiBoard.css';
 
-const ShogiBoard = ({ board, selected, hints, player, isTurn, togglePiece, movePiece }) => (
+const ShogiBoard = ({ board, set, selected, hints, player, isTurn, togglePiece, movePiece }) => (
   <div className="shogi__board">
     {board.map((row, ri) =>
       row.map((cell, ci) =>
@@ -24,6 +24,7 @@ const ShogiBoard = ({ board, selected, hints, player, isTurn, togglePiece, moveP
           turn={isTurn}
           activate={togglePiece}
           movePiece={movePiece}
+          set={set}
         />
     ))}
   </div>

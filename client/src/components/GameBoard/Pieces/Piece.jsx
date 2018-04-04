@@ -1,7 +1,7 @@
 import React from 'react';
 import Sets from './sets';
 
-const Piece = ({ setId = 'Symbols', piece, facing = 'north', color = 'white', promoted = false }) => {
+const Piece = ({ setId, piece, facing = 'north', color = 'white', promoted = false }) => {
   let colorThemes = {
     white: {
       fill: '#eee',

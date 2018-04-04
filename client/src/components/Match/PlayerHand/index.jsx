@@ -6,7 +6,7 @@ import ShogiPiece from '../../GameBoard/ShogiPiece.jsx';
 
 import './PlayerHand.css';
 
-const PlayerHandTile = ({ player, local, piece, count, selected = null, activate }) => {
+const PlayerHandTile = ({ player, local, piece, set, count, selected = null, activate }) => {
   let tile = new GameTile(pieceNameFromBoardId(piece), player.color, [10, 10]);
   // set active hover for owned pieces
   let tileStyles = ['player__hand-tile', player.facing];
@@ -28,13 +28,14 @@ const PlayerHandTile = ({ player, local, piece, count, selected = null, activate
         player={player}
         local={local}
         activate={activate}
+        set={set}
       />
       <div className="player__hand-count">{count}</div>
     </div>
   )
 }
 
-const PlayerHand = ({ player, hand, local, selected, activate, visibility, toggle }) => {
+const PlayerHand = ({ player, hand, set, local, selected, activate, visibility, toggle }) => {
   hand = hand.reduce((counts, piece) => {
     counts[piece] = counts[piece] + 1 || 1;
     return counts;
@@ -59,6 +60,7 @@ const PlayerHand = ({ player, hand, local, selected, activate, visibility, toggl
             count={count}
             selected={selected}
             activate={activate}
+            set={set}
           />
         )}
       </div>

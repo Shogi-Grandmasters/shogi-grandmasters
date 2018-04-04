@@ -16,13 +16,14 @@ const LogCheck = ({ color, check, checkmate }) => (
   </div>
 );
 
-const LogCapture = ({ color, capturedPiece }) => (
+const LogCapture = ({ set, color, capturedPiece }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
     <div className="match__log-piece">
       <ShogiPiece
         inPlay={false}
         tile={capturedPiece}
+        set={set}
       />
     </div>
     <div className="match__log-event">
@@ -32,7 +33,7 @@ const LogCapture = ({ color, capturedPiece }) => (
   </div>
 );
 
-const LogPromote = ({ color, piece }) => {
+const LogPromote = ({ set, color, piece }) => {
   let before = new GameTile(pieceNameFromBoardId(piece), color, [10,10], false);
   let after = new GameTile(pieceNameFromBoardId(piece), color, [10,10], true);
   return (
@@ -42,6 +43,7 @@ const LogPromote = ({ color, piece }) => {
         <ShogiPiece
           inPlay={false}
           tile={after}
+          set={set}
         />
       </div>
       <div className="match__log-event">
@@ -52,13 +54,14 @@ const LogPromote = ({ color, piece }) => {
   );
 }
 
-const LogMove = ({ color, piece, moveType, notation }) => (
+const LogMove = ({ set, color, piece, moveType, notation }) => (
   <div className="match__log-item">
     <div className={`match__log-color ${color}`}></div>
     <div className="match__log-piece">
       <ShogiPiece
         inPlay={false}
         tile={new GameTile(pieceNameFromBoardId(piece), color, [10, 10], piece.length > 1)}
+        set={set}
       />
     </div>
     <div className="match__log-event">
@@ -68,7 +71,7 @@ const LogMove = ({ color, piece, moveType, notation }) => (
   </div>
 );
 
-const MatchLog = ({ events, visibility, toggle }) => {
+const MatchLog = ({ set, events, visibility, toggle }) => {
   let logStyles = ['match__log'];
   visibility ? logStyles.push('shown') : logStyles.push('hidden');
   return (
@@ -78,10 +81,10 @@ const MatchLog = ({ events, visibility, toggle }) => {
             {events.map((event, ei) => {
               let moveType = event.notation.indexOf('*') >= 0 ? 'Drop' : event.notation.indexOf('x') >= 0 ? 'Capture' : 'Move';
               let eventBreakout = [];
-              (event.check || event.checkmate) && eventBreakout.push(<LogCheck key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} check={event.check} checkmate={event.checkmate} />);
-              event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} />);
-              moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`} color={event.move.color} capturedPiece={event.move.capturedPiece} />)
-            eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} piece={event.move.piece} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} />);
+              (event.check || event.checkmate) && eventBreakout.push(<LogCheck key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} check={event.check} checkmate={event.checkmate} set={set} />);
+              event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} set={set} />);
+              moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`} color={event.move.color} capturedPiece={event.move.capturedPiece} set={set} />)
+              eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} piece={event.move.piece} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} set={set} />);
               return [...eventBreakout];
             })}
         </div>
