@@ -1,0 +1,54 @@
+/*
+pale red: f15a4a
+light tan: d0c7af
+mid tan: b0a091
+dark tan: 4d443b
+light blue: 485562
+mid blue: 2c343f
+dark blue: 14151b
+*/
+
+.modal__glyphs {
+  height: 300px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 4px;
+}
+
+.modal__glyph-list {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 170px;
+}
+
+.glyph__option {
+  width: 50px;
+  height: 90px;
+  margin: 4px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  cursor: pointer;
+}
+
+.glyph__name {
+  color: rgba(208, 199, 175, 0.8);
+  text-shadow: 1px 1px 0px #14151b;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 4px;
+}
+
+.glyph__name.glyph__selected {
+  color: rgba(255, 255, 255, 1.0);
+  text-shadow:
+    1px 1px 0px #14151b,
+    1px 1px 2px #f15a4a;
+}
+
+.taller {
+  top: 35%;
+  height: 200px;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import ShogiPiece from './ShogiPiece.jsx';
 
-const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, player, turn, activate, movePiece }) => {
+const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece = null, set, player, turn, activate, movePiece }) => {
   let classNames = ['space'];
   let [x, y] = coords;
   let promotes = x < 3 ? 'white' : x > 5 ? 'black' : null;
@@ -31,6 +31,7 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
           tile={piece}
           player={player}
           activate={activate}
+          set={set}
         /> : ' '}
     </div>
   );
