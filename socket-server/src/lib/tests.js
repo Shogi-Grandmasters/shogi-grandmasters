@@ -98,66 +98,6 @@ export const test = () => {
   }
 
   testBoard = [
-    ["L", "N", "S", "G", "K", "G", "S", "N", "L"],
-    [" ", "R", " ", " ", " ", " ", " ", "B", " "],
-    ["P", "P", "P", "P", " ", "P", "P", "P", "P"],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    ["p", "p", "p", "p", " ", "p", "p", "p", "p"],
-    [" ", "b", " ", " ", "r", " ", " ", " ", " "],
-    ["l", "n", "s", "g", "k", "g", "s", "n", "l"]
-  ];
-  testKings = {};
-  testHands = { white: [], black: [] };
-  testTile = new GameTile("Rook", "white", [7, 4]);
-  result = isCheckOrMate(
-    {
-      board: testBoard,
-      kings: testKings,
-      white: testHands.white,
-      black: testHands.black
-    },
-    testTile
-  );
-  console.log("should correctly recognize check");
-  if (result[0] && !result[1] && !result[2]) {
-    passed();
-  } else {
-    failed(result);
-  }
-
-  testBoard = [
-    [" ", " ", "r", " ", "K", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " ", " ", " "]
-  ];
-  testKings = {};
-  testHands = { white: [], black: [] };
-  testTile = new GameTile("Rook", "white", [10, 10]);
-  result = isCheckOrMate(
-    {
-      board: testBoard,
-      kings: testKings,
-      white: testHands.white,
-      black: testHands.black
-    },
-    testTile
-  );
-  console.log("should recognize check from a drop");
-  if (result[0] && !result[1] && !result[2]) {
-    passed();
-  } else {
-    failed(result);
-  }
-
-  testBoard = [
     ["L", "N", "S", " ", "K", " ", "S", "N", "L"],
     [" ", " ", " ", " ", " ", " ", " ", "B", " "],
     ["P", "P", "P", " ", " ", " ", "P", "P", "P"],
