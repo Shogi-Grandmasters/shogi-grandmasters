@@ -17,8 +17,8 @@ class Leaderboard extends Component {
   async componentDidMount() {
     const { data } = await axios.get(`${REST_SERVER_URL}/api/leaderboard`);
     this.setState({
-      unrankedLeaderboard: JSON.parse(data.unrankedLeaderboard),
-      rankedLeaderboard: JSON.parse(data.rankedLeaderboard)
+      unrankedLeaderboard: JSON.parse(data.unrankedLeaderboard) || [],
+      rankedLeaderboard: JSON.parse(data.rankedLeaderboard) || []
     });
   }
 
