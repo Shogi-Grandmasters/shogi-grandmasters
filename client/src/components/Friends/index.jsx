@@ -38,11 +38,19 @@ class Friends extends Component {
             this.fetchFriends();
           })
           .catch(err => {
+<<<<<<< HEAD
             console.log('Error adding: ', username);
           });
       })
       .catch(err => {
         console.log('Error finding: ', username);
+=======
+            console.log('2nd promise error', err);
+          });
+      })
+      .catch(err => {
+        console.log('1st promise error', err);
+>>>>>>> removed console logs
       });
   }
 
