@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 import OnlineFriends from "../../Friends/OnlineFriends.jsx";
+import ChatPopup from "../Chat/popup.jsx";
 import randomstring from "randomstring";
 
 import "./FriendChallenge.css";
 import duel from "../../../../5fb83b603cb5c95c8cbdffb9cb379888.png";
+import scroll from "../../../../58df55f617483f263a3c2880d16ce947.png";
 
 const { REST_SERVER_URL, AVATAR_URL } = process.env;
 
@@ -15,7 +17,8 @@ class FriendChallenge extends Component {
       users: {},
       friends: [],
       selectedFriend: "",
-      openChallenges: []
+      openChallenges: [],
+      activePopups: []
     };
   }
 
@@ -50,7 +53,6 @@ class FriendChallenge extends Component {
       "server.challengeAccepted",
       ({ matchId, black, white }) => {
         (this.id === black || this.id === white) &&
-          this.props.socket.close();
           this.props.history.push({
             pathname: `/match/${matchId}`,
             state: { matchId, black, white },
@@ -69,25 +71,44 @@ class FriendChallenge extends Component {
         this.fetchOpenChallenges(friends);
       }
     });
+
+    this.props.socket.on("server.popupChat", message => {
+      if (message.friend_id === this.id) {
+        for (let friend of this.state.friends) {
+          message.user_id === friend.id && this.props.showActivePopups(friend);
+        }
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.socket.close();
   }
 
   fetchFriends = async () => {
     const { data } = await axios.get(
       `${REST_SERVER_URL}/api/friends/fetchFriends/${this.id}`,
       {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" }
       }
     );
-    this.setState({ friends: data.filter(friend => friend.id !== this.id && friend.status === 1) });
+    this.setState({
+      friends: data.filter(
+        friend => friend.id !== this.id && friend.status === 1
+      )
+    });
   };
 
   fetchOpenChallenges = async (friends = this.state.friends) => {
-    let { data } = await axios.get(`${REST_SERVER_URL}/api/openMatches`, {
-      params: { id: this.id }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    let { data } = await axios.get(
+      `${REST_SERVER_URL}/api/openMatches`,
+      {
+        params: { id: this.id }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     data.forEach(challenge => {
       for (let friend of friends) {
         (challenge.player1 === friend.id || challenge.player2 === friend.id) &&
@@ -98,7 +119,11 @@ class FriendChallenge extends Component {
   };
 
   async handleFriendSelect(user) {
-    await this.setState({ selectedFriend: user });
+    !this.state.activePopups.filter(friend => friend.id === user.id).length &&
+      (await this.setState({
+        selectedFriend: user,
+        activePopups: [...this.state.activePopups, user]
+      }));
   }
 
   async handleChallengeFriendClick(user) {
@@ -124,28 +149,34 @@ class FriendChallenge extends Component {
   async handleAcceptChallengeClick(e) {
     const matchId = randomstring.generate();
     const { id, player1, player2 } = JSON.parse(e.target.value);
-    await axios.delete(`${REST_SERVER_URL}/api/openmatches`, {
-      data: { id }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    await axios.delete(
+      `${REST_SERVER_URL}/api/openmatches`,
+      {
+        data: { id }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     this.props.socket.emit("client.acceptChallenge", {
       matchId,
       black: player1,
       white: player2,
-      type: 2,
+      type: 2
     });
   }
 
   async handleRejectChallengeClick(e) {
     const { id, player1, player2 } = JSON.parse(e.target.value);
-    await axios.delete(`${REST_SERVER_URL}/api/openmatches`, {
-      data: { id }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-    });
+    await axios.delete(
+      `${REST_SERVER_URL}/api/openmatches`,
+      {
+        data: { id }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     this.props.socket.emit("client.rejectChallenge", { player1, player2 });
   }
 
@@ -240,14 +271,17 @@ class FriendChallenge extends Component {
           {this.state.friends.map((user, index) => (
             <div className="online-friend-container" key={index}>
               <div className="online-friend-wrapper">
-              <img
-                className="online-friend-avi"
-                src={`${AVATAR_URL}/${
-                  user.avatar
-                }`}
-              />
-              <b className="online-username">{user.username}</b>
-              <a>{this.renderChallengeButton(user)}</a>
+                <img
+                  className="online-friend-avi"
+                  src={`${AVATAR_URL}/${user.avatar}`}
+                />
+                <b className="online-username">{user.username}</b>
+                <img
+                  className="online-message-icon"
+                  src={scroll}
+                  onClick={() => this.props.showActivePopups(user)}
+                />
+                <a>{this.renderChallengeButton(user)}</a>
               </div>
               <hr />
             </div>

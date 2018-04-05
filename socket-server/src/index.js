@@ -20,7 +20,7 @@ io.on("connection", client => {
   each(clientEvents, (handler, event) => {
     client.on(event, handler.bind(null, { io, client, room }));
   });
-  
+
   //add user to home and set loggedOn status to true
   const users = room.get("users");
   if (userId && username) {

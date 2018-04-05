@@ -1,0 +1,123 @@
+.match__chat-container {
+  padding: 8px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  color: #d0c7af;
+  background-color: #2c343f;
+}
+
+.match__chat-container input {
+  padding-right: 40px;
+  width: 65vw;
+  height: 32px;
+  line-height: 24px;
+  font-size: 12px;
+  background-color: #485562;
+  border: solid 1px rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: #d0c7af;
+}
+
+.match__chat-container button {
+  position: relative;
+  right: -65vw;
+  top: -36px;
+  font-size: 12px;
+  height: 32px;
+  width: 40px;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.match__chat-container strong {
+  font-size: 18px;
+  margin-right: 8px;
+  font-family: 'Oswald';
+  color: #e0dbcb;
+}
+
+.match__chat-actions {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat__input {
+  width: 65vw;
+  height: 40px;
+}
+
+.chatbox {
+  display: flex;
+  flex-flow: column-reverse nowrap;
+  align-content: flex-end;
+}
+
+.chat__message {
+  padding: 8px 4px;
+  line-height: 24px;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.match__chat {
+  z-index: 200;
+  position: absolute;
+  height: 100vh;
+  width: 80vw;
+  display: grid;
+  grid-template-rows: 9fr 1fr;
+  transition: all 0.4s ease;
+  background-color: #2c343f;
+}
+.match__chat.hidden {
+  left: -80vw;
+}
+.match__chat.shown {
+  left: 0vw;
+}
+
+@media screen and (min-device-width: 740px) {
+
+  .match__chat {
+    width: 45vw;
+  }
+  .chat__input {
+    width: 35vw;
+    height: 40px;
+  }
+  .match__chat-container input {
+    width: 35vw;
+  }
+  .match__chat-container button {
+    right: -35vw;
+  }
+}
+
+@media screen and (min-device-width: 1025px) {
+  .match__chat, .match__chat.hidden {
+    position: relative;
+    height: 100vh;
+    left: 0px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-content: center;
+    justify-content: flex-end;
+  }
+  .match__chat-actions {
+    display: none;
+  }
+  .chat__close {
+    display: none;
+  }
+  .chat__input {
+    width: 220px;
+  }
+  .match__chat-container input {
+    width: 180px;
+  }
+  .match__chat-container button {
+    right: -180px;
+  }
+}

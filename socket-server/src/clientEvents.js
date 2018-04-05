@@ -21,8 +21,9 @@ import {
   serverLoadMessages,
   serverGameReady,
   serverSendMessages,
+  serverSendPopupMessages,
   serverHomeChat,
-  serverGameChat,
+  serverPopupChat,
   serverUpdateGames,
   serverPlayerMove,
   serverConcludeMatch,
@@ -89,14 +90,19 @@ const clientDisconnect = ({ io, client, room }) => {
 const clientFetchMessages = async ({ io, client, room }, payload) => {
   success("client load message request heard");
   try {
+    const { userId, friendId } = payload;
     const { data } = await axios.get(`${REST_SERVER_URL}/api/messages`, {
-        params: { matchId: room.get("id") }
+        params: { userId, friendId }
       },
       {
         headers: { 'Content-Type': 'application/json' }
       }
     );
-    serverSendMessages({ io, client, room }, data);
+    if (userId) {
+      serverSendPopupMessages({ io, client, room }, data);
+    } else {
+      serverSendMessages({ io, client, room }, data);
+    }
   } catch (err) {
     error("error fetching messages from database. e = ", err);
   }
@@ -105,25 +111,31 @@ const clientFetchMessages = async ({ io, client, room }, payload) => {
 const clientHomeChat = async ({ io, client, room }, payload) => {
   success("client home chat heard");
   try {
+    const { content, user_id, friend_id } = payload;
     await axios.post(`${REST_SERVER_URL}/api/messages`, {
       matchId: room.get("id"),
-      message: payload.content,
-      userId: payload.userId
+      message: content,
+      userId: user_id,
+      friendId: friend_id,
     },
     {
       headers: { 'Content-Type': 'application/json' }
     }
     );
-    serverHomeChat({ io, client, room }, payload);
+    if (user_id === friend_id) {
+      serverHomeChat({ io, client, room }, payload);
+    } else {
+      serverPopupChat({ io, client, room }, payload);
+    }
   } catch (err) {
     error("client home chat error: ", err);
   }
 };
 
-const clientGameChat = async ({ io, client, room }, payload) => {
+const clientPopupChat = async ({ io, client, room }, payload) => {
   success("client game chat heard");
   try {
-    serverGameChat({ io, client, room }, payload);
+    serverPopupChat({ io, client, room }, payload);
   } catch (err) {
     error("client game chat error: ", err);
   }
@@ -296,7 +308,7 @@ const clientEmitters = {
   "client.fetchMessages": clientFetchMessages,
   "client.gameReady": clientGameReady,
   "client.homeChat": clientHomeChat,
-  "client.gameChat": clientGameChat,
+  "client.popupChat": clientPopupChat,
   "client.listOpenGames": clientListGames,
   "client.submitMove": clientSubmitMove,
   "client.challengeFriend": clientChallengeFriend,

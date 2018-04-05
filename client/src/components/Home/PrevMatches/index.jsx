@@ -23,6 +23,10 @@ class PrevMatches extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this.props.socket.close();
+  }
+
   async fetchPrevMatches() {
     let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
       params: { userId: this.state.userId }
@@ -55,7 +59,6 @@ class PrevMatches extends Component {
   async handleJoinMatchClick() {
     if (this.state.selectedMatch) {
       let { id, black, white } = this.state.selectedMatch;
-      this.props.socket.close();
       this.props.history.push({
         pathname: `/match/${id}`,
         state: {

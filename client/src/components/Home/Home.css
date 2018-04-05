@@ -13,21 +13,23 @@ button {
   background: #333;
 }
 
-.home {
-  width: 100vw;
+.home-container {
   height: 100vh;
+}
+
+.home-components {
+  width: 100vw;
+  height: 100%;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   margin: 0 auto;
 }
 
-
-
 .match_lists {
   display: grid;
   grid-template-rows: 50px auto;
-  height: 100vh;
+  height: 100%;
   align-items: center;
   /* justify-content: space-around; */
   background: radial-gradient(#fff, #eee);
