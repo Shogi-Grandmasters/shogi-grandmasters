@@ -71,6 +71,14 @@ class FriendChallenge extends Component {
         this.fetchOpenChallenges(friends);
       }
     });
+
+    this.props.socket.on("server.popupChat", message => {
+      if (message.friend_id === this.id) {
+        for (let friend of this.state.friends) {
+          message.user_id === friend.id && this.props.showActivePopups(friend);
+        }
+      }
+    });
   }
 
   componentWillUnmount() {

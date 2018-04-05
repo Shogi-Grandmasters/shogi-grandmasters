@@ -10,7 +10,6 @@ class ChatPopup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePopups: [this.props.activePopups],
       messages: [],
       message: ""
     };
@@ -22,15 +21,16 @@ class ChatPopup extends Component {
 
     this.props.socket.emit("client.fetchMessages", { userId: this.id });
 
-    await this.props.socket.on("server.popupChat", message => {
-      this.setState({ messages: [message, ...this.state.messages] });
-    });
-    await this.props.socket.on(
+    this.props.socket.on(
       `server.sendPopupMessages${this.id}`,
       messages => {
         this.setState({ messages });
       }
     );
+
+    this.props.socket.on("server.popupChat", message => {
+      this.setState({ messages: [message, ...this.state.messages] });
+    });
   }
 
   componentWillUnmount() {
@@ -57,7 +57,7 @@ class ChatPopup extends Component {
   }
 
   render() {
-    let right = 0;
+    let right = 100;
     return (
       <div className={"chat"}>
         {this.props.activePopups.map((friend, i) => (
@@ -77,11 +77,11 @@ class ChatPopup extends Component {
               <div className="popup-head-right">
                 {friend.minimized ? (
                   <a onClick={() => this.props.minimizePopup(friend.id)}>
-                    &#10010;{' '}
+                    &#10010;
                   </a>
                 ) : (
                   <a onClick={() => this.props.minimizePopup(friend.id)}>
-                    &#8212;{' '}
+                    &#8212;
                   </a>
                 )}
                 <a onClick={() => this.props.removeActivePopup(friend.id)}>
