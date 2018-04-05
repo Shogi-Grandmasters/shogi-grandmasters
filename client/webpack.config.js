@@ -29,7 +29,7 @@ const options = {
 module.exports = {
   entry: ["babel-polyfill", "./src/index.jsx"],
   output: {
-    filename: "./public/bundle.js"
+    filename: "./public/bundle.min.js"
   },
   watch: true,
   devtool: options.devTool,
@@ -77,7 +77,8 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': envVars,
-    })
+    }),
+    new webpack.optimize.UglifyJsPlugin({ minimize: true })
   ]
   // plugins: [
   //   new ExtractTextPlugin('./client/styles/main.css', {
