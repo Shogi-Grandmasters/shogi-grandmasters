@@ -1,4 +1,4 @@
-import {db} from "../index";
+import { db } from "../index";
 import { success, error } from "../../../lib/log";
 
 export const createMessagesTable = async () => {
@@ -12,6 +12,7 @@ export const createMessagesTable = async () => {
         friend_id INT,
         match_id TEXT NOT NULL,
         content TEXT NOt NULL,
+        created TIMESTAMP WITH TIME ZONE DEFAULT now(),
         CONSTRAINT messages_pk
           PRIMARY KEY(id),
         CONSTRAINT fk_messages_user_id
