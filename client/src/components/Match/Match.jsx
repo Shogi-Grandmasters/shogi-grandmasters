@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import debounce from 'lodash/debounce';
 
 import { boardIds, oppositeBoardSide } from '../../../lib/constants';
 import {
@@ -78,28 +79,6 @@ class Match extends Component {
       shogiSet: localStorage.getItem('shogiSet') || 'Traditional',
     }
     this.socket = props.socket;
-
-    this.initializeMatch = this.initializeMatch.bind(this);
-    this.getPlayer = this.getPlayer.bind(this);
-    this.togglePiece = this.togglePiece.bind(this);
-    this.toggleHints = this.toggleHints.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
-    this.toggleMobile = this.toggleMobile.bind(this);
-    this.toggleHand = this.toggleHand.bind(this);
-    this.movePiece = this.movePiece.bind(this);
-    this.commitMove = this.commitMove.bind(this);
-    this.submitMove = this.submitMove.bind(this);
-    this.receiveMove = this.receiveMove.bind(this);
-    this.moveWillPromote = this.moveWillPromote.bind(this);
-    this.promptForPromote = this.promptForPromote.bind(this);
-    this.confirmPromoteChoice = this.confirmPromoteChoice.bind(this);
-    this.promptToConcede = this.promptToConcede.bind(this);
-    this.confirmConcedeChoice = this.confirmConcedeChoice.bind(this);
-    this.toggleOptions = this.toggleOptions.bind(this);
-    this.confirmOptionsChange = this.confirmOptionsChange.bind(this);
-    this.concludeMatch = this.concludeMatch.bind(this);
-    this.quit = this.quit.bind(this);
-    this.removeFromHand = this.removeFromHand.bind(this);
   }
 
   componentDidMount() {
@@ -108,7 +87,7 @@ class Match extends Component {
     this.socket.on("server.concludeMatch", this.concludeMatch);
   }
 
-  initializeMatch() {
+  initializeMatch = () => {
     let updateBoard = this.state.localColor === 'black' ? reverseBoard(this.state.board) : copyMatrix(this.state.board);
     let isTurn = this.props.match.turn ? this.state.localColor === 'black' : this.state.localColor === 'white';
 
@@ -118,11 +97,11 @@ class Match extends Component {
     });
   }
 
-  getPlayer(which = 'local') {
+  getPlayer = (which = 'local') => {
     return which === 'opponent' ? this.state.players[this.state.opponentColor] : this.state.players[this.state.localColor];
   }
 
-  toggleMenu() {
+  toggleMenu = () => {
     let choices = [
       {
         cta: 'Options',
@@ -144,7 +123,7 @@ class Match extends Component {
     this.toggleModal(content)
   }
 
-  toggleModal(content = null) {
+  toggleModal = (content = null) => {
     this.setState(prevState => ({
       pendingDecision: content ? prevState.pendingDecision : false,
       showModal: content ? true : false,
@@ -152,31 +131,31 @@ class Match extends Component {
     }))
   }
 
-  toggleOptions() {
+  toggleOptions = () => {
     let content = <GlyphChoiceMenu callback={this.confirmOptionsChange} />;
     this.toggleModal(content);
   }
 
-  confirmOptionsChange(set) {
+  confirmOptionsChange = (set) => {
     this.setState({
       shogiSet: set,
     })
     this.toggleModal();
   }
 
-  capture([x, y]) {
+  capture = ([x, y]) => {
     let pieceToCapture = this.state.board[x][y];
     pieceToCapture = pieceToCapture[0];
     return this.state.localColor === 'white' ? pieceToCapture.toLowerCase() : pieceToCapture.toUpperCase();
   }
 
-  removeFromHand(piece, hand) {
+  removeFromHand = (piece, hand) => {
     let removePoint = hand.indexOf(piece);
     hand.splice(removePoint, 1);
     return hand;
   }
 
-  promptForPromote(coords) {
+  promptForPromote = (coords) => {
     let choices = [
       {
         cta: 'Yes',
@@ -193,7 +172,7 @@ class Match extends Component {
     this.toggleModal(content);
   }
 
-  confirmPromoteChoice(choice) {
+  confirmPromoteChoice = (choice) => {
     if (this.state.pendingMove) {
       let updateMove = { ...this.state.pendingMove };
       if (choice) {
@@ -208,7 +187,7 @@ class Match extends Component {
     }
   }
 
-  promptToConcede() {
+  promptToConcede = () => {
     let choices = [
       {
         cta: 'Yes',
@@ -225,7 +204,7 @@ class Match extends Component {
     this.toggleModal(content);
   }
 
-  confirmConcedeChoice(choice) {
+  confirmConcedeChoice = (choice) => {
     if (choice) {
       let winner = this.getPlayer('opponent').user;
       let loser = this.getPlayer('local').user;
@@ -240,7 +219,7 @@ class Match extends Component {
     this.toggleModal();
   }
 
-  moveWillPromote([fromX, fromY], [toX, toY], pieceId) {
+  moveWillPromote = ([fromX, fromY], [toX, toY], pieceId) => {
     let willPromote = false;
     let pendingInput = false;
     // if moving to the promotion zone, or moving from the promotion zone
@@ -259,7 +238,7 @@ class Match extends Component {
     return [willPromote, pendingInput];
   }
 
-  movePiece([x, y]) {
+  movePiece = debounce( ([x, y]) => {
     if (this.state.selected) {
       let { location, target } = this.state.selected;
 
@@ -280,7 +259,7 @@ class Match extends Component {
           to: [x, y],
           didCapture: false,
         },
-      };
+      }
 
       if (location === 'board') {
         let [fromX, fromY] = action.move.from;
@@ -314,12 +293,21 @@ class Match extends Component {
         pendingMove: action,
       }, () => !this.state.pendingDecision && this.commitMove());
     }
-  }
+  }, 500);
 
-  receiveMove({ log, status, before, after, move }) {
+  receiveMove = ({ log, status, before, after, move }) => {
+    if (!status.success) {
+      this.announce(status.messages.join('\n'));
+      this.setState({
+        pendingMove: false,
+        pendingDecision: false,
+        selected: null,
+      }, () => console.log('move rejected: ', status.messages));
+      return;
+    }
     if (status.checkmate) {
-      let winner = move.color === this.state.localColor ? this.getPlayer('local').user : this.getPlayer('opponent').user;
-      let loser = move.color === this.state.localColor ?  this.getPlayer('opponent').user : this.getPlayer('local').user;
+      let winner = this.state.players[move.color].user;
+      let loser = move.color === 'white' ? this.state.players.black.user : this.state.players.white.user;
       if (winner.id === this.getPlayer('local').user.id) {
         this.socket.emit("client.endGame", {
           matchId: this.state.matchId,
@@ -334,8 +322,7 @@ class Match extends Component {
       this.announce(message);
     }
     let { board, white, black } = after;
-    // boards are sent around from the perspective of each player, so
-    // the board must be flipped around when the move received comes from the other player
+
     board = move.color === this.state.localColor ? board : reverseBoard(board);
     let hands = {
       white,
@@ -354,7 +341,7 @@ class Match extends Component {
     }));
   }
 
-  announce(message) {
+  announce = (message) => {
     let choices = [{
       cta: 'OK',
       action: this.toggleModal,
@@ -364,7 +351,7 @@ class Match extends Component {
     this.toggleModal(content);
   }
 
-  concludeMatch({ winner, loser, status }) {
+  concludeMatch = ({ winner, loser, status }) => {
     let headline = winner.id === this.getPlayer('local').user.id ? 'YOU WIN' : 'YOU LOSE';
     let subheadline = status === 1 ? 'Checkmate' : winner.id === this.getPlayer('local').user.id ? 'Your opponent conceded the match' : 'You gave up. Quitter.';
     let choices = [{
@@ -376,7 +363,7 @@ class Match extends Component {
     this.toggleModal(content);
   }
 
-  submitMove(matchId, before, after, move) {
+  submitMove = (matchId, before, after, move) => {
     this.socket.emit("client.submitMove", {
       matchId,
       before,
@@ -385,7 +372,7 @@ class Match extends Component {
     });
   }
 
-  commitMove() {
+  commitMove = () => {
     if (this.state.pendingMove) {
       let { before, after, move } = this.state.pendingMove;
       // state is updated on the way back from the server
@@ -393,7 +380,7 @@ class Match extends Component {
     }
   }
 
-  togglePiece(location, target) {
+  togglePiece = (location, target) => {
     let updateSelected;
     let current = this.state.selected;
 
@@ -423,7 +410,7 @@ class Match extends Component {
     }, () => this.toggleHints());
   }
 
-  toggleHints() {
+  toggleHints = () => {
     if (this.state.selected) {
       if (this.state.selected.location === 'board') {
         let selectedPiece = gameTileAtCoords(this.state.board, this.state.selected.target);
@@ -445,14 +432,14 @@ class Match extends Component {
     }
   }
 
-  toggleMobile(target) {
+  toggleMobile = (target) => {
     let updateVisible = target === this.state.showMobileSidebar ? null : target;
     this.setState({
       showMobileSidebar: updateVisible,
     })
   }
 
-  toggleHand(color) {
+  toggleHand = (color) => {
     if (color === 'white') {
       let updateHandVisiblity = !this.state.showHandWhite;
       this.setState({
@@ -466,7 +453,7 @@ class Match extends Component {
     }
   }
 
-  quit() {
+  quit = () => {
     this.socket.close();
     this.props.history.replace({
       pathname: `/home`,
