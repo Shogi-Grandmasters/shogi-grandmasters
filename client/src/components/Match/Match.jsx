@@ -450,7 +450,6 @@ class Match extends Component {
           hints: selectedPiece.findMoves(this.state.board),
         });
       } else {
-        console.log(this.state.selected);
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(pieceNameFromBoardId(piece), playerColor, [10, 10]);
         let validLocations = validDropLocations(this.state.board, gameTile);

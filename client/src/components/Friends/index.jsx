@@ -21,7 +21,7 @@ class Friends extends Component {
   componentDidMount() {
     this.fetchFriends();
   }
-  
+
   addFriend = (e) => {
     e.preventDefault(); //Without this line 2nd axios call breaks
     const { username } = this.state;
@@ -38,11 +38,11 @@ class Friends extends Component {
             this.fetchFriends();
           })
           .catch(err => {
-            console.log('2nd promise error');
+            console.log('2nd promise error', err);
           });
       })
       .catch(err => {
-        console.log('1st promise error');
+        console.log('1st promise error', err);
       });
   }
 

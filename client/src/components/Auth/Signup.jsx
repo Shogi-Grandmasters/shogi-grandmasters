@@ -16,7 +16,6 @@ class Signup extends Component {
     e.preventDefault();
     const { email, password, username } = this.state;
     const body = { email, password, username };
-    console.log(body);
     try {
       const data = await axios.post(`${REST_SERVER_URL}/api/auth/signup`, body, {
         headers: { 'Content-Type': 'application/json' }
