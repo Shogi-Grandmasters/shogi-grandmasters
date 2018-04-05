@@ -296,9 +296,18 @@ class Match extends Component {
   }, 500);
 
   receiveMove = ({ log, status, before, after, move }) => {
+    if (!status.success) {
+      this.announce(status.messages.join('\n'));
+      this.setState({
+        pendingMove: false,
+        pendingDecision: false,
+        selected: null,
+      }, () => console.log('move rejected: ', status.messages));
+      return;
+    }
     if (status.checkmate) {
-      let winner = move.color === this.state.localColor ? this.getPlayer('local').user : this.getPlayer('opponent').user;
-      let loser = move.color === this.state.localColor ?  this.getPlayer('opponent').user : this.getPlayer('local').user;
+      let winner = this.state.players[move.color].user;
+      let loser = move.color === 'white' ? this.state.players.black.user : this.state.players.white.user;
       if (winner.id === this.getPlayer('local').user.id) {
         this.socket.emit("client.endGame", {
           matchId: this.state.matchId,
@@ -313,8 +322,6 @@ class Match extends Component {
       this.announce(message);
     }
     let { board, white, black } = after;
-    // boards are sent around from the perspective of each player, so
-    // the board must be flipped around when the move received comes from the other player
     board = move.color === this.state.localColor ? board : reverseBoard(board);
     let hands = {
       white,

@@ -101,8 +101,8 @@ const Symbols = (palette, piece) => {
       <line x1="20.69" y1="32.46" x2="13.6" y2="39.55" style={{ fill: 'none', stroke: palette.text, miterLimit: 10 }} />
       <line x1="20.69" y1="26.79" x2="13.61" y2="19.71" style={{ fill: 'none', stroke: palette.text, miterLimit: 10 }} />
     </g>;
-  sym.Silver.promoted, sym.Pawn.promoted, sym.Lance.promoted, sym.Knight.promoted =
-    <g id="Gold">
+  let promotedGoldPattern =
+    <g id="promote to gold">
       <circle cx="23.52" cy="29.63" r="2.15" style={{ fill: palette.promoted }} />
       <line x1="23.52" y1="25.62" x2="23.52" y2="15.6" style={{ fill: 'none', stroke: palette.promoted, miterLimit: 10 }} />
       <line x1="26.36" y1="26.79" x2="33.44" y2="19.71" style={{ fill: 'none', stroke: palette.promoted, miterLimit: 10 }} />
@@ -110,8 +110,13 @@ const Symbols = (palette, piece) => {
       <line x1="23.52" y1="33.64" x2="23.52" y2="43.66" style={{ fill: 'none', stroke: palette.promoted, miterLimit: 10 }} />
       <line x1="19.51" y1="29.63" x2="9.5" y2="29.63" style={{ fill: 'none', stroke: palette.promoted, miterLimit: 10 }} />
       <line x1="20.69" y1="26.79" x2="13.61" y2="19.71" style={{ fill: 'none', stroke: palette.promoted, miterLimit: 10 }} />
-
     </g>;
+
+  sym.Silver.promoted = promotedGoldPattern;
+  sym.Pawn.promoted = promotedGoldPattern;
+  sym.Lance.promoted = promotedGoldPattern;
+  sym.Knight.promoted = promotedGoldPattern;
+
   sym.Knight.default =
     <g id="knight">
       <circle cx="23.52" cy="29.63" r="2.15" style={{ fill: palette.text }} />

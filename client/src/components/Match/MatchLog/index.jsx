@@ -81,7 +81,7 @@ const MatchLog = ({ set, events, visibility, toggle }) => {
             {events.map((event, ei) => {
               let moveType = event.notation.indexOf('*') >= 0 ? 'Drop' : event.notation.indexOf('x') >= 0 ? 'Capture' : 'Move';
               let eventBreakout = [];
-              (event.check || event.checkmate) && eventBreakout.push(<LogCheck key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} check={event.check} checkmate={event.checkmate} set={set} />);
+              (event.check || event.checkmate) && eventBreakout.push(<LogCheck key={`${ei}:${event.moveNumber}:check`} color={event.move.color} check={event.check} checkmate={event.checkmate} set={set} />);
               event.move.didPromote && eventBreakout.push(<LogPromote key={`${ei}:${event.moveNumber}:promote`} color={event.move.color} piece={event.move.piece} set={set} />);
               moveType === 'Capture' && eventBreakout.push(<LogCapture key={`${ei}:${event.moveNumber}:capture`} color={event.move.color} capturedPiece={event.move.capturedPiece} set={set} />)
               eventBreakout.push(<LogMove key={`${ei}:${event.moveNumber}:movement`} color={event.move.color} piece={event.move.piece} moveType={moveType === 'Capture' ? 'Move' : moveType} notation={event.notation} set={set} />);
