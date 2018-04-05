@@ -14,9 +14,8 @@ export const pieceNameFromBoardId = (id) => {
   return boardIds[id];
 }
 
-export const validDropLocations = (board, kings, tile) => {
+export const validDropLocations = (board, tile) => {
   board = copyMatrix(board);
-  kings = findKings(board);
   let validDrops = [];
   let pawnLocs = [];
 
@@ -35,14 +34,13 @@ export const validDropLocations = (board, kings, tile) => {
     })
   );
 
-  let reverseKings;
   board.forEach((row, r) =>
     row.forEach((col, c) => {
+      let boardCopy = copyMatrix(board);
       if (col === " ") {
         if (r > 0 || (tile.name !== "Lance" && tile.name !== "Pawn")) {
           if (r > 1 || tile.name !== "Knight") {
             if (tile.name !== "Pawn" || !pawnLocs.includes(c)) {
-              let boardCopy = copyMatrix(board);
               boardCopy[r][c] = tile.color === 'white' ? 'p' : 'P';
               let pt = new GameTile("Pawn", tile.color, [r, c]);
               if (
@@ -50,11 +48,10 @@ export const validDropLocations = (board, kings, tile) => {
                 !isCheckOrMate(
                   {
                     board: boardCopy,
-                    kings: kings,
                     white: [],
                     black: []
                   },
-                  new GameTile("Pawn", tile.color, [r, c])
+                  tile.color
                 )[1]
               ) {
                 validDrops.push([r, c]);
@@ -69,22 +66,21 @@ export const validDropLocations = (board, kings, tile) => {
   return validDrops;
 };
 
-export const isCheckOrMate = (gameState, movedTile) => {
+export const isCheckOrMate = (gameState, playerColor) => {
   let check = false;
   let checkmate = false;
   let lock = false;
-
-  gameState.kings = findKings(gameState.board);
+  let kings = findKings(gameState.board);
 
   // find and collect pieces threatening the king along with their movesets
   const threats = {};
   gameState.board.forEach((row, r) => row.forEach((col, c) => {
     if (col !== ' ') {
-      if (movedTile.color === 'white') {
+      if (playerColor === 'white') {
         if (col.charCodeAt(0) > 90) {
           let p = new GameTile(pieceNameFromBoardId(col), 'white', [r, c], col.length > 1);
           let moveSet = p.findMoves(gameState.board);
-          if (includesLoc(moveSet, gameState.kings[oppositeColor(movedTile.color)])) {
+          if (includesLoc(moveSet, kings[oppositeColor(playerColor)])) {
             threats[r * 10 + c] = { piece: p, moves: moveSet };
           }
         }
@@ -92,7 +88,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
         if (col.charCodeAt(0) < 91) {
           let p = new GameTile(pieceNameFromBoardId(col), 'black', [r, c], col.length > 1);
           let moveSet = p.findMoves(gameState.board);
-          if (includesLoc(moveSet, gameState.kings[oppositeColor(movedTile.color)])) {
+          if (includesLoc(moveSet, kings[oppositeColor(playerColor)])) {
             threats[r * 10 + c] = { piece: p, moves: moveSet };
           }
         }
@@ -103,14 +99,14 @@ export const isCheckOrMate = (gameState, movedTile) => {
 
   // find opponent's team's moveSet
   const boardCopy = reverseBoard(gameState.board);
-  let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(movedTile.color), true).map(move => reverseLoc(move));
+  let teamMoves = getCombinedMoveSet(boardCopy, oppositeColor(playerColor), true).map(move => reverseLoc(move));
 
   // add all valid drop locations for pieces in that player's hand
-  gameState[oppositeColor(movedTile.color)] &&
-    gameState[oppositeColor(movedTile.color)].forEach(p => {
-      let temp = validDropLocations(copyMatrix(gameState.board), gameState.kings, new GameTile(
+  gameState[oppositeColor(playerColor)] &&
+    gameState[oppositeColor(playerColor)].forEach(p => {
+      let temp = validDropLocations(copyMatrix(gameState.board), new GameTile(
         pieceNameFromBoardId(p),
-        oppositeColor(movedTile.color),
+        oppositeColor(playerColor),
         [10, 10]
       ));
       teamMoves = teamMoves.concat(temp);
@@ -124,8 +120,8 @@ export const isCheckOrMate = (gameState, movedTile) => {
     // get available moves for king that is now in check
     let king = new GameTile(
       "King",
-      oppositeColor(movedTile.color),
-      reverseLoc(gameState.kings[oppositeColor(movedTile.color)])
+      oppositeColor(playerColor),
+      reverseLoc(kings[oppositeColor(playerColor)])
     );
     kingsMoves = king.findMoves(reverseBoard(gameState.board))//.map(move => reverseLoc(move));
 
@@ -148,7 +144,7 @@ export const isCheckOrMate = (gameState, movedTile) => {
           } else {
             // find spaces between king and threat
             tile.spaceBetween = findSpaceFrom(
-              gameState.kings[oppositeColor(movedTile.color)],
+              kings[oppositeColor(playerColor)],
               tile.piece.loc);
 
             // check combined moves for any squares that could protect the king
@@ -208,21 +204,20 @@ export const getCombinedMoveSet = (board, color, _test = false) => {
 };
 
 export const isValidMove = (gameStateBefore, gameStateAfter, tile, loc) => {
-  gameStateBefore.kings = findKings(gameStateBefore.board);
-  gameStateAfter.kings = findKings(gameStateAfter.board);
-  if (isCheckOrMate({ board: gameStateAfter.board, kings: gameStateAfter.kings }, tile)[0]) {
+  if (isCheckOrMate(gameStateAfter, oppositeColor(tile.color))[0]) {
     return [false, 'Move would put you in Check'];
   }
+
   let moveSet;
   if (includesLoc([tile.loc], [10, 10])) {
     moveSet = validDropLocations(
       gameStateBefore.board,
-      gameStateBefore.kings,
       tile
     );
   } else {
     moveSet = tile.findMoves(gameStateBefore.board);
   }
+
   let canMoveThere = includesLoc(moveSet, loc);
   return [canMoveThere, 'Invalid destination.  Piece cannot move there'];
 };
