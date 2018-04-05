@@ -120,9 +120,13 @@ dark blue: 14151b
 }
 
 .player__hand-tile.blink__from {
+  background-color: rgba(241, 90, 74, 0.0);
+  transition: background-color 0.25s ease;
   animation: firstBlink 2s once;
 }
 .player__hand-tile.blink__to {
+  background-color: rgba(241, 90, 74, 0.0);
+  transition: background-color 0.25s ease;
   animation: secondBlink 2s once;
 }
 @keyframes firstBlink {

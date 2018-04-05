@@ -12,8 +12,8 @@ const GridSpace = ({ coords, hints = [], selected = null, owned = false, piece =
     classNames.push('selected');
   }
   // flashes from first, to second for move replay
-  if (animate && animate.type === 'board') {
-    if (animate.from[0] === x && animate.from[1] === y) {
+  if (animate) {
+    if (animate.type === 'board' && animate.from[0] === x && animate.from[1] === y) {
       classNames.push('blink__from');
     } else if ( animate.to[0] === x && animate.to[1] === y) {
       classNames.push('blink__to');
