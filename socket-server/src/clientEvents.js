@@ -226,7 +226,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
     let [validMove, moveError] = isValidMove(before, after, new GameTile(pieceNameFromBoardId(move.piece), move.color, move.from, move.piece.length > 1), move.to);
     if (!validMove) messages.push(moveError);
     // board state is check or checkmate
-    console.log(after);
     let [check, checkmate] = isCheckOrMate(after, move.color);
     let gameStatus = data.status || 0;
     // save new state if the move was successful
@@ -243,7 +242,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       check,
       checkmate
     };
-    console.log(event);
     eventLog.unshift(event);
     await axios.put(`${REST_SERVER_URL}/api/matches`, {
       matchId,
