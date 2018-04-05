@@ -79,7 +79,6 @@ export const endMatchHelper = ({
 };
 
 export const historyMatchHelper = ({ id }) => {
-  console.log(id)
   return `
     SELECT * FROM matches
     WHERE (black=${id} OR white=${id})

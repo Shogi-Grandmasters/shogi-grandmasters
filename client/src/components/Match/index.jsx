@@ -21,10 +21,10 @@ class BoardIndex extends Component {
     });
 
   }
-  
+
   componentDidMount() {
     let { matchId, black, white } = this.props.location.state;
-  
+
     this.socket.emit("client.gameReady", {
       matchId,
       black,
@@ -48,7 +48,6 @@ class BoardIndex extends Component {
         type
       });
     });
-    // console.log(window.history);
     window.onpopstate = () => {
       this.socket.close();
     }
