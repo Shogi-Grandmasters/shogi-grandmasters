@@ -322,6 +322,7 @@ class Match extends Component {
       this.announce(message);
     }
     let { board, white, black } = after;
+
     board = move.color === this.state.localColor ? board : reverseBoard(board);
     let hands = {
       white,
