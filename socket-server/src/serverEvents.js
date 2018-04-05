@@ -40,7 +40,6 @@ export const serverGameReady = ({ io, client, room }, payload) => {
 };
 
 export const serverSendMessages = ({ io, client, room }, payload) => {
-  console.log("messages: ", payload);
   io.in(room.get("id")).emit("server.sendMessages", payload);
 };
 

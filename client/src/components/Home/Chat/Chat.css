@@ -52,6 +52,7 @@
 .chatbox {
   display: flex;
   flex-flow: column-reverse nowrap;
+  align-content: flex-end;
 }
 
 .chat__message {

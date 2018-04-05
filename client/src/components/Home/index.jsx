@@ -69,7 +69,6 @@ class Home extends Component {
       friend.id === id && (friend.minimized = !friend.minimized);
     }
     this.setState({ activePopups });
-    console.log(this.state.activePopups);
   }
 
   render() {

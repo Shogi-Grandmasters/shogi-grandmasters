@@ -25,7 +25,6 @@ class HomeChat extends Component {
       this.setState({ messages: [message, ...this.state.messages] });
     });
     await this.props.socket.on("server.sendMessages", messages => {
-      console.log(messages);
       this.setState({ messages });
     });
   }

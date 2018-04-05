@@ -6,6 +6,7 @@ import randomstring from "randomstring";
 
 import "./FriendChallenge.css";
 import duel from "../../../../5fb83b603cb5c95c8cbdffb9cb379888.png";
+import scroll from "../../../../58df55f617483f263a3c2880d16ce947.png";
 
 const { REST_SERVER_URL, AVATAR_URL } = process.env;
 
@@ -111,10 +112,10 @@ class FriendChallenge extends Component {
 
   async handleFriendSelect(user) {
     !this.state.activePopups.filter(friend => friend.id === user.id).length &&
-    await this.setState({
-      selectedFriend: user,
-      activePopups: [...this.state.activePopups, user]
-    });
+      (await this.setState({
+        selectedFriend: user,
+        activePopups: [...this.state.activePopups, user]
+      }));
   }
 
   async handleChallengeFriendClick(user) {
@@ -262,21 +263,22 @@ class FriendChallenge extends Component {
           {this.state.friends.map((user, index) => (
             <div className="online-friend-container" key={index}>
               <div className="online-friend-wrapper">
-              <img
-                className="online-friend-avi"
-                src={`${AVATAR_URL}/${
-                  user.avatar
-                }`}
-              />
-              <b className="online-username">{user.username}</b>
-              <div onClick={() => this.props.showActivePopups(user)}>Message</div>
-              <a>{this.renderChallengeButton(user)}</a>
+                <img
+                  className="online-friend-avi"
+                  src={`${AVATAR_URL}/${user.avatar}`}
+                />
+                <b className="online-username">{user.username}</b>
+                <img
+                  className="online-message-icon"
+                  src={scroll}
+                  onClick={() => this.props.showActivePopups(user)}
+                />
+                <a>{this.renderChallengeButton(user)}</a>
               </div>
               <hr />
             </div>
           ))}
         </div>
-        {/* <ChatPopup activePopups={this.state.activePopups} /> */}
       </div>
     );
   }
