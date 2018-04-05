@@ -25,12 +25,18 @@
 }
 
 .popup-head-right {
+  display: grid;
+  grid-template-columns: 5fr 5fr;
   float: right;
   opacity: 0.5;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
   color: #d0c7af;
+}
+
+.popup-head-right a {
+  padding-left: 4px;
 }
 
 .popup-messages {

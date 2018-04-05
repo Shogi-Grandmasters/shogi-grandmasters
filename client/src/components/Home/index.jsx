@@ -49,11 +49,15 @@ class Home extends Component {
   };
 
   showActivePopups(user) {
+    const maxPopups = Math.floor(window.innerWidth / 305);
+    const { activePopups } = this.state;
     if (
       !this.state.activePopups.filter(friend => friend.id === user.id).length
     ) {
       user.minimized = false;
-      this.setState({ activePopups: [...this.state.activePopups, user] });
+      activePopups.length >= maxPopups && activePopups.shift();
+      activePopups.push(user);
+      this.setState({ activePopups });
     }
   }
 
