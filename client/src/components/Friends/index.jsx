@@ -21,7 +21,7 @@ class Friends extends Component {
   componentDidMount() {
     this.fetchFriends();
   }
-  
+
   addFriend = (e) => {
     e.preventDefault(); //Without this line 2nd axios call breaks
     const { username } = this.state;
