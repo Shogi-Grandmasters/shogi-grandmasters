@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { unescape } from "lodash";
+import moment from "moment";
 
 import "./popup.css";
 
@@ -11,7 +12,8 @@ class ChatPopup extends Component {
     super(props);
     this.state = {
       messages: [],
-      message: ""
+      message: "",
+      timestamps: {},
     };
   }
 
@@ -21,16 +23,20 @@ class ChatPopup extends Component {
 
     this.props.socket.emit("client.fetchMessages", { userId: this.id });
 
-    this.props.socket.on(
+    await this.props.socket.on(
       `server.sendPopupMessages${this.id}`,
       messages => {
         this.setState({ messages });
+        this.setTimestamps();
       }
     );
 
     this.props.socket.on("server.popupChat", message => {
-      this.setState({ messages: [message, ...this.state.messages] });
+      const { timestamps } = this.state;
+      timestamps[message.user_id] = message.created;
+      this.setState({ messages: [message, ...this.state.messages], timestamps });
     });
+
   }
 
   componentWillUnmount() {
@@ -50,10 +56,26 @@ class ChatPopup extends Component {
         user_id: this.id,
         username: this.username,
         content: this.state.message.value,
-        friend_id: +this.state.message.id
+        friend_id: +this.state.message.id,
+        created: new Date(),
       });
     e.target.reset();
     this.setState({ message: "" });
+  }
+
+  setTimestamps() {
+    let { timestamps, messages } = this.state;
+    for (let message of messages) {
+      !timestamps[message.user_id] && message.user_id !== this.id 
+        && (timestamps[message.user_id] = message.created);
+    }
+    this.setState({ timestamps });
+  }
+
+  renderTimestamps(id) {
+    const { timestamps } = this.state;
+    return timestamps[id] 
+      ? <div className="timestamp">{moment(timestamps[id]).fromNow()}</div> : null;
   }
 
   render() {
@@ -103,15 +125,14 @@ class ChatPopup extends Component {
                       (message.friend_id === this.id ||
                         message.user_id === this.id)
                   )
-                  .map((message, i) => {
-                    return (
-                      <div className="popup-message" key={i}>
-                        <strong>{message.username}</strong>{" "}
-                        {unescape(message.content)}
-                      </div>
-                    );
-                  })}
+                  .map((message, i) => (
+                    <div className="popup-message" key={i}>
+                      <strong>{message.username}</strong>{" "}
+                      {unescape(message.content)}
+                    </div>
+                  ))}
             </div>
+            {this.renderTimestamps(friend.id)}
             <form onSubmit={e => this.handleSubmit(e)}>
               <div
                 className={

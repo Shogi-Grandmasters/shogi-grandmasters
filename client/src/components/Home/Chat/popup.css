@@ -43,6 +43,7 @@
   overflow: scroll;
   display: flex;
   flex-flow: column-reverse nowrap;
+  word-wrap: break-word;
 }
 
 .popup-message {
@@ -103,6 +104,10 @@
 
 .popup-messages-min, .popup-actions-min {
   display: none;
+}
+
+.timestamp {
+  text-align: center;
 }
 
 /* .popup-actions-min {
