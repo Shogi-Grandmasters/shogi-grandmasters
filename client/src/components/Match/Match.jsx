@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import debounce from 'lodash/debounce';
 
-import { boardIds, oppositeBoardSide } from '../../../lib/constants';
+import { boardIds, oppositeBoardSide, reverseLoc } from '../../../lib/constants';
 import {
   validDropLocations,
   copyMatrix,
@@ -76,6 +76,7 @@ class Match extends Component {
       showMobileSidebar: null,
       showHandWhite: false,
       showHandBlack: false,
+      animate: null,
       shogiSet: localStorage.getItem('shogiSet') || 'Traditional',
     }
     this.socket = props.socket;
@@ -296,11 +297,12 @@ class Match extends Component {
   }, 500);
 
   receiveMove = ({ log, status, before, after, move }) => {
-    if (!status.success) {
+    if (!status.success && move.color === this.state.localColor) {
       this.announce(status.messages.join('\n'));
       this.setState({
         pendingMove: false,
         pendingDecision: false,
+        hints: [],
         selected: null,
       }, () => console.log('move rejected: ', status.messages));
       return;
@@ -329,16 +331,46 @@ class Match extends Component {
       black
     }
 
-    this.setState(prevState => ({
-      board,
-      hands,
-      isTurn: !prevState.isTurn,
-      hints: [],
-      pendingMove: false,
-      pendingDecision: false,
-      selected: null,
-      log
-    }));
+    if (move.color !== this.state.localColor) {
+      this.animateMove(move);
+      setTimeout(() => {
+        this.setState(prevState => ({
+          board,
+          hands,
+          isTurn: !prevState.isTurn,
+          hints: [],
+          pendingMove: false,
+          pendingDecision: false,
+          selected: null,
+          animate: null,
+          log
+        }));
+      }, 2000);
+    } else {
+      this.setState(prevState => ({
+        board,
+        hands,
+        isTurn: !prevState.isTurn,
+        hints: [],
+        pendingMove: false,
+        pendingDecision: false,
+        selected: null,
+        animate: null,
+        log
+      }));
+    }
+  }
+
+  animateMove = (move) => {
+    let type = move.from[0] === 10 ? 'drop' : 'board';
+    let from = move.from[0] === 10 ? `${move.color}:${move.piece[0]}` : reverseLoc(move.from);
+    this.setState({
+      animate: {
+        type,
+        from,
+        to: reverseLoc(move.to)
+      }
+    })
   }
 
   announce = (message) => {
@@ -418,6 +450,7 @@ class Match extends Component {
           hints: selectedPiece.findMoves(this.state.board),
         });
       } else {
+        console.log(this.state.selected);
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(pieceNameFromBoardId(piece), playerColor, [10, 10]);
         let validLocations = validDropLocations(this.state.board, gameTile);
@@ -486,6 +519,7 @@ class Match extends Component {
                 visibility={this.getPlayer('opponent').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
                 toggle={this.toggleHand}
                 set={this.state.shogiSet}
+                animate={this.state.animate}
               />
             </div>
             <ShogiBoard
@@ -497,6 +531,7 @@ class Match extends Component {
               togglePiece={this.togglePiece}
               movePiece={this.movePiece}
               set={this.state.shogiSet}
+              animate={this.state.animate}
             />
             <div className="match__hand south">
               <PlayerHand
@@ -510,6 +545,7 @@ class Match extends Component {
                 visibility={this.getPlayer('local').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
                 toggle={this.toggleHand}
                 set={this.state.shogiSet}
+                animate={this.state.animate}
               />
             </div>
           </div>

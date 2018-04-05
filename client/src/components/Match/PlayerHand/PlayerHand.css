@@ -119,6 +119,30 @@ dark blue: 14151b
   margin-bottom: 0px;
 }
 
+.player__hand-tile.blink__from {
+  background-color: rgba(241, 90, 74, 0.0);
+  transition: background-color 0.25s ease;
+  animation: firstBlink 2s once;
+}
+.player__hand-tile.blink__to {
+  background-color: rgba(241, 90, 74, 0.0);
+  transition: background-color 0.25s ease;
+  animation: secondBlink 2s once;
+}
+@keyframes firstBlink {
+  0% { background-color: rgba(241, 90, 74, 0.0); }
+  25% { background-color: rgba(241, 90, 74, 1.0); }
+  50% { background-color: rgba(241, 90, 74, 0.0); }
+  100% { background-color: rgba(241, 90, 74, 0.0); }
+}
+@keyframes secondBlink {
+  0% { background-color: rgba(241, 90, 74, 0.0); }
+  50% { background-color: rgba(241, 90, 74, 0.0); }
+  75% { background-color: rgba(241, 90, 74, 1.0); }
+  100% { background-color: rgba(241, 90, 74, 0.0); }
+}
+
+
 @media screen and (min-device-width: 740px) {
   .match__hand {
     height: 80px;

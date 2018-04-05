@@ -1,7 +1,11 @@
 /*
+pale red: f15a4a
 light tan: d0c7af
 mid tan: b0a091
 dark tan: 4d443b
+light blue: 485562
+mid blue: 2c343f
+dark blue: 14151b
 */
 
 .shogi__board {
@@ -41,6 +45,29 @@ dark tan: 4d443b
   background-color: rgba(208, 199, 175, 0.5);
   margin: 0px;
   padding: 4px;
+}
+
+.space.blink__from {
+  background-color: rgba(241, 90, 74, 0.0);
+  transition: background-color 0.25s ease;
+  animation: firstBlink 2s once;
+}
+.space.blink__to {
+  background-color: rgba(241, 90, 74, 0.0);
+  transition: background-color 0.25s ease;
+  animation: secondBlink 2s once;
+}
+@keyframes firstBlink {
+  0% { background-color: rgba(241, 90, 74, 0.0); }
+  25% { background-color: rgba(241, 90, 74, 1.0); }
+  50% { background-color: rgba(241, 90, 74, 0.0); }
+  100% { background-color: rgba(241, 90, 74, 0.0); }
+}
+@keyframes secondBlink {
+  0% { background-color: rgba(241, 90, 74, 0.0); }
+  50% { background-color: rgba(241, 90, 74, 0.0); }
+  75% { background-color: rgba(241, 90, 74, 1.0); }
+  100% { background-color: rgba(241, 90, 74, 0.0); }
 }
 
 .lower-border {
