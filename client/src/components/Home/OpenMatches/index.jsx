@@ -89,8 +89,10 @@ class OpenMatches extends Component {
     return (
       <div className="open_matches">
         <div className="match_actions">
+          <br />
           <button onClick={() => this.handlePlayMatchClick(false)}>Play Now</button>
           <button onClick={() => this.handlePlayMatchClick(true)}>Play Ranked</button>
+          <br /><br /><br /><br />
         </div>
       </div>
     );

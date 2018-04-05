@@ -40,7 +40,6 @@ strong { font-weight: 700; }
 
 
 .prev_match_container {
-  padding-top: 50px;
   display: grid;
   grid-template-rows: 50px 10fr;
   height: 100%;
