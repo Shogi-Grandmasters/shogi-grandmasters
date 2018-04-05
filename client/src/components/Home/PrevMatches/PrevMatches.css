@@ -1,31 +1,102 @@
-.prev_matches {
-  /*padding-top: 50px;*/
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
+
+* {
+  outline: none;
+}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+/*--
+dl, dt, dd, ol, ul, li,
+-- */
+dl, dt, dd, ol,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+body {
+  font-size: 14px;
+  font-family: 'Open Sans';
+  font-weight: 400;
+  margin: 0px;
+}
+
+h1, h2, h3, h4, h5 { font-family: 'Oswald' }
+strong { font-weight: 700; }
+
+
+
+.prev_match_container {
   display: grid;
   grid-template-rows: 50px 10fr;
   height: 100%;
   width: 100%;
-  text-align: center;
 }
 
-.match_select {
+.prev_match_head {
+  padding-left: 10px;
+  padding-top: 5px;
+  font-family: 'Oswald';
+  font-weight: 400;
+  font-size: 25px;
+}
+
+.prev_match_select {
+  font-family: 'Oswald';
   overflow: scroll;
   max-height: 90vh;
 }
 
-.match_items {
-  font-size: 15px;
+.prev_match_items {
+  padding-left: 10px;
+  padding-top: 25px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   flex-flow: row nowrap;
-  align-items: center;
   justify-content: space-around;
   height: 45px;
-  padding: 4px;
   background: linear-gradient(#eee, #ddd);
   border-bottom: solid 1px #ccc;
 }
 
-.match_items:hover {
+.prev_match_items:hover {
   cursor: pointer;
   background: linear-gradient(rgba(238, 238, 238, 0), rgba(221, 221, 221, 0.199));
+}
+
+.prev_match_opponent {
+  text-transform: uppercase;
+  font-size: 21px;
+  padding-bottom: 15px;
+}
+
+.prev_match_turn {
+  float: middle;
+}
+
+.prev_match_time {
+  float: right;
+  font-size: 16px;
+  padding-top: 5px;
+  padding-right: 10px;
+}
+
+.prev_match_move {
+  /* font-style: italic; */
+  box-shadow: inset 1px 1px 8px 8px #f15a4a;
+  /* text-shadow: 1px 1px 2px #f15a4a; */
 }

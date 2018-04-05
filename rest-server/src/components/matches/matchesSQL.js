@@ -21,7 +21,7 @@ export const createMatchHelper = ({
 export const fetchMatchHelper = ({ matchId, userId, black, white }) => {
   if (userId) {
     return `
-      SELECT id,black,white FROM matches
+      SELECT id,black,white,turn,modified FROM matches
       WHERE status=0 AND (black='${userId}'
       OR white='${userId}')
     `;
