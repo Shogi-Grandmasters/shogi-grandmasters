@@ -25,9 +25,12 @@ class ChatPopup extends Component {
     await this.props.socket.on("server.popupChat", message => {
       this.setState({ messages: [message, ...this.state.messages] });
     });
-    await this.props.socket.on(`server.sendPopupMessages${this.id}`, messages => {
-      this.setState({ messages });
-    });
+    await this.props.socket.on(
+      `server.sendPopupMessages${this.id}`,
+      messages => {
+        this.setState({ messages });
+      }
+    );
   }
 
   componentWillUnmount() {
@@ -35,28 +38,20 @@ class ChatPopup extends Component {
   }
 
   async handleChat(e) {
-    e.persist();
     const { id, value } = e.target;
     await this.setState({ message: { id, value } });
-    if (e.keyCode === 13 && !e.shiftKey) {
-      e.preventDefault();
-      this.handleSubmit();
-      e.target.value = "";
-    }
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     this.state.message.value !== "\n" &&
       this.state.message.value.length &&
-      this.props.socket.emit("client.popupChat", {
+      this.props.socket.emit("client.homeChat", {
         user_id: this.id,
         username: this.username,
         content: this.state.message.value,
         friend_id: +this.state.message.id
       });
-  }
-
-  resetInput(e) {
     e.target.reset();
     this.setState({ message: "" });
   }
@@ -70,23 +65,27 @@ class ChatPopup extends Component {
             className={friend.minimized ? "popup-box-min" : "popup-box"}
             key={i}
             style={{ right: `${right}px` }}
-            {...(right += 300)}
+            {...(right += 305)}
           >
-            <div className="popup-head">
+            <div className={friend.minimized ? "popup-head-min" : "popup-head"}>
               <div
                 className="popup-head-left"
                 onClick={() => this.props.minimizePopup(friend.id)}
               >
                 {friend.username}
               </div>
-              <div
-                className={
-                  friend.minimized ? "popup-head-right-min" : "popup-head-right"
-                }
-              >
-                <a onClick={() => this.props.minimizePopup(friend.id)}>- </a>
+              <div className="popup-head-right">
+                {friend.minimized ? (
+                  <a onClick={() => this.props.minimizePopup(friend.id)}>
+                    &#10010;{' '}
+                  </a>
+                ) : (
+                  <a onClick={() => this.props.minimizePopup(friend.id)}>
+                    &#8212;{' '}
+                  </a>
+                )}
                 <a onClick={() => this.props.removeActivePopup(friend.id)}>
-                  &#10005;
+                  &#10006;
                 </a>
               </div>
             </div>
@@ -104,22 +103,23 @@ class ChatPopup extends Component {
                       (message.friend_id === this.id ||
                         message.user_id === this.id)
                   )
-                  .reverse()
                   .map((message, i) => {
                     return (
-                      <div className="" key={i}>
+                      <div className="popup-message" key={i}>
                         <strong>{message.username}</strong>{" "}
                         {unescape(message.content)}
                       </div>
                     );
                   })}
             </div>
-            <form onSubmit={e => e.preventDefault()}>
-              <div className="">
+            <form onSubmit={e => this.handleSubmit(e)}>
+              <div
+                className={
+                  friend.minimized ? "popup-actions-min" : "popup-actions"
+                }
+              >
                 <input id={friend.id} onKeyUp={e => this.handleChat(e)} />
-                {/* <button type="submit" onClick={() => this.handleSubmit()}>
-                  &gt;
-                </button> */}
+                <button type="submit">&gt;</button>
               </div>
             </form>
           </div>

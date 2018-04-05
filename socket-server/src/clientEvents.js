@@ -98,12 +98,9 @@ const clientFetchMessages = async ({ io, client, room }, payload) => {
         headers: { 'Content-Type': 'application/json' }
       }
     );
-    console.log('userId: ', userId);
     if (userId) {
-      console.log('sending popup messages');
-      serverSendPopupMessages({ io, client, room }, data) 
+      serverSendPopupMessages({ io, client, room }, data);
     } else {
-      console.log('sending public messages');
       serverSendMessages({ io, client, room }, data);
     }
   } catch (err) {
