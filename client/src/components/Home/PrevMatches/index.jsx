@@ -4,7 +4,7 @@ import moment from "moment";
 
 import "./PrevMatches.css";
 
-const {REST_SERVER_URL} = process.env;
+const { REST_SERVER_URL } = process.env;
 
 class PrevMatches extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class PrevMatches extends Component {
       prevMatches: [],
       selectedMatch: "",
       username: localStorage.getItem("username"),
-      userId: localStorage.getItem("id")
+      userId: +localStorage.getItem("id")
     };
   }
 
@@ -29,12 +29,15 @@ class PrevMatches extends Component {
   }
 
   async fetchPrevMatches() {
-    let { data } = await axios.get(`${REST_SERVER_URL}/api/matches`, {
-      params: { userId: this.state.userId }
-    },
-    {
-        headers: { 'Content-Type': 'application/json' }
-      });
+    let { data } = await axios.get(
+      `${REST_SERVER_URL}/api/matches`,
+      {
+        params: { userId: this.state.userId }
+      },
+      {
+        headers: { "Content-Type": "application/json" }
+      }
+    );
     const opponents = {};
     data.opponents &&
       data.opponents.forEach(
@@ -51,16 +54,19 @@ class PrevMatches extends Component {
       return match;
     });
     prevMatches.sort((a, b) => b.modified - a.modified);
-    const sortedMatches = []; 
+    const sortedMatches = [];
     prevMatches.forEach(match => {
-      if(match.blackName === this.state.username && match.turn === 1 ){
-        match.turn = 'YOUR MOVE'
-        sortedMatches.unshift(match)
+      if (match.white === this.state.userId && match.turn === 0) {
+        match.turn = "YOUR MOVE";
+        sortedMatches.unshift(match);
+      } else if (match.black === this.state.userId && match.turn === 1) {
+        match.turn = "YOUR MOVE";
+        sortedMatches.unshift(match);
       } else {
-        match.turn = 'OPPONENTS MOVE'
-        sortedMatches.push(match)
+        match.turn = "OPPONENTS MOVE";
+        sortedMatches.push(match);
       }
-    })
+    });
     this.setState({ prevMatches: sortedMatches });
   }
 
@@ -83,7 +89,7 @@ class PrevMatches extends Component {
       });
     }
   }
-  timeSince = (date) => {
+  timeSince = date => {
     let seconds = Math.floor((new Date() - date) / 1000);
     let interval = Math.floor(seconds / 31536000);
     if (interval > 1) {
@@ -106,8 +112,7 @@ class PrevMatches extends Component {
       return interval + " minutes";
     }
     return Math.floor(seconds) + " seconds";
-  }
-
+  };
 
   render() {
     return (
@@ -116,16 +121,22 @@ class PrevMatches extends Component {
         <div className="prev_match_select">
           {this.state.prevMatches.map(match => {
             return (
-              <div onClick={() => this.handleMatchSelect(match)} key={match.id} className={`prev_match_items  ${match.turn === "YOUR MOVE" ? "prev_match_move" : "awaiting"}`}>
+              <div
+                onClick={() => this.handleMatchSelect(match)}
+                key={match.id}
+                className={`prev_match_items  ${
+                  match.turn === "YOUR MOVE" ? "prev_match_move" : "awaiting"
+                }`}
+              >
                 <div className="prev_match_vs">Opponent: </div>
                 <div className="prev_match_opponent">
-                {`${
-                  match.blackName === this.state.username
-                    ? match.whiteName
-                    : match.blackName
-                }`}
+                  {`${
+                    match.blackName === this.state.username
+                      ? match.whiteName
+                      : match.blackName
+                  }`}
                 </div>
-                
+
                 <div className="prev_match_time">
                   {moment(match.modified).fromNow()}
                 </div>
