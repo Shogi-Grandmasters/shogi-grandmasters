@@ -45,7 +45,6 @@ strong { font-weight: 700; }
   height: 100%;
   max-height: 350px;
   width: 100%;
-<<<<<<< HEAD
   max-height: 525px;
   overflow: hidden;
   align-self: end;
@@ -64,47 +63,16 @@ strong { font-weight: 700; }
 
 .prev_match_select {
   font-family: 'Oswald';
-<<<<<<< HEAD
   height: 100;
   overflow: auto;
-=======
-  overflow: scroll;
->>>>>>> fix
   background: linear-gradient(#eee, #ddd);
   color: #2c343f;
-<<<<<<< HEAD
-=======
-  overflow: scroll;
-=======
   max-height: 500px;
   overflow: hidden;
   align-self: end;
 }
 
-.prev_match_head {
-  padding-left: 10px;
-  padding-top: 5px;
-  font-family: 'Oswald';
-  font-weight: 400;
-  font-size: 25px;
-  background-color: #333;
-  color: #eee;
-}
-
-.prev_match_select {
-  font-family: 'Oswald';
-  overflow: scroll;
-  background: linear-gradient(#eee, #ddd);
-  color: #2c343f;
-  overflow: scroll;
->>>>>>> fix
->>>>>>> fix
-  height: 100;
-  text-align: center;
-}
-
 .prev_match_items {
-<<<<<<< HEAD
   height: 100%;
   padding-right: 10px;
   padding-left: 10px;
@@ -115,26 +83,11 @@ strong { font-weight: 700; }
   border-bottom: solid 1px #ccc;
   grid-template-columns: 3fr 3fr 4fr;
   align-items: center;
-=======
-  padding-left: 10px;
-  /* padding-top: 25px; */
-  font-size: 14px;
-  font-weight: 600;
-  display: grid;
-  height: 45px;
-  border-bottom: solid 1px #ccc;
-  grid-template-columns: 2fr 3fr 5fr;
->>>>>>> fix
 }
 
 .prev_match_items:hover {
   cursor: pointer;
-<<<<<<< HEAD
-  background-color: #f15a4a;
-=======
-<<<<<<< HEAD
   background-color: #f15a4a;;
->>>>>>> fix
   color: #eee;
   /* background: linear-gradient(rgba(238, 238, 238, 0), rgba(221, 221, 221, 0)); */
 }
@@ -151,26 +104,6 @@ strong { font-weight: 700; }
 .prev_match_time {
   float: right;
   /* font-size: 16px; */
-=======
-  background-color: #2c343f;
-  color: #eee;
-  /* background: linear-gradient(rgba(238, 238, 238, 0), rgba(221, 221, 221, 0)); */
-}
-
-.prev_match_opponent {
-  text-transform: uppercase;
-  font-size: 21px;
-  padding-bottom: 15px;
-}
-
-.prev_match_turn {
-  float: middle;
-}
-
-.prev_match_time {
-  float: right;
-  font-size: 16px;
->>>>>>> fix
   padding-top: 5px;
   padding-right: 10px;
 }
