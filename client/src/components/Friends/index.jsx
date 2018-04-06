@@ -38,11 +38,11 @@ class Friends extends Component {
             this.fetchFriends();
           })
           .catch(err => {
-            console.log('2nd promise error');
+            console.log('Error adding: ', username);
           });
       })
       .catch(err => {
-        console.log('1st promise error');
+        console.log('Error finding: ', username);
       });
   }
 
@@ -142,8 +142,8 @@ class Friends extends Component {
           <form className="friend-search">
             <input ref="search" name="username" type="text" placeholder="Username" className="friend-form" onChange={this.handleInput} />
             <button type="submit" className="friend-button" onClick={(e) => this.addFriend(e)}>Search</ button>
-          </form>
-        </div>
+          </ form>
+        </ div>
         <div className="friend-list-container">
         <div className="friend-title">Current</div>
         {this.state.friends.map((user, index) => (

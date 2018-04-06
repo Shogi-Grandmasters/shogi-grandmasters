@@ -98,11 +98,11 @@ class EditProfile extends Component {
             className="edit-form"
             onChange={this.handleInputChange}
             />
-          <input
+          <button
             type="submit"
             className="auth-button"
             onClick={(e) => this.submitPasswordReset(e)}
-            />
+            >Submit</button>
         </form>
       </div>
     )

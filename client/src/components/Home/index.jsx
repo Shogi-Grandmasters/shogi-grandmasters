@@ -111,3 +111,7 @@ class Home extends Component {
 }
 
 export default Home;
+
+// <div className="chat">
+//   <HomeChat socket={this.socket} />
+// </div>

@@ -15,7 +15,8 @@
   padding: 16px;
   cursor: pointer;
 }
-.logo:hover{
+
+.logo a:hover {
   background-color: transparent;
 }
 
@@ -24,9 +25,8 @@
   flex: 1;
   display: block;
   color: white;
-  height: auto;
   text-align: center;
-  padding: 18px;
+  padding: 25px;
   text-decoration: none;
   font-size: 16px;
   line-height: 60px;
@@ -38,8 +38,7 @@
   float: right;
   width: 50px;
   color: white;
-  padding: 20px 10px;
-  vertical-align: center;
+  padding: 30px 10px;
 }
 
 @media screen and (max-width: 600px) {
