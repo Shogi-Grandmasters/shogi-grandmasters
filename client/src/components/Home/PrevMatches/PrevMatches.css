@@ -64,10 +64,9 @@ strong { font-weight: 700; }
 .prev_match_select {
   font-family: 'Oswald';
   height: 100;
-  overflow: scroll;
+  overflow: auto;
   background: linear-gradient(#eee, #ddd);
   color: #2c343f;
-  overflow: scroll;
   height: 100;
   text-align: center;
 }
