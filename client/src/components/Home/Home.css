@@ -53,14 +53,17 @@ button {
 }
 
 .match-container {
-  display: grid;
-  grid-template-rows: 5fr 50px 5fr;
+  display: flex;
+  flex-flow: column nowrap;
+  /* grid-template-rows: 5fr 50px 5fr; */
   background: linear-gradient(#eee, #ddd);
   /* overflow: hidden; */
+  margin-bottom: 40px;
 }
 
 .divider {
   background-color: #485562;
+  min-height: 40px;
 }
 
 .nav-container {
