@@ -31,11 +31,7 @@ button {
 .match_lists {
   display: grid;
   grid-template-rows: 75px auto;
-<<<<<<< HEAD
   max-height: 600px;
-=======
-  /* height: 100%; */
->>>>>>> fix
   align-items: center;
 }
 
