@@ -14,6 +14,7 @@ button {
 }
 
 .home-container {
+  background-color: #485562;
 }
 
 .home-components {
@@ -26,6 +27,7 @@ button {
   top: 100px;
   position: absolute;
   overflow: scroll;
+  background-color: #485562;
 }
 
 .match_lists {
