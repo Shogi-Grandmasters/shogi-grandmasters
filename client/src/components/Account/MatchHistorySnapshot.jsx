@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import CircularProgressBar from './CircularProgressBar.jsx';
+import './Snapshot.css';
 
 const {REST_SERVER_URL} = process.env;
 
@@ -11,14 +12,13 @@ class MatchHistorySnapshot extends Component {
       percentage: 0,
       history: [],
     };
-    this.handleChangeEvent = this.handleChangeEvent.bind(this);
   }
 
   componentWillMount = () => {
-    this.fetchMatchHistory()
+    this.fetchMatchSnapshot()
   }
 
-  fetchMatchHistory = async () => {
+  fetchMatchSnapshot = async () => {
     let history = [];
     const id = localStorage.getItem('id');
     let { data } = await axios.get(`${REST_SERVER_URL}/api/matches/history/`, {
@@ -30,33 +30,21 @@ class MatchHistorySnapshot extends Component {
       match.status != 0 && history.push(match);
     }
     history = history.slice(0, 5)
-    console.log(history)
-    this.setState({history: history});
+    let winCount = 0;
+    history.forEach(match => winCount += match.outcome)
+    let percent = 20 * winCount
+    this.setState({ percentage: percent });
+    this.setState({ history: history });
   }
 
-  handleChangeEvent(event) {
-    this.setState({
-      percentage: event.target.value
-    });
-  }
-
+  //change the sqSize to resize 
   render() {
     return (
-      <div>
+      <div className="match-snapshot-container">
           <CircularProgressBar
-            strokeWidth="10"
-            sqSize="200"
+            strokeWidth="7"
+            sqSize="100"
             percentage={this.state.percentage}/>
-          <div>
-            <input 
-              id="progressInput" 
-              type="range" 
-              min="0" 
-              max="100" 
-              step="1"
-              value={this.state.percentage}
-              onChange={this.handleChangeEvent}/>
-          </div>
         </div>
     );
   }
