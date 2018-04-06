@@ -18,6 +18,7 @@ import PlayerPanel from './PlayerPanel/index.jsx';
 import PlayerHand from './PlayerHand/index.jsx';
 import MatchLog from './MatchLog/index.jsx';
 import TurnIndicator from './TurnIndicator/index.jsx';
+import ChatPopup from '../Home/Chat/popup.jsx';
 import GameChat from './Chat/index.jsx';
 import ModalPrompt from '../Global/Modals/Prompt/ModalPrompt.jsx';
 import ModalMenu from '../Global/Modals/Menu/ModalMenu.jsx';
@@ -65,6 +66,7 @@ class Match extends Component {
       },
       localColor: isLocalPlayer(match.white) ? 'white' : 'black',
       opponentColor: isLocalPlayer(match.white) ? 'black' : 'white',
+      chatUser: isLocalPlayer(match.white) ? match.black : match.white,
       pendingMove: null,
       pendingDecision: false, // if true, cannot transition turn (doesn't do this yet)
       showModal: false,
@@ -91,8 +93,10 @@ class Match extends Component {
   initializeMatch = () => {
     let updateBoard = this.state.localColor === 'black' ? reverseBoard(this.state.board) : copyMatrix(this.state.board);
     let isTurn = this.props.match.turn ? this.state.localColor === 'black' : this.state.localColor === 'white';
-
+    let chatUser = { ...this.state.chatUser };
+    chatUser.minimized = true;
     this.setState({
+      chatUser,
       board: updateBoard,
       isTurn,
     });
@@ -450,7 +454,6 @@ class Match extends Component {
           hints: selectedPiece.findMoves(this.state.board),
         });
       } else {
-        console.log(this.state.selected);
         let [playerColor, piece] = this.state.selected.target.split(':');
         let gameTile = new GameTile(pieceNameFromBoardId(piece), playerColor, [10, 10]);
         let validLocations = validDropLocations(this.state.board, gameTile);
@@ -486,6 +489,14 @@ class Match extends Component {
     }
   }
 
+  toggleChatPopup = () => {
+    let updateChatUser = { ...this.state.chatUser };
+    updateChatUser.minimized = !updateChatUser.minimized;
+    this.setState({
+      chatUser: updateChatUser,
+    })
+  }
+
   quit = () => {
     this.socket.close();
     this.props.history.replace({
@@ -500,65 +511,73 @@ class Match extends Component {
     return (
       <div className="match">
         <MatchLog set={this.state.shogiSet} events={this.state.log} visibility={this.state.showMobileSidebar === 'log'} toggle={this.toggleMobile}/>
-        <div className="match__play">
-          <div className="match__turn">
-            <PlayerPanel player={this.getPlayer('opponent')} />
-            <TurnIndicator isTurn={this.state.isTurn} />
-            <PlayerPanel player={this.getPlayer('local')} />
-          </div>
-          <div className="match__board">
-            <div className="match__hand north">
-              <PlayerHand
-                id={'opponent'}
-                local={false}
-                selected={this.state.selected}
-                player={this.getPlayer('opponent')}
-                hand={this.state.hands[this.state.opponentColor]}
-                turn={!this.state.isTurn}
-                activate={this.togglePiece}
-                visibility={this.getPlayer('opponent').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
-                toggle={this.toggleHand}
-                set={this.state.shogiSet}
-                animate={this.state.animate}
-              />
+        <div className="match__container">
+          <div className="match__play">
+            <div className="match__turn">
+              <PlayerPanel player={this.getPlayer('opponent')} />
+              <TurnIndicator isTurn={this.state.isTurn} />
+              <PlayerPanel player={this.getPlayer('local')} />
             </div>
-            <ShogiBoard
-              board={this.state.board}
-              selected={this.state.selected}
-              hints={this.state.hints}
-              player={this.getPlayer('local')}
-              isTurn={this.state.isTurn}
-              togglePiece={this.togglePiece}
-              movePiece={this.movePiece}
-              set={this.state.shogiSet}
-              animate={this.state.animate}
-            />
-            <div className="match__hand south">
-              <PlayerHand
-                id={'player'}
-                local={true}
+            <div className="match__board">
+              <div className="match__hand north">
+                <PlayerHand
+                  id={'opponent'}
+                  local={false}
+                  selected={this.state.selected}
+                  player={this.getPlayer('opponent')}
+                  hand={this.state.hands[this.state.opponentColor]}
+                  turn={!this.state.isTurn}
+                  activate={this.togglePiece}
+                  visibility={this.getPlayer('opponent').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
+                  toggle={this.toggleHand}
+                  set={this.state.shogiSet}
+                  animate={this.state.animate}
+                />
+              </div>
+              <ShogiBoard
+                board={this.state.board}
                 selected={this.state.selected}
+                hints={this.state.hints}
                 player={this.getPlayer('local')}
-                hand={this.state.hands[this.state.localColor]}
-                turn={this.state.isTurn}
-                activate={this.togglePiece}
-                visibility={this.getPlayer('local').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
-                toggle={this.toggleHand}
+                isTurn={this.state.isTurn}
+                togglePiece={this.togglePiece}
+                movePiece={this.movePiece}
                 set={this.state.shogiSet}
                 animate={this.state.animate}
               />
+              <div className="match__hand south">
+                <PlayerHand
+                  id={'player'}
+                  local={true}
+                  selected={this.state.selected}
+                  player={this.getPlayer('local')}
+                  hand={this.state.hands[this.state.localColor]}
+                  turn={this.state.isTurn}
+                  activate={this.togglePiece}
+                  visibility={this.getPlayer('local').color === 'black' ? this.state.showHandBlack : this.state.showHandWhite}
+                  toggle={this.toggleHand}
+                  set={this.state.shogiSet}
+                  animate={this.state.animate}
+                />
+              </div>
             </div>
-          </div>
-          <div className="match__actions">
-            <a className="match__action-left mobile"onClick={() => this.toggleMobile('log')}>Log</a>
-            <a className="match__action-menu mobile" onClick={() => this.toggleMenu()}>Menu</a>
-            <a className="match__action-right mobile" onClick={() => this.toggleMobile('chat')}>Chat</a>
-            <a className="match__action-menu desktop" onClick={() => this.toggleOptions()}>Options</a>
-            <a className="match__action-menu desktop" onClick={() => this.promptToConcede()}>Concede</a>
-            <a className="match__action-menu desktop" onClick={() => this.quit()}>Quit</a>
+            <div className="match__actions">
+              <a className="match__action-left mobile" onClick={() => this.toggleMobile('log')}>Log</a>
+              <a className="match__action-menu mobile" onClick={() => this.toggleMenu()}>Menu</a>
+              <a className="match__action-right mobile" onClick={() => this.toggleChatPopup()}>Chat</a>
+              <a className="match__action-menu midpoint" onClick={() => this.toggleChatPopup()}>Chat</a>
+              <a className="match__action-menu midpoint" onClick={() => this.toggleMobile('log')}>Matchlog</a>
+              <a className="match__action-menu desktop" onClick={() => this.toggleOptions()}>Options</a>
+              <a className="match__action-menu desktop" onClick={() => this.promptToConcede()}>Concede</a>
+              <a className="match__action-menu desktop" onClick={() => this.quit()}>Quit</a>
+            </div>
           </div>
         </div>
-        <GameChat socket={this.socket} visibility={this.state.showMobileSidebar === 'chat'} toggle={this.toggleMobile} match={this.props.match} />
+        <ChatPopup
+          socket={this.socket}
+          activePopups={[this.state.chatUser]}
+          minimizePopup={this.toggleChatPopup}
+          zeroOffset={true} />
         {modal}
       </div>
     )

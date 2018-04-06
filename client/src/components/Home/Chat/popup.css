@@ -1,17 +1,21 @@
+
 .popup-box {
+  z-index: 800;
   display: grid;
   grid-auto-rows: 1fr 8fr 1fr;
   position: fixed;
   bottom: 0px;
-  height: 285px;
+  height: 55vh;
   background-color: #2c343f;
-  width: 300px;
+  width: 100%;
   border: 1px solid rgba(29, 49, 91, .3);
   color: #d0c7af;
   font-size: 14px;
 }
 
 .popup-head {
+  display: grid;
+  grid-template-columns: 9fr 1fr;
   background-color: #485562;
   padding: 4px;
   font-weight: bold;
@@ -85,7 +89,7 @@
 .popup-box-min {
   position: fixed;
   bottom: 0px;
-  height: 30px;
+  height: 0px;
   width: 300px;
   float: right;
   color: #d0c7af;
@@ -102,25 +106,42 @@
   font-size: 16px;
 }
 
-.popup-messages-min, .popup-actions-min {
-  display: none;
-}
-
 .timestamp {
   text-align: center;
 }
 
+@media screen and (min-width: 875px) {
+
+  .popup-box {
+    z-index: 800;
+    display: grid;
+    grid-auto-rows: 1fr 8fr 1fr;
+    position: fixed;
+    bottom: 0px;
+    right: 90px;
+    height: 285px;
+    background-color: #2c343f;
+    width: 300px;
+    border: 1px solid rgba(29, 49, 91, .3);
+    color: #d0c7af;
+    font-size: 14px;
+  }
+  .popup-box-min {
+    height: 30px;
+    right: 90px;
+  }
+}
 /* .popup-actions-min {
   display: none;
 } */
 
-/* @media only screen and (max-width : 540px) 
+/* @media only screen and (max-width : 540px)
 {
     .chat-sidebar
     {
         display: none !important;
     }
-    
+
     .chat-popup
     {
         display: none !important;
@@ -144,7 +165,7 @@ body
     border: 1px solid rgba(29, 49, 91, .3);
 }
 
-.sidebar-name 
+.sidebar-name
 {
     padding-left: 10px;
     padding-right: 10px;

@@ -40,19 +40,6 @@ button:hover {
   background-color: #f15a4a;
 }
 
-/* .lower-border {
-  border-bottom-color: rgba(0,0,0,0.6);
-}
-.upper-border {
-  border-top-color: rgba(0,0,0,0.6);
-}
-.right-border {
-  border-right-color: rgba(0,0,0,0.6);
-}
-.left-border {
-  border-left-color: rgba(0,0,0,0.6);
-} */
-
 .shogi__board {
   z-index: 75;
 }
@@ -61,11 +48,20 @@ button:hover {
   color: #d0c7af;
   width: 100vw;
   height: 100vh;
-  min-height: 730px;
   overflow: hidden;
   display: grid;
   margin: 0 auto;
   background: radial-gradient(#485562, #14151b);
+}
+
+.match__container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .match__turn {
@@ -96,7 +92,6 @@ button:hover {
   font-family: 'Oswald';
   text-transform: uppercase;
   font-size: 18px;
-  margin-top: 20px;
   text-align: center;
 }
 .match__action-left {
@@ -143,8 +138,11 @@ button:hover {
 .match__actions > .desktop {
   display: none;
 }
+.match__actions > .midpoint {
+  display: none;
+}
 
-@media screen and (min-device-width: 740px) {
+@media screen and (min-width: 740px) {
 
   .match__turn {
     flex-direction: row;
@@ -153,7 +151,6 @@ button:hover {
 
   .match__play {
     display: grid;
-    width: 80vw;
     margin: 0 auto;
   }
 
@@ -167,26 +164,18 @@ button:hover {
 
 }
 
-@media screen and (min-device-width: 1025px) {
+@media screen and (min-width: 875px) {
   .match {
-    grid-template-columns: 2fr 6fr 2fr;
+    grid-template-columns: 10fr;
   }
-  .match__play {
-    width: 70vw;
-    grid-template-columns: 2fr 8fr 3fr;
-  }
-
   .match__turn {
     margin-top: 10vh;
-    height: 80vh;
+    height: 70vh;
     min-width: 120px;
     flex-direction: column;
   }
-  .match__board {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: center;
+  .match__play {
+    grid-template-columns: 1fr 9fr 2fr;
   }
   .match__actions {
     height: 100vh;
@@ -199,8 +188,31 @@ button:hover {
   .match__actions > .mobile {
     display: none;
   }
+  .match__actions > .midpoint {
+    display: block;
+  }
   .match__actions > .desktop {
     display: block;
   }
+  .match .popup-box-min, .match .popup-box {
+    margin-right: -80px;
+  }
+  .match__board {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+  }
+}
 
+@media screen and (min-width: 1130px) {
+  .match {
+    grid-template-columns: 1fr 9fr;
+  }
+  .match__play {
+    grid-template-columns: 1fr 8fr 3fr;
+  }
+  .match__actions > .midpoint {
+    display: none;
+  }
 }

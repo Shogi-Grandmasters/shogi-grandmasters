@@ -46,12 +46,10 @@
   font-size: 24px;
   color: #d0c7af;
   text-shadow:
-    1px 1px 2px #14151b,
-    2px 2px 2px #f15a4a;
+    1px 1px 2px #14151b;
 }
 
-@media screen and (min-device-width: 1025px) {
-
+@media screen and (min-width: 875px) {
   .turn__indicator {
     flex-direction: column;
   }
@@ -63,5 +61,10 @@
   .turn__indicator-south {
     transform: rotate(0deg);
   }
+}
+
+@media screen and (min-width: 1130px) {
+
+
 
 }

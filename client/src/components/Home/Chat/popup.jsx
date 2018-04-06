@@ -66,7 +66,7 @@ class ChatPopup extends Component {
   setTimestamps() {
     let { timestamps, messages } = this.state;
     for (let message of messages) {
-      !timestamps[message.user_id] && message.user_id !== this.id 
+      !timestamps[message.user_id] && message.user_id !== this.id
         && (timestamps[message.user_id] = message.created);
     }
     this.setState({ timestamps });
@@ -74,7 +74,7 @@ class ChatPopup extends Component {
 
   renderTimestamps(id) {
     const { timestamps } = this.state;
-    return timestamps[id] 
+    return timestamps[id]
       ? <div className="timestamp">{moment(timestamps[id]).fromNow()}</div> : null;
   }
 
@@ -86,7 +86,7 @@ class ChatPopup extends Component {
           <div
             className={friend.minimized ? "popup-box-min" : "popup-box"}
             key={i}
-            style={{ right: `${right}px` }}
+            style={this.props.zeroOffset ? {} : { right: `${right}px` }}
             {...(right += 305)}
           >
             <div className={friend.minimized ? "popup-head-min" : "popup-head"}>
@@ -106,9 +106,11 @@ class ChatPopup extends Component {
                     &#8212;
                   </a>
                 )}
-                <a onClick={() => this.props.removeActivePopup(friend.id)}>
-                  &#10006;
-                </a>
+                {this.props.removeActivePopup ? (
+                  <a onClick={() => this.props.removeActivePopup(friend.id)}>
+                    &#10006;
+                  </a>
+                ) : null}
               </div>
             </div>
             <div
