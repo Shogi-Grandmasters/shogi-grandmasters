@@ -143,6 +143,7 @@ class Friends extends Component {
             <input ref="search" name="username" type="text" placeholder="Username" className="friend-form" onChange={this.handleInput} />
             <button type="submit" className="friend-button" onClick={(e) => this.addFriend(e)}>Search</ button>
 <<<<<<< HEAD
+<<<<<<< HEAD
           </form>
         </div>
 =======
@@ -153,6 +154,10 @@ class Friends extends Component {
           </form>
         </div>
 >>>>>>> fix
+>>>>>>> fix
+=======
+          </form>
+        </div>
 >>>>>>> fix
         <div className="friend-list-container">
         <div className="friend-title">Current</div>
