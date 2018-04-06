@@ -87,7 +87,6 @@ strong {
   display: grid;
   grid-template-rows: 50px 10fr;
   height: 100%;
-  max-height: 350px;
   width: 100%;
   max-height: 525px;
   overflow: hidden;
