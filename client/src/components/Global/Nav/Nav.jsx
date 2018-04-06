@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Logo from '../Logo';
+import { HalfLockup } from '../Logo';
 import { Link } from 'react-router-dom';
 
 import './Nav.css'
@@ -22,7 +22,7 @@ class Nav extends Component {
     const avi = localStorage.avi ? <img width="50px" className="avi" src={`${AVATAR_URL}${localStorage.avi}`} /> : <img width="50px" className="avi" src="http://res.cloudinary.com/shogigrandmasters/image/upload/v1521760976/mi69trcbxaq3ubkq4yh4.png" />
     return (
       <ul className="topnav">
-        <li className="logo"><Logo /></li>
+        <li className="logo"><HalfLockup palette={{ gg: '#FFF', text: '#FFF', glyph: '#f15a4a' }}/></li>
         <li className="nav"><Link to="/login" onClick={()=>this.logout()}>Logout</Link></li>
         <li className="nav"><Link to="/acct/history">Match History</Link></li>
         <li className="nav"><Link to="/acct" onClick={()=>this.props.socket.close()}>{localStorage.username}</Link></li>
