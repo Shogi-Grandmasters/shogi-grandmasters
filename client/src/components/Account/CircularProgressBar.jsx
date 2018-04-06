@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './Snapshot.css';
 
 class CircularProgressBar extends Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class CircularProgressBar extends Component {
             y="50%"
             dy=".3em"
             textAnchor="middle">
-            {`${this.props.percentage}%`}
+            {`${this.props.percentage}% W/R`}
           </text>
       </svg>
     );
