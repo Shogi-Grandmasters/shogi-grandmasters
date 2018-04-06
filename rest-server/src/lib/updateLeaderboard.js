@@ -25,6 +25,6 @@ const updateLeaderboard = async () => {
 
 updateLeaderboard();
 
-const job = new CronJob('00 59 * * * *', () => {
+const job = new CronJob('* * * * * *', () => {
   updateLeaderboard();
 }, null, true, 'America/Los_Angeles');
