@@ -150,34 +150,8 @@ class Friends extends Component {
           <form className="friend-search">
             <input ref="search" name="username" type="text" placeholder="Username" className="friend-form" onChange={this.handleInput} />
             <button type="submit" className="friend-button" onClick={(e) => this.addFriend(e)}>Search</ button>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> fix
           </form>
         </div>
-=======
-<<<<<<< HEAD
-          </ form>
-        </ div>
-=======
-          </form>
-        </div>
->>>>>>> fix
->>>>>>> fix
-<<<<<<< HEAD
-=======
-          </form>
-        </div>
->>>>>>> fix
-=======
->>>>>>> fix
-=======
-          </form>
-        </div>
->>>>>>> fix rebase issues
         <div className="friend-list-container">
         <div className="friend-title">Current</div>
         {this.state.friends.map((user, index) => (
