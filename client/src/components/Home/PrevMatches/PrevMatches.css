@@ -48,6 +48,7 @@ strong { font-weight: 700; }
   max-height: 525px;
   overflow: hidden;
   align-self: end;
+  font-size: 20px;
 }
 
 .prev_match_head {
@@ -75,12 +76,12 @@ strong { font-weight: 700; }
   height: 100%;
   padding-right: 10px;
   padding-left: 10px;
-  font-size: 14px;
-  font-weight: 600;
+  /* font-size: 14px; */
+  /* font-weight: 600; */
   display: grid;
   height: 45px;
   border-bottom: solid 1px #ccc;
-  grid-template-columns: 2fr 3fr 5fr;
+  grid-template-columns: 3fr 3fr 4fr;
   align-items: center;
 }
 
@@ -93,7 +94,7 @@ strong { font-weight: 700; }
 
 .prev_match_opponent {
   text-transform: uppercase;
-  font-size: 21px;
+  /* font-size: 21px; */
 }
 
 .prev_match_turn {
@@ -102,7 +103,7 @@ strong { font-weight: 700; }
 
 .prev_match_time {
   float: right;
-  font-size: 16px;
+  /* font-size: 16px; */
   padding-top: 5px;
   padding-right: 10px;
 }
