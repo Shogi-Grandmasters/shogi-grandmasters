@@ -27,6 +27,8 @@ strong { font-weight: 700; }
   text-transform: uppercase;
   font-weight: 400;
   font-size: 25px;
+  background-color: #333;
+  color: #eee;
 }
 
 .leaderboard-list-container {

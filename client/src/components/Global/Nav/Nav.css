@@ -3,7 +3,8 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: linear-gradient(#14151b, #485562)
+  background: linear-gradient(#14151b, #485562);
+  height: 100%;
 }
 
 .logo a {

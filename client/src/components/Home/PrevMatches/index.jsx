@@ -60,12 +60,11 @@ class PrevMatches extends Component {
         sortedMatches.push(match)
       }
     })
-    console.log('our sorted array', sortedMatches)
     this.setState({ prevMatches: sortedMatches });
   }
 
-  async handleMatchSelect(e) {
-    await this.setState({ selectedMatch: JSON.parse(e.target.id) });
+  async handleMatchSelect(selectedMatch) {
+    await this.setState({ selectedMatch });
     this.handleJoinMatchClick();
   }
 
@@ -116,8 +115,8 @@ class PrevMatches extends Component {
         <div className="prev_match_select">
           {this.state.prevMatches.map(match => {
             return (
-              <div onClick={e => this.handleMatchSelect(e)} id={JSON.stringify(match)} key={match.id} className={`prev_match_items  ${match.turn === "YOUR MOVE" ? "prev_match_move" : "awaiting"}`}>
-              <div className="prev_match_vs">Opponent: </div>
+              <div onClick={() => this.handleMatchSelect(match)} key={match.id} className={`prev_match_items  ${match.turn === "YOUR MOVE" ? "prev_match_move" : "awaiting"}`}>
+                <div className="prev_match_vs">Opponent: </div>
                 <div className="prev_match_opponent">
                 {`${
                   match.blackName === this.state.username
