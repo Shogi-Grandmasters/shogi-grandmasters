@@ -144,6 +144,9 @@ class Friends extends Component {
             <button type="submit" className="friend-button" onClick={(e) => this.addFriend(e)}>Search</ button>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fix
           </form>
         </div>
 =======
@@ -155,9 +158,12 @@ class Friends extends Component {
         </div>
 >>>>>>> fix
 >>>>>>> fix
+<<<<<<< HEAD
 =======
           </form>
         </div>
+>>>>>>> fix
+=======
 >>>>>>> fix
         <div className="friend-list-container">
         <div className="friend-title">Current</div>
