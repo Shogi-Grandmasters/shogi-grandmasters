@@ -15,7 +15,6 @@ strong { font-weight: 700; }
   vertical-align: top;
   min-width: 200px;
   width: 100%;
-  max-width: 650px;
   font-family: "Oswald";
   max-height: 600px;
 }
@@ -23,7 +22,6 @@ strong { font-weight: 700; }
 .leaderboard-head {
   padding-top: 5px;
   padding-left: 10px;
-  max-width: 650px;
   color: #000;
   font-family: 'Oswald';
   text-transform: uppercase;
@@ -35,7 +33,6 @@ strong { font-weight: 700; }
 }
 
 .leaderboard-list-container {
-  max-width: 650px;
 }
 
 .leader-avi {
@@ -94,7 +91,11 @@ strong { font-weight: 700; }
 
 .leader-player {
   padding: 0px 25px;
-  align-items: center;
+  align-items: left;
   display: flex;
-  justify-content: space-around;
+}
+
+.leader-username {
+  padding-left: 18px;
+  line-height: 2.5;
 }
