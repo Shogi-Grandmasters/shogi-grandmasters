@@ -33,9 +33,12 @@ button {
 .match_lists {
   display: grid;
   grid-template-rows: 75px auto;
+<<<<<<< HEAD
   max-height: 600px;
+=======
+  /* height: 100%; */
+>>>>>>> fix
   align-items: center;
-  grid-row-gap: 25px;
 }
 
 .match_new, .match_rejoin {
@@ -62,7 +65,7 @@ button {
   margin-bottom: 40px;
 }
 
-/*.divider {
+.divider {
   background-color: #485562;
   min-height: 40px;
 }
