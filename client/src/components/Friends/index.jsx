@@ -145,6 +145,7 @@ class Friends extends Component {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> fix
           </form>
@@ -165,6 +166,10 @@ class Friends extends Component {
 >>>>>>> fix
 =======
 >>>>>>> fix
+=======
+          </form>
+        </div>
+>>>>>>> fix rebase issues
         <div className="friend-list-container">
         <div className="friend-title">Current</div>
         {this.state.friends.map((user, index) => (
