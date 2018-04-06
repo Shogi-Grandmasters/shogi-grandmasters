@@ -82,7 +82,7 @@
   left: 0vw;
 }
 
-@media screen and (min-device-width: 740px) {
+@media screen and (min-width: 740px) {
 
   .match__chat {
     width: 45vw;
@@ -99,7 +99,7 @@
   }
 }
 
-@media screen and (min-device-width: 1025px) {
+@media screen and (min-width: 1025px) {
   .match__chat, .match__chat.hidden {
     position: relative;
     height: 100vh;
