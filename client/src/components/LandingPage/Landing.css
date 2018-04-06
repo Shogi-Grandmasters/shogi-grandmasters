@@ -1,19 +1,62 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
 
+.logo__container {
+  width: 450px;
+  margin-bottom: 32px;
+}
+
 .landing-page-container {
   padding: 50px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   flex: 1 auto;
   background: radial-gradient(#485562, #14151b);
   height: 100vh;
   max-height: 100vh;
+  overflow: hidden;
 }
 
+.landing__link-primary {
+  font-size: 24px;
+  font-family: 'Oswald';
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #FFF;
+  transition: all 0.4s ease;
+  padding: 4px;
+  margin: 16px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: transparent;
+  text-shadow: 1px 1px 1px #14151b;
+}
+.landing__link-primary:hover {
+  color: #f15a4a;
+  border-bottom-color: #f15a4a;
+}
+
+.landing__signup-cta {
+  color: #888;
+  margin: 16px;
+  line-height: 18px;
+}
+
+.landing__link-secondary {
+  color: #dedede;
+  font-size: 14px;
+  font-style: italic;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.landing__link-secondary:hover {
+  color: #f15a4a;
+}
 
 .landing-button{
-  background-color: #cecece;
+  background-color: transparent;
   color: #6a6969;
   padding: 16px 0;
   width: 130px;
@@ -27,7 +70,8 @@
 }
 
 .landing-title{
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 400;
   color: #fff;
 }
 

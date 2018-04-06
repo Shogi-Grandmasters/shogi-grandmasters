@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Logo from "../Global/Logo/index.js"
+import { HalfLockup } from "../Global/Logo/index.js"
 import "./Auth.css";
 
 const {REST_SERVER_URL} = process.env;
@@ -37,10 +37,11 @@ class Login extends Component {
 
   render() {
     return(
-      <div className="auth-container">
-        <br/>
-        <Logo /><br />
-        <form className="auth-form-container">
+      <div className="auth__container">
+        <div className="logo__container">
+          <HalfLockup />
+        </div>
+        <form className="auth__form-container">
           <input
             name="username"
             type="text"
@@ -48,7 +49,7 @@ class Login extends Component {
             placeholder={"ENTER YOUR USERNAME"}
             className="auth-form"
             onChange={this.handleInputChange}
-            /><br />
+            />
           <input
             name="password"
             type="password"
@@ -56,20 +57,16 @@ class Login extends Component {
             placeholder={"ENTER YOUR PASSWORD"}
             className="auth-form"
             onChange={this.handleInputChange}
-            /><br />
-          <input
-            type="submit"
-            value="Login"
-            className="auth-button"
-            onClick={(e) => this.submitAuthData(e)}
-            /><br />
-        </form>
-        <input
-            type="submit"
-            value="Signup"
-            className="auth-button"
-            onClick={() => this.props.history.push("/signup")}
             />
+          <button
+            type="submit"
+            className="auth__button"
+            onClick={(e) => this.submitAuthData(e)}
+          >Login</button>
+        </form>
+        <div className="landing__signup-cta">
+          <em>Need an account?</em> <a className="landing__link-secondary" onClick={() => this.props.history.push("/signup")}>Sign Up</a>
+        </div>
       </div>
     )
   }

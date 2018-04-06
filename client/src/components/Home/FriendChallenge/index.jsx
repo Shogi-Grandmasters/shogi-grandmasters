@@ -226,7 +226,8 @@ class FriendChallenge extends Component {
     if (user.challenge) {
       if (user.challenge.player1 === this.id) {
         return (
-          <div className="online-challenge-text">Waiting for response</div>
+          <div className="online-challenge-text">Waiting for response
+          </div>
         );
       } else {
         return (

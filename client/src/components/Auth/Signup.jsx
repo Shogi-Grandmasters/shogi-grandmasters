@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Logo from '../Global/Logo/index.js'
+import { HalfLockup } from '../Global/Logo/index.js'
 
 import './Auth.css';
 
@@ -33,40 +33,44 @@ class Signup extends Component {
 
   render() {
     return (
-      <div className='auth-container'>
-        <br/>
-        <Logo /><br />
-        <form className="auth-form-container">
-        <input
-        name='email'
-        type='text'
-        className='auth-form'
-        placeholder={'ENTER YOUR EMAIL'}
-        autoComplete='email'
-        onChange={this.handleInputChange}
-        />
-      <input
-        name='username'
-        type='text'
-        className='auth-form'
-        autoComplete="username"
-        placeholder={'ENTER YOUR USERNAME'}
-        onChange={this.handleInputChange}
-        />
-      <input
-        name='password'
-        type='password'
-        className='auth-form'
-        autoComplete="new-password"
-        placeholder={'ENTER YOUR PASSWORD'}
-        onChange={this.handleInputChange}
-        /><br />
-      <input
-        type='submit'
-        className='auth-button'
-        onClick={(e) => this.submitAuthData(e)}
-        />
+      <div className="auth__container">
+        <div className="logo__container">
+          <HalfLockup />
+        </div>
+        <form className="auth__form-container">
+          <input
+            name='email'
+            type='text'
+            className='auth-form'
+            placeholder={'ENTER YOUR EMAIL'}
+            autoComplete='email'
+            onChange={this.handleInputChange}
+            />
+          <input
+            name='username'
+            type='text'
+            className='auth-form'
+            autoComplete="username"
+            placeholder={'ENTER YOUR USERNAME'}
+            onChange={this.handleInputChange}
+            />
+          <input
+            name='password'
+            type='password'
+            className='auth-form'
+            autoComplete="new-password"
+            placeholder={'ENTER YOUR PASSWORD'}
+            onChange={this.handleInputChange}
+            />
+          <button
+            type='submit'
+            className='auth__button'
+            onClick={(e) => this.submitAuthData(e)}
+            >Submit</button>
         </form>
+        <div className="landing__signup-cta">
+          <em>Already have an account?</em> <a className="landing__link-secondary" onClick={() => this.props.history.push("/login")}>Login</a>
+        </div>
       </div>
     )
   }
