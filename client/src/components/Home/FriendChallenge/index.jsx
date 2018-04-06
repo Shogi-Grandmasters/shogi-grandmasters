@@ -58,6 +58,7 @@ class FriendChallenge extends Component {
 
   async componentDidMount() {
 <<<<<<< HEAD
+<<<<<<< HEAD
     this.id = +localStorage.getItem('id');
     this.username = localStorage.getItem('username');
     // this.props.socket.on("server.sendUsers", users => {
@@ -79,6 +80,10 @@ class FriendChallenge extends Component {
     this.id = +localStorage.getItem("id");
     this.username = localStorage.getItem("username");
 >>>>>>> svgs and styling for home friends list
+=======
+    this.id = +localStorage.getItem("id");
+    this.username = localStorage.getItem("username");
+>>>>>>> 4b7861c65cc3fcd3a47a37a5dc4a50362c8a143c
 
     await this.fetchFriends();
     await this.fetchOpenChallenges();
@@ -292,18 +297,9 @@ class FriendChallenge extends Component {
 
   render() {
     return (
-<<<<<<< HEAD
-      <div className="online-container">
-        <div className="online-head">
-          FRIENDS
-          <div className="online-head-right">CHALLENGE</div>
-        </div>
-        <div className="online-list-container">
-=======
       <div className="friends__container">
         <div className="friends__header"><h3>Friends</h3></div>
         <div className="friends__list">
->>>>>>> svgs and styling for home friends list
           {this.state.friends.map((user, index) => (
             <div className="friends__list-item" key={index}>
               <div className="friends__list-profile">
