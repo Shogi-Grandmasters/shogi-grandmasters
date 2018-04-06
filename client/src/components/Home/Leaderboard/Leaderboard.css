@@ -16,10 +16,12 @@ strong { font-weight: 700; }
   min-width: 200px;
   width: 100%;
   max-width: 650px;
+  font-family: "Oswald";
+  max-height: 600px;
 }
 
 .leaderboard-head {
-  padding: none;
+  padding-top: 5px;
   padding-left: 10px;
   max-width: 650px;
   color: #000;
@@ -29,6 +31,7 @@ strong { font-weight: 700; }
   font-size: 25px;
   background-color: #333;
   color: #eee;
+  height: 50px;
 }
 
 .leaderboard-list-container {
@@ -36,7 +39,7 @@ strong { font-weight: 700; }
 }
 
 .leader-avi {
-  padding-left: 20px;
+  /* padding-left: 25px; */
   width: 50px;
 }
 
@@ -44,25 +47,54 @@ strong { font-weight: 700; }
   width: auto;
   font-family: 'Oswald';
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 400;
+  padding-left: 25px;
 }
 
 .leader-username {
-  padding-left: 25px;
-  width: auto;
+  /* padding-left: 5px; */
+  /* width: auto; */
   font-family: 'Oswald';
   text-transform: uppercase;
-  font-size: 20px;
+  /* font-size: 20px; */
+  /* float: right; */
 }
 
 .leader-rating {
-  padding-left: 25px;
+  /* padding-left: 25px; */
   width: auto;
   font-family: 'Oswald';
   text-transform: uppercase;
+  /* font-size: 20px; */
+  /* float: right; */
+  /* padding-top: 28px; */
+  /* padding-right: 10px; */
+}
+
+.leader-container {
+  height: 50px;
+  border-bottom: solid 1px #ccc;
+  display: grid;
+  grid-template-columns: 2fr 4fr 4fr;
   font-size: 20px;
-  float: right;
-  padding-top: 28px;
-  padding-right: 10px;
+  text-align: center;
+  align-items: center;
+}
+
+.leaderboard-list-head {
+  height: 30px;
+  font-size: 22px;
+  border-bottom: solid 1px #ccc;
+  display: grid;
+  grid-template-columns: 2fr 4fr 4fr;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.leader-player {
+  padding: 0px 25px;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
 }

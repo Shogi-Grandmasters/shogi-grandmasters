@@ -13,10 +13,10 @@ const updateLeaderboard = async () => {
     const rankedLeaderboard = rows
       .sort((a, b) => b.rating_ranked - a.rating_ranked)
       .slice(0, 10);
-  
+
     await redisCache.set("unrankedLeaderboard",JSON.stringify(unrankedLeaderboard));
     await redisCache.set("rankedLeaderboard", JSON.stringify(rankedLeaderboard));
-  
+
     success('leaderboard successfully updated');
   } catch (err) {
     error("updateLeaderboard - error= ", err);

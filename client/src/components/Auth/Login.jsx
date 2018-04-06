@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { HalfLockup } from "../Global/Logo/index.js"
+import { FadeIn } from '../Global/Animation/Transitions.jsx';
 import "./Auth.css";
 
 const {REST_SERVER_URL} = process.env;
@@ -37,36 +38,40 @@ class Login extends Component {
 
   render() {
     return(
-      <div className="auth__container">
-        <div className="logo__container">
-          <HalfLockup />
-        </div>
-        <form className="auth__form-container">
-          <input
-            name="username"
-            type="text"
-            autoComplete="username"
-            placeholder={"ENTER YOUR USERNAME"}
-            className="auth-form"
-            onChange={this.handleInputChange}
-            />
-          <input
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder={"ENTER YOUR PASSWORD"}
-            className="auth-form"
-            onChange={this.handleInputChange}
-            />
-          <button
-            type="submit"
-            className="auth__button"
-            onClick={(e) => this.submitAuthData(e)}
-          >Login</button>
-        </form>
-        <div className="landing__signup-cta">
-          <em>Need an account?</em> <a className="landing__link-secondary" onClick={() => this.props.history.push("/signup")}>Sign Up</a>
-        </div>
+      <div className="auth__page">
+        <FadeIn>
+          <div className="auth__page-container">
+            <div className="logo__container">
+              <HalfLockup />
+            </div>
+            <form className="auth__form-container">
+              <input
+                name="username"
+                type="text"
+                autoComplete="username"
+                placeholder={"ENTER YOUR USERNAME"}
+                className="auth__form-input"
+                onChange={this.handleInputChange}
+                />
+              <input
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                placeholder={"ENTER YOUR PASSWORD"}
+                className="auth__form-input"
+                onChange={this.handleInputChange}
+                />
+              <button
+                type="submit"
+                className="auth__button"
+                onClick={(e) => this.submitAuthData(e)}
+              >Login</button>
+            </form>
+            <div className="landing__signup-cta">
+              <em>Need an account?</em> <a className="landing__link-secondary" onClick={() => this.props.history.push("/signup")}>Sign Up</a>
+            </div>
+          </div>
+        </FadeIn>
       </div>
     )
   }

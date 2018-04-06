@@ -135,9 +135,9 @@ export const isCheckOrMate = (gameState, playerColor) => {
 
         // check if the tile that put the king in check can be captured by
         //   another of the king's pieces
-        // otherwise check to see if a piece can be placed blocking the king from
-        //   the tile that put him in check
         if (!includesLoc(teamMoves, tile.piece.loc)) {
+          // otherwise check to see if a piece can be placed blocking the king from
+          //   the tile that put him in check
           // the Knight jumps and therefore cannot be blocked
           if (tile.piece.name === "Knight") {
             checkmate = true;
