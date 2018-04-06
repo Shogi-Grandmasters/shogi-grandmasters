@@ -76,7 +76,7 @@ class Home extends Component {
   }
 
   render() {
-    return (
+     return (
       <div className="home-container">
         <Nav socket={this.socket} />
         <div className="home-components">
