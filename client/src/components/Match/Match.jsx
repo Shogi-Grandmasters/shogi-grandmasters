@@ -564,8 +564,8 @@ class Match extends Component {
             <div className="match__actions">
               <a className="match__action-left mobile" onClick={() => this.toggleMobile('log')}>Log</a>
               <a className="match__action-menu mobile" onClick={() => this.toggleMenu()}>Menu</a>
-              <a className="match__action-right mobile" onClick={() => this.toggleMobile('chat')}>Chat</a>
-              <a className="match__action-menu midpoint" onClick={() => this.toggleMobile('chat')}>Chat</a>
+              <a className="match__action-right mobile" onClick={() => this.toggleChatPopup()}>Chat</a>
+              <a className="match__action-menu midpoint" onClick={() => this.toggleChatPopup()}>Chat</a>
               <a className="match__action-menu midpoint" onClick={() => this.toggleMobile('log')}>Matchlog</a>
               <a className="match__action-menu desktop" onClick={() => this.toggleOptions()}>Options</a>
               <a className="match__action-menu desktop" onClick={() => this.promptToConcede()}>Concede</a>
@@ -573,7 +573,11 @@ class Match extends Component {
             </div>
           </div>
         </div>
-        <ChatPopup socket={this.socket} activePopups={[this.state.chatUser]} minimizePopup={this.toggleChatPopup} />
+        <ChatPopup
+          socket={this.socket}
+          activePopups={[this.state.chatUser]}
+          minimizePopup={this.toggleChatPopup}
+          zeroOffset={true} />
         {modal}
       </div>
     )

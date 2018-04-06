@@ -86,7 +86,7 @@ class ChatPopup extends Component {
           <div
             className={friend.minimized ? "popup-box-min" : "popup-box"}
             key={i}
-            style={{ right: `${right}px` }}
+            style={this.props.zeroOffset ? {} : { right: `${right}px` }}
             {...(right += 305)}
           >
             <div className={friend.minimized ? "popup-head-min" : "popup-head"}>
