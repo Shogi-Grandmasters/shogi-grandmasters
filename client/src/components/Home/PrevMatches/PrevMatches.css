@@ -45,7 +45,7 @@ strong { font-weight: 700; }
   height: 100%;
   max-height: 350px;
   width: 100%;
-  max-height: 500px;
+  max-height: 525px;
   overflow: hidden;
   align-self: end;
 }
@@ -75,18 +75,18 @@ strong { font-weight: 700; }
   height: 100%;
   padding-right: 10px;
   padding-left: 10px;
-  /* padding-top: 25px; */
   font-size: 14px;
   font-weight: 600;
   display: grid;
   height: 45px;
   border-bottom: solid 1px #ccc;
   grid-template-columns: 2fr 3fr 5fr;
+  align-items: center;
 }
 
 .prev_match_items:hover {
   cursor: pointer;
-  background-color: #2c343f;
+  background-color: #f15a4a;;
   color: #eee;
   /* background: linear-gradient(rgba(238, 238, 238, 0), rgba(221, 221, 221, 0)); */
 }
@@ -94,7 +94,6 @@ strong { font-weight: 700; }
 .prev_match_opponent {
   text-transform: uppercase;
   font-size: 21px;
-  padding-bottom: 15px;
 }
 
 .prev_match_turn {

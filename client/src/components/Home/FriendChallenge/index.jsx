@@ -263,10 +263,9 @@ class FriendChallenge extends Component {
     return (
       <div className="online-container">
         <div className="online-head">
-          Friends
-          <div className="online-head-right">Challenge</div>
+          FRIENDS
+          <div className="online-head-right">CHALLENGE</div>
         </div>
-        <hr />
         <div className="online-list-container">
           {this.state.friends.map((user, index) => (
             <div className="online-friend-container" key={index}>

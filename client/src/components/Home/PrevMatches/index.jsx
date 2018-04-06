@@ -111,7 +111,7 @@ class PrevMatches extends Component {
   render() {
     return (
       <div className="prev_match_container">
-        <div className="prev_match_head">Rejoin Match</div>
+        <div className="prev_match_head">REJOIN MATCH</div>
         <div className="prev_match_select">
           {this.state.prevMatches.map(match => {
             return (
