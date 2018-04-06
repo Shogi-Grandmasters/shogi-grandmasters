@@ -10,7 +10,6 @@ class Protected extends Component {
         localStorage.clear();
       }
     } catch (e) {
-      console.log('error in Protected ', e);
       this.props.history.push('/login');
     }
   }

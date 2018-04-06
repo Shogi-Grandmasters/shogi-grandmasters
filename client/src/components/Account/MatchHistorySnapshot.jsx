@@ -29,7 +29,7 @@ class MatchHistorySnapshot extends Component {
       match.outcome = match.winner == id ? 1 : 0;
       match.status != 0 && history.push(match);
     }
-    history = history.slice(0, 5)
+    history = history.length > 4 ? history.slice(0, 5) : []; 
     let winCount = 0;
     history.forEach(match => winCount += match.outcome)
     let percent = 20 * winCount
@@ -42,7 +42,7 @@ class MatchHistorySnapshot extends Component {
         <div className="match-snapshot-container">
           <CircularProgressBar
             strokeWidth="7"
-            sqSize="100"
+            sqSize="50"
             percentage={this.state.percentage}/>
         </div>
     );

@@ -44,7 +44,6 @@ export const updateMatchController = async (req, res) => {
 
 export const endMatchController = async (req, res) => {
   try {
-    console.log('EndMatch Controller Body: ', req.body);
     const data = await endMatchQuery(req.body);
     success(
       "endMatchController - successfully updated match and user data",
@@ -59,7 +58,6 @@ export const endMatchController = async (req, res) => {
 
 export const historyMatchController = async (req, res) => {
   try {
-    console.log(req.query)
     const data = await historyMatchQuery(req.query);
     success(
       "historyMatchController - successfully fetched match history data",
