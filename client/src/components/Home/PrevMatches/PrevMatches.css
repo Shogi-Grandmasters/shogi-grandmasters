@@ -107,8 +107,12 @@ strong {
 
 .prev_match_select {
   font-family: 'Oswald';
+<<<<<<< HEAD
   height: 100;
   overflow: auto;
+=======
+  overflow: scroll;
+>>>>>>> fix
   background: linear-gradient(#eee, #ddd);
   color: #2c343f;
   height: 100;
