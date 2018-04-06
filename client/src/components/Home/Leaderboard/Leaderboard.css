@@ -85,8 +85,8 @@ strong { font-weight: 700; }
   border-bottom: solid 1px #ccc;
   display: grid;
   grid-template-columns: 2fr 4fr 4fr;
-  text-align: center;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .leader-player {

@@ -30,6 +30,7 @@ class Account extends Component {
           <li className="vert-nav"><Link to="/acct/faq">FAQ</Link></li>
           <li className="vert-bar" />  
         </ul>
+        <div className="acct-router-container">
         <Switch>
           <Route path="/acct/friends" component={Friends} /> 
           <Route path="/acct/edit" component={EditProfile} />
@@ -38,6 +39,7 @@ class Account extends Component {
           <Route path="/acct/faq" component={FrequentlyAsked} />
           <Redirect from="/acct/" to="/acct/friends" />
         </Switch> 
+        </div>
       </div>
     )
   }
