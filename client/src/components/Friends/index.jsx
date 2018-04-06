@@ -143,17 +143,23 @@ class Friends extends Component {
             <input ref="search" name="username" type="text" placeholder="Username" className="friend-form" onChange={this.handleInput} />
             <button type="submit" className="friend-button" onClick={(e) => this.addFriend(e)}>Search</ button>
 <<<<<<< HEAD
+<<<<<<< HEAD
           </form>
         </div>
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> e311c442b8cf689fbef9d6f5928a229f43280ce4
           </ form>
         </ div>
 =======
           </form>
         </div>
 >>>>>>> fix
+<<<<<<< HEAD
 >>>>>>> fix
+=======
+>>>>>>> e311c442b8cf689fbef9d6f5928a229f43280ce4
         <div className="friend-list-container">
         <div className="friend-title">Current</div>
         {this.state.friends.map((user, index) => (
