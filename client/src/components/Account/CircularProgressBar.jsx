@@ -56,10 +56,4 @@ class CircularProgressBar extends Component {
   }
 }
 
-CircularProgressBar.defaultProps = {
-  sqSize: 200,
-  percentage: 0,
-  strokeWidth: 10
-};
-
 export default CircularProgressBar;
