@@ -1,6 +1,14 @@
+/*
+pale red: f15a4a
+light tan: d0c7af
+mid tan: b0a091
+dark tan: 4d443b
+light blue: 485562
+mid blue: 2c343f
+dark blue: 14151b
+*/
+
 .friend-challenge {
-  /* display: grid; */
-  /* grid-template-columns: 8fr 1fr 1fr; */
   width: 100%;
 }
 
@@ -20,84 +28,148 @@
   width: 100%;
 }
 
-.online-container {
+.friends__container {
   display: inline-block;
-  vertical-align: top;
-  /* min-width: 500px; */
   width: 100%;
-  max-width: 740px;
-  background: linear-gradient(#eee, #ddd);
+  max-width: 300px;
+  margin-bottom: 40px;
+  background-color: #485562;
+  border: solid 1px rgba(20, 21, 27, 0.8);
+  padding: 8px;
+  box-shadow: 0px 0px 10px 0px rgba(20, 21, 27, 0.6);
 }
 
-.online-head {
-  padding-left: 10px;
-  padding-top: 5px;
+.friends__header {
+  background: #333;
+  margin: -8px -8px 8px -8px;
+  padding: 8px;
+}
+
+.friends__header h3 {
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+}
+.friends__list-item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding-bottom: 5px;
+  border-bottom: solid 1px rgba(255,255,255,0.2);
+  box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.4);
+}
+.friends__list-username {
+  margin-left: 16px;
   font-family: 'Oswald';
-  font-weight: 400;
-  font-size: 25px;
-  background-color: #333;
+  text-transform: uppercase;
+  font-size: 18px;
   color: #eee;
+  text-shadow: 1px 1px 2px #14151b;
+  cursor: pointer;
+}
+.friends__list-username:hover {
+  color: #fff;
 }
 
-.online-head-right {
-  float: right;
-  padding-right: 10px;
+.friends__challenge {
+  width: 40px;
+}
+.friends__challenge-pending {
+  width: 40px;
+  margin-top: -10px;
 }
 
-.online-challenge-icon {
-  width: 50px;
-  float: right;
-  padding-right: 25px;
+.friends__challenge-accept {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+}
+.friends__challenge-pending span {
+  color: #14151b;
+}
+.friends__challenge-accept span {
+  color: #fff;
+}
+.friends__challenge-accept span, .friends__challenge-pending span {
+  margin-top: -12px;
+  margin-bottom: 4px;
+  line-height: 12px;
+  font-size: 10px;
 }
 
-.online-challenge-text {
-  width: 100px;
-  float: right;
-  text-align: center;
-  padding-top: 10px;
+.friends__challenge-accept button {
+  width: 30px;
+  height: 30px;
+  margin: 4px;
 }
 
-.online-friend-container {
-  position: relative;
+.friends__challenge-accept-options {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
 }
 
-.online-friend-avi {
-  padding-left: 20px;
-  width: 50px;
+.friends__challenge-icon-pending {
+  fill: #14151b;
+}
+.friends__challenge-icon-pending:hover {
+  cursor: pointer;
+  fill: #2c343f;
 }
 
-.online-challenge-button1 {
-  position: absolute;
-  width: 50px;
-  right: 50px;
-  bottom: 15px;
+.friends__list-actions {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+.friends__list-actions > * {
+  margin: 4px;
 }
 
-.online-challenge-button2 {
-  position: absolute;
-  width: 50px;
-  right: 0px;
-  bottom: 15px;
+.friends__list-action {
+  width: 40px;
+  height: 40px;
+  transition: all 0.4s ease;
+}
+.friends__list-message {
+  width: 16px;
+  height: 16px;
+  margin-bottom: -9px;
+  margin-left: 8px;
 }
 
-.online-challenge-svg {
-  width: 50px;
-  float: right;
-  padding-right: 25px;
-  color: #f15a4a;
+.friends__list-message, .friends__challenge-icon {
+  fill: #fff;
+}
+.friends__list-message:hover, .friends__challenge-icon:hover {
+  cursor: pointer;
   fill: #f15a4a;
 }
 
-.online-username {
-  padding-left: 25px;
-  padding-right: 5px;
-  width: auto;
-  font-family: 'Oswald';
-  text-transform: uppercase;
-  font-size: 20px;
+
+.friends__list-profile {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }
 
-.online-message-icon {
-  width: 15px;
-  cursor: pointer;
+.friends__list-avatar {
+  margin-left: 8px;
+  width: 50px;
+  height: 50px;
+}
+
+.friends__actions {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
 }
