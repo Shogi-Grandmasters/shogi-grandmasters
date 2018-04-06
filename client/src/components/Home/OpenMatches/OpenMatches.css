@@ -1,11 +1,24 @@
 .open_matches {
   display: grid;
   text-align: center;
+  background-color: #485562;
+  height: 100%;
   /* padding-top: 50px; */
   /* grid-template-rows: 100px; */
   /* height: 50vh; */
 }
 
 .match_actions {
-  padding-top: 50px;
+  /* padding-top: 20px; */
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.match_actions button {
+  width: 180px;
+  height: 54px;
+  font-size: 21px;
+  font-family: "Oswald";
+  /* margin-left: 25px; */
 }

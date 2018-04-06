@@ -78,23 +78,26 @@ class Home extends Component {
   render() {
     return (
       <div className="home-container">
-        <Nav socket={this.socket} />
+        <div className="nav-container">
+          <Nav socket={this.socket} />
+        </div>
         <div className="home-components">
-          <div className="match_lists">
-            <OpenMatches history={this.props.history} socket={this.socket} />
-            <PrevMatches history={this.props.history} socket={this.socket} />
-          </div>
-          <div>
-            <FriendChallenge
-              history={this.props.history}
-              socket={this.socket}
-              showActivePopups={this.showActivePopups}
-            />
+          <div className="divider" />
+          <div className="match-container">
+            <div className="match_lists">
+              <OpenMatches history={this.props.history} socket={this.socket} />
+              <PrevMatches history={this.props.history} socket={this.socket} />
+            </div>
+            <div className="divider" />
             <Leaderboard history={this.props.history} socket={this.socket} />
           </div>
-          <div className="chat">
-            <HomeChat socket={this.socket} />
-          </div>
+          <div className="divider" />
+          <FriendChallenge
+            history={this.props.history}
+            socket={this.socket}
+            showActivePopups={this.showActivePopups}
+          />
+          <div className="divider" />
         </div>
         <ChatPopup
           socket={this.socket}
