@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import duel from '../../../public/5fb83b603cb5c95c8cbdffb9cb379888.png'
+import MatchHistorySnapshot from './MatchHistorySnapshot.jsx';
+
 import './Account.css';
 
 const {REST_SERVER_URL, AVATAR_URL} = process.env;
@@ -39,6 +41,7 @@ class MatchHistory extends Component {
   render() {
     return (
       <div className="history-container">
+      <MatchHistorySnapshot />
       <div className="history-list-container"> 
         <div className="history-head">Match History</div>
         <div className="history-list">
