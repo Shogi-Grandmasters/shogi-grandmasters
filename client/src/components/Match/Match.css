@@ -48,7 +48,6 @@ button:hover {
   color: #d0c7af;
   width: 100vw;
   height: 100vh;
-  min-height: 730px;
   overflow: hidden;
   display: grid;
   margin: 0 auto;
@@ -93,7 +92,6 @@ button:hover {
   font-family: 'Oswald';
   text-transform: uppercase;
   font-size: 18px;
-  margin-top: 20px;
   text-align: center;
 }
 .match__action-left {
@@ -210,6 +208,9 @@ button:hover {
 @media screen and (min-width: 1130px) {
   .match {
     grid-template-columns: 1fr 9fr;
+  }
+  .match__play {
+    grid-template-columns: 1fr 8fr 3fr;
   }
   .match__actions > .midpoint {
     display: none;
