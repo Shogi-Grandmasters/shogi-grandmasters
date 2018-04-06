@@ -58,3 +58,8 @@ typings/
 .env
 .env.js
 
+# bundles
+bundle.js
+bundle.min.js
+bundle.js.map
+bundle.min.js.map
