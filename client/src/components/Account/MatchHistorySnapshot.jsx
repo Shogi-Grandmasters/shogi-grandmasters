@@ -40,6 +40,7 @@ class MatchHistorySnapshot extends Component {
   render() {
     return (
         <div className="match-snapshot-container">
+        Winrate past 5 games
           <CircularProgressBar
             strokeWidth="7"
             sqSize="50"

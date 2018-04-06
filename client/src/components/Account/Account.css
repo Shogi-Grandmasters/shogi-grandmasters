@@ -19,6 +19,14 @@ strong { font-weight: 700; }
   radial-gradient(#fff, #d0c7af);
 */
 
+.auth-button {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0px #14151b;
+  transition: background-color 0.4s ease;
+}
+
 .vert-container {
   list-style-type: none;
   margin: 0;
@@ -167,8 +175,8 @@ li a:hover {
 }
 
 .history-list {
-  overflow: hidden;
-  max-height: 80vh;
+  overflow: scroll;
+  max-height: 90vh;
 }
 
 .history-list-inner {
@@ -247,4 +255,5 @@ li a:hover {
   font-family: 'Oswald';
   font-weight: 400;
   font-size: 25px;
+  display: inline;
 }

@@ -4,7 +4,11 @@
 }
 
 .match-snapshot-container{
-  
+  display: inline;
+  float: right;
+  vertical-align: top;
+  font-size: 12px;
+  padding-top: 10px;
 }
 
 .circle-background,
