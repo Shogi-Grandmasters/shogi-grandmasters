@@ -10,6 +10,7 @@ class LandingPage extends Component {
 
   render() {
     return (
+<<<<<<< HEAD
       <div className="landing__page">
         <FadeIn>
           <div className="landing__page-container">
@@ -21,6 +22,25 @@ class LandingPage extends Component {
             </div>
           </div>
         </FadeIn>
+=======
+      <div className="landing-page-container">
+        <br/>
+        <Logo />
+        <div className="landing-title">Shogi Grandmasters</div>
+        <input
+          type="submit"
+          value="Login"
+          className="landing-button"
+          onClick={() => this.props.history.push("/login")}
+        />
+        <br />
+        <input
+          type="submit"
+          value="Signup"
+          className="landing-button"
+          onClick={() => this.props.history.push("/signup")}
+        />
+>>>>>>> fix
       </div>
     );
   }
