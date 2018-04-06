@@ -34,13 +34,12 @@ class MatchHistorySnapshot extends Component {
     history.forEach(match => winCount += match.outcome)
     let percent = 20 * winCount
     this.setState({ percentage: percent });
-    this.setState({ history: history });
   }
 
   //change the sqSize to resize 
   render() {
     return (
-      <div className="match-snapshot-container">
+        <div className="match-snapshot-container">
           <CircularProgressBar
             strokeWidth="7"
             sqSize="100"
