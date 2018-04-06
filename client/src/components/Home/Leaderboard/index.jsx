@@ -29,18 +29,26 @@ class Leaderboard extends Component {
   render() {
     return (
       <div className="leaderboard-container">
-        <div className="leaderboard-head">Leaderboards</div><hr />
+        <div className="leaderboard-head">GRANDMASTERS</div>
         <div className="leaderboard-list-container">
+          <div className="leaderboard-list-head">
+            <b />
+            <b>Player</b>
+            <b>Rating</b>
+          </div>
           {this.state.rankedLeaderboard.map((leader, index) => (
             <div className="leader-container" key={index}>
-              <img
-                className="leader-avi"
-                src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${leader.avatar}`}
-              />
               <b className="leader-rank">#{index + 1}</b>
-              <b className="leader-username">{leader.username}</b>
-              <b className="leader-rating">Rating: {leader.rating_ranked}</b>
-              <hr />
+              <div className="leader-player">
+                <img
+                  className="leader-avi"
+                  src={`https://res.cloudinary.com/shogigrandmasters/image/upload/${
+                    leader.avatar
+                  }`}
+                />
+                <div className="leader-username">{leader.username}</div>
+              </div>
+              <b className="leader-rating">{leader.rating_ranked}</b>
             </div>
           ))}
         </div>

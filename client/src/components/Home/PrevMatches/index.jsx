@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import moment from "moment";
 
 import "./PrevMatches.css";
 
@@ -111,7 +112,7 @@ class PrevMatches extends Component {
   render() {
     return (
       <div className="prev_match_container">
-        <div className="prev_match_head">Rejoin Match</div>
+        <div className="prev_match_head">REJOIN MATCH</div>
         <div className="prev_match_select">
           {this.state.prevMatches.map(match => {
             return (
@@ -126,7 +127,7 @@ class PrevMatches extends Component {
                 </div>
                 
                 <div className="prev_match_time">
-                  {this.timeSince(match.modified)} since last move
+                  {moment(match.modified).fromNow()}
                 </div>
               </div>
             );

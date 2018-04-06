@@ -6,7 +6,7 @@ import randomstring from 'randomstring';
 import './FriendChallenge.css';
 import duel from '../../../../5fb83b603cb5c95c8cbdffb9cb379888.png';
 import scroll from '../../../../58df55f617483f263a3c2880d16ce947.png';
-import awaitingDuel from '../../../../6277b9a543e1dc34eb2e3e99b42af758.png';
+import awaitingDuel from '../../../../public/6277b9a543e1dc34eb2e3e99b42af758.png';
 
 const { REST_SERVER_URL, AVATAR_URL } = process.env;
 
@@ -263,10 +263,9 @@ class FriendChallenge extends Component {
     return (
       <div className="online-container">
         <div className="online-head">
-          Friends
-          <div className="online-head-right">Challenge</div>
+          FRIENDS
+          <div className="online-head-right">CHALLENGE</div>
         </div>
-        <hr />
         <div className="online-list-container">
           {this.state.friends.map((user, index) => (
             <div className="online-friend-container" key={index}>
