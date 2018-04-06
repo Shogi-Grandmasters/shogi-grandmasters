@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Logo from "../Global/Logo"
+import { FullLockup } from "../Global/Logo"
 
 import './Landing.css';
 
@@ -10,22 +10,15 @@ class LandingPage extends Component {
   render() {
     return (
       <div className="landing-page-container">
-        <br/>
-        <Logo />
-        <div className="landing-title">Shogi Grandmasters</div>
-        <input
-          type="submit"
-          value="Login"
-          className="landing-button"
-          onClick={() => this.props.history.push("/login")}
-        />
-        <br />
-        <input
-          type="submit"
-          value="Signup"
-          className="landing-button"
-          onClick={() => this.props.history.push("/signup")}
-        />
+        <div className="logo__container">
+          <FullLockup />
+        </div>
+        <div>
+          <a className="landing__link-primary" onClick={() => this.props.history.push("/login")}>Enter</a>
+        </div>
+        <div className="landing__signup-cta">
+          <em>New Here?</em> <a className="landing__link-secondary" onClick={() => this.props.history.push("/signup")}>Sign Up</a>
+        </div>
       </div>
     );
   }
