@@ -1,18 +1,27 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700|Oswald');
 
 
-.auth-button {
-  background-color: #cecece;
-  color: #6a6969;
-  padding: 12px;
-  width: 80px;
-  font-size: 14px;
-  border-radius: 2px;
-  outline: 0;
-  cursor: pointer;
-  justify-content: center;
-  font-family: 'Oswald';
+.auth__button {
+  width: 200px;
 }
+
+button {
+  color: #eee;
+  width: 120px;
+  height: 36px;
+  margin: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0px #14151b;
+  transition: background-color 0.4s ease;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #f15a4a;
+}
+
 
 .auth-form {
   background-color: #cecece;
@@ -27,21 +36,26 @@
   width: 200px;
 }
 
-.auth-container {
+.auth__container {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   background: radial-gradient(#485562, #14151b);
   height: 100vh;
   max-height: 100vh;
-}  
+}
 
 .sg-logo {
   height: 100px;
 }
 
-.auth-form-container {
+.auth__form-container {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.auth__form-container > * {
+  margin: 8px;
 }
