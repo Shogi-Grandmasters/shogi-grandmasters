@@ -51,7 +51,7 @@ class PrevMatches extends Component {
       return match;
     });
     prevMatches.sort((a, b) => b.modified - a.modified);
-    const sortedMatches = []; 
+    const sortedMatches = [];
     prevMatches.forEach(match => {
       if(match.blackName === this.state.username && match.turn === 1 ){
         match.turn = 'YOUR MOVE'
@@ -125,7 +125,7 @@ class PrevMatches extends Component {
                     : match.blackName
                 }`}
                 </div>
-                
+
                 <div className="prev_match_time">
                   {moment(match.modified).fromNow()}
                 </div>
