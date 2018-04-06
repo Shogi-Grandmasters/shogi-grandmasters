@@ -2,21 +2,23 @@
 
 .logo__container {
   width: 450px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
-.landing-page-container {
-  padding: 50px;
+.landing__page {
+  background: radial-gradient(#485562, #14151b);
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.landing__page-container {
   display: flex;
   align-items: center;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex: 1 auto;
-  background: radial-gradient(#485562, #14151b);
   height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
 }
 
 .landing__link-primary {
