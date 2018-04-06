@@ -57,33 +57,8 @@ class FriendChallenge extends Component {
   }
 
   async componentDidMount() {
-<<<<<<< HEAD
-<<<<<<< HEAD
     this.id = +localStorage.getItem('id');
     this.username = localStorage.getItem('username');
-    // this.props.socket.on("server.sendUsers", users => {
-    //   this.setState({ users });
-    // });
-
-    // this.props.socket.on("server.userConnected", user => {
-    //   let users = this.state.users;
-    //   users[user.userId] = user;
-    //   this.setState({ users });
-    // });
-
-    // this.props.socket.on("server.userDisconnected", user => {
-    //   let users = this.state.users;
-    //   users[user.userId] = user;
-    //   this.setState({ users });
-    // });
-=======
-    this.id = +localStorage.getItem("id");
-    this.username = localStorage.getItem("username");
->>>>>>> svgs and styling for home friends list
-=======
-    this.id = +localStorage.getItem("id");
-    this.username = localStorage.getItem("username");
->>>>>>> 4b7861c65cc3fcd3a47a37a5dc4a50362c8a143c
 
     await this.fetchFriends();
     await this.fetchOpenChallenges();
