@@ -14,7 +14,6 @@ button {
 }
 
 .home-container {
-  height: 100vh;
 }
 
 .home-components {
@@ -22,17 +21,18 @@ button {
   height: 100%;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 4fr 1fr 3fr 1fr;
   margin: 0 auto;
+  top: 100px;
+  position: absolute;
+  overflow: scroll;
 }
 
 .match_lists {
   display: grid;
-  grid-template-rows: 50px auto;
-  height: 100%;
+  grid-template-rows: 75px auto;
+  /* height: 100%; */
   align-items: center;
-  /* justify-content: space-around; */
-  background: radial-gradient(#fff, #eee);
 }
 
 .match_new, .match_rejoin {
@@ -48,4 +48,22 @@ button {
 
 .match_leaders {
   background: radial-gradient(#eee,#fff);
+}
+
+.match-container {
+  display: grid;
+  grid-template-rows: 5fr 50px 5fr;
+  background: linear-gradient(#eee, #ddd);
+  /* overflow: hidden; */
+}
+
+.divider {
+  background-color: #485562;
+}
+
+.nav-container {
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  height: 100px;
 }

@@ -23,9 +23,10 @@
 .online-container {
   display: inline-block;
   vertical-align: top;
-  min-width: 500px;
+  /* min-width: 500px; */
   width: 100%;
   max-width: 740px;
+  background: linear-gradient(#eee, #ddd);
 }
 
 .online-head {
@@ -34,6 +35,8 @@
   font-family: 'Oswald';
   font-weight: 400;
   font-size: 25px;
+  background-color: #333;
+  color: #eee;
 }
 
 .online-head-right {
