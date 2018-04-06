@@ -94,7 +94,11 @@ strong { font-weight: 700; }
 
 .leader-player {
   padding: 0px 25px;
-  align-items: center;
+  align-items: left;
   display: flex;
-  justify-content: space-around;
+}
+
+.leader-username {
+  padding-left: 18px;
+  line-height: 2.5;
 }
