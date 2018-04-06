@@ -41,9 +41,8 @@ class MatchHistory extends Component {
   render() {
     return (
       <div className="history-container">
-      <MatchHistorySnapshot />
       <div className="history-list-container"> 
-        <div className="history-head">Match History</div>
+        <div className="history-head">Match History<MatchHistorySnapshot className="match-snapshot-widget"/></div>
         <div className="history-list">
           <div className="history-list-inner">
           {this.state.history.map((match, index) => (
