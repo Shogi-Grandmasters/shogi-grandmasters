@@ -100,7 +100,7 @@ dark blue: 14151b
   justify-content: center;
 }
 
-@media screen and (min-device-width: 740px) {
+@media screen and (min-width: 740px) {
   .match__log {
     position: absolute;
     height: 100vh;
@@ -108,8 +108,10 @@ dark blue: 14151b
   }
 }
 
-@media screen and (min-device-width: 1025px) {
+@media screen and (min-width: 875px) {
+}
 
+@media screen and (min-width: 1130px) {
   .match__log, .match__log.hidden {
     left: 0px;
     position: relative;
@@ -141,4 +143,5 @@ dark blue: 14151b
   .match__log-actions {
     display: none;
   }
+
 }

@@ -3,7 +3,8 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: linear-gradient(#14151b, #485562)
+  background: linear-gradient(#14151b, #485562);
+  height: 100%;
 }
 
 .logo a {
@@ -18,12 +19,12 @@
 
 .nav a {
   float: right;
+  flex: 1;
   display: block;
   color: white;
   height: auto;
   text-align: center;
   padding: 18px;
-  width: 75px;
   text-decoration: none;
   font-size: 16px;
   line-height: 60px; 
@@ -37,7 +38,13 @@
   color: white;
   padding: 20px 10px;
   vertical-align: center;
-  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .avi {
+    visibility: hidden;
+    display: none;
+  }
 }
 
 li a:hover {

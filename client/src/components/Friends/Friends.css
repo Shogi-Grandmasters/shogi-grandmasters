@@ -40,6 +40,7 @@ strong { font-weight: 700; }
 
 .friend-search {
   float: right; 
+  display: inline;
 }
 
 .friend-button {
@@ -55,19 +56,18 @@ strong { font-weight: 700; }
   outline: 0;
   cursor: pointer;
   justify-content: center;
-  align-content: right;
+  display: inline;
 }
 
 .friend-form {
   font-family: 'Oswald';
   background-color: #cecece;
   font-size: 16px;
-  height: 43px;
+  height: 45px;
   width: 200px;
-  border: 1px;
   border-radius: 3px;
   text-align: center;
-  display: inline-block;
+  display: inline;
 }
 
 .current-friend-container {

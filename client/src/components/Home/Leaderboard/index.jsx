@@ -23,7 +23,7 @@ class Leaderboard extends Component {
   }
 
   componentWillUnmount() {
-    this.props.socket.close();
+    this.props.socket && this.props.socket.close();
   }
 
   render() {

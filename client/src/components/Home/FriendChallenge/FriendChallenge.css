@@ -23,9 +23,10 @@
 .online-container {
   display: inline-block;
   vertical-align: top;
-  min-width: 500px;
+  /* min-width: 500px; */
   width: 100%;
   max-width: 740px;
+  background: linear-gradient(#eee, #ddd);
 }
 
 .online-head {
@@ -34,6 +35,8 @@
   font-family: 'Oswald';
   font-weight: 400;
   font-size: 25px;
+  background-color: #333;
+  color: #eee;
 }
 
 .online-head-right {
@@ -50,6 +53,8 @@
 .online-challenge-text {
   width: 100px;
   float: right;
+  text-align: center;
+  padding-top: 10px;
 }
 
 .online-friend-container {
@@ -65,14 +70,14 @@
   position: absolute;
   width: 50px;
   right: 50px;
-  bottom: 10px;
+  bottom: 15px;
 }
 
 .online-challenge-button2 {
   position: absolute;
   width: 50px;
   right: 0px;
-  bottom: 10px;
+  bottom: 15px;
 }
 
 .online-challenge-svg {
