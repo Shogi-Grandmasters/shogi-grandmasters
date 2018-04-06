@@ -259,7 +259,6 @@ const clientSubmitMove = async ({ io, client, room }, payload) => {
       checkmate,
       messages
     };
-    console.log(payload.status)
     // broadcast move
     serverPlayerMove({ io, client, room }, payload);
   } catch (err) {
