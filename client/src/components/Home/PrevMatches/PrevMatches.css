@@ -43,6 +43,7 @@ strong { font-weight: 700; }
   display: grid;
   grid-template-rows: 50px 10fr;
   height: 100%;
+  max-height: 350px;
   width: 100%;
   max-height: 500px;
   overflow: hidden;
@@ -61,6 +62,7 @@ strong { font-weight: 700; }
 
 .prev_match_select {
   font-family: 'Oswald';
+  height: 100;
   overflow: scroll;
   background: linear-gradient(#eee, #ddd);
   color: #2c343f;
@@ -70,6 +72,8 @@ strong { font-weight: 700; }
 }
 
 .prev_match_items {
+  height: 100%;
+  padding-right: 10px;
   padding-left: 10px;
   /* padding-top: 25px; */
   font-size: 14px;
