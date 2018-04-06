@@ -58,11 +58,12 @@ button {
   /* grid-template-rows: 5fr 50px 5fr; */
   background: linear-gradient(#eee, #ddd);
   /* overflow: hidden; */
+  margin-bottom: 40px;
 }
 
 .divider {
   background-color: #485562;
-  min-height: 50px;
+  min-height: 40px;
 }
 
 .nav-container {

@@ -90,7 +90,6 @@ class Home extends Component {
             </div>
             <div className="divider" />
             <Leaderboard history={this.props.history} socket={this.socket} />
-            <div className="divider" />
           </div>
           <div className="divider" />
           <FriendChallenge
