@@ -280,7 +280,7 @@ class FriendChallenge extends Component {
               <div className="friends__list-profile">
                 <img
                   className="friends__list-avatar"
-                  src={`${AVATAR_URL}/${user.avatar}`}
+                  src={`${AVATAR_URL}${user.avatar}`}
                 />
                 <div className="friends__list-username" onClick={() => this.props.showActivePopups(user)}>{user.username}</div>
                 <MessageAction user={user} click={this.props.showActivePopups} />
