@@ -1,1 +1,132 @@
-serving static files on port  1337
+yarn run v1.5.1
+$ cd rest-server && yarn start
+$ nodemon bin/entry.js
+[33m[nodemon] 1.17.2[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node bin/entry.js`[39m
+successfully connected to rest-server port  3396
+redis cache connected
+successfully connected to db grandmaster
+successfully connected to db grandmaster
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+loginQuery - successfully retrieved data  {"id":1,"email":"dr.ocheyo@gmail.com","username":"ocheyo","password":"$2a$10$NP7UNASkZ6dps2su46kmUO/itPW6a7Fbzfyci7TB7jJR8pL.sPyZO","wins":10,"losses":2,"rating_unranked":1041,"rating_ranked":1699,"avatar":"v1523031197/milg4rt1ujvu2grin1vy.png"}
+loginQuery - successfully retrieved data  {"id":1,"email":"dr.ocheyo@gmail.com","username":"ocheyo","password":"$2a$10$NP7UNASkZ6dps2su46kmUO/itPW6a7Fbzfyci7TB7jJR8pL.sPyZO","wins":10,"losses":2,"rating_unranked":1041,"rating_ranked":1699,"avatar":"v1523031197/milg4rt1ujvu2grin1vy.png"}
+loginController - successfully retrieved data  {"id":1,"email":"dr.ocheyo@gmail.com","username":"ocheyo","wins":10,"losses":2,"rating_unranked":1041,"rating_ranked":1699,"avatar":"v1523031197/milg4rt1ujvu2grin1vy.png"}
+fetchMatchQuery - successfully fetched match 
+fetchMatchController - successfully fetched match data
+fetchLeaderboardQuery - successfully retrieved leaderboards 
+fetchLeaderboardController - sucessfully retrieved leaderboard
+fetchfriendsQuery - successfully retrieved data  {"id":2,"email":"liliana@blackmagic.com","username":"Liliana","wins":0,"losses":3,"avatar":"v1523031272/otxefy5chb7xhcaduasl.png","status":1,"u_id":1}
+fetchFriendController - sucessfully retrieved data  [{"id":2,"email":"liliana@blackmagic.com","username":"Liliana","wins":0,"losses":3,"avatar":"v1523031272/otxefy5chb7xhcaduasl.png","status":1,"u_id":1},{"id":5,"email":"skellington@nightmare.com","username":"jack","wins":1,"losses":3,"avatar":"v1523031619/shglahb3qsvdf7bjc5b2.png","status":1,"u_id":1},{"id":4,"email":"hoggle@labyrinth.com","username":"Hoggle","wins":1,"losses":2,"avatar":"v1523031527/k2meflzn5vhjd0duh2mo.png","status":1,"u_id":1},{"id":3,"email":"atreyu@neverending.com","username":"atreyu","wins":4,"losses":3,"avatar":"v1523031473/cpdekhp8ir0u36s6ilsa.png","status":1,"u_id":1},{"id":8,"email":"masters@universe.com","username":"Skeletor","wins":1,"losses":1,"avatar":"v1523033157/xsmkiu6dufsctfncomqx.png","status":1,"u_id":1},{"id":6,"email":"tekken@tekken.com","username":"Heihachi","wins":2,"losses":1,"avatar":"v1523032647/algi9wto6fpqseanfr1h.png","status":1,"u_id":1},{"id":7,"email":"chewbacca@starwars.com","username":"Chewie","wins":2,"losses":0,"avatar":"v1523032869/rdwreogkzz5gs7icacr5.png","status":1,"u_id":1},{"id":9,"email":"jameshyen@gmail.com","username":"jameshyen","wins":0,"losses":0,"avatar":"v1523035354/pdg0cww5doojczdxsf42.png","status":1,"u_id":1},{"id":19,"email":"somedude@gmail.com","username":"somedude","wins":0,"losses":1,"avatar":"v1521764208/jmspueczx7ad6jsumnjd.png","status":1,"u_id":1},{"id":21,"email":"gabriel.katz223@gmail.com","username":"gabek","wins":2,"losses":2,"avatar":"v1521764208/jmspueczx7ad6jsumnjd.png","status":0,"u_id":1},{"id":1,"email":"dr.ocheyo@gmail.com","username":"ocheyo","wins":10,"losses":2,"avatar":"v1523031197/milg4rt1ujvu2grin1vy.png","status":1,"u_id":1},{"id":10,"email":"aaron@gmail.com","username":"squaaron","wins":0,"losses":0,"avatar":"v1523044169/c9eh0utafd8sng68yzsn.png","status":1,"u_id":1}]
+fetchMessageQuery - successfully fetched messages [{"match_id":"gOxIKHJOZu3Pih7YdKJK1Tjun0xxo4lO","content":"welcome","user_id":1,"friend_id":3,"created":"2018-04-19T20:28:51.598Z","username":"ocheyo"},{"match_id":"home","content":"hello","user_id":1,"friend_id":3,"created":"2018-04-19T20:27:39.486Z","username":"ocheyo"},{"match_id":"home","content":"u in?","user_id":1,"friend_id":3,"created":"2018-04-19T20:24:50.640Z","username":"ocheyo"},{"match_id":"home","content":"i finally made it","user_id":7,"friend_id":1,"created":"2018-04-08T18:28:14.327Z","username":"Chewie"},{"match_id":"home","content":"hi mom","user_id":1,"friend_id":7,"created":"2018-04-08T18:27:28.525Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"i wont take any more pieces","user_id":21,"friend_id":1,"created":"2018-04-07T00:22:09.661Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Most shogi ganes last a couplr of hours between amateurs. But this is persistent. We can pick it back up later","user_id":1,"friend_id":21,"created":"2018-04-07T00:21:36.587Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"haha giving you the opening, i just weant to see the checkmate logic","user_id":21,"friend_id":1,"created":"2018-04-07T00:21:28.571Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Believe me i am trying. With all the pieces going bavk to hand it is tough.","user_id":1,"friend_id":21,"created":"2018-04-07T00:21:06.228Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"im clearly outmatched hit me with a checkmate","user_id":21,"friend_id":1,"created":"2018-04-07T00:19:36.987Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Thank you. It was alot of fun to build","user_id":1,"friend_id":21,"created":"2018-04-07T00:12:01.748Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"l","user_id":21,"friend_id":1,"created":"2018-04-07T00:03:05.100Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"man kudos really this is rediculously coo","user_id":21,"friend_id":1,"created":"2018-04-07T00:02:59.406Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"nope never","user_id":21,"friend_id":1,"created":"2018-04-06T23:59:22.725Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Ive done aome research. You started strong i thought u had played before","user_id":1,"friend_id":21,"created":"2018-04-06T23:59:06.857Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"l","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:59.649Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"lo","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:24.852Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"im bad at this","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:23.730Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"shoot","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:21.164Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"oh did it again i gues","user_id":21,"friend_id":1,"created":"2018-04-06T23:53:18.350Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"fair enough","user_id":21,"friend_id":1,"created":"2018-04-06T23:52:17.874Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Just dont double click","user_id":1,"friend_id":21,"created":"2018-04-06T23:52:10.791Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"haha","user_id":21,"friend_id":1,"created":"2018-04-06T23:51:49.517Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"You did. Apparently that fix wasnt perfect","user_id":1,"friend_id":21,"created":"2018-04-06T23:51:38.661Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"seems like i moved twice?","user_id":21,"friend_id":1,"created":"2018-04-06T23:51:20.982Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"ohh","user_id":21,"friend_id":1,"created":"2018-04-06T23:50:53.964Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"It&#39;s your turn sadly gotta refresh","user_id":1,"friend_id":21,"created":"2018-04-06T23:50:40.383Z","username":"ocheyo"},{"match_id":"3nCf2G8MGfqCkVHS2RhLiKDlI3aui2MJ","content":"damn you","user_id":1,"friend_id":7,"created":"2018-04-06T23:28:36.160Z","username":"ocheyo"},{"match_id":"home","content":"jesus you&#39;re pushy","user_id":1,"friend_id":9,"created":"2018-04-06T18:32:10.684Z","username":"ocheyo"},{"match_id":"home","content":"gg","user_id":1,"friend_id":2,"created":"2018-04-06T18:22:26.082Z","username":"ocheyo"},{"match_id":"home","content":"nice play","user_id":1,"friend_id":2,"created":"2018-04-06T18:22:24.264Z","username":"ocheyo"},{"match_id":"home","content":"SHOGI SHOGI SHOGI","user_id":9,"friend_id":1,"created":"2018-04-06T18:13:45.060Z","username":"jameshyen"},{"match_id":"home","content":"yo let&#39;s go","user_id":9,"friend_id":1,"created":"2018-04-06T18:12:37.178Z","username":"jameshyen"},{"match_id":"home","content":"fite me","user_id":9,"friend_id":1,"created":"2018-04-06T18:12:21.559Z","username":"jameshyen"},{"match_id":"home","content":"yo","user_id":9,"friend_id":1,"created":"2018-04-06T18:12:18.488Z","username":"jameshyen"},{"match_id":"home","content":"calm down buddy","user_id":1,"friend_id":7,"created":"2018-04-06T16:56:28.934Z","username":"ocheyo"},{"match_id":"home","content":"ok ok you win","user_id":1,"friend_id":7,"created":"2018-04-06T16:56:25.771Z","username":"ocheyo"},{"match_id":"home","content":"WAGRRRRWWGAHHHHWWWRRGGAWWWWWWRR!!","user_id":7,"friend_id":1,"created":"2018-04-06T16:56:15.668Z","username":"Chewie"},{"match_id":"home","content":"its over now","user_id":1,"friend_id":4,"created":"2018-04-06T16:54:39.815Z","username":"ocheyo"},{"match_id":"home","content":"lol","user_id":1,"friend_id":4,"created":"2018-04-06T16:54:29.248Z","username":"ocheyo"},{"match_id":"home","content":"oh man","user_id":4,"friend_id":1,"created":"2018-04-06T16:54:25.517Z","username":"Hoggle"},{"match_id":"home","content":"thanks","user_id":4,"friend_id":1,"created":"2018-04-06T16:54:21.580Z","username":"Hoggle"},{"match_id":"home","content":"nice move","user_id":1,"friend_id":4,"created":"2018-04-06T16:54:18.118Z","username":"ocheyo"},{"match_id":"home","content":"ty u2","user_id":4,"friend_id":1,"created":"2018-04-06T16:54:09.097Z","username":"Hoggle"},{"match_id":"home","content":"hi gl","user_id":1,"friend_id":4,"created":"2018-04-06T16:53:59.852Z","username":"ocheyo"},{"match_id":"home","content":"you&#39;re goin down","user_id":1,"friend_id":3,"created":"2018-04-06T16:53:32.482Z","username":"ocheyo"},{"match_id":"home","content":"game on!","user_id":3,"friend_id":1,"created":"2018-04-06T16:53:20.648Z","username":"atreyu"},{"match_id":"home","content":"game on?","user_id":1,"friend_id":3,"created":"2018-04-06T16:53:13.698Z","username":"ocheyo"},{"match_id":"home","content":"Sup","user_id":3,"friend_id":1,"created":"2018-04-06T16:53:07.499Z","username":"atreyu"},{"match_id":"home","content":"Yo","user_id":1,"friend_id":3,"created":"2018-04-06T16:53:01.679Z","username":"ocheyo"},{"match_id":"home","content":"it&#39;s on","user_id":1,"friend_id":2,"created":"2018-04-06T16:52:33.332Z","username":"ocheyo"},{"match_id":"home","content":"Well, shall we?","user_id":2,"friend_id":1,"created":"2018-04-06T16:52:28.649Z","username":"Liliana"},{"match_id":"home","content":"Hey, how are ya?","user_id":1,"friend_id":2,"created":"2018-04-06T16:52:16.577Z","username":"ocheyo"},{"match_id":"home","content":"Hi","user_id":2,"friend_id":1,"created":"2018-04-06T16:52:03.274Z","username":"Liliana"}]
+fetchMessageController - successfully fetched messages [{"match_id":"gOxIKHJOZu3Pih7YdKJK1Tjun0xxo4lO","content":"welcome","user_id":1,"friend_id":3,"created":"2018-04-19T20:28:51.598Z","username":"ocheyo"},{"match_id":"home","content":"hello","user_id":1,"friend_id":3,"created":"2018-04-19T20:27:39.486Z","username":"ocheyo"},{"match_id":"home","content":"u in?","user_id":1,"friend_id":3,"created":"2018-04-19T20:24:50.640Z","username":"ocheyo"},{"match_id":"home","content":"i finally made it","user_id":7,"friend_id":1,"created":"2018-04-08T18:28:14.327Z","username":"Chewie"},{"match_id":"home","content":"hi mom","user_id":1,"friend_id":7,"created":"2018-04-08T18:27:28.525Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"i wont take any more pieces","user_id":21,"friend_id":1,"created":"2018-04-07T00:22:09.661Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Most shogi ganes last a couplr of hours between amateurs. But this is persistent. We can pick it back up later","user_id":1,"friend_id":21,"created":"2018-04-07T00:21:36.587Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"haha giving you the opening, i just weant to see the checkmate logic","user_id":21,"friend_id":1,"created":"2018-04-07T00:21:28.571Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Believe me i am trying. With all the pieces going bavk to hand it is tough.","user_id":1,"friend_id":21,"created":"2018-04-07T00:21:06.228Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"im clearly outmatched hit me with a checkmate","user_id":21,"friend_id":1,"created":"2018-04-07T00:19:36.987Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Thank you. It was alot of fun to build","user_id":1,"friend_id":21,"created":"2018-04-07T00:12:01.748Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"l","user_id":21,"friend_id":1,"created":"2018-04-07T00:03:05.100Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"man kudos really this is rediculously coo","user_id":21,"friend_id":1,"created":"2018-04-07T00:02:59.406Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"nope never","user_id":21,"friend_id":1,"created":"2018-04-06T23:59:22.725Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Ive done aome research. You started strong i thought u had played before","user_id":1,"friend_id":21,"created":"2018-04-06T23:59:06.857Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"l","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:59.649Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"lo","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:24.852Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"im bad at this","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:23.730Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"shoot","user_id":21,"friend_id":1,"created":"2018-04-06T23:58:21.164Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"oh did it again i gues","user_id":21,"friend_id":1,"created":"2018-04-06T23:53:18.350Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"fair enough","user_id":21,"friend_id":1,"created":"2018-04-06T23:52:17.874Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"Just dont double click","user_id":1,"friend_id":21,"created":"2018-04-06T23:52:10.791Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"haha","user_id":21,"friend_id":1,"created":"2018-04-06T23:51:49.517Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"You did. Apparently that fix wasnt perfect","user_id":1,"friend_id":21,"created":"2018-04-06T23:51:38.661Z","username":"ocheyo"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"seems like i moved twice?","user_id":21,"friend_id":1,"created":"2018-04-06T23:51:20.982Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"ohh","user_id":21,"friend_id":1,"created":"2018-04-06T23:50:53.964Z","username":"gabek"},{"match_id":"3LgBD5vqvBJMWGFuOr4Pn8zVaoIV7HeF","content":"It&#39;s your turn sadly gotta refresh","user_id":1,"friend_id":21,"created":"2018-04-06T23:50:40.383Z","username":"ocheyo"},{"match_id":"3nCf2G8MGfqCkVHS2RhLiKDlI3aui2MJ","content":"damn you","user_id":1,"friend_id":7,"created":"2018-04-06T23:28:36.160Z","username":"ocheyo"},{"match_id":"home","content":"jesus you&#39;re pushy","user_id":1,"friend_id":9,"created":"2018-04-06T18:32:10.684Z","username":"ocheyo"},{"match_id":"home","content":"gg","user_id":1,"friend_id":2,"created":"2018-04-06T18:22:26.082Z","username":"ocheyo"},{"match_id":"home","content":"nice play","user_id":1,"friend_id":2,"created":"2018-04-06T18:22:24.264Z","username":"ocheyo"},{"match_id":"home","content":"SHOGI SHOGI SHOGI","user_id":9,"friend_id":1,"created":"2018-04-06T18:13:45.060Z","username":"jameshyen"},{"match_id":"home","content":"yo let&#39;s go","user_id":9,"friend_id":1,"created":"2018-04-06T18:12:37.178Z","username":"jameshyen"},{"match_id":"home","content":"fite me","user_id":9,"friend_id":1,"created":"2018-04-06T18:12:21.559Z","username":"jameshyen"},{"match_id":"home","content":"yo","user_id":9,"friend_id":1,"created":"2018-04-06T18:12:18.488Z","username":"jameshyen"},{"match_id":"home","content":"calm down buddy","user_id":1,"friend_id":7,"created":"2018-04-06T16:56:28.934Z","username":"ocheyo"},{"match_id":"home","content":"ok ok you win","user_id":1,"friend_id":7,"created":"2018-04-06T16:56:25.771Z","username":"ocheyo"},{"match_id":"home","content":"WAGRRRRWWGAHHHHWWWRRGGAWWWWWWRR!!","user_id":7,"friend_id":1,"created":"2018-04-06T16:56:15.668Z","username":"Chewie"},{"match_id":"home","content":"its over now","user_id":1,"friend_id":4,"created":"2018-04-06T16:54:39.815Z","username":"ocheyo"},{"match_id":"home","content":"lol","user_id":1,"friend_id":4,"created":"2018-04-06T16:54:29.248Z","username":"ocheyo"},{"match_id":"home","content":"oh man","user_id":4,"friend_id":1,"created":"2018-04-06T16:54:25.517Z","username":"Hoggle"},{"match_id":"home","content":"thanks","user_id":4,"friend_id":1,"created":"2018-04-06T16:54:21.580Z","username":"Hoggle"},{"match_id":"home","content":"nice move","user_id":1,"friend_id":4,"created":"2018-04-06T16:54:18.118Z","username":"ocheyo"},{"match_id":"home","content":"ty u2","user_id":4,"friend_id":1,"created":"2018-04-06T16:54:09.097Z","username":"Hoggle"},{"match_id":"home","content":"hi gl","user_id":1,"friend_id":4,"created":"2018-04-06T16:53:59.852Z","username":"ocheyo"},{"match_id":"home","content":"you&#39;re goin down","user_id":1,"friend_id":3,"created":"2018-04-06T16:53:32.482Z","username":"ocheyo"},{"match_id":"home","content":"game on!","user_id":3,"friend_id":1,"created":"2018-04-06T16:53:20.648Z","username":"atreyu"},{"match_id":"home","content":"game on?","user_id":1,"friend_id":3,"created":"2018-04-06T16:53:13.698Z","username":"ocheyo"},{"match_id":"home","content":"Sup","user_id":3,"friend_id":1,"created":"2018-04-06T16:53:07.499Z","username":"atreyu"},{"match_id":"home","content":"Yo","user_id":1,"friend_id":3,"created":"2018-04-06T16:53:01.679Z","username":"ocheyo"},{"match_id":"home","content":"it&#39;s on","user_id":1,"friend_id":2,"created":"2018-04-06T16:52:33.332Z","username":"ocheyo"},{"match_id":"home","content":"Well, shall we?","user_id":2,"friend_id":1,"created":"2018-04-06T16:52:28.649Z","username":"Liliana"},{"match_id":"home","content":"Hey, how are ya?","user_id":1,"friend_id":2,"created":"2018-04-06T16:52:16.577Z","username":"ocheyo"},{"match_id":"home","content":"Hi","user_id":2,"friend_id":1,"created":"2018-04-06T16:52:03.274Z","username":"Liliana"}]
+fetchOpenMatchQuery - successfully fetched open match [{"id":7,"player1":9,"player2":1,"status":null},{"id":9,"player1":1,"player2":5,"status":null},{"id":10,"player1":1,"player2":4,"status":null},{"id":14,"player1":11,"player2":1,"status":null}]
+fetchOpenMatchController - successfully fetched open match data [{"id":7,"player1":9,"player2":1,"status":null},{"id":9,"player1":1,"player2":5,"status":null},{"id":10,"player1":1,"player2":4,"status":null},{"id":14,"player1":11,"player2":1,"status":null}]
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
+leaderboard successfully updated
