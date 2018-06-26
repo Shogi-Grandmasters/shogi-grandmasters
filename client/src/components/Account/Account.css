@@ -13,6 +13,14 @@ strong { font-weight: 700; }
 .acct-container {
   background: linear-gradient( #eee, #fff);
 }
+
+.acct-router-container {
+  position: absolute;
+  top: 110.88px;
+  left: 100px;
+  width: 100%;
+}
+
 /* 
   radial-gradient(#fff, #eee); 
   radial-gradient(#d0c7af, #fff);
@@ -36,7 +44,6 @@ strong { font-weight: 700; }
   max-height: 100%;
   display: inline-block;
   background: #485562;
-  overflow: auto;
 }
 
 .vert-nav a {

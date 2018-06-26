@@ -38,6 +38,7 @@ strong { font-weight: 700; }
 .leader-avi {
   /* padding-left: 25px; */
   width: 50px;
+  height: 50px;
 }
 
 .leader-rank {
@@ -85,8 +86,8 @@ strong { font-weight: 700; }
   border-bottom: solid 1px #ccc;
   display: grid;
   grid-template-columns: 2fr 4fr 4fr;
-  text-align: center;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .leader-player {

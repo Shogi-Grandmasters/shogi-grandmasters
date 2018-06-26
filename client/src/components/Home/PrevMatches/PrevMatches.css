@@ -87,7 +87,7 @@ strong { font-weight: 700; }
 
 .prev_match_items:hover {
   cursor: pointer;
-  background-color: #f15a4a;;
+  background-color: #f15a4a;
   color: #eee;
   /* background: linear-gradient(rgba(238, 238, 238, 0), rgba(221, 221, 221, 0)); */
 }
